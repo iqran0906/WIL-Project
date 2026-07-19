@@ -1,0 +1,196 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Exclusive Distributors</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <style>
+        :root {
+            --sidebar-bg: #357383;
+            --main-bg: #1c323d;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-dark: #212529;
+        }
+
+        body {
+            background-color: var(--main-bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar switches to standard flow layout on mobile */
+        .sidebar {
+            background-color: var(--sidebar-bg);
+            min-height: auto;
+            color: white;
+            padding-top: 20px;
+        }
+
+        @@media (min-width: 768px) {
+            .sidebar {
+                min-height: 100vh;
+            }
+        }
+
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 12px 20px;
+            border-left: 4px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid #ffffff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .brand-logo-container {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+        }
+
+        @@media (min-width: 768px) {
+            .brand-logo-container {
+                margin: 40px auto 20px auto;
+            }
+        }
+
+        .top-navbar {
+            background-color: transparent !important;
+            padding: 15px 15px;
+        }
+
+        @@media (min-width: 768px) {
+            .top-navbar {
+                padding: 15px 30px;
+            }
+        }
+
+        .top-navbar .navbar-brand {
+            color: white !important;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        @@media (min-width: 768px) {
+            .top-navbar .navbar-brand {
+                font-size: 1.5rem;
+            }
+        }
+
+        .content-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            min-height: 80vh;
+            margin-bottom: 30px;
+        }
+
+        @@media (min-width: 768px) {
+            .content-card {
+                padding: 30px;
+            }
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #495057;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+
+        .form-control, .form-select {
+            border-radius: 6px;
+            border: 1px solid #ced4da;
+            padding: 8px 12px;
+            background-color: #f8f9fa;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background-color: #fff;
+            border-color: #357383;
+            box-shadow: 0 0 0 0.25rem rgba(53, 115, 131, 0.25);
+        }
+
+        .btn-custom-save {
+            background-color: #212529;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .btn-custom-save:hover {
+            background-color: #000000;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid p-0">
+        <div class="row g-0">
+            <div class="col-12 col-md-3 col-lg-2 sidebar d-flex flex-column justify-content-between">
+                <div>
+                    <div class="px-3 mb-2 mb-md-4">
+                        <h4 class="text-center font-weight-bold tracking-wide py-2 m-0">Exclusive</h4>
+                    </div>
+                    <ul class="nav flex-row flex-md-column justify-content-center justify-content-md-start flex-wrap">
+                        <li class="nav-item"><a class="nav-link px-2 px-md-3 py-2" asp-controller="Home" asp-action="Dashboard">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link px-2 px-md-3 py-2" asp-controller="Home" asp-action="CustomerList">Customers</a></li>
+                        <li class="nav-item"><a class="nav-link px-2 px-md-3 py-2" asp-controller="Home" asp-action="AddSupplier">Suppliers</a></li>
+                        <li class="nav-item"><a class="nav-link px-2 px-md-3 py-2" asp-controller="Home" asp-action="AddSalesRep">Sales Reps</a></li>
+                        <li class="nav-item"><a class="nav-link px-2 px-md-3 py-2" asp-controller="Home" asp-action="AddItem">Inventory</a></li>
+                        <li class="nav-item"><a class="nav-link px-2 px-md-3 py-2" asp-controller="Home" asp-action="CreateInvoice">Invoices</a></li>
+                        <li class="nav-item"><a class="nav-link px-2 px-md-3 py-2" asp-controller="Home" asp-action="CreateQuote">Quotes</a></li>
+                        <li class="nav-item"><a class="nav-link px-2 px-md-3 py-2" asp-controller="Home" asp-action="AddEmployee">Employees</a></li>
+                    </ul>
+                </div>
+                <div class="text-center pb-4 d-none d-md-block">
+                    <div class="brand-logo-container">ED</div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-9 col-lg-10 d-flex flex-column">
+                <header>
+                    <nav class="navbar navbar-expand navbar-light top-navbar d-flex justify-content-between align-items-center">
+                        <span class="navbar-brand">Exclusive Distributors</span>
+                        <div class="d-flex align-items-center gap-3 gap-md-4 text-white">
+                            <a asp-controller="Home" asp-action="Notifications" class="text-white decoration-none">
+                                <i class="bi bi-bell fs-4" style="cursor: pointer;"></i>
+                            </a>
+                            <a asp-controller="Home" asp-action="UserProfile" class="text-white decoration-none">
+                                <i class="bi bi-person-circle fs-3" style="cursor: pointer;"></i>
+                            </a>
+                        </div>
+                    </nav>
+                </header>
+
+                <div class="container-fluid px-2 px-md-4">
+                    <main role="main" class="pb-3">
+                        @RenderBody()
+                    </main>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

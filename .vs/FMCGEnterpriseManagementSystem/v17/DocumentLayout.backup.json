@@ -1,0 +1,317 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|c:\\users\\nuk3t\\onedrive\\desktop\\insy7315 - wil - novacore\\wil-project-development\\wil-project-development\\fmcgenterprisemanagementsystem\\fmcgenterprisemanagementsystem\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|solutionrelative:fmcgenterprisemanagementsystem\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|c:\\users\\nuk3t\\onedrive\\desktop\\insy7315 - wil - novacore\\wil-project-development\\wil-project-development\\fmcgenterprisemanagementsystem\\fmcgenterprisemanagementsystem\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|solutionrelative:fmcgenterprisemanagementsystem\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|c:\\users\\nuk3t\\onedrive\\desktop\\insy7315 - wil - novacore\\wil-project-development\\wil-project-development\\fmcgenterprisemanagementsystem\\fmcgenterprisemanagementsystem\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|solutionrelative:fmcgenterprisemanagementsystem\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|c:\\users\\nuk3t\\onedrive\\desktop\\insy7315 - wil - novacore\\wil-project-development\\wil-project-development\\fmcgenterprisemanagementsystem\\fmcgenterprisemanagementsystem\\views\\home\\userprofile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|solutionrelative:fmcgenterprisemanagementsystem\\views\\home\\userprofile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|c:\\users\\nuk3t\\onedrive\\desktop\\insy7315 - wil - novacore\\wil-project-development\\wil-project-development\\fmcgenterprisemanagementsystem\\fmcgenterprisemanagementsystem\\views\\home\\privacy.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|solutionrelative:fmcgenterprisemanagementsystem\\views\\home\\privacy.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|c:\\users\\nuk3t\\onedrive\\desktop\\insy7315 - wil - novacore\\wil-project-development\\wil-project-development\\fmcgenterprisemanagementsystem\\fmcgenterprisemanagementsystem\\views\\home\\notifications.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|solutionrelative:fmcgenterprisemanagementsystem\\views\\home\\notifications.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|c:\\users\\nuk3t\\onedrive\\desktop\\insy7315 - wil - novacore\\wil-project-development\\wil-project-development\\fmcgenterprisemanagementsystem\\fmcgenterprisemanagementsystem\\views\\home\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|solutionrelative:fmcgenterprisemanagementsystem\\views\\home\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|c:\\users\\nuk3t\\onedrive\\desktop\\insy7315 - wil - novacore\\wil-project-development\\wil-project-development\\fmcgenterprisemanagementsystem\\fmcgenterprisemanagementsystem\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|solutionrelative:fmcgenterprisemanagementsystem\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|c:\\users\\nuk3t\\onedrive\\desktop\\insy7315 - wil - novacore\\wil-project-development\\wil-project-development\\fmcgenterprisemanagementsystem\\fmcgenterprisemanagementsystem\\views\\home\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|solutionrelative:fmcgenterprisemanagementsystem\\views\\home\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|c:\\users\\nuk3t\\onedrive\\desktop\\insy7315 - wil - novacore\\wil-project-development\\wil-project-development\\fmcgenterprisemanagementsystem\\fmcgenterprisemanagementsystem\\views\\home\\customerlist.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|solutionrelative:fmcgenterprisemanagementsystem\\views\\home\\customerlist.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|c:\\users\\nuk3t\\onedrive\\desktop\\insy7315 - wil - novacore\\wil-project-development\\wil-project-development\\fmcgenterprisemanagementsystem\\fmcgenterprisemanagementsystem\\views\\home\\createquote.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|solutionrelative:fmcgenterprisemanagementsystem\\views\\home\\createquote.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|c:\\users\\nuk3t\\onedrive\\desktop\\insy7315 - wil - novacore\\wil-project-development\\wil-project-development\\fmcgenterprisemanagementsystem\\fmcgenterprisemanagementsystem\\views\\home\\createinvoice.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|solutionrelative:fmcgenterprisemanagementsystem\\views\\home\\createinvoice.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|c:\\users\\nuk3t\\onedrive\\desktop\\insy7315 - wil - novacore\\wil-project-development\\wil-project-development\\fmcgenterprisemanagementsystem\\fmcgenterprisemanagementsystem\\views\\home\\addsupplier.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|solutionrelative:fmcgenterprisemanagementsystem\\views\\home\\addsupplier.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|c:\\users\\nuk3t\\onedrive\\desktop\\insy7315 - wil - novacore\\wil-project-development\\wil-project-development\\fmcgenterprisemanagementsystem\\fmcgenterprisemanagementsystem\\views\\home\\addsalesrep.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|solutionrelative:fmcgenterprisemanagementsystem\\views\\home\\addsalesrep.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|c:\\users\\nuk3t\\onedrive\\desktop\\insy7315 - wil - novacore\\wil-project-development\\wil-project-development\\fmcgenterprisemanagementsystem\\fmcgenterprisemanagementsystem\\views\\home\\additem.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|solutionrelative:fmcgenterprisemanagementsystem\\views\\home\\additem.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|c:\\users\\nuk3t\\onedrive\\desktop\\insy7315 - wil - novacore\\wil-project-development\\wil-project-development\\fmcgenterprisemanagementsystem\\fmcgenterprisemanagementsystem\\views\\home\\addemployee.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|solutionrelative:fmcgenterprisemanagementsystem\\views\\home\\addemployee.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|c:\\users\\nuk3t\\onedrive\\desktop\\insy7315 - wil - novacore\\wil-project-development\\wil-project-development\\fmcgenterprisemanagementsystem\\fmcgenterprisemanagementsystem\\views\\home\\addcustomer.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F4BA9B5B-0F0D-48FA-B89E-E61B9A42837B}|FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.csproj|solutionrelative:fmcgenterprisemanagementsystem\\views\\home\\addcustomer.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home\\Profile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:FMCGEnterpriseManagementSystem\\Views\\Home\\Profile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 18,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "CreateQuote.cshtml",
+              "DocumentMoniker": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home\\CreateQuote.cshtml",
+              "RelativeDocumentMoniker": "FMCGEnterpriseManagementSystem\\Views\\Home\\CreateQuote.cshtml",
+              "ToolTip": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home\\CreateQuote.cshtml",
+              "RelativeToolTip": "FMCGEnterpriseManagementSystem\\Views\\Home\\CreateQuote.cshtml",
+              "ViewState": "AgIAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-07-10T14:49:08.09Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "AddSalesRep.cshtml",
+              "DocumentMoniker": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home\\AddSalesRep.cshtml",
+              "RelativeDocumentMoniker": "FMCGEnterpriseManagementSystem\\Views\\Home\\AddSalesRep.cshtml",
+              "ToolTip": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home\\AddSalesRep.cshtml",
+              "RelativeToolTip": "FMCGEnterpriseManagementSystem\\Views\\Home\\AddSalesRep.cshtml",
+              "ViewState": "AgIAAIEAAAAAAAAAAAAAAAgAAABHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-07-10T14:48:22.403Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "AddItem.cshtml",
+              "DocumentMoniker": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home\\AddItem.cshtml",
+              "RelativeDocumentMoniker": "FMCGEnterpriseManagementSystem\\Views\\Home\\AddItem.cshtml",
+              "ToolTip": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home\\AddItem.cshtml",
+              "RelativeToolTip": "FMCGEnterpriseManagementSystem\\Views\\Home\\AddItem.cshtml",
+              "ViewState": "AgIAAGAAAAAAAAAAAAAAAAQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-07-10T14:48:14.97Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "AddCustomer.cshtml",
+              "DocumentMoniker": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home\\AddCustomer.cshtml",
+              "RelativeDocumentMoniker": "FMCGEnterpriseManagementSystem\\Views\\Home\\AddCustomer.cshtml",
+              "ToolTip": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home\\AddCustomer.cshtml",
+              "RelativeToolTip": "FMCGEnterpriseManagementSystem\\Views\\Home\\AddCustomer.cshtml",
+              "ViewState": "AgIAAJwAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-07-10T14:47:30.679Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Privacy.cshtml",
+              "DocumentMoniker": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home\\Privacy.cshtml",
+              "RelativeDocumentMoniker": "FMCGEnterpriseManagementSystem\\Views\\Home\\Privacy.cshtml",
+              "ToolTip": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home\\Privacy.cshtml",
+              "RelativeToolTip": "FMCGEnterpriseManagementSystem\\Views\\Home\\Privacy.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-07-10T12:40:29.404Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "FMCGEnterpriseManagementSystem\\Views\\Home\\Index.cshtml",
+              "ToolTip": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "FMCGEnterpriseManagementSystem\\Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-07-10T12:40:21.299Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "UserProfile.cshtml",
+              "DocumentMoniker": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home\\UserProfile.cshtml",
+              "RelativeDocumentMoniker": "FMCGEnterpriseManagementSystem\\Views\\Home\\UserProfile.cshtml",
+              "ToolTip": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home\\UserProfile.cshtml",
+              "RelativeToolTip": "FMCGEnterpriseManagementSystem\\Views\\Home\\UserProfile.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEkAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-07-10T12:36:02.674Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "AddEmployee.cshtml",
+              "DocumentMoniker": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home\\AddEmployee.cshtml",
+              "RelativeDocumentMoniker": "FMCGEnterpriseManagementSystem\\Views\\Home\\AddEmployee.cshtml",
+              "ToolTip": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home\\AddEmployee.cshtml",
+              "RelativeToolTip": "FMCGEnterpriseManagementSystem\\Views\\Home\\AddEmployee.cshtml",
+              "ViewState": "AgIAABIAAAAAAAAAAAAAAEIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-07-10T12:35:47.248Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "AddSupplier.cshtml",
+              "DocumentMoniker": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home\\AddSupplier.cshtml",
+              "RelativeDocumentMoniker": "FMCGEnterpriseManagementSystem\\Views\\Home\\AddSupplier.cshtml",
+              "ToolTip": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home\\AddSupplier.cshtml",
+              "RelativeToolTip": "FMCGEnterpriseManagementSystem\\Views\\Home\\AddSupplier.cshtml",
+              "ViewState": "AgIAAIQAAAAAAAAAAAAAAAQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-07-10T12:35:37.641Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Notifications.cshtml",
+              "DocumentMoniker": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home\\Notifications.cshtml",
+              "RelativeDocumentMoniker": "FMCGEnterpriseManagementSystem\\Views\\Home\\Notifications.cshtml",
+              "ToolTip": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home\\Notifications.cshtml",
+              "RelativeToolTip": "FMCGEnterpriseManagementSystem\\Views\\Home\\Notifications.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-07-10T12:04:50.054Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "Profile.cshtml",
+              "DocumentMoniker": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home\\Profile.cshtml",
+              "RelativeDocumentMoniker": "FMCGEnterpriseManagementSystem\\Views\\Home\\Profile.cshtml",
+              "ToolTip": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home\\Profile.cshtml",
+              "RelativeToolTip": "FMCGEnterpriseManagementSystem\\Views\\Home\\Profile.cshtml",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAmwCgAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-07-10T12:04:40.702Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "CreateInvoice.cshtml",
+              "DocumentMoniker": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home\\CreateInvoice.cshtml",
+              "RelativeDocumentMoniker": "FMCGEnterpriseManagementSystem\\Views\\Home\\CreateInvoice.cshtml",
+              "ToolTip": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home\\CreateInvoice.cshtml",
+              "RelativeToolTip": "FMCGEnterpriseManagementSystem\\Views\\Home\\CreateInvoice.cshtml",
+              "ViewState": "AgIAAL0AAAAAAAAAAAAAAIwAAABIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-07-10T12:04:27.31Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "CustomerList.cshtml",
+              "DocumentMoniker": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home\\CustomerList.cshtml",
+              "RelativeDocumentMoniker": "FMCGEnterpriseManagementSystem\\Views\\Home\\CustomerList.cshtml",
+              "ToolTip": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home\\CustomerList.cshtml",
+              "RelativeToolTip": "FMCGEnterpriseManagementSystem\\Views\\Home\\CustomerList.cshtml",
+              "ViewState": "AgIAABUAAAAAAAAAAAAAACQAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-07-10T12:04:17.638Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Dashboard.cshtml",
+              "DocumentMoniker": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home\\Dashboard.cshtml",
+              "RelativeDocumentMoniker": "FMCGEnterpriseManagementSystem\\Views\\Home\\Dashboard.cshtml",
+              "ToolTip": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home\\Dashboard.cshtml",
+              "RelativeToolTip": "FMCGEnterpriseManagementSystem\\Views\\Home\\Dashboard.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAD0AAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-07-10T12:04:07.398Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home\\Login.cshtml",
+              "RelativeDocumentMoniker": "FMCGEnterpriseManagementSystem\\Views\\Home\\Login.cshtml",
+              "ToolTip": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home\\Login.cshtml",
+              "RelativeToolTip": "FMCGEnterpriseManagementSystem\\Views\\Home\\Login.cshtml",
+              "ViewState": "AgIAAGYAAAAAAAAAAAAAABoAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-07-10T12:03:56.429Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "FMCGEnterpriseManagementSystem\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "FMCGEnterpriseManagementSystem\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAL0AAAAAAAAAAAAAAIoAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-07-10T12:03:35.983Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "FMCGEnterpriseManagementSystem\\Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "FMCGEnterpriseManagementSystem\\Controllers\\HomeController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAIoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-10T12:03:15.637Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Program.cs",
+              "RelativeDocumentMoniker": "FMCGEnterpriseManagementSystem\\Program.cs",
+              "ToolTip": "C:\\Users\\nuk3t\\OneDrive\\Desktop\\INSY7315 - WIL - NovaCore\\WIL-Project-development\\WIL-Project-development\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Program.cs",
+              "RelativeToolTip": "FMCGEnterpriseManagementSystem\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAABAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-10T12:02:45.836Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

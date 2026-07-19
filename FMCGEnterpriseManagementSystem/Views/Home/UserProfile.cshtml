@@ -1,0 +1,74 @@
+@{
+    ViewData["Title"] = "User Profile";
+}
+
+<div class="content-card">
+    <div class="d-flex align-items-center gap-3 mb-4 border-bottom pb-3">
+        <i class="bi bi-person-badge fs-2" style="color: #357383;"></i>
+        <h2 class="fw-bold m-0" style="color: #1c323d;">User Profile</h2>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-12">
+            <h5 class="fw-bold text-secondary mb-3">Personal Information</h5>
+            <div class="row g-3">
+                <div class="col-12 col-md-6">
+                    <label class="form-label fw-bold">Name</label>
+                    <div class="form-control bg-light text-muted border shadow-sm py-2">
+                        [Name Placeholder]
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <label class="form-label fw-bold">Surname</label>
+                    <div class="form-control bg-light text-muted border shadow-sm py-2">
+                        [Surname Placeholder]
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-4 text-muted" />
+
+        <div class="col-12">
+            <h5 class="fw-bold text-secondary mb-3">Contact Details</h5>
+            <div class="row g-3">
+                <div class="col-12 col-md-6">
+                    <label class="form-label fw-bold">Email Address</label>
+                    <div class="form-control bg-light text-muted border shadow-sm py-2">
+                        [Email Placeholder]
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <label class="form-label fw-bold">Contact Number</label>
+                    <div class="form-control bg-light text-muted border shadow-sm py-2">
+                        [Contact Number Placeholder]
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-4 text-muted" />
+
+        <div class="col-12 mb-4">
+            <h5 class="fw-bold text-secondary mb-3">Business Profile</h5>
+            <div class="row g-3">
+                <div class="col-12 col-md-6">
+                    <label class="form-label fw-bold">Business Position / Role</label>
+                    <div class="form-control bg-light text-muted border shadow-sm py-2">
+                        [Business Position Placeholder]
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <label class="form-label fw-bold">Assigned Department</label>
+                    <div class="form-control bg-light text-muted border shadow-sm py-2">
+                        [Department Placeholder]
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-end gap-3 border-top pt-3">
+        <a asp-action="Dashboard" class="btn btn-outline-secondary px-4 w-100 w-sm-auto text-center">Back to Dashboard</a>
+    </div>
+</div>

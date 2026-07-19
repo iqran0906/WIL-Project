@@ -1,0 +1,167 @@
+@{
+
+    ViewData["Title"] = "New Customer";
+
+}
+
+<div class="content-card">
+
+    <h2 class="fw-bold mb-4" style="color: #1c323d;">New Customer</h2>
+
+
+
+    <form method="post">
+
+        <div class="row g-4">
+
+            <div class="col-md-6">
+
+                <div class="mb-3">
+
+                    <label class="form-label">Name</label>
+
+                    <input type="text" class="form-control" placeholder="Enter Customer Name">
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">Surname</label>
+
+                    <input type="text" class="form-control" placeholder="Enter Customer Surname">
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">ID Number</label>
+
+                    <input type="text" class="form-control" placeholder="Enter ID Number">
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">Contact Number</label>
+
+                    <input type="text" class="form-control" placeholder="Enter Contact Number">
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">Email</label>
+
+                    <input type="email" class="form-control" placeholder="Enter Email Address">
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">VAT Number</label>
+
+                    <input type="text" class="form-control" placeholder="Enter VAT Number (Optional)">
+
+                </div>
+
+            </div>
+
+
+
+            <div class="col-md-6">
+
+                <div class="mb-3">
+
+                    <label class="form-label">Physical Address</label>
+
+                    <textarea class="form-control" rows="2" placeholder="Enter Physical Address"></textarea>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">Delivery Address</label>
+
+                    <textarea class="form-control" rows="2" placeholder="Enter Delivery Address"></textarea>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">Group</label>
+
+                    <select class="form-select">
+
+                        <option selected disabled>Select Group</option>
+
+                        <option>Wholesale</option>
+
+                        <option>Retail</option>
+
+                    </select>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">Payment Terms</label>
+
+                    <select class="form-select">
+
+                        <option selected disabled>Select Payment Terms</option>
+
+                        <option>COD</option>
+
+                        <option>14 Days</option>
+
+                        <option>21 Days</option>
+
+                        <option>30 Days</option>
+
+                    </select>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">Sales Rep</label>
+
+                    <select class="form-select">
+
+                        <option selected disabled>Select Sales Rep</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="col-12">
+
+                <div class="mb-4">
+
+                    <label class="form-label">Notes</label>
+
+                    <textarea class="form-control" rows="3" placeholder="Optional"></textarea>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="d-flex justify-content-end gap-3 mt-2">
+
+            <a asp-action="CustomerList" class="btn btn-link text-decoration-none text-secondary align-self-center">Cancel</a>
+
+            <button type="submit" class="btn btn-custom-save">Save Customer</button>
+
+        </div>
+
+    </form>
+
+</div>

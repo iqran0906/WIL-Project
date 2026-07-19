@@ -1,0 +1,142 @@
+@{
+
+    ViewData["Title"] = "New Sales Rep";
+
+}
+
+<div class="content-card">
+
+    <h2 class="fw-bold mb-4" style="color: #1c323d;">New Sales Rep</h2>
+
+
+    <form method="post">
+
+        <div class="row g-4">
+
+            <div class="col-md-6">
+
+                <div class="mb-3">
+
+                    <label class="form-label">Name</label>
+
+                    <input type="text" class="form-control" placeholder="Enter Name">
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">Surname</label>
+
+                    <input type="text" class="form-control" placeholder="Enter Surname">
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">Rep Code</label>
+
+                    <input type="text" class="form-control" placeholder="Enter Rep Code">
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">ID Number</label>
+
+                    <input type="text" class="form-control" placeholder="Enter ID Number">
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">Email</label>
+
+                    <input type="email" class="form-control" placeholder="Enter Email Address">
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">Address</label>
+
+                    <textarea class="form-control" rows="2" placeholder="Enter Address"></textarea>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="col-md-6">
+
+                <div class="mb-3">
+
+                    <label class="form-label">Area</label>
+
+                    <input type="text" class="form-control" placeholder="Enter Rep Area">
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">Salary</label>
+
+                    <input type="text" class="form-control" placeholder="Enter Salary">
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">Commission</label>
+
+                    <input type="text" class="form-control" placeholder="Enter Commission, e.g., 2%, etc">
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">Sales target</label>
+
+                    <input type="text" class="form-control" placeholder="Enter Sales Target, e.g., R500000">
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">Allowances</label>
+
+                    <textarea class="form-control" rows="3" placeholder="Enter Allowances, e.g., Fuel, Food, Cellphone, etc"></textarea>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="col-12">
+
+                <div class="mb-4">
+
+                    <label class="form-label">Notes</label>
+
+                    <textarea class="form-control" rows="3" placeholder="Optional"></textarea>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="d-flex justify-content-end gap-3 mt-2">
+
+            <a asp-action="Dashboard" class="btn btn-link text-decoration-none text-secondary align-self-center">Cancel</a>
+
+            <button type="submit" class="btn btn-custom-save">Save Sales Rep</button>
+
+        </div>
+
+    </form>
+
+</div>
