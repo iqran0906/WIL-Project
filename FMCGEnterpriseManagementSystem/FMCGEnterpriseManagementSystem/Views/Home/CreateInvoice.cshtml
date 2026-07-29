@@ -1,0 +1,201 @@
+﻿@{
+
+    ViewData["Title"] = "New Invoice";
+
+}
+
+<div class="content-card">
+
+    <div class="row align-items-center mb-4">
+
+        <div class="col-sm-6">
+
+            <h5 class="fw-bold m-0" style="color: #1c323d;">Exclusive Distributors (pty) LTD</h5>
+
+            <small class="text-muted d-block">Durban <i class="bi bi-pencil small ms-1" style="cursor:pointer;"></i></small>
+
+        </div>
+
+        <div class="col-sm-6 text-sm-end">
+
+            <div class="d-inline-block text-start">
+
+                <div class="d-flex align-items-center gap-2 mb-2">
+
+                    <label class="small text-secondary fw-bold text-nowrap m-0">Date:</label>
+
+                    <input type="date" class="form-control form-control-sm" style="width:160px;">
+
+                </div>
+
+                <div class="d-flex align-items-center gap-2">
+
+                    <label class="small text-secondary fw-bold text-nowrap m-0">Invoice Number:</label>
+
+                    <input type="text" class="form-control form-control-sm text-center fw-bold" value="ED00125" style="width:160px;">
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <h2 class="fw-bold mb-4" style="color: #1c323d;">New Invoice</h2>
+
+
+    <form method="post">
+
+        <div class="row g-3 mb-4">
+
+            <div class="col-md-6">
+
+                <div class="row align-items-center mb-3">
+
+                    <label class="col-sm-3 fw-bold text-secondary">Customer</label>
+
+                    <div class="col-sm-9">
+
+                        <select class="form-select"><option>Invoices</option></select>
+
+                    </div>
+
+                </div>
+
+                <div class="row align-items-start">
+
+                    <label class="col-sm-3 fw-bold text-secondary">Billing Address:</label>
+
+                    <div class="col-sm-9">
+
+                        <textarea class="form-control bg-white shadow-sm" rows="3" readonly>123 ABC Street&#10;Durban&#10;1234</textarea>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="row align-items-center mb-3">
+
+                    <label class="col-sm-4 fw-bold text-secondary text-sm-end">Payment Terms:</label>
+
+                    <div class="col-sm-8">
+
+                        <select class="form-select"><option>COD</option></select>
+
+                    </div>
+
+                </div>
+
+                <div class="row align-items-center">
+
+                    <label class="col-sm-4 fw-bold text-secondary text-sm-end">Sales Person:</label>
+
+                    <div class="col-sm-8">
+
+                        <select class="form-select"><option>All</option></select>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="table-responsive border rounded bg-light p-2 mb-3">
+
+            <table class="table align-middle m-0 bg-white shadow-sm rounded">
+
+                <thead class="table-secondary text-secondary small">
+
+                    <tr>
+
+                        <th style="width: 8%;">Qty</th>
+
+                        <th style="width: 15%;">Item Code</th>
+
+                        <th style="width: 35%;">Description</th>
+
+                        <th style="width: 12%;">Unit Price</th>
+
+                        <th style="width: 10%;">Disc</th>
+
+                        <th style="width: 10%;">VAT</th>
+
+                        <th style="width: 10%;">Total</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <!-- Empty baseline structural grids matching layout -->
+
+                    <tr>
+
+                        <td><input type="number" class="form-control form-control-sm text-center" value="10"></td>
+
+                        <td><select class="form-select form-select-sm"><option>ED001</option></select></td>
+
+                        <td><input type="text" class="form-control form-control-sm" readonly value="Chocolate Wafers"></td>
+
+                        <td><input type="text" class="form-control form-control-sm text-end" readonly value="R0.00"></td>
+
+                        <td><input type="text" class="form-control form-control-sm text-center" readonly value="0.00%"></td>
+
+                        <td><select class="form-select form-select-sm"><option>[NONE]</option></select></td>
+
+                        <td><input type="text" class="form-control form-control-sm text-end" readonly value="R0.00"></td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+            <div class="p-2">
+
+                <button type="button" class="btn btn-sm btn-link text-decoration-none text-dark fw-bold p-0"><i class="bi bi-plus-lg me-1"></i>Add Item</button>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="row justify-content-end text-end g-0 mb-4 fw-bold text-secondary">
+
+            <div class="col-md-4 border-top pt-2">
+
+                <div class="d-flex justify-content-between py-1"><span>Subtotal</span><span>R0.00</span></div>
+
+                <div class="d-flex justify-content-between py-1 border-top border-dark mt-2 text-dark fs-5"><span>Total</span><span>R0.00</span></div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="d-flex justify-content-end gap-3">
+
+            <button type="button" class="btn btn-outline-secondary px-4">Preview</button>
+
+            <a asp-action="Dashboard" class="btn btn-link text-decoration-none text-secondary align-self-center">Cancel</a>
+
+            <button type="submit" class="btn btn-custom-save">Save Invoice</button>
+
+        </div>
+
+    </form>
+
+</div>

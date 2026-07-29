@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\FMCGEnterpriseManagementSystem",
+    "\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem",
+    "\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Controllers",
+    "\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Models",
+    "\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views",
+    "\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home",
+    "\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Shared"
+  ],
+  "SelectedNode": "\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Shared\\_Layout.cshtml",
+  "PreviewInSolutionExplorer": false
+}

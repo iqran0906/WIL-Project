@@ -18,7 +18,77 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return View();
         }
 
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        public IActionResult Settings()
+        {
+            return View();
+        }
+
+        public IActionResult UserProfile()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        public IActionResult Dashboard()
+        {
+            return View();
+        }
+
+        public IActionResult Reports()
+        {
+            return View();
+        }
+
+        public IActionResult CustomerList()
+        {
+            return View();
+        }
+
+        public IActionResult Notifications()
+        {
+            return View();
+        }
+
+        public IActionResult AddCustomer()
+        {
+            return View();
+        }
+
+        public IActionResult AddSupplier()
+        {
+            return View();
+        }
+
+        public IActionResult AddSalesRep()
+        {
+            return View();
+        }
+
+        public IActionResult AddItem()
+        {
+            return View();
+        }
+
+        public IActionResult CreateInvoice()
+        {
+            return View();
+        }
+
+        public IActionResult CreateQuote()
+        {
+            return View();
+        }
+
+        public IActionResult AddEmployee()
         {
             return View();
         }

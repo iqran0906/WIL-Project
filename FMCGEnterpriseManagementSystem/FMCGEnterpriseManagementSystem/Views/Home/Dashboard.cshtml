@@ -1,0 +1,62 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="mb-4 d-flex justify-content-center justify-content-md-start">
+    <div class="input-group w-100" style="max-width: 400px;">
+        <span class="input-group-text bg-light border-end-0"><i class="bi bi-search"></i></span>
+        <input type="text" class="form-control bg-light border-start-0" placeholder="Search Bar">
+    </div>
+</div>
+
+<h3 class="text-white text-center mb-4">Create New</h3>
+
+<div class="row g-3 justify-content-center mb-5">
+    <div class="col-6 col-md-4 col-lg-2">
+        <a asp-action="AddCustomer" class="btn btn-light w-100 py-4 shadow-sm text-center d-flex flex-column align-items-center justify-content-center border-0 style-card" style="min-height: 110px; background-color: #357383; color: white;">
+            <span class="fw-bold fs-5">Customer</span>
+        </a>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+        <a asp-action="AddSupplier" class="btn btn-light w-100 py-4 shadow-sm text-center d-flex flex-column align-items-center justify-content-center border-0 style-card" style="min-height: 110px; background-color: #357383; color: white;">
+            <span class="fw-bold fs-5">Supplier</span>
+        </a>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+        <a asp-action="AddItem" class="btn btn-light w-100 py-4 shadow-sm text-center d-flex flex-column align-items-center justify-content-center border-0 style-card" style="min-height: 110px; background-color: #357383; color: white;">
+            <span class="fw-bold fs-5">Item</span>
+        </a>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+        <a asp-action="CreateInvoice" class="btn btn-light w-100 py-4 shadow-sm text-center d-flex flex-column align-items-center justify-content-center border-0 style-card" style="min-height: 110px; background-color: #357383; color: white;">
+            <span class="fw-bold fs-5">Invoices</span>
+        </a>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+        <a asp-action="CreateQuote" class="btn btn-light w-100 py-4 shadow-sm text-center d-flex flex-column align-items-center justify-content-center border-0 style-card" style="min-height: 110px; background-color: #357383; color: white;">
+            <span class="fw-bold fs-5">Quote</span>
+        </a>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+        <a asp-action="Reports" class="btn btn-light w-100 py-4 shadow-sm text-center d-flex flex-column align-items-center justify-content-center border-0 style-card" style="min-height: 110px; background-color: #357383; color: white;">
+            <span class="fw-bold fs-5">Report</span>
+        </a>
+    </div>
+</div>
+
+<div class="row g-4 mt-4">
+    <div class="col-12 col-md-7">
+        <div class="p-4 rounded shadow-sm" style="background-color: rgba(255,255,255,0.05); min-height: 300px; border: 1px solid rgba(255,255,255,0.1);">
+            <h5 class="text-white mb-3">Income by Month</h5>
+            <div class="d-flex align-items-end justify-content-between h-75 pt-5 text-muted" style="min-height: 200px;">
+                <div class="text-center w-100 text-white-50 small">Monthly Bar Metrics View Dashboard Placeholder</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-5">
+        <div class="p-4 rounded shadow-sm" style="background-color: rgba(255,255,255,0.05); min-height: 300px; border: 1px solid rgba(255,255,255,0.1);">
+            <h5 class="text-white mb-3">Sales Per Category</h5>
+            <div class="text-center text-white-50 small pt-5">Category Distribution Breakdown Matrix View Placeholder</div>
+        </div>
+    </div>
+</div>

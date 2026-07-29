@@ -26,8 +26,9 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+// Launch the Login page when the application starts
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Login}/{id?}");
 
 app.Run();
