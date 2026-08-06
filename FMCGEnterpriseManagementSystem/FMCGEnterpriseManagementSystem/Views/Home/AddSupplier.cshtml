@@ -1,137 +1,70 @@
 ﻿@{
-
     ViewData["Title"] = "New Supplier";
-
 }
 
 <div class="content-card">
-
     <h2 class="fw-bold mb-4" style="color: #1c323d;">New Supplier</h2>
 
-
-
     <form method="post">
-
         <div class="row g-4">
-
             <div class="col-md-6">
-
                 <div class="mb-3">
-
                     <label class="form-label">Company Name</label>
-
                     <input type="text" class="form-control" placeholder="Enter Company Name">
-
                 </div>
-
                 <div class="mb-3">
-
                     <label class="form-label">Contact Person</label>
-
                     <input type="text" class="form-control" placeholder="Enter Contact Person">
-
                 </div>
-
                 <div class="mb-3">
-
                     <label class="form-label">Telephone</label>
-
                     <input type="text" class="form-control" placeholder="Enter Telephone Number">
-
                 </div>
-
                 <div class="mb-3">
-
                     <label class="form-label">Cell Number</label>
-
                     <input type="text" class="form-control" placeholder="Enter Cell Number">
-
                 </div>
-
                 <div class="mb-3">
-
                     <label class="form-label">Email</label>
-
                     <input type="email" class="form-control" placeholder="Enter Email Address">
-
                 </div>
-
             </div>
-
-
 
             <div class="col-md-6">
-
                 <div class="mb-3">
-
                     <label class="form-label">Address</label>
-
                     <textarea class="form-control" rows="2" placeholder="Enter Address"></textarea>
-
                 </div>
-
                 <div class="mb-3">
-
                     <label class="form-label">Credit Limit</label>
-
                     <input type="text" class="form-control" placeholder="Enter Credit Limit, e.g., R500">
-
                 </div>
-
                 <div class="mb-3">
-
                     <label class="form-label">Credit Terms</label>
-
                     <select class="form-select">
-
                         <option selected disabled>Select Select Terms</option>
-
                         <option>Current</option>
-
                         <option>30 Days</option>
-
                         <option>60 Days</option>
-
                     </select>
-
                 </div>
-
                 <div class="mb-3">
-
                     <label class="form-label">VAT Number</label>
-
                     <input type="text" class="form-control" placeholder="Enter VAT Number (Optional)">
-
                 </div>
-
             </div>
-
-
 
             <div class="col-12">
-
                 <div class="mb-4">
-
                     <label class="form-label">Notes</label>
-
                     <textarea class="form-control" rows="3" placeholder="Optional"></textarea>
-
                 </div>
-
             </div>
-
         </div>
-
-
 
         <div class="d-flex justify-content-end gap-3 mt-2">
-
-            <a asp-action="Dashboard" class="btn btn-link text-decoration-none text-secondary align-self-center">Cancel</a>
-
+            <a asp-controller="Home" asp-action="SupplierList" class="btn btn-link text-decoration-none text-secondary align-self-center">Cancel</a>
             <button type="submit" class="btn btn-custom-save">Save Supplier</button>
-
         </div>
-
     </form>
-
 </div>
