@@ -16,8 +16,8 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
             public DateTime InvoiceDate { get; set; }
 
             [Required]
-            public int CustomerId { get; set; }
-            public string CustomerName { get; set; }
+        public string CustomerId { get; set; }
+        public string CustomerName { get; set; }
             public string BillingAddress { get; set; }
 
             public string PaymentTerms { get; set; }
@@ -29,8 +29,8 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
             public decimal Subtotal { get; set; }
             public decimal VatTotal { get; set; }
             public decimal Total { get; set; }
-
-            public string Status { get; set; }
+        public decimal AmountDue { get; set; }
+        public string Status { get; set; }
         }
 
         public class InvoiceItemViewModel
