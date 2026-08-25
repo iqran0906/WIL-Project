@@ -1,20 +1,23 @@
 ﻿@{
-    ViewData["Title"] = "Customers";
+    ViewData["Title"] = "Inventory";
 }
 
 <div class="px-2 py-3">
-    <h2 class="text-white fw-bold mb-3">Customers</h2>
+    <h2 class="text-white fw-bold mb-3">Inventory</h2>
 
-    <div class="mb-4">
-        <a asp-controller="Home" asp-action="AddCustomer" class="btn btn-action-primary text-decoration-none">
-            New Customer
+    <div class="d-flex flex-column gap-2 mb-4" style="max-width: 220px;">
+        <a asp-controller="Home" asp-action="AddItem" class="btn btn-action-primary text-decoration-none text-center">
+            New Item
         </a>
+        <button type="button" class="btn btn-action-primary text-center">
+            Manage Categories
+        </button>
     </div>
 
     <div class="d-flex align-items-center gap-2 mb-4">
         <span class="text-white fw-bold">Keyword:</span>
         <div class="position-relative">
-            <input type="text" class="form-control form-control-sm search-field" placeholder="Customer, Email,etc">
+            <input type="text" class="form-control form-control-sm search-field" placeholder="Item Code, Category, etc">
             <i class="bi bi-search position-absolute end-0 top-50 translate-middle-y me-2 text-white-50 small"></i>
         </div>
     </div>
@@ -23,11 +26,11 @@
         <table class="custom-data-table">
             <thead>
                 <tr>
-                    <th>Contact Person</th>
-                    <th>Contact Number</th>
-                    <th>Group</th>
-                    <th>Terms</th>
-                    <th>Due</th>
+                    <th>Item Code</th>
+                    <th>Description</th>
+                    <th>Quantity</th>
+                    <th>Category</th>
+                    <th>Unit Price Incl VAT</th>
                 </tr>
             </thead>
             <tbody>
