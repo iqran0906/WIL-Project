@@ -1,0 +1,168 @@
+﻿@model FMCGEnterpriseManagementSystem.ViewModels.InvoiceViewModel
+
+@{
+    ViewData["Title"] = "New Invoice";
+}
+
+<div class="content-card">
+    <div class="row align-items-center mb-4">
+        <div class="col-sm-6">
+            <h5 class="fw-bold m-0" style="color: #1c323d;">Exclusive Distributors (pty) LTD</h5>
+            <small class="text-muted d-block">Durban</small>
+        </div>
+        <div class="col-sm-6 text-sm-end">
+            <div class="d-inline-block text-start">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <label class="small text-secondary fw-bold text-nowrap m-0">Date:</label>
+                    <input asp-for="InvoiceDate" type="date" class="form-control form-control-sm" style="width:160px;">
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <label class="small text-secondary fw-bold text-nowrap m-0">Invoice Number:</label>
+                    <input type="text" class="form-control form-control-sm text-center fw-bold" value="Auto-generated" readonly style="width:160px;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="fw-bold mb-4" style="color: #1c323d;">New Invoice</h2>
+
+    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+    <form asp-action="Create" method="post" id="invoiceForm">
+        <div class="row g-3 mb-4">
+            <div class="col-md-6">
+                <div class="row align-items-center mb-3">
+                    <label class="col-sm-3 fw-bold text-secondary">Customer ID</label>
+                    <div class="col-sm-9">
+                        <input asp-for="CustomerId" class="form-control" placeholder="Enter Customer ID" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row align-items-center mb-3">
+                    <label class="col-sm-4 fw-bold text-secondary text-sm-end">Payment Terms:</label>
+                    <div class="col-sm-8">
+                        <select asp-for="PaymentTerms" class="form-select">
+                            <option value="COD">COD</option>
+                            <option value="Net 30">Net 30</option>
+                            <option value="Net 60">Net 60</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive border rounded bg-light p-2 mb-3">
+            <table class="table align-middle m-0 bg-white shadow-sm rounded" id="itemsTable">
+                <thead class="table-secondary text-secondary small">
+                    <tr>
+                        <th style="width: 8%;">Qty</th>
+                        <th style="width: 15%;">Item Code</th>
+                        <th style="width: 27%;">Description</th>
+                        <th style="width: 12%;">Unit Price</th>
+                        <th style="width: 10%;">Disc %</th>
+                        <th style="width: 10%;">VAT %</th>
+                        <th style="width: 10%;">Total</th>
+                        <th style="width: 8%;"></th>
+                    </tr>
+                </thead>
+                <tbody id="itemsBody">
+                    <!-- rows added by JS -->
+                </tbody>
+            </table>
+            <div class="p-2">
+                <button type="button" class="btn btn-sm btn-link text-decoration-none text-dark fw-bold p-0" id="addItemBtn">
+                    <i class="bi bi-plus-lg me-1"></i>Add Item
+                </button>
+            </div>
+        </div>
+
+        <div class="row justify-content-end text-end g-0 mb-4 fw-bold text-secondary">
+            <div class="col-md-4 border-top pt-2">
+                <div class="d-flex justify-content-between py-1"><span>Subtotal</span><span id="subtotalDisplay">R0.00</span></div>
+                <div class="d-flex justify-content-between py-1 border-top border-dark mt-2 text-dark fs-5"><span>Total</span><span id="totalDisplay">R0.00</span></div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-3">
+            <a asp-action="Index" class="btn btn-link text-decoration-none text-secondary align-self-center">Cancel</a>
+            <button type="submit" class="btn btn-custom-save">Save Invoice</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        let itemIndex = 0;
+
+        function addItemRow() {
+            const tbody = document.getElementById('itemsBody');
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><input type="number" name="Items[${itemIndex}].Quantity" class="form-control form-control-sm text-center item-qty" value="1" min="1"></td>
+                <td><input type="text" name="Items[${itemIndex}].ItemCode" class="form-control form-control-sm item-code" placeholder="e.g. ED001"></td>
+                <td><input type="text" name="Items[${itemIndex}].Description" class="form-control form-control-sm item-desc"></td>
+                <td><input type="number" step="0.01" name="Items[${itemIndex}].UnitPrice" class="form-control form-control-sm text-end item-price" value="0.00"></td>
+                <td><input type="number" step="0.01" name="Items[${itemIndex}].DiscountPercent" class="form-control form-control-sm text-center item-disc" value="0"></td>
+                <td><input type="number" step="0.01" name="Items[${itemIndex}].VatPercent" class="form-control form-control-sm text-center item-vat" value="15"></td>
+                <td><span class="line-total">R0.00</span></td>
+                <td><button type="button" class="btn btn-sm btn-link text-danger remove-row">&times;</button></td>
+            `;
+            tbody.appendChild(row);
+            itemIndex++;
+            attachRowEvents(row);
+        }
+
+        function attachRowEvents(row) {
+            const inputs = row.querySelectorAll('.item-qty, .item-price, .item-disc, .item-vat');
+            inputs.forEach(input => input.addEventListener('input', () => {
+                calculateRow(row);
+                calculateTotals();
+            }));
+            row.querySelector('.remove-row').addEventListener('click', () => {
+                row.remove();
+                calculateTotals();
+            });
+        }
+
+        function calculateRow(row) {
+            const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
+            const price = parseFloat(row.querySelector('.item-price').value) || 0;
+            const disc = parseFloat(row.querySelector('.item-disc').value) || 0;
+            const vat = parseFloat(row.querySelector('.item-vat').value) || 0;
+
+            const lineSubtotal = qty * price;
+            const afterDiscount = lineSubtotal - (lineSubtotal * disc / 100);
+            const vatAmount = afterDiscount * vat / 100;
+            const lineTotal = afterDiscount + vatAmount;
+
+            row.querySelector('.line-total').textContent = 'R' + lineTotal.toFixed(2);
+            return lineTotal;
+        }
+
+        function calculateTotals() {
+            let subtotal = 0;
+            let total = 0;
+            document.querySelectorAll('#itemsBody tr').forEach(row => {
+                const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
+                const price = parseFloat(row.querySelector('.item-price').value) || 0;
+                const disc = parseFloat(row.querySelector('.item-disc').value) || 0;
+                const vat = parseFloat(row.querySelector('.item-vat').value) || 0;
+
+                const lineSubtotal = qty * price;
+                const afterDiscount = lineSubtotal - (lineSubtotal * disc / 100);
+                const vatAmount = afterDiscount * vat / 100;
+
+                subtotal += afterDiscount;
+                total += afterDiscount + vatAmount;
+            });
+            document.getElementById('subtotalDisplay').textContent = 'R' + subtotal.toFixed(2);
+            document.getElementById('totalDisplay').textContent = 'R' + total.toFixed(2);
+        }
+
+        document.getElementById('addItemBtn').addEventListener('click', addItemRow);
+
+        // start with one row
+        addItemRow();
+    </script>
+}

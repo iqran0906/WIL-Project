@@ -1,0 +1,86 @@
+﻿@model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.InvoiceViewModel>
+
+@{
+    ViewData["Title"] = "Invoice";
+}
+
+<div class="px-2 py-3">
+    <div class="row align-items-start mb-3">
+        <div class="col-md-4">
+            <h2 class="text-white fw-bold mb-3">Invoice</h2>
+            <a asp-controller="Invoices" asp-action="Create" class="btn btn-action-primary text-decoration-none">
+                New Invoice
+            </a>
+        </div>
+
+        <div class="col-md-8">
+            <form asp-action="Index" method="get">
+                <div class="row g-2 justify-content-md-end text-white">
+                    <div class="col-6 col-sm-3">
+                        <label class="small fw-bold">Customer:</label>
+                        <input type="text" name="customerId" class="form-control form-control-sm" placeholder="Customer ID">
+                    </div>
+                    <div class="col-6 col-sm-3">
+                        <label class="small fw-bold">Start:</label>
+                        <input type="date" name="startDate" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-6 col-sm-3">
+                        <label class="small fw-bold">End:</label>
+                        <input type="date" name="endDate" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-6 col-sm-3">
+                        <label class="small fw-bold">&nbsp;</label>
+                        <button type="submit" class="btn btn-sm btn-light w-100">Filter</button>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-md-end align-items-center gap-2 mt-3">
+                    <span class="text-white fw-bold small">Keyword:</span>
+                    <div class="position-relative">
+                        <input type="text" name="keyword" class="form-control form-control-sm search-field" placeholder="Invoice Number">
+                        <i class="bi bi-search position-absolute end-0 top-50 translate-middle-y me-2 text-white-50 small"></i>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="custom-data-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Invoice No.</th>
+                    <th>Amount Due</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var invoice in Model)
+                    {
+                        <tr>
+                            <td>@invoice.InvoiceDate.ToString("yyyy-MM-dd")</td>
+                            <td>@invoice.InvoiceNumber</td>
+                            <td>R@invoice.AmountDue.ToString("0.00")</td>
+                            <td>R@invoice.Total.ToString("0.00")</td>
+                            <td>@invoice.Status</td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@invoice.Id" class="btn btn-sm btn-outline-secondary">View</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-muted">No invoices found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
