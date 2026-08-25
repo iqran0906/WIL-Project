@@ -1,20 +1,20 @@
 ﻿@{
-    ViewData["Title"] = "Customers";
+    ViewData["Title"] = "Employee";
 }
 
 <div class="px-2 py-3">
-    <h2 class="text-white fw-bold mb-3">Customers</h2>
+    <h2 class="text-white fw-bold mb-3">Employee</h2>
 
     <div class="mb-4">
-        <a asp-controller="Home" asp-action="AddCustomer" class="btn btn-action-primary text-decoration-none">
-            New Customer
+        <a asp-controller="Home" asp-action="AddEmployee" class="btn btn-action-primary text-decoration-none">
+            New Employee
         </a>
     </div>
 
     <div class="d-flex align-items-center gap-2 mb-4">
         <span class="text-white fw-bold">Keyword:</span>
         <div class="position-relative">
-            <input type="text" class="form-control form-control-sm search-field" placeholder="Customer, Email,etc">
+            <input type="text" class="form-control form-control-sm search-field" placeholder="Rep Code, Area, Commission, etc">
             <i class="bi bi-search position-absolute end-0 top-50 translate-middle-y me-2 text-white-50 small"></i>
         </div>
     </div>
@@ -23,11 +23,11 @@
         <table class="custom-data-table">
             <thead>
                 <tr>
-                    <th>Contact Person</th>
-                    <th>Contact Number</th>
-                    <th>Group</th>
-                    <th>Terms</th>
-                    <th>Due</th>
+                    <th>Employee Code</th>
+                    <th>Name</th>
+                    <th>Area</th>
+                    <th>Commission</th>
+                    <th>Target</th>
                 </tr>
             </thead>
             <tbody>

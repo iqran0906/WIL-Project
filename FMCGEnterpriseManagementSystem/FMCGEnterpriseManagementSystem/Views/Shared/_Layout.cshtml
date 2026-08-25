@@ -50,7 +50,6 @@
                 text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
             }
 
-        
         .brand-logo-container {
             width: 80px;
             height: 80px;
@@ -149,13 +148,57 @@
                 background-color: #000000;
                 color: white;
             }
+
+        .btn-action-primary {
+            background-color: #357383;
+            color: white;
+            font-weight: 600;
+            padding: 8px 24px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+        }
+        .btn-action-primary:hover {
+            background-color: #2b5e6b;
+            color: white;
+        }
+
+        .custom-data-table {
+            border-collapse: separate;
+            border-spacing: 0 8px;
+            width: 100%;
+        }
+
+        .custom-data-table th, .custom-data-table td {
+            background: white;
+            padding: 10px 15px;
+            text-align: center;
+            border: 1px solid #c8d6e5;
+            color: #212529;
+            font-weight: 500;
+        }
+
+        .custom-data-table th {
+            font-weight: 600;
+            background: #ffffff;
+        }
+
+        .search-field {
+            max-width: 250px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding-right: 30px;
+        }
+
+        .search-field::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
     </style>
 </head>
 <body>
-    
     <div class="d-md-none text-white" style="background-color: var(--sidebar-bg);">
         <div class="d-flex justify-content-between align-items-center px-3 py-2">
-            
             <div class="d-flex align-items-center gap-2">
                 <img src="~/images/logo.png" alt="Logo" style="width: 32px; height: 32px; border-radius: 50%; object-fit: contain; background: white; padding: 2px;" />
                 <span class="fw-bold fs-5">Menu</span>
@@ -168,11 +211,11 @@
             <ul class="nav flex-column text-center pb-3">
                 <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="Dashboard">Dashboard</a></li>
                 <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="CustomerList">Customers</a></li>
-                <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="AddSupplier">Suppliers</a></li>
-                <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="AddSalesRep">Sales Reps</a></li>
-                <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="AddItem">Inventory</a></li>
-                <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="CreateInvoice">Invoices</a></li>
-                <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="CreateQuote">Quotes</a></li>
+                <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="SupplierList">Suppliers</a></li>
+                <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="EmployeeList">Sales Reps</a></li>
+                <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="InventoryList">Inventory</a></li>
+                <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="InvoiceList">Invoices</a></li>
+                <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="QuoteList">Quotes</a></li>
                 <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="Reports">Reports</a></li>
                 <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="Settings">Settings</a></li>
             </ul>
@@ -181,7 +224,6 @@
 
     <div class="container-fluid p-0">
         <div class="row g-0">
-            
             <div class="col-md-3 col-lg-2 sidebar d-none d-md-flex flex-column justify-content-between">
                 <div>
                     <div class="px-3 mb-4">
@@ -190,17 +232,16 @@
                     <ul class="nav flex-column justify-content-start">
                         <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="Dashboard">Dashboard</a></li>
                         <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="CustomerList">Customers</a></li>
-                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="AddSupplier">Suppliers</a></li>
-                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="AddSalesRep">Sales Reps</a></li>
-                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="AddItem">Inventory</a></li>
-                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="CreateInvoice">Invoices</a></li>
-                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="CreateQuote">Quotes</a></li>
+                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="SupplierList">Suppliers</a></li>
+                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="EmployeeList">Sales Reps</a></li>
+                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="InventoryList">Inventory</a></li>
+                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="InvoiceList">Invoices</a></li>
+                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="QuoteList">Quotes</a></li>
                         <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="Reports">Reports</a></li>
                         <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="Settings">Settings</a></li>
                     </ul>
                 </div>
 
-                
                 <div class="text-center sidebar-logo-wrapper">
                     <div class="brand-logo-container">
                         <img src="~/images/logo.png" alt="Exclusive Distributors Logo" />
@@ -208,7 +249,6 @@
                 </div>
             </div>
 
-            
             <div class="col-12 col-md-9 col-lg-10 d-flex flex-column">
                 <header>
                     <nav class="navbar navbar-expand navbar-light top-navbar d-flex justify-content-between align-items-center">

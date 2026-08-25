@@ -13,85 +13,29 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+        public IActionResult Index() => View();
+        public IActionResult Login() => View();
+        public IActionResult Settings() => View();
+        public IActionResult UserProfile() => View();
+        public IActionResult Privacy() => View();
+        public IActionResult Dashboard() => View();
+        public IActionResult Reports() => View();
+        public IActionResult Notifications() => View();
 
-        public IActionResult Login()
-        {
-            return View();
-        }
+        public IActionResult CustomerList() => View();
+        public IActionResult SupplierList() => View();
+        public IActionResult EmployeeList() => View();
+        public IActionResult InventoryList() => View();
+        public IActionResult InvoiceList() => View();
+        public IActionResult QuoteList() => View();
 
-        public IActionResult Settings()
-        {
-            return View();
-        }
-
-        public IActionResult UserProfile()
-        {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        public IActionResult Dashboard()
-        {
-            return View();
-        }
-
-        public IActionResult Reports()
-        {
-            return View();
-        }
-
-        public IActionResult CustomerList()
-        {
-            return View();
-        }
-
-        public IActionResult Notifications()
-        {
-            return View();
-        }
-
-        public IActionResult AddCustomer()
-        {
-            return View();
-        }
-
-        public IActionResult AddSupplier()
-        {
-            return View();
-        }
-
-        public IActionResult AddSalesRep()
-        {
-            return View();
-        }
-
-        public IActionResult AddItem()
-        {
-            return View();
-        }
-
-        public IActionResult CreateInvoice()
-        {
-            return View();
-        }
-
-        public IActionResult CreateQuote()
-        {
-            return View();
-        }
-
-        public IActionResult AddEmployee()
-        {
-            return View();
-        }
+        public IActionResult AddCustomer() => View();
+        public IActionResult AddSupplier() => View();
+        public IActionResult AddSalesRep() => View();
+        public IActionResult AddEmployee() => View();
+        public IActionResult AddItem() => View();
+        public IActionResult CreateInvoice() => View();
+        public IActionResult CreateQuote() => View();
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
