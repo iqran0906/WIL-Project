@@ -22,6 +22,10 @@ namespace FMCGEnterpriseManagementSystem.Data
 
         public DbSet<Inventory> Inventories { get; set; }
 
+        public DbSet<Quote> Quotes { get; set; }
+
+        public DbSet<QuoteItem> QuoteItems { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
