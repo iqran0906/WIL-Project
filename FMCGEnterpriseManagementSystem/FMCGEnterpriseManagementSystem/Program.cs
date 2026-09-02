@@ -1,14 +1,18 @@
 using FMCGEnterpriseManagementSystem.Data;
-using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using FMCGEnterpriseManagementSystem.Repositories;
-using FMCGEnterpriseManagementSystem.Services.Interfaces;
+using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using FMCGEnterpriseManagementSystem.Services;
+using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
+builder.Services.AddScoped<ISupplierService, SupplierService>();
 
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));

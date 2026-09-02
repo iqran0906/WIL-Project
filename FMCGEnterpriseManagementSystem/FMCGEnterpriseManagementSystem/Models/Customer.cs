@@ -4,11 +4,15 @@
     {
         public string CustomerID { get; set; }
 
-        public string CompanyName { get; set; }
+        public string Name { get; set; }
 
-        public string ContactPerson { get; set; }
+        public string Surname { get; set; }
 
-        public string ContactNumber { get; set; }
+        public string IdNumber { get; set; }
+
+        public string TelephoneNumber { get; set; }
+
+        public string CellNumber { get; set; }
 
         public string Email { get; set; }
 
@@ -22,6 +26,10 @@
 
         public string PaymentMethod { get; set; }
 
-        public string VATNumber { get; set; }
+        public string Notes { get; set; }
+
+        public string SalesRep { get; set; }
+
+        public string? VATNumber { get; set; }
     }
 }
