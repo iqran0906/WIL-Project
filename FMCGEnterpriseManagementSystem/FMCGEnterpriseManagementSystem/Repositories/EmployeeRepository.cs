@@ -24,6 +24,7 @@ namespace FMCGEnterpriseManagementSystem.Repositories
         public async Task<Employee?> GetByIdAsync(string id)
         {
             return await _context.Employees
+                .Include(e => e.NextOfKin)
                 .FirstOrDefaultAsync(e => e.EmployeeID == id);
         }
 
@@ -44,16 +45,22 @@ namespace FMCGEnterpriseManagementSystem.Repositories
             return Task.CompletedTask;
         }
 
-        public async Task<bool> EmployeeNumberExistsAsync(string employeeNumber)
+        public async Task<bool> EmployeeNumberExistsAsync(
+    string employeeNumber,
+    string? excludeEmployeeId = null)
         {
-            return await _context.Employees
-                .AnyAsync(e => e.EmployeeNumber == employeeNumber);
+            return await _context.Employees.AnyAsync(e =>
+                e.EmployeeNumber == employeeNumber &&
+                (excludeEmployeeId == null || e.EmployeeID != excludeEmployeeId));
         }
 
-        public async Task<bool> EmailExistsAsync(string email)
+        public async Task<bool> EmailExistsAsync(
+            string email,
+            string? excludeEmployeeId = null)
         {
-            return await _context.Employees
-                .AnyAsync(e => e.Email == email);
+            return await _context.Employees.AnyAsync(e =>
+                e.Email == email &&
+                (excludeEmployeeId == null || e.EmployeeID != excludeEmployeeId));
         }
 
         public async Task SaveChangesAsync()
