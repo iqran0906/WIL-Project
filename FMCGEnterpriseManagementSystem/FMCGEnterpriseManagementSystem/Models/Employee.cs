@@ -5,8 +5,8 @@ namespace FMCGEnterpriseManagementSystem.Models
     public class Employee
     {
         [Key]
-        [StringLength(20)] 
-        public string EmployeeID { get; set; } = string.Empty; 
+        [StringLength(20)]
+        public string EmployeeID { get; set; } = string.Empty;
 
         [Required]
         [StringLength(20)]
@@ -39,7 +39,8 @@ namespace FMCGEnterpriseManagementSystem.Models
 
         public bool IsActive { get; set; } = true;
 
-        public string? UserID { get; set; }
+        public string? UserId { get; set; }
+        public User? User { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

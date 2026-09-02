@@ -5,9 +5,13 @@ namespace FMCGEnterpriseManagementSystem.Services.Interfaces
     public interface ISupplierService
     {
         Task<IEnumerable<SupplierViewModel>> GetAllSuppliersAsync();
-        Task<SupplierViewModel?> GetSupplierByIdAsync(string id);
+
+        Task<SupplierViewModel?> GetSupplierByIdAsync(int id);
+
         Task CreateSupplierAsync(SupplierViewModel model);
+
         Task UpdateSupplierAsync(SupplierViewModel model);
-        Task DeleteSupplierAsync(string id);
+
+        Task DeleteSupplierAsync(int id);
     }
 }
