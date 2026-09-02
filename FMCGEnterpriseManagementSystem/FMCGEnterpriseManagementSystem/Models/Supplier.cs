@@ -19,5 +19,7 @@
         public string CreditTerms { get; set; }
 
         public string VATNumber { get; set; }
+
+        public string Notes { get; set; }
     }
 }
