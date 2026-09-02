@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Sales Representatives";
+}
+
+<div class="px-2 py-3">
+    <h2 class="text-white fw-bold mb-3">Sales Representative</h2>
+
+    <div class="mb-4">
+        <a asp-controller="Home" asp-action="AddSalesRep" class="btn btn-action-primary text-decoration-none">
+            New Sales Rep
+        </a>
+    </div>
+
+    <div class="d-flex align-items-center gap-2 mb-4">
+        <span class="text-white fw-bold">Keyword:</span>
+        <div class="position-relative">
+            <input type="text" class="form-control form-control-sm search-field" placeholder="Rep Code, Area, Commiss">
+            <i class="bi bi-search position-absolute end-0 top-50 translate-middle-y me-2 text-white-50 small"></i>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="custom-data-table">
+            <thead>
+                <tr>
+                    <th>Rep Code</th>
+                    <th>Name</th>
+                    <th>Area</th>
+                    <th>Commission</th>
+                    <th>Target</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

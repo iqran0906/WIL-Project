@@ -1,142 +1,124 @@
 ﻿@{
-
     ViewData["Title"] = "New Sales Rep";
-
 }
 
 <div class="content-card">
+    <h2 class="font-weight-bold mb-4">New Sales Rep</h2>
 
-    <h2 class="fw-bold mb-4" style="color: #1c323d;">New Sales Rep</h2>
-
-
-    <form method="post">
-
-        <div class="row g-4">
-
-            <div class="col-md-6">
-
-                <div class="mb-3">
-
-                    <label class="form-label">Name</label>
-
-                    <input type="text" class="form-control" placeholder="Enter Name">
-
-                </div>
-
-                <div class="mb-3">
-
-                    <label class="form-label">Surname</label>
-
-                    <input type="text" class="form-control" placeholder="Enter Surname">
-
-                </div>
-
-                <div class="mb-3">
-
-                    <label class="form-label">Rep Code</label>
-
-                    <input type="text" class="form-control" placeholder="Enter Rep Code">
-
-                </div>
-
-                <div class="mb-3">
-
-                    <label class="form-label">ID Number</label>
-
-                    <input type="text" class="form-control" placeholder="Enter ID Number">
-
-                </div>
-
-                <div class="mb-3">
-
-                    <label class="form-label">Email</label>
-
-                    <input type="email" class="form-control" placeholder="Enter Email Address">
-
-                </div>
-
-                <div class="mb-3">
-
-                    <label class="form-label">Address</label>
-
-                    <textarea class="form-control" rows="2" placeholder="Enter Address"></textarea>
-
-                </div>
-
+    <form asp-controller="Home" asp-action="SalesRepList" method="post">
+        <h5 class="mb-3 text-secondary border-bottom pb-2 font-weight-bold">Personal Details</h5>
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <label class="form-label">First Name</label>
+                <input type="text" class="form-control" placeholder="Enter First Name" required />
             </div>
-
-
-
-            <div class="col-md-6">
-
-                <div class="mb-3">
-
-                    <label class="form-label">Area</label>
-
-                    <input type="text" class="form-control" placeholder="Enter Rep Area">
-
-                </div>
-
-                <div class="mb-3">
-
-                    <label class="form-label">Salary</label>
-
-                    <input type="text" class="form-control" placeholder="Enter Salary">
-
-                </div>
-
-                <div class="mb-3">
-
-                    <label class="form-label">Commission</label>
-
-                    <input type="text" class="form-control" placeholder="Enter Commission, e.g., 2%, etc">
-
-                </div>
-
-                <div class="mb-3">
-
-                    <label class="form-label">Sales target</label>
-
-                    <input type="text" class="form-control" placeholder="Enter Sales Target, e.g., R500000">
-
-                </div>
-
-                <div class="mb-3">
-
-                    <label class="form-label">Allowances</label>
-
-                    <textarea class="form-control" rows="3" placeholder="Enter Allowances, e.g., Fuel, Food, Cellphone, etc"></textarea>
-
-                </div>
-
+            <div class="col-md-4">
+                <label class="form-label">Last Name</label>
+                <input type="text" class="form-control" placeholder="Enter Last Name" required />
             </div>
-
-
-
+            <div class="col-md-4">
+                <label class="form-label">Rep Code</label>
+                <input type="text" class="form-control" placeholder="Enter Rep Code" required />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">ID / Passport Number</label>
+                <input type="text" class="form-control" placeholder="Enter ID Number" required />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Email Address</label>
+                <input type="email" class="form-control" placeholder="Enter Email Address" required />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Contact Number</label>
+                <input type="tel" class="form-control" placeholder="Enter Contact Number" required />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Gender</label>
+                <select class="form-select">
+                    <option selected disabled>Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
             <div class="col-12">
-
-                <div class="mb-4">
-
-                    <label class="form-label">Notes</label>
-
-                    <textarea class="form-control" rows="3" placeholder="Optional"></textarea>
-
-                </div>
-
+                <label class="form-label">Residential Address</label>
+                <textarea class="form-control" rows="2" placeholder="Enter Physical Address"></textarea>
             </div>
-
         </div>
 
+        <h5 class="mb-3 text-secondary border-bottom pb-2 font-weight-bold">Sales & Commission Details</h5>
+        <div class="row g-3 mb-4">
+            <div class="col-md-6">
+                <label class="form-label">Assigned Area / Territory</label>
+                <input type="text" class="form-control" placeholder="Enter Area" required />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Commission Rate (%)</label>
+                <input type="number" step="0.01" class="form-control" placeholder="Enter Commission Rate" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Sales Target (ZAR)</label>
+                <input type="number" step="0.01" class="form-control" placeholder="Enter Target Amount" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Status</label>
+                <select class="form-select">
+                    <option selected disabled>Select Status</option>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+            </div>
+        </div>
 
+        <h5 class="mb-3 text-secondary border-bottom pb-2 font-weight-bold">Next of Kin Details</h5>
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <label class="form-label">Next of Kin Full Name</label>
+                <input type="text" class="form-control" placeholder="Enter Full Name" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Relationship</label>
+                <input type="text" class="form-control" placeholder="Enter Relationship" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Contact Phone Number</label>
+                <input type="tel" class="form-control" placeholder="Enter Contact Number" />
+            </div>
+        </div>
 
-        <div class="d-flex justify-content-end gap-3 mt-2">
+        <h5 class="mb-3 text-secondary border-bottom pb-2 font-weight-bold">Banking Details</h5>
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <label class="form-label">Bank Name</label>
+                <select class="form-select">
+                    <option selected disabled>Select Bank</option>
+                    <option value="FNB">First National Bank (FNB)</option>
+                    <option value="Standard Bank">Standard Bank</option>
+                    <option value="ABSA">ABSA</option>
+                    <option value="Nedbank">Nedbank</option>
+                    <option value="Capitec">Capitec</option>
+                    <option value="Discovery">Discovery Bank</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Account Number</label>
+                <input type="text" class="form-control" placeholder="Enter Account Number" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Branch Code</label>
+                <input type="text" class="form-control" placeholder="Enter Branch Code" />
+            </div>
+        </div>
 
-            <a asp-action="Dashboard" class="btn btn-link text-decoration-none text-secondary align-self-center">Cancel</a>
+        <div class="mb-4">
+            <label class="form-label">Notes</label>
+            <textarea class="form-control" rows="3" placeholder="Optional"></textarea>
+        </div>
 
+        <div class="d-flex justify-content-end align-items-center gap-3 pt-2">
+            <a asp-controller="Home" asp-action="SalesRepList" class="text-secondary text-decoration-none">Cancel</a>
             <button type="submit" class="btn btn-custom-save">Save Sales Rep</button>
-
         </div>
-
     </form>
-
 </div>

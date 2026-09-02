@@ -43,19 +43,28 @@
                     <label class="form-label">Delivery Address</label>
                     <textarea class="form-control" rows="2" placeholder="Enter Delivery Address"></textarea>
                 </div>
+
                 <div class="mb-3">
                     <label class="form-label">Group</label>
-                    <select class="form-select">
+                    <select id="groupSelect" class="form-select" onchange="toggleCustomGroup(this)">
                         <option selected disabled>Select Group</option>
-                        <option>Wholesale</option>
-                        <option>Retail</option>
+                        <option value="Wholesale">Wholesale</option>
+                        <option value="Retail">Retail</option>
+                        <option value="Other">Other</option>
                     </select>
+
+                    <div id="customGroupContainer" class="mt-2 d-none">
+                        <label class="form-label small text-muted">New Group Name</label>
+                        <input type="text" id="customGroupName" class="form-control" placeholder="Enter new group name">
+                    </div>
                 </div>
+
                 <div class="mb-3">
                     <label class="form-label">Payment Terms</label>
                     <select class="form-select">
                         <option selected disabled>Select Payment Terms</option>
                         <option>COD</option>
+                        <option>7 Days</option>
                         <option>14 Days</option>
                         <option>21 Days</option>
                         <option>30 Days</option>
@@ -83,3 +92,20 @@
         </div>
     </form>
 </div>
+
+@section Scripts {
+    <script>
+        function toggleCustomGroup(selectElement) {
+            const container = document.getElementById('customGroupContainer');
+            const input = document.getElementById('customGroupName');
+
+            if (selectElement.value === 'Other') {
+                container.classList.remove('d-none');
+                input.focus();
+            } else {
+                container.classList.add('d-none');
+                input.value = '';
+            }
+        }
+    </script>
+}

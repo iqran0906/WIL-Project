@@ -3,76 +3,130 @@
 }
 
 <div class="content-card">
-    <h2 class="fw-bold mb-4" style="color: #1c323d;">New Employee</h2>
+    <h2 class="font-weight-bold mb-4">New Employee</h2>
 
-    <form method="post">
-        <div class="row g-4">
-            <div class="col-md-6 border-end pe-md-4">
-                <div class="mb-3">
-                    <label class="form-label">Name</label>
-                    <input type="text" class="form-control" placeholder="Enter Name">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Surname</label>
-                    <input type="text" class="form-control" placeholder="Enter Surname">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">ID Number</label>
-                    <input type="text" class="form-control" placeholder="Enter ID Number">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Cell Number</label>
-                    <input type="text" class="form-control" placeholder="Enter Cell Number">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Email</label>
-                    <input type="email" class="form-control" placeholder="Enter Email Address">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Nationality</label>
-                    <input type="text" class="form-control" placeholder="Enter Nationality">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Address</label>
-                    <textarea class="form-control" rows="2" placeholder="Enter Address"></textarea>
-                </div>
+    <form asp-controller="Home" asp-action="EmployeeList" method="post">
+        <h5 class="mb-3 text-secondary border-bottom pb-2 font-weight-bold">Personal Details</h5>
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <label class="form-label">First Name</label>
+                <input type="text" class="form-control" placeholder="Enter First Name" required />
             </div>
-
-            <div class="col-md-6 ps-md-4">
-                <h5 class="fw-bold text-muted mb-3 text-end">Next Of Kin</h5>
-
-                <div class="mb-3">
-                    <label class="form-label">Name</label>
-                    <input type="text" class="form-control" placeholder="Enter Name">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Surname</label>
-                    <input type="text" class="form-control" placeholder="Enter Surname">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Relationship</label>
-                    <input type="text" class="form-control" placeholder="Enter Relationship, e.g., Mother, Father, etc">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Contact Number</label>
-                    <input type="text" class="form-control" placeholder="Enter Contact Number">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Address</label>
-                    <textarea class="form-control" rows="2" placeholder="Enter Address"></textarea>
-                </div>
+            <div class="col-md-4">
+                <label class="form-label">Last Name</label>
+                <input type="text" class="form-control" placeholder="Enter Last Name" required />
             </div>
-
-            <div class="col-12 border-top pt-3">
-                <div class="mb-4">
-                    <label class="form-label">Notes</label>
-                    <textarea class="form-control" rows="3" placeholder="Optional"></textarea>
-                </div>
+            <div class="col-md-4">
+                <label class="form-label">ID / Passport Number</label>
+                <input type="text" class="form-control" placeholder="Enter ID Number" required />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Email Address</label>
+                <input type="email" class="form-control" placeholder="Enter Email Address" required />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Contact Number</label>
+                <input type="tel" class="form-control" placeholder="Enter Contact Number" required />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Gender</label>
+                <select class="form-select">
+                    <option selected disabled>Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="col-12">
+                <label class="form-label">Residential Address</label>
+                <textarea class="form-control" rows="2" placeholder="Enter Physical Address"></textarea>
             </div>
         </div>
 
-        <div class="d-flex justify-content-end gap-3 mt-2">
-            <a asp-controller="Home" asp-action="EmployeeList" class="btn btn-link text-decoration-none text-secondary align-self-center">Cancel</a>
+        <h5 class="mb-3 text-secondary border-bottom pb-2 font-weight-bold">Employment Details</h5>
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <label class="form-label">Job Title / Role</label>
+                <input type="text" class="form-control" placeholder="Enter Job Title" required />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Department</label>
+                <select class="form-select">
+                    <option selected disabled>Select Department</option>
+                    <option value="Operations">Operations</option>
+                    <option value="Logistics">Logistics</option>
+                    <option value="Sales">Sales</option>
+                    <option value="Administration">Administration</option>
+                    <option value="Finance">Finance</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Employment Type</label>
+                <select class="form-select">
+                    <option selected disabled>Select Type</option>
+                    <option value="Full-Time">Full-Time</option>
+                    <option value="Part-Time">Part-Time</option>
+                    <option value="Contract">Contract</option>
+                    <option value="Intern">Intern</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Date of Joining</label>
+                <input type="date" class="form-control" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Salary / Rate (ZAR)</label>
+                <input type="number" step="0.01" class="form-control" placeholder="Enter Salary Amount" />
+            </div>
+        </div>
+
+        <h5 class="mb-3 text-secondary border-bottom pb-2 font-weight-bold">Next of Kin Details</h5>
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <label class="form-label">Next of Kin Full Name</label>
+                <input type="text" class="form-control" placeholder="Enter Full Name" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Relationship</label>
+                <input type="text" class="form-control" placeholder="Enter Relationship" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Contact Phone Number</label>
+                <input type="tel" class="form-control" placeholder="Enter Contact Number" />
+            </div>
+        </div>
+
+        <h5 class="mb-3 text-secondary border-bottom pb-2 font-weight-bold">Banking Details</h5>
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <label class="form-label">Bank Name</label>
+                <select class="form-select">
+                    <option selected disabled>Select Bank</option>
+                    <option value="FNB">First National Bank (FNB)</option>
+                    <option value="Standard Bank">Standard Bank</option>
+                    <option value="ABSA">ABSA</option>
+                    <option value="Nedbank">Nedbank</option>
+                    <option value="Capitec">Capitec</option>
+                    <option value="Discovery">Discovery Bank</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Account Number</label>
+                <input type="text" class="form-control" placeholder="Enter Account Number" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Branch Code</label>
+                <input type="text" class="form-control" placeholder="Enter Branch Code" />
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label class="form-label">Notes</label>
+            <textarea class="form-control" rows="3" placeholder="Optional"></textarea>
+        </div>
+
+        <div class="d-flex justify-content-end align-items-center gap-3 pt-2">
+            <a asp-controller="Home" asp-action="EmployeeList" class="text-secondary text-decoration-none">Cancel</a>
             <button type="submit" class="btn btn-custom-save">Save Employee</button>
         </div>
     </form>

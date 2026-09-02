@@ -15,7 +15,6 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
         public IActionResult Index() => View();
         public IActionResult Login() => View();
-        public IActionResult Settings() => View();
         public IActionResult UserProfile() => View();
         public IActionResult Privacy() => View();
         public IActionResult Dashboard() => View();
@@ -25,14 +24,25 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         public IActionResult CustomerList() => View();
         public IActionResult SupplierList() => View();
         public IActionResult EmployeeList() => View();
+
+        public IActionResult SalesRepList() => View();
+
         public IActionResult InventoryList() => View();
         public IActionResult InvoiceList() => View();
         public IActionResult QuoteList() => View();
 
         public IActionResult AddCustomer() => View();
         public IActionResult AddSupplier() => View();
-        public IActionResult AddSalesRep() => View();
         public IActionResult AddEmployee() => View();
+
+        public IActionResult AddSalesRep() => View();
+
+        [HttpPost]
+        public IActionResult AddSalesRep(IFormCollection collection)
+        {
+            return RedirectToAction(nameof(SalesRepList));
+        }
+
         public IActionResult AddItem() => View();
         public IActionResult CreateInvoice() => View();
         public IActionResult CreateQuote() => View();
