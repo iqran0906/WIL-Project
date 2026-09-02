@@ -25,6 +25,8 @@ namespace FMCGEnterpriseManagementSystem.Data
         public DbSet<Quote> Quotes { get; set; }
 
         public DbSet<QuoteItem> QuoteItems { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<NextOfKin> NextOfKins { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -45,6 +47,12 @@ namespace FMCGEnterpriseManagementSystem.Data
             modelBuilder.Entity<Supplier>()
                 .Property(s => s.CreditLimit)
                 .HasPrecision(18, 2);
+
+            modelBuilder.Entity<Employee>()
+    .HasOne(e => e.NextOfKin)
+    .WithOne(n => n.Employee)
+    .HasForeignKey<NextOfKin>(n => n.EmployeeID)
+    .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
