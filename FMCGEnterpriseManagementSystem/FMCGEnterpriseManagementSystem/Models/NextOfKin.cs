@@ -28,5 +28,7 @@ namespace FMCGEnterpriseManagementSystem.Models
         [EmailAddress]
         [StringLength(100)]
         public string? Email { get; set; }
+
+        public Employee Employee { get; set; } = null!;
     }
 }
