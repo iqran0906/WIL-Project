@@ -18,7 +18,7 @@ namespace FMCGEnterpriseManagementSystem.Models
         public DateTime ExpiryDate { get; set; }
 
         [Required]
-        public string CustomerId { get; set; }
+        public int CustomerId { get; set; }
 
         [ForeignKey("CustomerId")]
         public Customer Customer { get; set; }
@@ -27,7 +27,9 @@ namespace FMCGEnterpriseManagementSystem.Models
 
         public string PaymentTerms { get; set; }
 
-        public string SalesPerson { get; set; }
+        public int? SalesRepresentativeId { get; set; }
+
+        public SalesRepresentative? SalesRepresentative { get; set; }
 
         [Required]
         public QuoteStatus Status { get; set; } = QuoteStatus.Draft;
@@ -39,5 +41,9 @@ namespace FMCGEnterpriseManagementSystem.Models
         public decimal Total { get; set; }
 
         public ICollection<QuoteItem> QuoteItems { get; set; } = new List<QuoteItem>();
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public DateTime? UpdatedAt { get; set; }
     }
 }

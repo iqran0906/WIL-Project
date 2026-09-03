@@ -20,7 +20,7 @@ namespace FMCGEnterpriseManagementSystem.Services
             return suppliers.Select(s => MapToViewModel(s));
         }
 
-        public async Task<SupplierViewModel?> GetSupplierByIdAsync(string id)
+        public async Task<SupplierViewModel?> GetSupplierByIdAsync(int id)
         {
             var supplier = await _supplierRepository.GetByIdAsync(id);
             return supplier == null ? null : MapToViewModel(supplier);
@@ -38,14 +38,14 @@ namespace FMCGEnterpriseManagementSystem.Services
             await _supplierRepository.UpdateAsync(supplier);
         }
 
-        public async Task DeleteSupplierAsync(string id)
+        public async Task DeleteSupplierAsync(int id)
         {
             await _supplierRepository.DeleteAsync(id);
         }
 
         private static SupplierViewModel MapToViewModel(Supplier s) => new()
         {
-            SupplierID = s.SupplierID,
+            SupplierId = s.SupplierId,
             CompanyName = s.CompanyName,
             ContactPerson = s.ContactPerson,
             ContactNumber = s.ContactNumber,
@@ -59,7 +59,7 @@ namespace FMCGEnterpriseManagementSystem.Services
 
         private static Supplier MapToEntity(SupplierViewModel vm) => new()
         {
-            SupplierID = vm.SupplierID,
+            SupplierId = vm.SupplierId,
             CompanyName = vm.CompanyName,
             ContactPerson = vm.ContactPerson,
             ContactNumber = vm.ContactNumber,

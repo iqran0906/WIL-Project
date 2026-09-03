@@ -4,7 +4,7 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
 {
     public class SupplierViewModel
     {
-        public string SupplierID { get; set; } = string.Empty;
+        public int SupplierId { get; set; }
 
         [Required(ErrorMessage = "Company name is required.")]
         public string CompanyName { get; set; } = string.Empty;
