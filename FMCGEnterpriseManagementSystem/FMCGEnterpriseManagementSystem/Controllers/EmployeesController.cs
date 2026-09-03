@@ -50,7 +50,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 ContactNumber = model.ContactNumber,
                 JobTitle = model.JobTitle,
                 DateOfEmployment = model.DateOfEmployment,
-                UserID = model.UserID,
+              
 
                 NextOfKin = new NextOfKin
                 {
@@ -102,7 +102,6 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 ContactNumber = employee.ContactNumber,
                 JobTitle = employee.JobTitle,
                 DateOfEmployment = employee.DateOfEmployment,
-                UserID = employee.UserID,
                 IsActive = employee.IsActive,
 
                 NextOfKinID = employee.NextOfKin?.NextOfKinID,
@@ -138,7 +137,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             employee.ContactNumber = model.ContactNumber;
             employee.JobTitle = model.JobTitle;
             employee.DateOfEmployment = model.DateOfEmployment;
-            employee.UserID = model.UserID;
+            
 
             if (employee.NextOfKin == null)
             {

@@ -12,12 +12,12 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
         public string EmployeeNumber { get; set; } = string.Empty;
 
         [Required]
-        [StringLength(100)]
+        [StringLength(50)]
         [Display(Name = "First Name")]
         public string FirstName { get; set; } = string.Empty;
 
         [Required]
-        [StringLength(100)]
+        [StringLength(50)]
         [Display(Name = "Last Name")]
         public string LastName { get; set; } = string.Empty;
 
@@ -42,7 +42,7 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
         [Display(Name = "Date of Employment")]
         public DateTime DateOfEmployment { get; set; }
 
-        public string? UserID { get; set; }
+        public string? UserId { get; set; }
 
         public bool IsActive { get; set; } = true;
 

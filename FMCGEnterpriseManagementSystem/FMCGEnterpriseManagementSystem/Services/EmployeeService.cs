@@ -93,7 +93,7 @@ namespace FMCGEnterpriseManagementSystem.Services
             existingEmployee.ContactNumber = employee.ContactNumber;
             existingEmployee.JobTitle = employee.JobTitle;
             existingEmployee.DateOfEmployment = employee.DateOfEmployment;
-            existingEmployee.UserID = employee.UserID;
+           
 
             if (employee.NextOfKin != null)
             {
