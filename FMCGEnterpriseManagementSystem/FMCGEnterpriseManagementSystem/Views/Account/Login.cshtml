@@ -1,0 +1,198 @@
+﻿@model FMCGEnterpriseManagementSystem.ViewModels.LoginViewModel
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Login";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Exclusive Distributors</title>
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+    <style>
+            :root {
+                --sidebar-bg: #357383;
+                --main-bg: #1c323d;
+                --card-bg: rgba(255, 255, 255, 0.95);
+            }
+
+            body {
+                background-color: var(--main-bg);
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                min-height: 100vh;
+            }
+
+            .login-card {
+                background: var(--card-bg);
+                border-radius: 12px;
+                padding: 30px 20px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                max-width: 420px;
+                width: 100%;
+            }
+
+            @@media (min-width: 576px) {
+                .login-card {
+                    padding: 40px 30px;
+                }
+            }
+
+            .form-control {
+                border-radius: 6px;
+                border: 1px solid #ced4da;
+                padding: 10px 14px;
+                background-color: #f8f9fa;
+            }
+
+                .form-control:focus {
+                    background-color: #fff;
+                    border-color: #357383;
+                    box-shadow: 0 0 0 0.25rem rgba(53, 115, 131, 0.25);
+                }
+
+            .btn-login {
+                background-color: #357383;
+                color: white;
+                padding: 12px;
+                font-weight: 600;
+                border-radius: 6px;
+                border: none;
+                transition: all 0.2s ease;
+            }
+
+                .btn-login:hover {
+                    background-color: #275662;
+                    color: white;
+                }
+
+            .brand-icon {
+                width: 70px;
+                height: 70px;
+                background: #1c323d;
+                color: white;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto 20px auto;
+                font-weight: bold;
+                font-size: 1.5rem;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            }
+
+            .validation-summary-errors {
+                text-align: left;
+                font-size: 0.9rem;
+            }
+    </style>
+</head>
+
+<body class="d-flex align-items-center justify-content-center p-3">
+
+    <div class="login-card text-center">
+
+        <div class="brand-icon">ED</div>
+
+        <h3 class="fw-bold mb-1"
+            style="color: #1c323d;">
+            Exclusive Distributors
+        </h3>
+
+        <p class="text-muted small mb-4">
+            Enterprise System Portal
+        </p>
+
+        <form asp-controller="Account"
+              asp-action="Login"
+              method="post">
+
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly"
+                 class="alert alert-danger"
+                 role="alert">
+            </div>
+
+            <div class="mb-3 text-start">
+
+                <label asp-for="UsernameOrEmail"
+                       class="form-label fw-bold text-secondary small">
+                </label>
+
+                <div class="input-group">
+
+                    <span class="input-group-text bg-white text-muted">
+                        <i class="bi bi-person"></i>
+                    </span>
+
+                    <input asp-for="UsernameOrEmail"
+                           class="form-control"
+                           placeholder="Enter username or email" />
+
+                </div>
+
+                <span asp-validation-for="UsernameOrEmail"
+                      class="text-danger small">
+                </span>
+
+            </div>
+
+            <div class="mb-3 text-start">
+
+                <label asp-for="Password"
+                       class="form-label fw-bold text-secondary small">
+                </label>
+
+                <div class="input-group">
+
+                    <span class="input-group-text bg-white text-muted">
+                        <i class="bi bi-lock"></i>
+                    </span>
+
+                    <input asp-for="Password"
+                           class="form-control"
+                           placeholder="Enter password" />
+
+                </div>
+
+                <span asp-validation-for="Password"
+                      class="text-danger small">
+                </span>
+
+            </div>
+
+            <div class="form-check text-start mb-4">
+
+                <input asp-for="RememberMe"
+                       class="form-check-input" />
+
+                <label asp-for="RememberMe"
+                       class="form-check-label text-secondary small">
+                </label>
+
+            </div>
+
+            <button type="submit"
+                    class="btn btn-login w-100 shadow-sm">
+                Login to System
+            </button>
+
+        </form>
+
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+</body>
+</html>
