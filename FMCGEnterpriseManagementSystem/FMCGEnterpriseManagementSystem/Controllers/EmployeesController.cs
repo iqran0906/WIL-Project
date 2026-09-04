@@ -14,9 +14,20 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             _employeeService = employeeService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? keyword)
         {
-            var employees = await _employeeService.GetAllEmployeesAsync();
+            IEnumerable<Employee> employees;
+
+            if (string.IsNullOrWhiteSpace(keyword))
+            {
+                employees = await _employeeService.GetAllEmployeesAsync();
+            }
+            else
+            {
+                employees = await _employeeService.SearchEmployeesAsync(keyword);
+            }
+
+            ViewBag.Keyword = keyword;
 
             return View(employees);
         }

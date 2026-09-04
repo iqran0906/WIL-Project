@@ -28,6 +28,16 @@ namespace FMCGEnterpriseManagementSystem.Services
             return await _employeeRepository.GetByEmployeeNumberAsync(employeeNumber);
         }
 
+        public async Task<IEnumerable<Employee>> SearchEmployeesAsync(string keyword)
+        {
+            if (string.IsNullOrWhiteSpace(keyword))
+            {
+                return await _employeeRepository.GetAllAsync();
+            }
+
+            return await _employeeRepository.SearchAsync(keyword);
+        }
+
         public async Task<bool> CreateEmployeeAsync(Employee employee)
         {
             if (await _employeeRepository.EmployeeNumberExistsAsync(employee.EmployeeNumber))

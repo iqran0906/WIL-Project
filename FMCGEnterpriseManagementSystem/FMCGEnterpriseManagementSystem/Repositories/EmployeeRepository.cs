@@ -34,6 +34,21 @@ namespace FMCGEnterpriseManagementSystem.Repositories
                 .FirstOrDefaultAsync(e => e.EmployeeNumber == employeeNumber);
         }
 
+        public async Task<IEnumerable<Employee>> SearchAsync(string keyword)
+        {
+            keyword = keyword.Trim();
+
+            return await _context.Employees
+                .AsNoTracking()
+                .Where(e =>
+                    e.EmployeeNumber.Contains(keyword) ||
+                    e.FirstName.Contains(keyword) ||
+                    e.LastName.Contains(keyword) ||
+                    e.Email.Contains(keyword) ||
+                    e.JobTitle.Contains(keyword))
+                .ToListAsync();
+        }
+
         public async Task AddAsync(Employee employee)
         {
             await _context.Employees.AddAsync(employee);

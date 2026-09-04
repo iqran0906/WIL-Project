@@ -10,17 +10,20 @@ namespace FMCGEnterpriseManagementSystem.Repositories.Interfaces
 
         Task<Employee?> GetByEmployeeNumberAsync(string employeeNumber);
 
+        Task<IEnumerable<Employee>> SearchAsync(string keyword);
+
         Task AddAsync(Employee employee);
 
         Task UpdateAsync(Employee employee);
 
         Task<bool> EmployeeNumberExistsAsync(
-    string employeeNumber,
-    string? excludeEmployeeId = null);
+            string employeeNumber,
+            string? excludeEmployeeId = null);
 
         Task<bool> EmailExistsAsync(
             string email,
             string? excludeEmployeeId = null);
+
         Task SaveChangesAsync();
     }
 }

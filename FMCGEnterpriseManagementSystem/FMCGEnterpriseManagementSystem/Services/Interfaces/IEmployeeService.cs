@@ -10,6 +10,8 @@ namespace FMCGEnterpriseManagementSystem.Services.Interfaces
 
         Task<Employee?> GetEmployeeByNumberAsync(string employeeNumber);
 
+        Task<IEnumerable<Employee>> SearchEmployeesAsync(string keyword);
+
         Task<bool> CreateEmployeeAsync(Employee employee);
 
         Task<bool> UpdateEmployeeAsync(Employee employee);
