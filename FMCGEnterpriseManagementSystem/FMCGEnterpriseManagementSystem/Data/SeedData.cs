@@ -31,50 +31,66 @@ namespace FMCGEnterpriseManagementSystem.Data
                 }
             }
 
-            var adminEmail =
-                configuration["SeedAdmin:Email"];
+            await SeedUserAsync(
+                userManager,
+                configuration["SeedAdmin:Email"],
+                configuration["SeedAdmin:Password"],
+                "Administrator");
 
-            var adminPassword =
-                configuration["SeedAdmin:Password"];
+            await SeedUserAsync(
+                userManager,
+                configuration["SeedEmployee:Email"],
+                configuration["SeedEmployee:Password"],
+                "Employee");
 
-            if (string.IsNullOrWhiteSpace(adminEmail) ||
-                string.IsNullOrWhiteSpace(adminPassword))
+            await SeedUserAsync(
+                userManager,
+                configuration["SeedSalesRepresentative:Email"],
+                configuration["SeedSalesRepresentative:Password"],
+                "SalesRepresentative");
+        }
+
+        private static async Task SeedUserAsync(
+            UserManager<User> userManager,
+            string? email,
+            string? password,
+            string role)
+        {
+            if (string.IsNullOrWhiteSpace(email) ||
+                string.IsNullOrWhiteSpace(password))
             {
                 return;
             }
 
-            var adminUser =
-                await userManager.FindByEmailAsync(adminEmail);
+            var user =
+                await userManager.FindByEmailAsync(email);
 
-            if (adminUser == null)
+            if (user == null)
             {
-                adminUser = new User
+                user = new User
                 {
-                    UserName = adminEmail,
-                    Email = adminEmail,
+                    UserName = email,
+                    Email = email,
                     EmailConfirmed = true,
                     IsActive = true
                 };
 
                 var result =
                     await userManager.CreateAsync(
-                        adminUser,
-                        adminPassword);
+                        user,
+                        password);
 
-                if (result.Succeeded)
+                if (!result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(
-                        adminUser,
-                        "Administrator");
+                    return;
                 }
             }
-            else if (!await userManager.IsInRoleAsync(
-                         adminUser,
-                         "Administrator"))
+
+            if (!await userManager.IsInRoleAsync(user, role))
             {
                 await userManager.AddToRoleAsync(
-                    adminUser,
-                    "Administrator");
+                    user,
+                    role);
             }
         }
     }
