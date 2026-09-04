@@ -2,9 +2,10 @@
 {
     public class Product
     {
-        public string ProductID { get; set; }
+        public int ProductId { get; set; }
 
-        public string SupplierID { get; set; }
+        public int SupplierId { get; set; }
+        public Supplier Supplier { get; set; } = null!;
 
         public string ProductCode { get; set; }
 
@@ -19,5 +20,10 @@
         public decimal CostIncVat { get; set; }
 
         public decimal SellingPrice { get; set; }
+        public bool IsActive { get; set; } = true;
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public DateTime? UpdatedAt { get; set; }
     }
 }
