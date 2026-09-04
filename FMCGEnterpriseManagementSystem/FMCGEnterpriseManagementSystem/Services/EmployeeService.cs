@@ -38,6 +38,23 @@ namespace FMCGEnterpriseManagementSystem.Services
             return await _employeeRepository.SearchAsync(keyword);
         }
 
+        public async Task<bool> EmployeeNumberExistsAsync(
+    string employeeNumber,
+    string? excludeEmployeeId = null)
+        {
+            return await _employeeRepository.EmployeeNumberExistsAsync(
+                employeeNumber,
+                excludeEmployeeId);
+        }
+
+        public async Task<bool> EmailExistsAsync(
+            string email,
+            string? excludeEmployeeId = null)
+        {
+            return await _employeeRepository.EmailExistsAsync(
+                email,
+                excludeEmployeeId);
+        }
         public async Task<bool> CreateEmployeeAsync(Employee employee)
         {
             if (await _employeeRepository.EmployeeNumberExistsAsync(employee.EmployeeNumber))

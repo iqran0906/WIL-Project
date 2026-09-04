@@ -52,6 +52,24 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 return View(model);
             }
 
+            if (await _employeeService.EmployeeNumberExistsAsync(model.EmployeeNumber))
+            {
+                ModelState.AddModelError(
+                    nameof(model.EmployeeNumber),
+                    "This employee number is already in use.");
+
+                return View(model);
+            }
+
+            if (await _employeeService.EmailExistsAsync(model.Email))
+            {
+                ModelState.AddModelError(
+                    nameof(model.Email),
+                    "An employee with this email address already exists.");
+
+                return View(model);
+            }
+
             var employee = new Employee
             {
                 EmployeeNumber = model.EmployeeNumber,
@@ -131,6 +149,28 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         {
             if (!ModelState.IsValid)
             {
+                return View(model);
+            }
+
+            if (await _employeeService.EmployeeNumberExistsAsync(
+          model.EmployeeNumber,
+          model.EmployeeID))
+            {
+                ModelState.AddModelError(
+                    nameof(model.EmployeeNumber),
+                    "This employee number is already in use.");
+
+                return View(model);
+            }
+
+            if (await _employeeService.EmailExistsAsync(
+                    model.Email,
+                    model.EmployeeID))
+            {
+                ModelState.AddModelError(
+                    nameof(model.Email),
+                    "An employee with this email address already exists.");
+
                 return View(model);
             }
 
