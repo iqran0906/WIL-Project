@@ -2,9 +2,11 @@
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
+    [Authorize(Roles = "Administrator")]
     public class EmployeesController : Controller
     {
         private readonly IEmployeeService _employeeService;
