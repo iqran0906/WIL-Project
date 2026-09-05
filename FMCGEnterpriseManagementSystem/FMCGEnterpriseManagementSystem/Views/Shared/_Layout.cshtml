@@ -212,10 +212,12 @@
                 <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="Dashboard">Dashboard</a></li>
                 <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="CustomerList">Customers</a></li>
                 <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="SupplierList">Suppliers</a></li>
-                <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="EmployeeList">Sales Reps</a></li>
+                <li class="nav-item"> <a class="nav-link py-2" asp-controller="Employees" asp-action="Index"> Employees</a> </li>
                 <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="InventoryList">Inventory</a></li>
                 <li class="nav-item"><a class="nav-link py-2" asp-controller="Invoices" asp-action="Index">Invoices</a></li>
                 <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="QuoteList">Quotes</a></li>
+                <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="InvoiceList">Invoices</a></li>
+                <li class="nav-item"><a class="nav-link py-2" asp-controller="Quotes" asp-action="Index">Quotes</a></li>
                 <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="Reports">Reports</a></li>
                 <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="Settings">Settings</a></li>
             </ul>
@@ -233,10 +235,12 @@
                         <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="Dashboard">Dashboard</a></li>
                         <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="CustomerList">Customers</a></li>
                         <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="SupplierList">Suppliers</a></li>
-                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="EmployeeList">Sales Reps</a></li>
+                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Employees" asp-action="Index">Employees  </a> </li>
                         <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="InventoryList">Inventory</a></li>
                         <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Invoices" asp-action="Index">Invoices</a></li>
                         <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="QuoteList">Quotes</a></li>
+                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="InvoiceList">Invoices</a></li>
+                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Quotes" asp-action="Index">Quotes</a></li>
                         <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="Reports">Reports</a></li>
                         <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="Settings">Settings</a></li>
                     </ul>
@@ -254,15 +258,39 @@
                     <nav class="navbar navbar-expand navbar-light top-navbar d-flex justify-content-between align-items-center">
                         <span class="navbar-brand">Exclusive Distributors</span>
                         <div class="d-flex align-items-center gap-3 gap-md-4 text-white">
-                            <a asp-controller="Home" asp-action="Notifications" class="text-white decoration-none">
+
+                            <a asp-controller="Home"
+                               asp-action="Notifications"
+                               class="text-white text-decoration-none">
                                 <i class="bi bi-bell fs-4" style="cursor: pointer;"></i>
                             </a>
-                            <a asp-controller="Home" asp-action="UserProfile" class="text-white decoration-none">
+
+                            <a asp-controller="Home"
+                               asp-action="UserProfile"
+                               class="text-white text-decoration-none">
                                 <i class="bi bi-person-circle fs-3" style="cursor: pointer;"></i>
                             </a>
+
+                            <form asp-controller="Account"
+                                  asp-action="Logout"
+                                  method="post"
+                                  class="m-0">
+
+                                @Html.AntiForgeryToken()
+
+                                <button type="submit"
+                                        class="btn p-0 border-0 text-white"
+                                        title="Logout">
+                                    <i class="bi bi-box-arrow-right fs-4"></i>
+                                </button>
+
+                            </form>
+
                         </div>
                     </nav>
                 </header>
+
+
 
                 <div class="container-fluid px-2 px-md-4">
                     <main role="main" class="pb-3">

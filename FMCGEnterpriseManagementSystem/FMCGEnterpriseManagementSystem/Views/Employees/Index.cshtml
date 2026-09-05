@@ -1,0 +1,117 @@
+﻿@model IEnumerable<FMCGEnterpriseManagementSystem.Models.Employee>
+
+@{
+    ViewData["Title"] = "Employees";
+}
+
+<div class="px-2 py-3">
+    <h2 class="text-white fw-bold mb-3">Employees</h2>
+
+    <div class="mb-4">
+        <a asp-controller="Employees"
+           asp-action="Create"
+           class="btn btn-action-primary text-decoration-none">
+            New Employee
+        </a>
+    </div>
+
+    <div class="d-flex align-items-center gap-2 mb-4">
+        <span class="text-white fw-bold">Keyword:</span>
+
+        <form asp-controller="Employees"
+              asp-action="Index"
+              method="get"
+              class="d-flex gap-2">
+
+            <input type="text"
+                   name="keyword"
+                   value="@ViewBag.Keyword"
+                   class="form-control form-control-sm search-field"
+                   placeholder="Employee number, name, email, job title" />
+
+            <button type="submit"
+                    class="btn btn-sm btn-light">
+                Search
+            </button>
+
+            <a asp-controller="Employees"
+               asp-action="Index"
+               class="btn btn-sm btn-outline-light">
+                Clear
+            </a>
+        </form>
+    </div>
+
+    <div class="table-responsive">
+        <table class="custom-data-table">
+            <thead>
+                <tr>
+                    <th>Employee Number</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Contact Number</th>
+                    <th>Job Title</th>
+                    <th>Date Employed</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var employee in Model)
+                    {
+                        <tr>
+                            <td>@employee.EmployeeNumber</td>
+                            <td>@employee.FirstName @employee.LastName</td>
+                            <td>@employee.Email</td>
+                            <td>@employee.ContactNumber</td>
+                            <td>@employee.JobTitle</td>
+                            <td>@employee.DateOfEmployment.ToString("dd/MM/yyyy")</td>
+                            <td>
+                                @(employee.IsActive ? "Active" : "Inactive")
+                            </td>
+
+                            <td>
+                                <a asp-controller="Employees"
+                                   asp-action="Edit"
+                                   asp-route-id="@employee.EmployeeID"
+                                   class="btn btn-sm btn-outline-secondary">
+                                    Edit
+                                </a>
+
+                                @if (employee.IsActive)
+                                {
+                                    <form asp-controller="Employees"
+                                          asp-action="Deactivate"
+                                          asp-route-id="@employee.EmployeeID"
+                                          method="post"
+                                          class="d-inline">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <button type="submit"
+                                                class="btn btn-sm btn-outline-danger">
+                                            Deactivate
+                                        </button>
+                                    </form>
+                                }
+                            </td>
+
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8" class="text-center">
+                            No employees found.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
