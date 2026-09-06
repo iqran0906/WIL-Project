@@ -1,6 +1,7 @@
 ﻿using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
@@ -28,6 +29,9 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 QuoteDate = DateTime.Today,
                 ExpiryDate = DateTime.Today.AddDays(30)
             };
+
+            ViewBag.PaymentTermsList = new SelectList(new[] { "COD", "7 Days", "14 Days", "21 Days", "28 Days", "30 Days" });
+
             return View(quote);
         }
 
@@ -38,6 +42,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         {
             if (!ModelState.IsValid)
             {
+                ViewBag.PaymentTermsList = new SelectList(new[] { "COD", "7 Days", "14 Days", "21 Days", "28 Days", "30 Days" });
                 return View(quote);
             }
 
