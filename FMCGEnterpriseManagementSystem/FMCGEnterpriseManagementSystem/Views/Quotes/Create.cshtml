@@ -73,9 +73,17 @@
                 <tbody id="quoteItemsBody">
                     <tr class="quote-item-row">
                         <td><input type="number" name="QuoteItems[0].Quantity" class="form-control form-control-sm text-center" value="1"></td>
-                        <td><select name="QuoteItems[0].ProductId" class="form-select form-select-sm"><option>Select Product</option></select></td>
-                        <td><input type="text" class="form-control form-control-sm" readonly value=""></td>
-                        <td><input type="text" name="QuoteItems[0].UnitPrice" class="form-control form-control-sm text-end" readonly value="R0.00"></td>
+                        <td>
+                            <select name="QuoteItems[0].ProductId" class="form-select form-select-sm product-select">
+                                <option value="">Select Product</option>
+                                @foreach (var product in (List<FMCGEnterpriseManagementSystem.Models.Product>)ViewBag.ProductList)
+                                {
+                                    <option value="@product.ProductId" data-price="@product.SellingPrice" data-description="@product.Description">@product.ProductCode</option>
+                                }
+                            </select>
+                        </td>
+                        <td><input type="text" class="form-control form-control-sm description-field" readonly value=""></td>
+                        <td><input type="text" name="QuoteItems[0].UnitPrice" class="form-control form-control-sm text-end price-field" readonly value="R0.00"></td>
                         <td><input type="text" name="QuoteItems[0].DiscountPercent" class="form-control form-control-sm text-center" value="0.00"></td>
                         <td>
                             <select name="QuoteItems[0].VatCategory" class="form-select form-select-sm">
@@ -134,6 +142,19 @@
 
             tbody.appendChild(newRow);
             quoteItemIndex++;
+        });
+
+        document.getElementById('quoteItemsBody').addEventListener('change', function(e) {
+            if (e.target.classList.contains('product-select')) {
+                const row = e.target.closest('tr');
+                const selectedOption = e.target.options[e.target.selectedIndex];
+
+                const price = selectedOption.getAttribute('data-price') || '0.00';
+                const description = selectedOption.getAttribute('data-description') || '';
+
+                row.querySelector('.description-field').value = description;
+                row.querySelector('.price-field').value = 'R' + parseFloat(price).toFixed(2);
+            }
         });
     </script>
 }

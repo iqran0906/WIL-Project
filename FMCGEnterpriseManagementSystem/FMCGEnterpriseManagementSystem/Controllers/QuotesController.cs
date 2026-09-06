@@ -1,17 +1,21 @@
-﻿using FMCGEnterpriseManagementSystem.Models;
+﻿using FMCGEnterpriseManagementSystem.Data;
+using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
     public class QuotesController : Controller
     {
         private readonly IQuoteService _quoteService;
+        private readonly ApplicationDbContext _context;
 
-        public QuotesController(IQuoteService quoteService)
+        public QuotesController(IQuoteService quoteService, ApplicationDbContext context)
         {
             _quoteService = quoteService;
+            _context = context;
         }
 
         // GET: Quotes
@@ -31,6 +35,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             };
 
             ViewBag.PaymentTermsList = new SelectList(new[] { "COD", "7 Days", "14 Days", "21 Days", "28 Days", "30 Days" });
+            ViewBag.ProductList = _context.Products.Where(p => p.IsActive).ToList();
 
             return View(quote);
         }
@@ -43,6 +48,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             if (!ModelState.IsValid)
             {
                 ViewBag.PaymentTermsList = new SelectList(new[] { "COD", "7 Days", "14 Days", "21 Days", "28 Days", "30 Days" });
+                ViewBag.ProductList = _context.Products.Where(p => p.IsActive).ToList();
                 return View(quote);
             }
 
