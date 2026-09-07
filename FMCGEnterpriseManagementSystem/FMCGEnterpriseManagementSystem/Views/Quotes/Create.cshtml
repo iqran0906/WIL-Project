@@ -51,7 +51,9 @@
                 <div class="row align-items-center g-2">
                     <label class="col-12 col-sm-4 fw-bold text-secondary text-sm-end">Sales Person:</label>
                     <div class="col-12 col-sm-8">
-                        <select asp-for="SalesRepresentativeId" class="form-select"><option>All</option></select>
+                        <select asp-for="SalesRepresentativeId" asp-items="ViewBag.SalesRepList" class="form-select">
+                            <option value="">Select Sales Person</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -91,7 +93,7 @@
                                 <option>STANDARD</option>
                             </select>
                         </td>
-                        <td><input type="text" class="form-control form-control-sm text-end" readonly value="R0.00"></td>
+                        <td><input type="text" class="form-control form-control-sm text-end line-total-field" readonly value="R0.00"></td>
                     </tr>
                 </tbody>
             </table>
@@ -102,11 +104,10 @@
 
         <div class="row justify-content-end text-end g-0 mb-4 fw-bold text-secondary">
             <div class="col-12 col-md-4 border-top pt-2">
-                <div class="d-flex justify-content-between py-1"><span>Subtotal</span><span>R0.00</span></div>
-                <div class="d-flex justify-content-between py-1 border-top border-dark mt-2 text-dark fs-5"><span>Total</span><span>R0.00</span></div>
+                <div class="d-flex justify-content-between py-1"><span>Subtotal</span><span id="subtotalAmount">R0.00</span></div>
+                <div class="d-flex justify-content-between py-1 border-top border-dark mt-2 text-dark fs-5"><span>Total</span><span id="totalAmount">R0.00</span></div>
             </div>
         </div>
-
         <div class="d-flex justify-content-end gap-2 gap-sm-3">
             <a asp-controller="Quotes" asp-action="Index" class="btn btn-link text-decoration-none text-secondary align-self-center">Cancel</a>
             <button type="submit" class="btn btn-custom-save">Create Quote</button>
@@ -154,6 +155,62 @@
 
                 row.querySelector('.description-field').value = description;
                 row.querySelector('.price-field').value = 'R' + parseFloat(price).toFixed(2);
+            }
+        });
+
+        const VAT_RATE = 0.15;
+
+        function calculateRow(row) {
+            const quantity = parseFloat(row.querySelector('input[name$=".Quantity"]').value) || 0;
+            const priceText = row.querySelector('.price-field').value.replace('R', '');
+            const unitPrice = parseFloat(priceText) || 0;
+            const discountPercent = parseFloat(row.querySelector('input[name$=".DiscountPercent"]').value) || 0;
+            const vatCategory = row.querySelector('select[name$=".VatCategory"]').value;
+
+            const lineBeforeDiscount = quantity * unitPrice;
+            const discountAmount = lineBeforeDiscount * (discountPercent / 100);
+            const lineAfterDiscount = lineBeforeDiscount - discountAmount;
+            const vatAmount = vatCategory === '[NONE]' ? 0 : lineAfterDiscount * VAT_RATE;
+            const lineTotal = lineAfterDiscount + vatAmount;
+
+            row.querySelector('.line-total-field').value = 'R' + lineTotal.toFixed(2);
+
+            calculateGrandTotals();
+        }
+
+        function calculateGrandTotals() {
+            let subtotal = 0;
+            let total = 0;
+
+            document.querySelectorAll('.quote-item-row').forEach(function(row) {
+                const quantity = parseFloat(row.querySelector('input[name$=".Quantity"]').value) || 0;
+                const priceText = row.querySelector('.price-field').value.replace('R', '');
+                const unitPrice = parseFloat(priceText) || 0;
+                const discountPercent = parseFloat(row.querySelector('input[name$=".DiscountPercent"]').value) || 0;
+
+                const lineBeforeDiscount = quantity * unitPrice;
+                const discountAmount = lineBeforeDiscount * (discountPercent / 100);
+                const lineAfterDiscount = lineBeforeDiscount - discountAmount;
+
+                subtotal += lineAfterDiscount;
+
+                const lineTotalText = row.querySelector('.line-total-field').value.replace('R', '');
+                total += parseFloat(lineTotalText) || 0;
+            });
+
+            document.getElementById('subtotalAmount').textContent = 'R' + subtotal.toFixed(2);
+            document.getElementById('totalAmount').textContent = 'R' + total.toFixed(2);
+        }
+
+        document.getElementById('quoteItemsBody').addEventListener('input', function(e) {
+            if (e.target.matches('input[name$=".Quantity"], input[name$=".DiscountPercent"]')) {
+                calculateRow(e.target.closest('tr'));
+            }
+        });
+
+        document.getElementById('quoteItemsBody').addEventListener('change', function(e) {
+            if (e.target.matches('select[name$=".VatCategory"]') || e.target.classList.contains('product-select')) {
+                calculateRow(e.target.closest('tr'));
             }
         });
     </script>

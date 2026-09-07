@@ -36,7 +36,19 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
             ViewBag.PaymentTermsList = new SelectList(new[] { "COD", "7 Days", "14 Days", "21 Days", "28 Days", "30 Days" });
             ViewBag.ProductList = _context.Products.Where(p => p.IsActive).ToList();
-
+            ViewBag.SalesRepList = new SelectList(
+           _context.SalesRepresentatives
+               .Include(sr => sr.Employee)
+               .Where(sr => sr.IsActive)
+               .Select(sr => new
+               {
+                   sr.SalesRepresentativeId,
+                   FullName = sr.Employee.FirstName + " " + sr.Employee.LastName
+               })
+               .ToList(),
+           "SalesRepresentativeId",
+           "FullName"
+       );
             return View(quote);
         }
 
@@ -49,6 +61,20 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             {
                 ViewBag.PaymentTermsList = new SelectList(new[] { "COD", "7 Days", "14 Days", "21 Days", "28 Days", "30 Days" });
                 ViewBag.ProductList = _context.Products.Where(p => p.IsActive).ToList();
+
+                ViewBag.SalesRepList = new SelectList(
+               _context.SalesRepresentatives
+                   .Include(sr => sr.Employee)
+                   .Where(sr => sr.IsActive)
+                   .Select(sr => new
+                   {
+                       sr.SalesRepresentativeId,
+                       FullName = sr.Employee.FirstName + " " + sr.Employee.LastName
+                   })
+                   .ToList(),
+               "SalesRepresentativeId",
+               "FullName"
+           );
                 return View(quote);
             }
 
