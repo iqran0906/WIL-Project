@@ -17,7 +17,7 @@
                 </div>
                 <div class="d-flex align-items-center justify-content-between gap-2">
                     <label class="small text-secondary fw-bold text-nowrap m-0">Quote Number:</label>
-                    <input type="text" class="form-control form-control-sm text-center fw-bold" value="Auto-generated" readonly style="width:160px;">
+                    <input type="text" class="form-control form-control-sm text-center fw-bold" value="Will be generated on save" readonly style="width:160px;">
                 </div>
             </div>
         </div>
@@ -31,13 +31,24 @@
                 <div class="row align-items-center mb-3 g-2">
                     <label class="col-12 col-sm-3 fw-bold text-secondary">Customer</label>
                     <div class="col-12 col-sm-9">
-                        <select asp-for="CustomerId" class="form-select"><option>Select Customer</option></select>
+                        <select asp-for="CustomerId" class="form-select" id="customerSelect">
+                            <option value="">Select Customer</option>
+                            @foreach (var customer in (List<FMCGEnterpriseManagementSystem.Models.Customer>)ViewBag.CustomerList)
+                            {
+                                <option value="@customer.CustomerId"
+                                        data-payment-terms="@customer.PaymentTerms"
+                                        data-sales-rep-id="@customer.SalesRepresentativeId"
+                                        data-billing-address="@customer.PhysicalAddress">
+                                    @customer.Name @customer.Surname
+                                </option>
+                            }
+                        </select>
                     </div>
                 </div>
                 <div class="row align-items-start g-2">
                     <label class="col-12 col-sm-3 fw-bold text-secondary">Billing Address:</label>
                     <div class="col-12 col-sm-9">
-                        <textarea asp-for="BillingAddress" class="form-control bg-white shadow-sm" rows="3"></textarea>
+                        <textarea asp-for="BillingAddress" class="form-control bg-white shadow-sm" rows="3" readonly></textarea>
                     </div>
                 </div>
             </div>
@@ -45,15 +56,19 @@
                 <div class="row align-items-center mb-3 g-2">
                     <label class="col-12 col-sm-4 fw-bold text-secondary text-sm-end">Payment Terms:</label>
                     <div class="col-12 col-sm-8">
-                        <select asp-for="PaymentTerms" asp-items="ViewBag.PaymentTermsList" class="form-select"></select>
+                        <select id="paymentTermsDisplay" class="form-select" disabled>
+                            <option value="">--</option>
+                        </select>
+                        <input type="hidden" asp-for="PaymentTerms" id="paymentTermsHidden">
                     </div>
                 </div>
                 <div class="row align-items-center g-2">
                     <label class="col-12 col-sm-4 fw-bold text-secondary text-sm-end">Sales Person:</label>
                     <div class="col-12 col-sm-8">
-                        <select asp-for="SalesRepresentativeId" asp-items="ViewBag.SalesRepList" class="form-select">
-                            <option value="">Select Sales Person</option>
+                        <select id="salesRepDisplay" class="form-select" disabled>
+                            <option value="">--</option>
                         </select>
+                        <input type="hidden" asp-for="SalesRepresentativeId" id="salesRepHidden">
                     </div>
                 </div>
             </div>
@@ -69,6 +84,7 @@
                         <th style="width: 12%;">Unit Price</th>
                         <th style="width: 10%;">Disc</th>
                         <th style="width: 10%;">VAT</th>
+                        <th style="width: 10%;">Total Excl. VAT</th>
                         <th style="width: 10%;">Total</th>
                     </tr>
                 </thead>
@@ -86,13 +102,14 @@
                         </td>
                         <td><input type="text" class="form-control form-control-sm description-field" readonly value=""></td>
                         <td><input type="text" name="QuoteItems[0].UnitPrice" class="form-control form-control-sm text-end price-field" readonly value="R0.00"></td>
-                        <td><input type="text" name="QuoteItems[0].DiscountPercent" class="form-control form-control-sm text-center" value="0.00"></td>
+                        <td><input type="number" name="QuoteItems[0].DiscountPercent" class="form-control form-control-sm text-center" value="0" min="0" max="100" step="1"></td>
                         <td>
                             <select name="QuoteItems[0].VatCategory" class="form-select form-select-sm">
                                 <option>[NONE]</option>
                                 <option>STANDARD</option>
                             </select>
                         </td>
+                        <td><input type="text" class="form-control form-control-sm text-end line-total-excl-vat-field" readonly value="R0.00"></td>
                         <td><input type="text" class="form-control form-control-sm text-end line-total-field" readonly value="R0.00"></td>
                     </tr>
                 </tbody>
@@ -105,6 +122,7 @@
         <div class="row justify-content-end text-end g-0 mb-4 fw-bold text-secondary">
             <div class="col-12 col-md-4 border-top pt-2">
                 <div class="d-flex justify-content-between py-1"><span>Subtotal</span><span id="subtotalAmount">R0.00</span></div>
+                <div class="d-flex justify-content-between py-1"><span>VAT</span><span id="vatAmount">R0.00</span></div>
                 <div class="d-flex justify-content-between py-1 border-top border-dark mt-2 text-dark fs-5"><span>Total</span><span id="totalAmount">R0.00</span></div>
             </div>
         </div>
@@ -118,6 +136,13 @@
 @section Scripts {
     <script>
         let quoteItemIndex = 1;
+
+        const salesRepLookup = {
+        @foreach (var rep in ((SelectList)ViewBag.SalesRepList))
+            {
+                @:@rep.Value: "@rep.Text",
+            }
+        };
 
         document.getElementById('addItemBtn').addEventListener('click', function() {
             const tbody = document.getElementById('quoteItemsBody');
@@ -173,6 +198,7 @@
             const vatAmount = vatCategory === '[NONE]' ? 0 : lineAfterDiscount * VAT_RATE;
             const lineTotal = lineAfterDiscount + vatAmount;
 
+            row.querySelector('.line-total-excl-vat-field').value = 'R' + lineAfterDiscount.toFixed(2);
             row.querySelector('.line-total-field').value = 'R' + lineTotal.toFixed(2);
 
             calculateGrandTotals();
@@ -198,7 +224,10 @@
                 total += parseFloat(lineTotalText) || 0;
             });
 
+            const vat = total - subtotal;
+
             document.getElementById('subtotalAmount').textContent = 'R' + subtotal.toFixed(2);
+            document.getElementById('vatAmount').textContent = 'R' + vat.toFixed(2);
             document.getElementById('totalAmount').textContent = 'R' + total.toFixed(2);
         }
 
@@ -212,6 +241,28 @@
             if (e.target.matches('select[name$=".VatCategory"]') || e.target.classList.contains('product-select')) {
                 calculateRow(e.target.closest('tr'));
             }
+        });
+
+        document.getElementById('customerSelect').addEventListener('change', function(e) {
+            const selectedOption = e.target.options[e.target.selectedIndex];
+
+            const paymentTerms = selectedOption.getAttribute('data-payment-terms') || '';
+            const salesRepId = selectedOption.getAttribute('data-sales-rep-id') || '';
+            const billingAddress = selectedOption.getAttribute('data-billing-address') || '';
+
+            // Payment Terms
+            document.getElementById('paymentTermsHidden').value = paymentTerms;
+            const paymentTermsDisplay = document.getElementById('paymentTermsDisplay');
+            paymentTermsDisplay.innerHTML = paymentTerms ? `<option>${paymentTerms}</option>` : '<option value="">--</option>';
+
+            // Sales Rep
+            document.getElementById('salesRepHidden').value = salesRepId;
+            const salesRepDisplay = document.getElementById('salesRepDisplay');
+            const salesRepName = salesRepId ? salesRepLookup[salesRepId] || 'Unknown' : '--';
+            salesRepDisplay.innerHTML = `<option>${salesRepName}</option>`;
+
+            // Billing Address
+            document.getElementById('BillingAddress').value = billingAddress;
         });
     </script>
 }

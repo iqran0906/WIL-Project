@@ -31,7 +31,6 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             var quote = new Quote
             {
                 QuoteDate = DateTime.Today,
-                ExpiryDate = DateTime.Today.AddDays(30)
             };
 
             ViewBag.PaymentTermsList = new SelectList(new[] { "COD", "7 Days", "14 Days", "21 Days", "28 Days", "30 Days" });
@@ -49,6 +48,8 @@ namespace FMCGEnterpriseManagementSystem.Controllers
            "SalesRepresentativeId",
            "FullName"
        );
+
+            ViewBag.CustomerList = _context.Customers.Where(c => c.IsActive).ToList();
             return View(quote);
         }
 
@@ -71,10 +72,13 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                        sr.SalesRepresentativeId,
                        FullName = sr.Employee.FirstName + " " + sr.Employee.LastName
                    })
+
                    .ToList(),
                "SalesRepresentativeId",
                "FullName"
            );
+
+                ViewBag.CustomerList = _context.Customers.Where(c => c.IsActive).ToList();
                 return View(quote);
             }
 
