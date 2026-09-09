@@ -17,6 +17,8 @@ namespace FMCGEnterpriseManagementSystem.Data
         public DbSet<Inventory> Inventories { get; set; }
         public DbSet<Quote> Quotes { get; set; }
         public DbSet<QuoteItem> QuoteItems { get; set; }
+        public DbSet<Invoice> Invoices { get; set; }
+        public DbSet<InvoiceItem> InvoiceItems { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<NextOfKin> NextOfKins { get; set; }
         public DbSet<SalesRepresentative> SalesRepresentatives { get; set; }
@@ -99,6 +101,63 @@ namespace FMCGEnterpriseManagementSystem.Data
                 .WithMany(i => i.StockBatches)
                 .HasForeignKey(sb => sb.InventoryId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // Quote -> Invoice
+            modelBuilder.Entity<Invoice>()
+                .HasOne(i => i.Quote)
+                .WithMany()
+                .HasForeignKey(i => i.QuoteId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            // Customer -> Invoice
+            modelBuilder.Entity<Invoice>()
+                .HasOne(i => i.Customer)
+                .WithMany()
+                .HasForeignKey(i => i.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // SalesRepresentative -> Invoice
+            modelBuilder.Entity<Invoice>()
+                .HasOne(i => i.SalesRepresentative)
+                .WithMany()
+                .HasForeignKey(i => i.SalesRepresentativeId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            // Invoice -> InvoiceItems
+            modelBuilder.Entity<InvoiceItem>()
+                .HasOne(ii => ii.Invoice)
+                .WithMany(i => i.InvoiceItems)
+                .HasForeignKey(ii => ii.InvoiceId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Product -> InvoiceItems
+            modelBuilder.Entity<InvoiceItem>()
+                .HasOne(ii => ii.Product)
+                .WithMany()
+                .HasForeignKey(ii => ii.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Invoice decimal precision
+            modelBuilder.Entity<Invoice>()
+                .Property(i => i.Subtotal)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<Invoice>()
+                .Property(i => i.Total)
+                .HasPrecision(18, 2);
+
+            // InvoiceItem decimal precision
+            modelBuilder.Entity<InvoiceItem>()
+                .Property(ii => ii.UnitPrice)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<InvoiceItem>()
+                .Property(ii => ii.DiscountPercent)
+                .HasPrecision(5, 2);
+
+            modelBuilder.Entity<InvoiceItem>()
+                .Property(ii => ii.LineTotal)
+                .HasPrecision(18, 2);
 
             // SalesRepresentative decimal precision
             modelBuilder.Entity<SalesRepresentative>()
