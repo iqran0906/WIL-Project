@@ -1,94 +1,81 @@
-@model FMCGEnterpriseManagementSystem.Models.Invoice
+@model FMCGEnterpriseManagementSystem.ViewModels.InvoiceViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Invoice Preview";
 }
 
-<h1>Details</h1>
+<div class="content-card">
+    <div class="row align-items-center mb-4">
+        <div class="col-sm-6">
+            <h5 class="fw-bold m-0" style="color: #1c323d;">Exclusive Distributors (pty) LTD</h5>
+            <small class="text-muted d-block">Durban</small>
+        </div>
+        <div class="col-sm-6 text-sm-end">
+            <div class="d-inline-block text-start">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <label class="small text-secondary fw-bold text-nowrap m-0">Date:</label>
+                    <span>@Model.InvoiceDate.ToString("yyyy-MM-dd")</span>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <label class="small text-secondary fw-bold text-nowrap m-0">Invoice Number:</label>
+                    <span class="fw-bold">@Model.InvoiceNumber</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<div>
-    <h4>Invoice</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.InvoiceNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.InvoiceNumber)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.InvoiceDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.InvoiceDate)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CustomerId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CustomerId)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Customer)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Customer)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PaymentTerms)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PaymentTerms)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SalesPersonId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SalesPersonId)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Items)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Items)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Subtotal)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Subtotal)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.VatTotal)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.VatTotal)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Total)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Total)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <h2 class="fw-bold mb-4" style="color: #1c323d;">Invoice Preview</h2>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-6">
+            <label class="fw-bold text-secondary">Customer</label>
+            <p>@Model.CustomerName</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+            <label class="fw-bold text-secondary">Payment Terms</label>
+            <p>@Model.PaymentTerms</p>
+        </div>
+    </div>
+
+    <div class="table-responsive border rounded bg-light p-2 mb-3">
+        <table class="table align-middle m-0 bg-white shadow-sm rounded">
+            <thead class="table-secondary text-secondary small">
+                <tr>
+                    <th>Qty</th>
+                    <th>Item Code</th>
+                    <th>Description</th>
+                    <th>Unit Price</th>
+                    <th>Disc %</th>
+                    <th>VAT %</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td>@item.Quantity</td>
+                        <td>@item.ItemCode</td>
+                        <td>@item.Description</td>
+                        <td>R@item.UnitPrice.ToString("0.00")</td>
+                        <td>@item.DiscountPercent.ToString("0.00")%</td>
+                        <td>@item.VatPercent.ToString("0.00")%</td>
+                        <td>R@item.LineTotal.ToString("0.00")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row justify-content-end text-end g-0 mb-4 fw-bold text-secondary">
+        <div class="col-md-4 border-top pt-2">
+            <div class="d-flex justify-content-between py-1"><span>Subtotal (excl. VAT)</span><span>R@Model.Subtotal.ToString("0.00")</span></div>
+            <div class="d-flex justify-content-between py-1"><span>VAT</span><span>R@Model.VatTotal.ToString("0.00")</span></div>
+            <div class="d-flex justify-content-between py-1 border-top border-dark mt-2 text-dark fs-5"><span>Grand Total</span><span>R@Model.Total.ToString("0.00")</span></div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-end gap-3">
+        <a asp-action="Index" class="btn btn-outline-secondary px-4">Back to Invoices</a>
+    </div>
 </div>

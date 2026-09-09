@@ -51,6 +51,7 @@
                 <tr>
                     <th>Date</th>
                     <th>Invoice No.</th>
+                    <th>Customer</th>
                     <th>Amount Due</th>
                     <th>Total</th>
                     <th>Status</th>
@@ -65,9 +66,19 @@
                         <tr>
                             <td>@invoice.InvoiceDate.ToString("yyyy-MM-dd")</td>
                             <td>@invoice.InvoiceNumber</td>
+                            <td>@invoice.CustomerName</td>
                             <td>R@invoice.AmountDue.ToString("0.00")</td>
                             <td>R@invoice.Total.ToString("0.00")</td>
-                            <td>@invoice.Status</td>
+                            <td>
+                                @if (invoice.Status == "Paid")
+                                {
+                                    <span class="badge bg-success">Paid</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Unpaid</span>
+                                }
+                            </td>
                             <td>
                                 <a asp-action="Details" asp-route-id="@invoice.Id" class="btn btn-sm btn-outline-secondary">View</a>
                             </td>

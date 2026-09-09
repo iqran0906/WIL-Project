@@ -18,13 +18,14 @@ namespace FMCGEnterpriseManagementSystem.Repositories
         {
             return await _context.Invoices
                 .Include(i => i.Items)
+                .Include(i => i.Customer)
                 .FirstOrDefaultAsync(i => i.Id == id);
         }
-
         public async Task<IEnumerable<Invoice>> GetAllAsync()
         {
             return await _context.Invoices
                 .Include(i => i.Items)
+                .Include(i => i.Customer)
                 .ToListAsync();
         }
 
