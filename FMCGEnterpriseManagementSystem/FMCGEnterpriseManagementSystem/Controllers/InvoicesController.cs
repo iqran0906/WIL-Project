@@ -14,7 +14,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         }
 
         // GET: Invoices
-        public async Task<IActionResult> Index(string customerId, DateTime? startDate, DateTime? endDate, string keyword)
+        public async Task<IActionResult> Index(int? customerId, DateTime? startDate, DateTime? endDate, string keyword)
         {
             var invoices = await _invoiceService.SearchAsync(customerId, startDate, endDate, keyword);
             return View(invoices);

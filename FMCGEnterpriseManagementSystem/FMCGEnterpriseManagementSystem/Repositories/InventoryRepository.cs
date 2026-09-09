@@ -14,19 +14,19 @@ namespace FMCGEnterpriseManagementSystem.Repositories
             _context = context;
         }
 
-        public async Task<Inventory> GetByProductIdAsync(string productId)
+        public async Task<Inventory> GetByProductIdAsync(int productId)
         {
             return await _context.Inventories
-                .FirstOrDefaultAsync(i => i.ProductID == productId);
+                .FirstOrDefaultAsync(i => i.ProductId == productId);
         }
 
-        public async Task<bool> HasSufficientStockAsync(string productId, int quantity)
+        public async Task<bool> HasSufficientStockAsync(int productId, int quantity)
         {
             var inventory = await GetByProductIdAsync(productId);
             return inventory != null && inventory.QuantityOnHand >= quantity;
         }
 
-        public async Task DeductStockAsync(string productId, int quantity)
+        public async Task DeductStockAsync(int productId, int quantity)
         {
             var inventory = await GetByProductIdAsync(productId);
             if (inventory != null)

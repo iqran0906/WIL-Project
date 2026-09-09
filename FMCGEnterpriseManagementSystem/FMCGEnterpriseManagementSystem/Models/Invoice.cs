@@ -15,7 +15,7 @@ namespace FMCGEnterpriseManagementSystem.Models
         public DateTime InvoiceDate { get; set; }
 
         [Required]
-        public string CustomerId { get; set; }
+        public int CustomerId { get; set; }
         public Customer Customer { get; set; }
 
         public string PaymentTerms { get; set; }

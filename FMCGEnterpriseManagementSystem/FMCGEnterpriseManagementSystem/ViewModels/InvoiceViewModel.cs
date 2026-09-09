@@ -16,7 +16,7 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
             public DateTime InvoiceDate { get; set; }
 
             [Required]
-        public string CustomerId { get; set; }
+        public int CustomerId { get; set; }
         public string CustomerName { get; set; }
             public string BillingAddress { get; set; }
 

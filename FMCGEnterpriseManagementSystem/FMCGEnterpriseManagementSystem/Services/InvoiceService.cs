@@ -50,8 +50,7 @@ namespace FMCGEnterpriseManagementSystem.Services
                     throw new InvalidOperationException($"Product with code {itemVm.ItemCode} not found.");
                 }
 
-                var hasStock = await _inventoryRepository.HasSufficientStockAsync(product.ProductID, itemVm.Quantity);
-                if (!hasStock)
+                var hasStock = await _inventoryRepository.HasSufficientStockAsync(product.ProductId, itemVm.Quantity); if (!hasStock)
                 {
                     throw new InvalidOperationException($"Insufficient stock for product {itemVm.ItemCode}.");
                 }
@@ -100,14 +99,14 @@ namespace FMCGEnterpriseManagementSystem.Services
             return invoices.Select(MapToViewModel);
         }
 
-        public async Task<IEnumerable<InvoiceViewModel>> SearchAsync(string customerId, DateTime? startDate, DateTime? endDate, string keyword)
+        public async Task<IEnumerable<InvoiceViewModel>> SearchAsync(int? customerId, DateTime? startDate, DateTime? endDate, string keyword)
         {
             var invoices = await _invoiceRepository.GetAllAsync();
 
             var filtered = invoices.AsEnumerable();
 
-            if (!string.IsNullOrEmpty(customerId))
-                filtered = filtered.Where(i => i.CustomerId == customerId);
+            if (customerId.HasValue)
+                filtered = filtered.Where(i => i.CustomerId == customerId.Value);
 
             if (startDate.HasValue)
                 filtered = filtered.Where(i => i.InvoiceDate >= startDate.Value);
@@ -144,7 +143,7 @@ namespace FMCGEnterpriseManagementSystem.Services
                     var product = await _productRepository.GetByCodeAsync(item.ItemCode);
                     if (product != null)
                     {
-                        await _inventoryRepository.DeductStockAsync(product.ProductID, item.Quantity);
+                        await _inventoryRepository.DeductStockAsync(product.ProductId, item.Quantity);
                     }
                 }
             }
@@ -165,7 +164,7 @@ namespace FMCGEnterpriseManagementSystem.Services
                 InvoiceNumber = invoice.InvoiceNumber,
                 InvoiceDate = invoice.InvoiceDate,
                 CustomerId = invoice.CustomerId,
-                CustomerName = invoice.Customer?.CompanyName,
+                CustomerName = invoice.Customer != null ? $"{invoice.Customer.Name} {invoice.Customer.Surname}" : null,
                 PaymentTerms = invoice.PaymentTerms,
                 SalesPersonId = invoice.SalesPersonId,
                 Subtotal = invoice.Subtotal,

@@ -14,10 +14,10 @@ namespace FMCGEnterpriseManagementSystem.Repositories
             _context = context;
         }
 
-        public async Task<Product> GetByIdAsync(string productId)
+        public async Task<Product> GetByIdAsync(int productId)
         {
             return await _context.Products
-                .FirstOrDefaultAsync(p => p.ProductID == productId);
+                .FirstOrDefaultAsync(p => p.ProductId == productId);
         }
 
         public async Task<Product> GetByCodeAsync(string productCode)
