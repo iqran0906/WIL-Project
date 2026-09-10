@@ -46,7 +46,7 @@
                     <th>Description</th>
                     <th>Unit Price</th>
                     <th>Disc %</th>
-                    <th>VAT %</th>
+                    <th>VAT</th>
                     <th>Total</th>
                 </tr>
             </thead>
@@ -59,7 +59,7 @@
                         <td>@item.Description</td>
                         <td>R@item.UnitPrice.ToString("0.00")</td>
                         <td>@item.DiscountPercent.ToString("0.00")%</td>
-                        <td>@item.VatPercent.ToString("0.00")%</td>
+                        <td>@(item.VatCategory == "[NONE]" ? "No VAT" : "15%")</td>
                         <td>R@item.LineTotal.ToString("0.00")</td>
                     </tr>
                 }

@@ -37,6 +37,12 @@
                         <input asp-for="CustomerId" class="form-control" placeholder="Enter Customer ID" />
                     </div>
                 </div>
+                <div class="row align-items-start">
+                    <label class="col-sm-3 fw-bold text-secondary">Billing Address:</label>
+                    <div class="col-sm-9">
+                        <textarea asp-for="BillingAddress" class="form-control" rows="3"></textarea>
+                    </div>
+                </div>
             </div>
             <div class="col-md-6">
                 <div class="row align-items-center mb-3">
@@ -57,12 +63,11 @@
                 <thead class="table-secondary text-secondary small">
                     <tr>
                         <th style="width: 8%;">Qty</th>
-                        <th style="width: 15%;">Item Code</th>
-                        <th style="width: 27%;">Description</th>
+                        <th style="width: 12%;">Product ID</th>
                         <th style="width: 12%;">Unit Price</th>
-                        <th style="width: 10%;">Disc %</th>
-                        <th style="width: 10%;">VAT %</th>
-                        <th style="width: 10%;">Total</th>
+                        <th style="width: 12%;">Disc %</th>
+                        <th style="width: 15%;">VAT Category</th>
+                        <th style="width: 12%;">Total</th>
                         <th style="width: 8%;"></th>
                     </tr>
                 </thead>
@@ -94,21 +99,26 @@
 
 @section Scripts {
     <script>
+        const VAT_RATE = 0.15;
         let itemIndex = 0;
 
         function addItemRow() {
             const tbody = document.getElementById('itemsBody');
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td><input type="number" name="Items[${itemIndex}].Quantity" class="form-control form-control-sm text-center item-qty" value="1" min="1"></td>
-                <td><input type="text" name="Items[${itemIndex}].ItemCode" class="form-control form-control-sm item-code" placeholder="e.g. ED001"></td>
-                <td><input type="text" name="Items[${itemIndex}].Description" class="form-control form-control-sm item-desc"></td>
-                <td><input type="number" step="0.01" name="Items[${itemIndex}].UnitPrice" class="form-control form-control-sm text-end item-price" value="0.00"></td>
-                <td><input type="number" step="0.01" name="Items[${itemIndex}].DiscountPercent" class="form-control form-control-sm text-center item-disc" value="0"></td>
-                <td><input type="number" step="0.01" name="Items[${itemIndex}].VatPercent" class="form-control form-control-sm text-center item-vat" value="15"></td>
-                <td><span class="line-total">R0.00</span></td>
-                <td><button type="button" class="btn btn-sm btn-link text-danger remove-row">&times;</button></td>
-            `;
+                        <td><input type="number" name="Items[${itemIndex}].Quantity" class="form-control form-control-sm text-center item-qty" value="1" min="1"></td>
+                        <td><input type="number" name="Items[${itemIndex}].ProductId" class="form-control form-control-sm item-product" placeholder="e.g. 1"></td>
+                        <td><input type="number" step="0.01" name="Items[${itemIndex}].UnitPrice" class="form-control form-control-sm text-end item-price" value="0.00"></td>
+                        <td><input type="number" step="0.01" name="Items[${itemIndex}].DiscountPercent" class="form-control form-control-sm text-center item-disc" value="0"></td>
+                        <td>
+                            <select name="Items[${itemIndex}].VatCategory" class="form-select form-select-sm item-vat">
+                                <option value="STANDARD">Standard</option>
+                                <option value="[NONE]">None</option>
+                            </select>
+                        </td>
+                        <td><span class="line-total">R0.00</span></td>
+                        <td><button type="button" class="btn btn-sm btn-link text-danger remove-row">&times;</button></td>
+                    `;
             tbody.appendChild(row);
             itemIndex++;
             attachRowEvents(row);
@@ -130,11 +140,11 @@
             const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
             const price = parseFloat(row.querySelector('.item-price').value) || 0;
             const disc = parseFloat(row.querySelector('.item-disc').value) || 0;
-            const vat = parseFloat(row.querySelector('.item-vat').value) || 0;
+            const vatCategory = row.querySelector('.item-vat').value;
 
             const lineSubtotal = qty * price;
             const afterDiscount = lineSubtotal - (lineSubtotal * disc / 100);
-            const vatAmount = afterDiscount * vat / 100;
+            const vatAmount = vatCategory === '[NONE]' ? 0 : afterDiscount * VAT_RATE;
             const lineTotal = afterDiscount + vatAmount;
 
             row.querySelector('.line-total').textContent = 'R' + lineTotal.toFixed(2);
@@ -149,11 +159,11 @@
                 const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
                 const price = parseFloat(row.querySelector('.item-price').value) || 0;
                 const disc = parseFloat(row.querySelector('.item-disc').value) || 0;
-                const vat = parseFloat(row.querySelector('.item-vat').value) || 0;
+                const vatCategory = row.querySelector('.item-vat').value;
 
                 const lineSubtotal = qty * price;
                 const afterDiscount = lineSubtotal - (lineSubtotal * disc / 100);
-                const vatAmount = afterDiscount * vat / 100;
+                const vatAmount = vatCategory === '[NONE]' ? 0 : afterDiscount * VAT_RATE;
 
                 subtotal += afterDiscount;
                 vatTotal += vatAmount;

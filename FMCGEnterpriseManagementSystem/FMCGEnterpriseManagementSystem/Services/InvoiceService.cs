@@ -1,5 +1,4 @@
-﻿using FMCGEnterpriseManagementSystem.Enums;
-using FMCGEnterpriseManagementSystem.Models;
+﻿using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;
@@ -8,6 +7,8 @@ namespace FMCGEnterpriseManagementSystem.Services
 {
     public class InvoiceService : IInvoiceService
     {
+        private const decimal VatRate = 0.15m;
+
         private readonly IInvoiceRepository _invoiceRepository;
         private readonly IProductRepository _productRepository;
         private readonly IInventoryRepository _inventoryRepository;
@@ -33,9 +34,10 @@ namespace FMCGEnterpriseManagementSystem.Services
             {
                 CustomerId = model.CustomerId,
                 InvoiceDate = model.InvoiceDate,
+                BillingAddress = model.BillingAddress,
                 PaymentTerms = model.PaymentTerms,
-                SalesPersonId = model.SalesPersonId,
-                Status = InvoiceStatus.Draft,
+                SalesRepresentativeId = model.SalesRepresentativeId,
+                Status = "Draft",
                 InvoiceNumber = await _invoiceRepository.GetNextInvoiceNumberAsync()
             };
 
@@ -44,31 +46,31 @@ namespace FMCGEnterpriseManagementSystem.Services
 
             foreach (var itemVm in model.Items)
             {
-                var product = await _productRepository.GetByCodeAsync(itemVm.ItemCode);
+                var product = await _productRepository.GetByIdAsync(itemVm.ProductId);
                 if (product == null)
                 {
-                    throw new InvalidOperationException($"Product with code {itemVm.ItemCode} not found.");
+                    throw new InvalidOperationException($"Product with ID {itemVm.ProductId} not found.");
                 }
 
-                var hasStock = await _inventoryRepository.HasSufficientStockAsync(product.ProductId, itemVm.Quantity); if (!hasStock)
+                var hasStock = await _inventoryRepository.HasSufficientStockAsync(product.ProductId, itemVm.Quantity);
+                if (!hasStock)
                 {
-                    throw new InvalidOperationException($"Insufficient stock for product {itemVm.ItemCode}.");
+                    throw new InvalidOperationException($"Insufficient stock for product {product.ProductCode}.");
                 }
 
-                decimal lineSubtotal = itemVm.Quantity * itemVm.UnitPrice;
-                decimal discountAmount = lineSubtotal * (itemVm.DiscountPercent / 100m);
-                decimal lineAfterDiscount = lineSubtotal - discountAmount;
-                decimal lineVat = VatHelper.CalculateVat(lineAfterDiscount, itemVm.VatPercent);
+                decimal lineBeforeDiscount = itemVm.Quantity * itemVm.UnitPrice;
+                decimal discountAmount = lineBeforeDiscount * (itemVm.DiscountPercent / 100m);
+                decimal lineAfterDiscount = lineBeforeDiscount - discountAmount;
+                decimal lineVat = itemVm.VatCategory == "[NONE]" ? 0 : lineAfterDiscount * VatRate;
                 decimal lineTotal = lineAfterDiscount + lineVat;
 
-                invoice.Items.Add(new InvoiceItem
+                invoice.InvoiceItems.Add(new InvoiceItem
                 {
-                    ItemCode = itemVm.ItemCode,
-                    Description = itemVm.Description,
+                    ProductId = itemVm.ProductId,
                     Quantity = itemVm.Quantity,
                     UnitPrice = itemVm.UnitPrice,
                     DiscountPercent = itemVm.DiscountPercent,
-                    VatPercent = itemVm.VatPercent,
+                    VatCategory = itemVm.VatCategory,
                     LineTotal = lineTotal
                 });
 
@@ -77,12 +79,11 @@ namespace FMCGEnterpriseManagementSystem.Services
             }
 
             invoice.Subtotal = subtotal;
-            invoice.VatTotal = vatTotal;
             invoice.Total = subtotal + vatTotal;
 
             var saved = await _invoiceRepository.AddAsync(invoice);
 
-            return MapToViewModel(saved);
+            return await GetByIdAsync(saved.InvoiceId);
         }
 
         public async Task<InvoiceViewModel> GetByIdAsync(int id)
@@ -128,23 +129,14 @@ namespace FMCGEnterpriseManagementSystem.Services
                 throw new InvalidOperationException("Invoice not found.");
             }
 
-            if (!Enum.TryParse<InvoiceStatus>(newStatus, out var statusEnum))
-            {
-                throw new InvalidOperationException("Invalid status value.");
-            }
-
             var previousStatus = invoice.Status;
-            invoice.Status = statusEnum;
+            invoice.Status = newStatus;
 
-            if (statusEnum == InvoiceStatus.Approved && previousStatus != InvoiceStatus.Approved)
+            if (newStatus == "Approved" && previousStatus != "Approved")
             {
-                foreach (var item in invoice.Items)
+                foreach (var item in invoice.InvoiceItems)
                 {
-                    var product = await _productRepository.GetByCodeAsync(item.ItemCode);
-                    if (product != null)
-                    {
-                        await _inventoryRepository.DeductStockAsync(product.ProductId, item.Quantity);
-                    }
+                    await _inventoryRepository.DeductStockAsync(item.ProductId, item.Quantity);
                 }
             }
 
@@ -158,29 +150,34 @@ namespace FMCGEnterpriseManagementSystem.Services
 
         private static InvoiceViewModel MapToViewModel(Invoice invoice)
         {
+            decimal vatTotal = invoice.Total - invoice.Subtotal;
+
             return new InvoiceViewModel
             {
-                Id = invoice.Id,
+                InvoiceId = invoice.InvoiceId,
                 InvoiceNumber = invoice.InvoiceNumber,
                 InvoiceDate = invoice.InvoiceDate,
+                QuoteId = invoice.QuoteId,
                 CustomerId = invoice.CustomerId,
                 CustomerName = invoice.Customer != null ? $"{invoice.Customer.Name} {invoice.Customer.Surname}" : null,
+                BillingAddress = invoice.BillingAddress,
                 PaymentTerms = invoice.PaymentTerms,
-                SalesPersonId = invoice.SalesPersonId,
+                SalesRepresentativeId = invoice.SalesRepresentativeId,
                 Subtotal = invoice.Subtotal,
-                VatTotal = invoice.VatTotal,
+                VatTotal = vatTotal,
                 Total = invoice.Total,
                 AmountDue = invoice.Total,
-                Status = invoice.Status.ToString(),
-                Items = invoice.Items.Select(i => new InvoiceItemViewModel
+                Status = invoice.Status,
+                Items = invoice.InvoiceItems.Select(i => new InvoiceItemViewModel
                 {
-                    Id = i.Id,
-                    ItemCode = i.ItemCode,
-                    Description = i.Description,
+                    InvoiceItemId = i.InvoiceItemId,
+                    ProductId = i.ProductId,
+                    ItemCode = i.Product?.ProductCode,
+                    Description = i.Product?.ProductName,
                     Quantity = i.Quantity,
                     UnitPrice = i.UnitPrice,
                     DiscountPercent = i.DiscountPercent,
-                    VatPercent = i.VatPercent,
+                    VatCategory = i.VatCategory,
                     LineTotal = i.LineTotal
                 }).ToList()
             };

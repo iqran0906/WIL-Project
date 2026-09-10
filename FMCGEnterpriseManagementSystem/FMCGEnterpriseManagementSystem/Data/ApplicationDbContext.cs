@@ -24,10 +24,6 @@ namespace FMCGEnterpriseManagementSystem.Data
         public DbSet<SalesRepresentative> SalesRepresentatives { get; set; }
         public DbSet<StockBatch> StockBatches { get; set; }
 
-        public DbSet<Invoice> Invoices { get; set; }
-
-        public DbSet<InvoiceItem> InvoiceItems { get; set; }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

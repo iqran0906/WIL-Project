@@ -17,14 +17,17 @@ namespace FMCGEnterpriseManagementSystem.Repositories
         public async Task<Invoice> GetByIdAsync(int id)
         {
             return await _context.Invoices
-                .Include(i => i.Items)
+                .Include(i => i.InvoiceItems)
+                    .ThenInclude(ii => ii.Product)
                 .Include(i => i.Customer)
-                .FirstOrDefaultAsync(i => i.Id == id);
+                .FirstOrDefaultAsync(i => i.InvoiceId == id);
         }
+
         public async Task<IEnumerable<Invoice>> GetAllAsync()
         {
             return await _context.Invoices
-                .Include(i => i.Items)
+                .Include(i => i.InvoiceItems)
+                    .ThenInclude(ii => ii.Product)
                 .Include(i => i.Customer)
                 .ToListAsync();
         }
