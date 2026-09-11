@@ -46,21 +46,23 @@
                     <th>Description</th>
                     <th>Unit Price</th>
                     <th>Disc %</th>
+                    <th>Total (excl. VAT)</th>
                     <th>VAT</th>
-                    <th>Total</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model.Items)
                 {
+                    var lineExVat = item.VatCategory == "[NONE]" ? item.LineTotal : item.LineTotal / 1.15m;
+                    var lineVatAmount = item.LineTotal - lineExVat;
                     <tr>
                         <td>@item.Quantity</td>
                         <td>@item.ItemCode</td>
                         <td>@item.Description</td>
                         <td>R@item.UnitPrice.ToString("0.00")</td>
                         <td>@item.DiscountPercent.ToString("0.00")%</td>
-                        <td>@(item.VatCategory == "[NONE]" ? "No VAT" : "15%")</td>
-                        <td>R@item.LineTotal.ToString("0.00")</td>
+                        <td>R@lineExVat.ToString("0.00")</td>
+                        <td>R@lineVatAmount.ToString("0.00")</td>
                     </tr>
                 }
             </tbody>

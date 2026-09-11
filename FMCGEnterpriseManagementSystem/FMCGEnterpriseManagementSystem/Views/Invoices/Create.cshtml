@@ -32,15 +32,27 @@
         <div class="row g-3 mb-4">
             <div class="col-md-6">
                 <div class="row align-items-center mb-3">
-                    <label class="col-sm-3 fw-bold text-secondary">Customer ID</label>
+                    <label class="col-sm-3 fw-bold text-secondary">Customer</label>
                     <div class="col-sm-9">
-                        <input asp-for="CustomerId" class="form-control" placeholder="Enter Customer ID" />
+                        <select asp-for="CustomerId" id="customerSelect" class="form-select">
+                            <option value="">-- Select Customer --</option>
+                            @foreach (var customer in Model.AvailableCustomers)
+                            {
+                                <option value="@customer.CustomerId"
+                                        data-address="@customer.DeliveryAddress"
+                                        data-terms="@customer.PaymentTerms"
+                                        data-salesrep="@customer.SalesRepresentativeId"
+                                        data-salesrepname="@(customer.SalesRepresentative?.Employee != null ? $"{customer.SalesRepresentative.Employee.FirstName} {customer.SalesRepresentative.Employee.LastName}" : "")">
+                                    @customer.Name @customer.Surname
+                                </option>
+                            }
+                        </select>
                     </div>
                 </div>
                 <div class="row align-items-start">
                     <label class="col-sm-3 fw-bold text-secondary">Billing Address:</label>
                     <div class="col-sm-9">
-                        <textarea asp-for="BillingAddress" class="form-control" rows="3"></textarea>
+                        <textarea asp-for="BillingAddress" id="billingAddress" class="form-control" rows="3" readonly></textarea>
                     </div>
                 </div>
             </div>
@@ -48,14 +60,17 @@
                 <div class="row align-items-center mb-3">
                     <label class="col-sm-4 fw-bold text-secondary text-sm-end">Payment Terms:</label>
                     <div class="col-sm-8">
-                        <select asp-for="PaymentTerms" class="form-select">
-                            <option value="COD">COD</option>
-                            <option value="Net 30">Net 30</option>
-                            <option value="Net 60">Net 60</option>
-                        </select>
+                        <input asp-for="PaymentTerms" id="paymentTerms" class="form-control" readonly />
                     </div>
                 </div>
-            </div>
+                <div class="row align-items-center">
+                    <label class="col-sm-4 fw-bold text-secondary text-sm-end">Sales Person:</label>
+                    <div class="col-sm-8">
+                        <input asp-for="SalesRepresentativeName" id="salesRepName" class="form-control" readonly />
+                        <input type="hidden" asp-for="SalesRepresentativeId" id="salesRepId" />
+                    </div>
+                </div>
+            </div>actaul n
         </div>
 
         <div class="table-responsive border rounded bg-light p-2 mb-3">
@@ -178,5 +193,13 @@
 
         // start with one row
         addItemRow();
+       
+        document.getElementById('customerSelect').addEventListener('change', function() {
+            const selected = this.options[this.selectedIndex];
+            document.getElementById('billingAddress').value = selected.getAttribute('data-address') || '';
+            document.getElementById('paymentTerms').value = selected.getAttribute('data-terms') || '';
+            document.getElementById('salesRepId').value = selected.getAttribute('data-salesrep') || '';
+            document.getElementById('salesRepName').value = selected.getAttribute('data-salesrepname') || '';
+        });
     </script>
 }

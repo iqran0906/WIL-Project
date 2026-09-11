@@ -1,16 +1,23 @@
-using Microsoft.AspNetCore.Mvc;
+using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;
+using Microsoft.EntityFrameworkCore;
+using FMCGEnterpriseManagementSystem.Data;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
     public class InvoicesController : Controller
     {
         private readonly IInvoiceService _invoiceService;
+        private readonly ICustomerRepository _customerRepository;
+        private readonly ApplicationDbContext _context;
 
-        public InvoicesController(IInvoiceService invoiceService)
+        public InvoicesController(IInvoiceService invoiceService, ICustomerRepository customerRepository, ApplicationDbContext context)
         {
             _invoiceService = invoiceService;
+            _customerRepository = customerRepository;
+            _context = context;
         }
 
         // GET: Invoices
@@ -31,11 +38,17 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return View(invoice);
         }
         // GET: Invoices/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var customers = await _context.Customers
+     .Include(c => c.SalesRepresentative)
+         .ThenInclude(sr => sr.Employee)
+     .ToListAsync();
+
             return View(new InvoiceViewModel
             {
-                InvoiceDate = DateTime.Today
+                InvoiceDate = DateTime.Today,
+                AvailableCustomers = customers
             });
         }
 
