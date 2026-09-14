@@ -1,43 +1,105 @@
-﻿@{
+﻿@model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.CustomerViewModel>
+
+@{
     ViewData["Title"] = "Customers";
 }
 
-<div class="px-2 py-3">
-    <h2 class="text-white fw-bold mb-3">Customers</h2>
-
-    <div class="mb-4">
-        <a asp-controller="Home" asp-action="AddCustomer" class="btn btn-action-primary text-decoration-none">
-            New Customer
-        </a>
-    </div>
-
-    <div class="d-flex align-items-center gap-2 mb-4">
-        <span class="text-white fw-bold">Keyword:</span>
-        <div class="position-relative">
-            <input type="text" class="form-control form-control-sm search-field" placeholder="Customer, Email,etc">
-            <i class="bi bi-search position-absolute end-0 top-50 translate-middle-y me-2 text-white-50 small"></i>
+<div class="p-3">
+    <!-- Header Row -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <!-- Brightened title for dark background -->
+        <h1 class="fw-bold mb-0" style="color: #61b5ff !important; font-size: 2.2rem;">Customers</h1>
+        <div class="d-flex gap-2">
+            <a asp-controller="Home" asp-action="AddCustomer" class="btn btn-success fw-bold px-3 py-1" style="background-color: #008a00; border: none; border-radius: 0;">New Customer</a>
+            <button type="button" class="btn btn-success fw-bold px-3 py-1" style="background-color: #008a00; border: none; border-radius: 0;">Manage Groups</button>
         </div>
     </div>
 
+    <!-- Search & Filter Bar -->
+    <form method="get" class="d-flex align-items-center gap-2 mb-4">
+        <!-- White text for Keyword label -->
+        <label class="fw-bold mb-0 text-white">Keyword:</label>
+        <input type="text" name="searchKeyword" class="form-control form-control-sm rounded-0" placeholder="Customer, Email, Salesp..." style="width: 220px; border: 1px solid #ccc;">
+        <button type="submit" class="btn btn-light btn-sm rounded-0 border px-3" style="background-color: #f4f4f4; border-color: #ccc !important;">Search</button>
+
+        <!-- White text for Checkbox label -->
+        <div class="form-check mb-0 ms-3">
+            <input class="form-check-input rounded-0" type="checkbox" id="displayInactive">
+            <label class="form-check-label text-white small ms-1" for="displayInactive">
+                Display inactive customers
+            </label>
+        </div>
+    </form>
+
+    <!-- Table -->
     <div class="table-responsive">
-        <table class="custom-data-table">
+        <table class="table table-hover align-middle mb-0" style="border: 1px solid #44596e; font-size: 0.95rem;">
             <thead>
-                <tr>
-                    <th>Contact Person</th>
-                    <th>Contact Number</th>
-                    <th>Group</th>
-                    <th>Terms</th>
-                    <th>Due</th>
+                <tr style="background-color: #d8d8d8; border-bottom: 1px solid #c0c0c0;">
+                    <th class="fw-semibold py-2 px-3" style="color: #000;">Name</th>
+                    <th class="fw-semibold py-2 px-3 text-end" style="color: #000;">Balance</th>
+                    <th class="fw-semibold py-2 px-3" style="color: #000;">Due Date</th>
+                    <th class="fw-semibold py-2 px-3 text-center" style="color: #000;">Last Invoice</th>
+                    <th class="fw-semibold py-2 px-3" style="color: #000;">Salesperson</th>
+                    <th class="fw-semibold py-2 px-3" style="color: #000;">Group</th>
+                    <th class="fw-semibold py-2 px-3" style="color: #000;">Email</th>
+                    <th class="fw-semibold py-2 px-3 text-center" style="color: #000; width: 60px;">Action</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var customer in Model)
+                    {
+                        <tr class="text-white" style="border-bottom: 1px solid #2d4052; background-color: #1a2a38;">
+                            <td class="py-2 px-3 text-white">@customer.Name @customer.Surname</td>
+                            <td class="py-2 px-3 text-end text-white">R0.00</td>
+                            <td class="py-2 px-3 text-white">-</td>
+                            <td class="py-2 px-3 text-center text-white">-</td>
+                            <td class="py-2 px-3 text-white">@customer.SalesRep</td>
+                            <td class="py-2 px-3 text-white">@(string.IsNullOrEmpty(customer.CustomerGroup) ? "Default" : customer.CustomerGroup)</td>
+                            <td class="py-2 px-3 text-white">@customer.Email</td>
+                            <td class="py-2 px-3 text-center">
+                                <div class="dropdown">
+                                    <button class="btn btn-sm p-0 border-0 text-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        ▼
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow rounded-0">
+                                        <li>
+                                            <a class="dropdown-item small" asp-controller="Home" asp-action="EditCustomer" asp-route-id="@customer.CustomerID">
+                                                <i class="bi bi-pencil me-2"></i>Edit
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item small" asp-controller="Home" asp-action="DownloadCustomerPdf" asp-route-id="@customer.CustomerID">
+                                                <i class="bi bi-file-earmark-arrow-down me-2"></i>Download PDF
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item small" asp-controller="Home" asp-action="ViewCustomerPdf" asp-route-id="@customer.CustomerID" target="_blank">
+                                                <i class="bi bi-file-earmark-pdf me-2"></i>View PDF
+                                            </a>
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <a class="dropdown-item small text-danger" asp-controller="Home" asp-action="DeleteCustomer" asp-route-id="@customer.CustomerID">
+                                                <i class="bi bi-trash me-2"></i>Delete
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr style="background-color: #13222f;">
+                        <td colspan="8" class="text-center py-4 text-white-50">
+                            No customers found.
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
     </div>
