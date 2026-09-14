@@ -19,6 +19,7 @@ namespace FMCGEnterpriseManagementSystem.Data
         public DbSet<QuoteItem> QuoteItems { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<InvoiceItem> InvoiceItems { get; set; }
+        public DbSet<Payment> Payments { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<NextOfKin> NextOfKins { get; set; }
         public DbSet<SalesRepresentative> SalesRepresentatives { get; set; }
@@ -129,6 +130,13 @@ namespace FMCGEnterpriseManagementSystem.Data
                 .WithMany(i => i.InvoiceItems)
                 .HasForeignKey(ii => ii.InvoiceId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // Invoice -> Payments
+            modelBuilder.Entity<Payment>()
+                .HasOne(p => p.Invoice)
+                .WithMany(i => i.Payments)
+                .HasForeignKey(p => p.InvoiceId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // Product -> InvoiceItems
             modelBuilder.Entity<InvoiceItem>()

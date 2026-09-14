@@ -25,8 +25,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         {
             var quote = new Quote
             {
-                QuoteDate = DateTime.Today,
-                ExpiryDate = DateTime.Today.AddDays(30)
+                QuoteDate = DateTime.Today
             };
             return View(quote);
         }

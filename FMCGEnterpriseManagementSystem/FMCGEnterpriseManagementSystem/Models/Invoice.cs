@@ -45,6 +45,9 @@ namespace FMCGEnterpriseManagementSystem.Models
         public ICollection<InvoiceItem> InvoiceItems { get; set; } =
             new List<InvoiceItem>();
 
+        public ICollection<Payment> Payments { get; set; } =
+            new List<Payment>();
+
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public DateTime? UpdatedAt { get; set; }
