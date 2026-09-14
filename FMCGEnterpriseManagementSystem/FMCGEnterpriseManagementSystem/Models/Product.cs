@@ -2,18 +2,17 @@
 {
     public class Product
     {
-        public int ProductId { get; set; }
+        public string ProductId { get; set; } = Guid.NewGuid().ToString();
 
-        public int SupplierId { get; set; }
-        public Supplier Supplier { get; set; } = null!;
+        public string SupplierId { get; set; } = string.Empty;
 
-        public string ProductCode { get; set; }
+        public string ProductCode { get; set; } = string.Empty;
 
-        public string ProductName { get; set; }
+        public string ProductName { get; set; } = string.Empty;
 
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
 
-        public string Category { get; set; }
+        public string Category { get; set; } = string.Empty;
 
         public decimal CostExVat { get; set; }
 
