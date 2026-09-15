@@ -4,11 +4,12 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
 {
     public class ProductViewModel
     {
-        public string ProductId { get; set; } = string.Empty;
+        public int ProductId { get; set; }
 
         [Required(ErrorMessage = "Please select a supplier.")]
-        [Display(Name = "Supplier ID")]
-        public string SupplierId { get; set; } = string.Empty;
+        [Range(1, int.MaxValue, ErrorMessage = "Please select a valid supplier.")]
+        [Display(Name = "Supplier")]
+        public int SupplierId { get; set; }
 
         [Display(Name = "Product Code")]
         public string? ProductCode { get; set; }
