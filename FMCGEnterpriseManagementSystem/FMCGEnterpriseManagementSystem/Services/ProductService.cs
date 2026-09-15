@@ -22,7 +22,7 @@ namespace FMCGEnterpriseManagementSystem.Services
             return list.Select(MapToViewModel);
         }
 
-        public async Task<ProductViewModel?> GetProductByIdAsync(string id)
+        public async Task<ProductViewModel?> GetProductByIdAsync(int id)
         {
             var product = await _repository.GetByIdAsync(id);
             return product == null ? null : MapToViewModel(product);
@@ -54,7 +54,6 @@ namespace FMCGEnterpriseManagementSystem.Services
 
             var entity = new Product
             {
-                ProductId = string.IsNullOrEmpty(model.ProductId) ? Guid.NewGuid().ToString() : model.ProductId,
                 SupplierId = model.SupplierId,
                 ProductCode = generatedCode,
                 ProductName = model.ProductName,
@@ -93,7 +92,7 @@ namespace FMCGEnterpriseManagementSystem.Services
             await _repository.UpdateAsync(existingEntity);
         }
 
-        public async Task DeleteProductAsync(string id)
+        public async Task DeleteProductAsync(int id)
         {
             await _repository.DeleteAsync(id);
         }
