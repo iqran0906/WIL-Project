@@ -24,7 +24,7 @@ namespace FMCGEnterpriseManagementSystem.Services
                 throw new InvalidOperationException("Payment amount must be greater than zero.");
 
             var alreadyPaid = await _paymentRepository.GetTotalPaidForInvoiceAsync(model.InvoiceId);
-            var outstanding = invoice.TotalAmount - alreadyPaid;
+            var outstanding = invoice.Total - alreadyPaid;
 
             if (model.AmountPaid > outstanding)
                 throw new InvalidOperationException(
@@ -49,22 +49,48 @@ namespace FMCGEnterpriseManagementSystem.Services
                 ?? throw new InvalidOperationException("Invoice not found.");
 
             var alreadyPaid = await _paymentRepository.GetTotalPaidForInvoiceAsync(invoiceId);
+
             return await BuildViewModelAsync(invoice, alreadyPaid);
         }
-
         public async Task<List<PaymentViewModel>> GetAllPaymentsAsync()
         {
             var payments = await _paymentRepository.GetAllAsync();
 
-            return payments.Select(p => new PaymentViewModel
+            var result = new List<PaymentViewModel>();
+
+            foreach (var payment in payments)
             {
-                PaymentId = p.PaymentId,
-                InvoiceId = p.InvoiceId,
-                InvoiceNumber = p.Invoice?.InvoiceNumber,
-                PaymentDate = p.PaymentDate,
-                AmountPaid = p.AmountPaid,
-                PaymentMethod = p.PaymentMethod
-            }).ToList();
+                var totalPaid = await _paymentRepository
+                    .GetTotalPaidForInvoiceAsync(payment.InvoiceId);
+
+                var invoiceTotal = payment.Invoice?.Total ?? 0m;
+                var outstanding = invoiceTotal - totalPaid;
+
+                var status = payment.Invoice != null
+                    ? CalculateStatus(payment.Invoice, totalPaid, outstanding)
+                    : PaymentStatus.Unpaid;
+
+                result.Add(new PaymentViewModel
+                {
+                    PaymentId = payment.PaymentId,
+                    InvoiceId = payment.InvoiceId,
+                    InvoiceNumber = payment.Invoice?.InvoiceNumber,
+                    CustomerName = payment.Invoice?.Customer?.Name,
+
+                    InvoiceTotal = invoiceTotal,
+                    AmountAlreadyPaid = totalPaid,
+                    OutstandingBalance = outstanding < 0 ? 0 : outstanding,
+
+                    PaymentDate = payment.PaymentDate,
+                    AmountPaid = payment.AmountPaid,
+                    PaymentMethod = payment.PaymentMethod,
+
+                    Status = status,
+                    IsOverdue = status == PaymentStatus.Overdue
+                });
+            }
+
+            return result;
         }
 
         public async Task<List<PaymentViewModel>> GetPaymentsForInvoiceAsync(int invoiceId)
@@ -87,19 +113,50 @@ namespace FMCGEnterpriseManagementSystem.Services
                 ?? throw new InvalidOperationException("Invoice not found.");
 
             var paid = await _paymentRepository.GetTotalPaidForInvoiceAsync(invoiceId);
-            return invoice.TotalAmount - paid;
+
+            return invoice.Total - paid;
         }
 
-        private async Task<PaymentViewModel> BuildViewModelAsync(Invoice invoice, decimal totalPaid)
+        public async Task<PaymentViewModel?> GetPaymentByIdAsync(int paymentId)
         {
-            var outstanding = invoice.TotalAmount - totalPaid;
+            var payment = await _paymentRepository.GetByIdAsync(paymentId);
+
+            if (payment == null)
+                return null;
+
+            var totalPaid = await _paymentRepository.GetTotalPaidForInvoiceAsync(payment.InvoiceId);
+            var outstanding = payment.Invoice.Total - totalPaid;
+            var status = CalculateStatus(payment.Invoice, totalPaid, outstanding);
+
+            return new PaymentViewModel
+            {
+                PaymentId = payment.PaymentId,
+                InvoiceId = payment.InvoiceId,
+                InvoiceNumber = payment.Invoice?.InvoiceNumber,
+                CustomerName = payment.Invoice?.Customer?.Name,
+                InvoiceTotal = payment.Invoice.Total,
+                AmountAlreadyPaid = totalPaid,
+                OutstandingBalance = outstanding < 0 ? 0 : outstanding,
+                PaymentDate = payment.PaymentDate,
+                PaymentMethod = payment.PaymentMethod,
+                AmountPaid = payment.AmountPaid,
+                Status = status,
+                IsOverdue = status == PaymentStatus.Overdue
+            };
+        }
+
+        private async Task<PaymentViewModel> BuildViewModelAsync(
+            Invoice invoice,
+            decimal totalPaid)
+        {
+            var outstanding = invoice.Total - totalPaid;
             var status = CalculateStatus(invoice, totalPaid, outstanding);
 
             return new PaymentViewModel
             {
                 InvoiceId = invoice.InvoiceId,
                 InvoiceNumber = invoice.InvoiceNumber,
-                InvoiceTotal = invoice.TotalAmount,
+                InvoiceTotal = invoice.Total,
                 AmountAlreadyPaid = totalPaid,
                 OutstandingBalance = outstanding < 0 ? 0 : outstanding,
                 Status = status,
@@ -108,15 +165,17 @@ namespace FMCGEnterpriseManagementSystem.Services
             };
         }
 
-        private PaymentStatus CalculateStatus(Invoice invoice, decimal totalPaid, decimal outstanding)
+        private PaymentStatus CalculateStatus(
+            Invoice invoice,
+            decimal totalPaid,
+            decimal outstanding)
         {
             if (outstanding <= 0)
                 return PaymentStatus.Paid;
 
-            if (invoice.DueDate < DateTime.Now && totalPaid < invoice.TotalAmount)
-                return PaymentStatus.Overdue;
-
-            return totalPaid > 0 ? PaymentStatus.PartiallyPaid : PaymentStatus.Unpaid;
+            return totalPaid > 0
+                ? PaymentStatus.PartiallyPaid
+                : PaymentStatus.Unpaid;
         }
     }
 }

@@ -45,5 +45,15 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 return View(refreshed);
             }
         }
+
+        public async Task<IActionResult> View(int id)
+        {
+            var payment = await _paymentService.GetPaymentByIdAsync(id);
+
+            if (payment == null)
+                return NotFound();
+
+            return View(payment);
+        }
     }
 }

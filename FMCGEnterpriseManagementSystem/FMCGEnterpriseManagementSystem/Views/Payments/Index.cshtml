@@ -1,0 +1,129 @@
+﻿@model List<FMCGEnterpriseManagementSystem.ViewModels.PaymentViewModel>
+
+@{
+    ViewData["Title"] = "Payments";
+}
+
+<div class="container-fluid py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold">Payments</h1>
+            <p class="text-muted mb-0">View and manage customer payments.</p>
+        </div>
+
+        <a asp-action="Create" class="btn btn-success">
+            + New Payment
+        </a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Date</th>
+                                <th>Invoice</th>
+                                <th>Customer</th>
+                                <th>Payment Method</th>
+                                <th>Invoice Total</th>
+                                <th>Amount Paid</th>
+                                <th>Outstanding</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var payment in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @payment.PaymentDate.ToString("dd/MM/yyyy")
+                                    </td>
+
+                                    <td>
+                                        @payment.InvoiceNumber
+                                    </td>
+
+                                    <td>
+                                        @(string.IsNullOrWhiteSpace(payment.CustomerName)
+                                                                        ? "N/A"
+                                                                        : payment.CustomerName)
+                            </td>
+
+                                    <td>
+                                        @payment.PaymentMethod
+                                    </td>
+
+                                    <td>
+                                        R @payment.InvoiceTotal.ToString("N2")
+                                    </td>
+
+                                    <td>
+                                        R @payment.AmountPaid.ToString("N2")
+                                    </td>
+
+                                    <td>
+                                        R @payment.OutstandingBalance.ToString("N2")
+                                    </td>
+
+                                    <td>
+                                @if (payment.Status == FMCGEnterpriseManagementSystem.Enums.PaymentStatus.Paid)
+                                        {
+                                            <span class="badge bg-success">Paid</span>
+                                        }
+                                        else if (payment.Status == FMCGEnterpriseManagementSystem.Enums.PaymentStatus.PartiallyPaid)
+                                        {
+                                            <span class="badge bg-warning text-dark">Partially Paid</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">Unpaid</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+
+                    <h3 class="fw-bold">No Payments Found</h3>
+
+                    <p class="text-muted">
+                        There are currently no recorded payments.
+                    </p>
+
+                    <a asp-action="Create" class="btn btn-success">
+                        Create a Payment
+                    </a>
+
+                </div>
+            }
+
+        </div>
+    </div>
+
+</div>

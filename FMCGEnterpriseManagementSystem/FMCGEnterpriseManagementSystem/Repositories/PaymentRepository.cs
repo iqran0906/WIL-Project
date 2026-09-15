@@ -24,8 +24,9 @@ namespace FMCGEnterpriseManagementSystem.Repositories
         public async Task<Payment?> GetByIdAsync(int paymentId)
         {
             return await _context.Payments
-                .Include(p => p.Invoice)
-                .FirstOrDefaultAsync(p => p.PaymentId == paymentId);
+             .Include(p => p.Invoice)
+             .ThenInclude(i => i.Customer)
+              .FirstOrDefaultAsync(p => p.PaymentId == paymentId);
         }
 
         public async Task<List<Payment>> GetAllAsync()
