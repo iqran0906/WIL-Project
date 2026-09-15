@@ -30,7 +30,7 @@ namespace FMCGEnterpriseManagementSystem.Services
         public async Task<Quote> CreateQuoteAsync(Quote quote)
         {
             quote.QuoteNumber = await _quoteRepository.GenerateNextQuoteNumberAsync();
-            quote.Status = QuoteStatus.Draft;
+            quote.Status = QuoteStatus.Pending;
 
             CalculateTotals(quote);
 
@@ -57,7 +57,7 @@ namespace FMCGEnterpriseManagementSystem.Services
             }
 
             // TODO: implement once Invoice module is merged into this branch
-            quote.Status = QuoteStatus.Converted;
+            quote.Status = QuoteStatus.Invoiced;
             await _quoteRepository.UpdateAsync(quote);
 
             return true;

@@ -70,8 +70,21 @@
                             
                             <td>R@quote.Total.ToString("N2")</td>
                             <td>@quote.Status</td>
-                            <td>
-                                <a asp-controller="Quotes" asp-action="Details" asp-route-id="@quote.QuoteId">View</a>
+                            <td class="dropdown">
+                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                    Actions
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" asp-controller="Quotes" asp-action="Details" asp-route-id="@quote.QuoteId">View</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Quotes" asp-action="Edit" asp-route-id="@quote.QuoteId">Edit</a></li>
+                                    <li>
+                                        <form asp-controller="Quotes" asp-action="ConvertToInvoice" asp-route-id="@quote.QuoteId" method="post" class="d-inline">
+                                            <button type="submit" class="dropdown-item">Convert to Invoice</button>
+                                        </form>
+                                    </li>
+                                    <li><a class="dropdown-item" href="#" onclick="alert('PDF export coming soon'); return false;">Download as PDF</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="alert('Email quote coming soon'); return false;">Email Quote</a></li>
+                                </ul>
                             </td>
                         </tr>
                     }

@@ -32,7 +32,7 @@ namespace FMCGEnterpriseManagementSystem.Models
         public SalesRepresentative? SalesRepresentative { get; set; }
 
         [Required]
-        public QuoteStatus Status { get; set; } = QuoteStatus.Draft;
+        public QuoteStatus Status { get; set; } = QuoteStatus.Pending;
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal Subtotal { get; set; }

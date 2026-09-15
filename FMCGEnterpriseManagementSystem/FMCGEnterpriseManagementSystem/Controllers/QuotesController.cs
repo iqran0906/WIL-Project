@@ -86,6 +86,26 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // GET: Quotes/Edit/5
+        public async Task<IActionResult> Edit(int id)
+        {
+            var quote = await _quoteService.GetQuoteByIdAsync(id);
+            if (quote == null)
+            {
+                return NotFound();
+            }
+            return View(quote);
+        }
+
+        // POST: Quotes/ConvertToInvoice/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConvertToInvoice(int id)
+        {
+            await _quoteService.ConvertToInvoiceAsync(id);
+            return RedirectToAction(nameof(Index));
+        }
+
         // GET: Quotes/Details/5
         public async Task<IActionResult> Details(int id)
         {
