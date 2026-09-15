@@ -70,7 +70,7 @@
                         <input type="hidden" asp-for="SalesRepresentativeId" id="salesRepId" />
                     </div>
                 </div>
-            </div>actaul n
+            </div>
         </div>
 
         <div class="table-responsive border rounded bg-light p-2 mb-3">
@@ -132,8 +132,7 @@
                             </select>
                         </td>
                         <td><span class="line-total">R0.00</span></td>
-                        <td><button type="button" class="btn btn-sm btn-link text-danger remove-row">&times;</button></td>
-                    `;
+                                <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger remove-row" title="Remove item"><i class="bi bi-trash"></i></button></td>                    `;
             tbody.appendChild(row);
             itemIndex++;
             attachRowEvents(row);
