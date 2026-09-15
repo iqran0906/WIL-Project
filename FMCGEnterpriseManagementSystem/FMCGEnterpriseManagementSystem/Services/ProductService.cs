@@ -62,7 +62,10 @@ namespace FMCGEnterpriseManagementSystem.Services
                 Category = model.Category,
                 CostExVat = model.CostExVat,
                 CostIncVat = costIncVat,
-                SellingPrice = model.SellingPrice
+                SellingPrice = model.SellingPrice,
+                IsActive = model.IsActive,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = null
             };
 
             await _repository.AddAsync(entity);
@@ -70,24 +73,24 @@ namespace FMCGEnterpriseManagementSystem.Services
 
         public async Task UpdateProductAsync(ProductViewModel model)
         {
+            var existingEntity = await _repository.GetByIdAsync(model.ProductId);
+            if (existingEntity == null) return;
+
             decimal costIncVat = model.CostIncVat > 0
                 ? model.CostIncVat
                 : Math.Round(model.CostExVat * (1 + VatRate), 2);
 
-            var entity = new Product
-            {
-                ProductId = model.ProductId,
-                SupplierId = model.SupplierId,
-                ProductCode = model.ProductCode ?? string.Empty,
-                ProductName = model.ProductName,
-                Description = model.Description ?? string.Empty,
-                Category = model.Category,
-                CostExVat = model.CostExVat,
-                CostIncVat = costIncVat,
-                SellingPrice = model.SellingPrice
-            };
+            existingEntity.SupplierId = model.SupplierId;
+            existingEntity.ProductName = model.ProductName;
+            existingEntity.Description = model.Description ?? string.Empty;
+            existingEntity.Category = model.Category;
+            existingEntity.CostExVat = model.CostExVat;
+            existingEntity.CostIncVat = costIncVat;
+            existingEntity.SellingPrice = model.SellingPrice;
+            existingEntity.IsActive = model.IsActive;
+            existingEntity.UpdatedAt = DateTime.UtcNow;
 
-            await _repository.UpdateAsync(entity);
+            await _repository.UpdateAsync(existingEntity);
         }
 
         public async Task DeleteProductAsync(string id)
@@ -105,7 +108,10 @@ namespace FMCGEnterpriseManagementSystem.Services
             Category = p.Category,
             CostExVat = p.CostExVat,
             CostIncVat = p.CostIncVat,
-            SellingPrice = p.SellingPrice
+            SellingPrice = p.SellingPrice,
+            IsActive = p.IsActive,
+            CreatedAt = p.CreatedAt,
+            UpdatedAt = p.UpdatedAt
         };
     }
 }

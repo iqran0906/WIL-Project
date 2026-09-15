@@ -34,5 +34,14 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
         [Range(0.01, double.MaxValue, ErrorMessage = "Selling price must be greater than zero.")]
         [Display(Name = "Selling Price")]
         public decimal SellingPrice { get; set; }
+
+        [Display(Name = "Is Active")]
+        public bool IsActive { get; set; } = true;
+
+        [Display(Name = "Created At")]
+        public DateTime CreatedAt { get; set; }
+
+        [Display(Name = "Updated At")]
+        public DateTime? UpdatedAt { get; set; }
     }
 }
