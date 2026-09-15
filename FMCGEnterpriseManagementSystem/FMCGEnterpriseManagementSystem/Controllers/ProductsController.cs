@@ -34,9 +34,9 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (string.IsNullOrEmpty(id)) return NotFound();
+            if (id <= 0) return NotFound();
 
             var product = await _productService.GetProductByIdAsync(id);
             if (product == null) return NotFound();
@@ -46,7 +46,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, ProductViewModel model)
+        public async Task<IActionResult> Edit(int id, ProductViewModel model)
         {
             if (id != model.ProductId) return BadRequest();
             if (!ModelState.IsValid) return View(model);
@@ -55,9 +55,9 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (string.IsNullOrEmpty(id)) return NotFound();
+            if (id <= 0) return NotFound();
 
             var product = await _productService.GetProductByIdAsync(id);
             if (product == null) return NotFound();
@@ -67,7 +67,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _productService.DeleteProductAsync(id);
             return RedirectToAction(nameof(Index));
