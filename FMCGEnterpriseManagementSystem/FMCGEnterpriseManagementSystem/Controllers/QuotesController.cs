@@ -30,7 +30,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         {
             var quote = new Quote
             {
-                QuoteDate = DateTime.Today,
+                QuoteDate = DateTime.Today
             };
 
             ViewBag.PaymentTermsList = new SelectList(new[] { "COD", "7 Days", "14 Days", "21 Days", "28 Days", "30 Days" });

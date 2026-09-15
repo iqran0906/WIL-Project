@@ -4,35 +4,37 @@ using FMCGEnterpriseManagementSystem.Enums;
 
 namespace FMCGEnterpriseManagementSystem.Models
 {
-    public class Quote
+    public class Invoice
     {
         [Key]
-        public int QuoteId { get; set; }
+        public int InvoiceId { get; set; }
 
         [Required]
-        public string QuoteNumber { get; set; }
+        public string InvoiceNumber { get; set; } = string.Empty;
 
         [Required]
-        public DateTime QuoteDate { get; set; }
+        public DateTime InvoiceDate { get; set; }
 
-       
+        public int? QuoteId { get; set; }
+
+        [ForeignKey("QuoteId")]
+        public Quote? Quote { get; set; }
 
         [Required]
         public int CustomerId { get; set; }
 
         [ForeignKey("CustomerId")]
-        public Customer Customer { get; set; }
+        public Customer Customer { get; set; } = null!;
 
-        public string BillingAddress { get; set; }
+        public string BillingAddress { get; set; } = string.Empty;
 
-        public string PaymentTerms { get; set; }
+        public string PaymentTerms { get; set; } = string.Empty;
 
         public int? SalesRepresentativeId { get; set; }
 
         public SalesRepresentative? SalesRepresentative { get; set; }
 
-        [Required]
-        public QuoteStatus Status { get; set; } = QuoteStatus.Draft;
+        public string Status { get; set; } = "Draft";
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal Subtotal { get; set; }
@@ -40,7 +42,11 @@ namespace FMCGEnterpriseManagementSystem.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal Total { get; set; }
 
-        public ICollection<QuoteItem> QuoteItems { get; set; } = new List<QuoteItem>();
+        public ICollection<InvoiceItem> InvoiceItems { get; set; } =
+            new List<InvoiceItem>();
+
+        public ICollection<Payment> Payments { get; set; } =
+            new List<Payment>();
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
