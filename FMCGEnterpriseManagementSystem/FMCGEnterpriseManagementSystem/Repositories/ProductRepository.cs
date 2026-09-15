@@ -19,7 +19,7 @@ namespace FMCGEnterpriseManagementSystem.Repositories
             return await _context.Products.ToListAsync();
         }
 
-        public async Task<Product?> GetByIdAsync(string id)
+        public async Task<Product?> GetByIdAsync(int id)
         {
             return await _context.Products.FirstOrDefaultAsync(p => p.ProductId == id);
         }
@@ -36,7 +36,7 @@ namespace FMCGEnterpriseManagementSystem.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(string id)
+        public async Task DeleteAsync(int id)
         {
             var product = await GetByIdAsync(id);
             if (product != null)
