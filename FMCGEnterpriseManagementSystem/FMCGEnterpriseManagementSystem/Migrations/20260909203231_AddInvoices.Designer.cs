@@ -4,6 +4,7 @@ using FMCGEnterpriseManagementSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FMCGEnterpriseManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260909203231_AddInvoices")]
+    partial class AddInvoices
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -332,41 +335,6 @@ namespace FMCGEnterpriseManagementSystem.Migrations
                     b.ToTable("NextOfKins");
                 });
 
-            modelBuilder.Entity("FMCGEnterpriseManagementSystem.Models.Payment", b =>
-                {
-                    b.Property<int>("PaymentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentId"));
-
-                    b.Property<decimal>("AmountPaid")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("InvoiceId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("PaymentDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PaymentMethod")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("PaymentId");
-
-                    b.HasIndex("InvoiceId");
-
-                    b.ToTable("Payments");
-                });
-
             modelBuilder.Entity("FMCGEnterpriseManagementSystem.Models.Product", b =>
                 {
                     b.Property<int>("ProductId")
@@ -439,6 +407,9 @@ namespace FMCGEnterpriseManagementSystem.Migrations
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("PaymentTerms")
                         .IsRequired()
@@ -948,17 +919,6 @@ namespace FMCGEnterpriseManagementSystem.Migrations
                     b.Navigation("Employee");
                 });
 
-            modelBuilder.Entity("FMCGEnterpriseManagementSystem.Models.Payment", b =>
-                {
-                    b.HasOne("FMCGEnterpriseManagementSystem.Models.Invoice", "Invoice")
-                        .WithMany("Payments")
-                        .HasForeignKey("InvoiceId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Invoice");
-                });
-
             modelBuilder.Entity("FMCGEnterpriseManagementSystem.Models.Product", b =>
                 {
                     b.HasOne("FMCGEnterpriseManagementSystem.Models.Supplier", "Supplier")
@@ -1093,8 +1053,6 @@ namespace FMCGEnterpriseManagementSystem.Migrations
             modelBuilder.Entity("FMCGEnterpriseManagementSystem.Models.Invoice", b =>
                 {
                     b.Navigation("InvoiceItems");
-
-                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("FMCGEnterpriseManagementSystem.Models.Quote", b =>
