@@ -158,10 +158,11 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
         }
-        .btn-action-primary:hover {
-            background-color: #2b5e6b;
-            color: white;
-        }
+
+            .btn-action-primary:hover {
+                background-color: #2b5e6b;
+                color: white;
+            }
 
         .custom-data-table {
             border-collapse: separate;
@@ -169,19 +170,19 @@
             width: 100%;
         }
 
-        .custom-data-table th, .custom-data-table td {
-            background: white;
-            padding: 10px 15px;
-            text-align: center;
-            border: 1px solid #c8d6e5;
-            color: #212529;
-            font-weight: 500;
-        }
+            .custom-data-table th, .custom-data-table td {
+                background: white;
+                padding: 10px 15px;
+                text-align: center;
+                border: 1px solid #c8d6e5;
+                color: #212529;
+                font-weight: 500;
+            }
 
-        .custom-data-table th {
-            font-weight: 600;
-            background: #ffffff;
-        }
+            .custom-data-table th {
+                font-weight: 600;
+                background: #ffffff;
+            }
 
         .search-field {
             max-width: 250px;
@@ -191,54 +192,125 @@
             padding-right: 30px;
         }
 
-        .search-field::placeholder {
-            color: rgba(255, 255, 255, 0.6);
-        }
+            .search-field::placeholder {
+                color: rgba(255, 255, 255, 0.6);
+            }
     </style>
 </head>
 <body>
+
     <div class="d-md-none text-white" style="background-color: var(--sidebar-bg);">
         <div class="d-flex justify-content-between align-items-center px-3 py-2">
             <div class="d-flex align-items-center gap-2">
                 <img src="~/images/logo.png" alt="Logo" style="width: 32px; height: 32px; border-radius: 50%; object-fit: contain; background: white; padding: 2px;" />
                 <span class="fw-bold fs-5">Menu</span>
             </div>
+
             <button class="btn text-white p-1 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu">
                 <i class="bi bi-list fs-1"></i>
             </button>
         </div>
+
         <div class="collapse mobile-dropdown" id="mobileMenu">
             <ul class="nav flex-column text-center pb-3">
-                <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="Dashboard">Dashboard</a></li>
-                <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="CustomerList">Customers</a></li>
-                <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="SupplierList">Suppliers</a></li>
-                <li class="nav-item"> <a class="nav-link py-2" asp-controller="Employees" asp-action="Index"> Employees</a> </li>
-                <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="InventoryList">Inventory</a></li>
-                <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="InvoiceList">Invoices</a></li>
-                <li class="nav-item"><a class="nav-link py-2" asp-controller="Quotes" asp-action="Index">Quotes</a></li>
-                <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="Reports">Reports</a></li>
-                <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="Settings">Settings</a></li>
+
+                <li class="nav-item">
+                    <a class="nav-link py-2" asp-controller="Home" asp-action="Dashboard">Dashboard</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link py-2" asp-controller="Home" asp-action="CustomerList">Customers</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link py-2" asp-controller="Home" asp-action="SupplierList">Suppliers</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link py-2" asp-controller="Employees" asp-action="Index">Employees</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link py-2" asp-controller="Home" asp-action="InventoryList">Inventory</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link py-2" asp-controller="Home" asp-action="InvoiceList">Invoices</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link py-2" asp-controller="Payments" asp-action="Index">Payments</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link py-2" asp-controller="Quotes" asp-action="Index">Quotes</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link py-2" asp-controller="Home" asp-action="Reports">Reports</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link py-2" asp-controller="Home" asp-action="Settings">Settings</a>
+                </li>
+
             </ul>
         </div>
     </div>
 
     <div class="container-fluid p-0">
         <div class="row g-0">
+
             <div class="col-md-3 col-lg-2 sidebar d-none d-md-flex flex-column justify-content-between">
+
                 <div>
+
                     <div class="px-3 mb-4">
                         <h4 class="text-center font-weight-bold tracking-wide py-2 m-0">Exclusive</h4>
                     </div>
+
                     <ul class="nav flex-column justify-content-start">
-                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="Dashboard">Dashboard</a></li>
-                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="CustomerList">Customers</a></li>
-                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="SupplierList">Suppliers</a></li>
-                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Employees" asp-action="Index">Employees  </a> </li>
-                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="InventoryList">Inventory</a></li>
-                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="InvoiceList">Invoices</a></li>
-                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Quotes" asp-action="Index">Quotes</a></li>
-                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="Reports">Reports</a></li>
-                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="Settings">Settings</a></li>
+
+                        <li class="nav-item">
+                            <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="Dashboard">Dashboard</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="CustomerList">Customers</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="SupplierList">Suppliers</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link px-3 py-2" asp-controller="Employees" asp-action="Index">Employees</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="InventoryList">Inventory</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="InvoiceList">Invoices</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link px-3 py-2" asp-controller="Payments" asp-action="Index">Payments</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link px-3 py-2" asp-controller="Quotes" asp-action="Index">Quotes</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="Reports">Reports</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="Settings">Settings</a>
+                        </li>
+
                     </ul>
                 </div>
 
@@ -247,12 +319,16 @@
                         <img src="~/images/logo.png" alt="Exclusive Distributors Logo" />
                     </div>
                 </div>
+
             </div>
 
             <div class="col-12 col-md-9 col-lg-10 d-flex flex-column">
+
                 <header>
                     <nav class="navbar navbar-expand navbar-light top-navbar d-flex justify-content-between align-items-center">
+
                         <span class="navbar-brand">Exclusive Distributors</span>
+
                         <div class="d-flex align-items-center gap-3 gap-md-4 text-white">
 
                             <a asp-controller="Home"
@@ -283,23 +359,28 @@
                             </form>
 
                         </div>
+
                     </nav>
                 </header>
 
-
-
                 <div class="container-fluid px-2 px-md-4">
+
                     <main role="main" class="pb-3">
                         @RenderBody()
                     </main>
+
                 </div>
+
             </div>
+
         </div>
     </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>
