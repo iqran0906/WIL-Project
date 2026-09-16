@@ -21,11 +21,27 @@ namespace FMCGEnterpriseManagementSystem.Models
 
         [Required]
         [Column(TypeName = "decimal(18,2)")]
-        public decimal UnitPrice { get; set; }
+        public decimal CostExVat { get; set; }
+
+        [Required]
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal CostIncVat { get; set; }
+
+        [Required]
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal SellingPrice { get; set; }
 
         [Required]
         [StringLength(50)]
         public string Category { get; set; } = string.Empty;
+
+        public bool IsActive { get; set; } = true;
+
+        [Required]
+        public int SupplierId { get; set; }
+
+        [ForeignKey("SupplierId")]
+        public Supplier? Supplier { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
