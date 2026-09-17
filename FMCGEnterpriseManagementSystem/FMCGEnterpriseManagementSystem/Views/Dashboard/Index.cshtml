@@ -1,0 +1,77 @@
+﻿@model FMCGEnterpriseManagementSystem.ViewModels.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard & Analytics";
+}
+
+<!-- KPI Cards Header -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <h5>Total Products</h5>
+                <h3>@Model.TotalProducts</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <h5>Total Inventory Value</h5>
+                <h3>@Model.TotalInventoryValue.ToString("C")</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-dark">
+            <div class="card-body">
+                <h5>Low Stock Items</h5>
+                <h3>@Model.LowStockItems</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-danger text-white">
+            <div class="card-body">
+                <h5>Out of Stock</h5>
+                <h3>@Model.OutOfStockItems</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Analytics & Alerts Table -->
+<div class="card">
+    <div class="card-header">
+        <h4>Critical Stock Alerts</h4>
+    </div>
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Product</th>
+                    <th>Current Stock</th>
+                    <th>Reorder Level</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var alert in Model.CriticalStockAlerts)
+                {
+                    <tr>
+                        <td>@alert.ProductCode</td>
+                        <td>@alert.ProductName</td>
+                        <td>@alert.CurrentStock</td>
+                        <td>@alert.ReorderLevel</td>
+                        <td>
+                            <span class="badge @(alert.HealthStatus == "Critical" ? "bg-danger" : "bg-warning")">
+                                @alert.HealthStatus
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
