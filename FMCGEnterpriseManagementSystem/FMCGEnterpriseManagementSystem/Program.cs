@@ -23,8 +23,6 @@ builder.Services.AddScoped<IQuoteService, QuoteService>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
-builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
-builder.Services.AddScoped<IInventoryService, InventoryService>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 
