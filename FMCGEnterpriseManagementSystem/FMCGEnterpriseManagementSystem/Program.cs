@@ -1,6 +1,7 @@
 using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Repositories;
+using FMCGEnterpriseManagementSystem.Repositories.Implementations;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using FMCGEnterpriseManagementSystem.Services;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
@@ -22,6 +23,9 @@ builder.Services.AddScoped<IQuoteService, QuoteService>();
 
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+
+builder.Services.AddScoped<IForecastingService, ForecastingService>();
+builder.Services.AddScoped<IForecastingRepository, ForecastingRepository>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 
