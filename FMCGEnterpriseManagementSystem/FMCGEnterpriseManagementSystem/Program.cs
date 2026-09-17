@@ -1,15 +1,23 @@
 using FMCGEnterpriseManagementSystem.Data;
+using FMCGEnterpriseManagementSystem.Factories;
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Repositories;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using FMCGEnterpriseManagementSystem.Services;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
+using FMCGEnterpriseManagementSystem.Strategies;
+using FMCGEnterpriseManagementSystem.Strategies.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
+
 builder.Services.AddControllersWithViews();
+
 
 builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddScoped<ISupplierService, SupplierService>();
@@ -27,7 +35,9 @@ builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
-
+builder.Services.AddScoped<IExportStrategy, PdfExportStrategy>();
+builder.Services.AddScoped<IExportStrategy, ExcelExportStrategy>();
+builder.Services.AddScoped<ExportFactory>();
 
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
