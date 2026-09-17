@@ -6,68 +6,68 @@ namespace FMCGEnterpriseManagementSystem.Services.Implementations
 {
     public class DashboardService : IDashboardService
     {
-        private readonly IProductRepository _productRepository;
-        private readonly ISupplierRepository _supplierRepository;
-        private readonly ICustomerRepository _customerRepository;
-        private readonly IInventoryRepository _inventoryRepository;
+        private readonly IDashboardRepository _dashboardRepository;
 
-        public DashboardService(
-            IProductRepository productRepository,
-            ISupplierRepository supplierRepository,
-            ICustomerRepository customerRepository,
-            IInventoryRepository inventoryRepository)
+        // Injects only IDashboardRepository to remain independent of unmerged repositories
+        public DashboardService(IDashboardRepository dashboardRepository)
         {
-            _productRepository = productRepository;
-            _supplierRepository = supplierRepository;
-            _customerRepository = customerRepository;
-            _inventoryRepository = inventoryRepository;
+            _dashboardRepository = dashboardRepository;
         }
 
         public async Task<DashboardViewModel> GetDashboardAnalyticsAsync()
         {
-            var products = await _productRepository.GetAllAsync();
-            var suppliers = await _supplierRepository.GetAllAsync();
-            var customers = await _customerRepository.GetAllAsync();
-            var inventories = await _inventoryRepository.GetAllAsync();
+            // Execute parallel aggregation queries
+            var totalProductsTask = _dashboardRepository.GetTotalProductsCountAsync();
+            var totalSuppliersTask = _dashboardRepository.GetTotalSuppliersCountAsync();
+            var totalCustomersTask = _dashboardRepository.GetTotalCustomersCountAsync();
+            var totalInventoryValueTask = _dashboardRepository.GetTotalInventoryValueAsync();
+            var lowStockInventoriesTask = _dashboardRepository.GetLowStockInventoriesAsync();
+            var categorySummariesTask = _dashboardRepository.GetCategoryStockSummariesAsync();
 
+            await Task.WhenAll(
+                totalProductsTask,
+                totalSuppliersTask,
+                totalCustomersTask,
+                totalInventoryValueTask,
+                lowStockInventoriesTask,
+                categorySummariesTask
+            );
+
+            var lowStockList = await lowStockInventoriesTask;
+            var categoryDict = await categorySummariesTask;
+
+            // Map repository outputs directly into DashboardViewModel
             var viewModel = new DashboardViewModel
             {
-                TotalProducts = products.Count(),
-                TotalSuppliers = suppliers.Count(),
-                TotalCustomers = customers.Count(),
+                TotalProducts = await totalProductsTask,
+                TotalSuppliers = await totalSuppliersTask,
+                TotalCustomers = await totalCustomersTask,
+                TotalInventoryValue = await totalInventoryValueTask,
+                LowStockItems = lowStockList.Count(i => i.QuantityOnHand > 0),
+                OutOfStockItems = lowStockList.Count(i => i.QuantityOnHand == 0),
 
-                // Inventory calculations using SellingPrice/CostIncVat
-                TotalInventoryValue = inventories.Sum(i => i.QuantityOnHand * (i.Product?.SellingPrice ?? 0)),
-                LowStockItems = inventories.Count(i => i.QuantityOnHand <= i.ReorderLevel && i.QuantityOnHand > 0),
-                OutOfStockItems = inventories.Count(i => i.QuantityOnHand == 0),
+                // Critical Stock Alerts
+                CriticalStockAlerts = lowStockList.Select(i => new LowStockAlertItem
+                {
+                    ProductCode = i.Product?.ProductCode ?? "N/A",
+                    ProductName = i.Product?.ProductName ?? "Unknown Item",
+                    CurrentStock = i.QuantityOnHand,
+                    ReorderLevel = i.ReorderLevel,
+                    HealthStatus = i.QuantityOnHand == 0 ? "Critical" : "Warning"
+                }).ToList(),
 
-                // Critical alert list
-                CriticalStockAlerts = inventories
-                    .Where(i => i.QuantityOnHand <= i.ReorderLevel)
-                    .Select(i => new LowStockAlertItem
-                    {
-                        ProductCode = i.Product?.ProductCode ?? "N/A",
-                        ProductName = i.Product?.ProductName ?? "Unknown",
-                        CurrentStock = i.QuantityOnHand,
-                        ReorderLevel = i.ReorderLevel,
-                        HealthStatus = i.QuantityOnHand == 0 ? "Critical" : "Warning"
-                    }).ToList(),
+                // Category Summaries
+                CategorySummaries = categoryDict.Select(kvp => new CategoryStockSummary
+                {
+                    CategoryName = kvp.Key,
+                    ItemCount = kvp.Value.ItemCount,
+                    TotalQuantity = kvp.Value.TotalQty
+                }).ToList(),
 
-                // Category summary aggregations
-                CategorySummaries = products
-                    .GroupBy(p => p.Category)
-                    .Select(g => new CategoryStockSummary
-                    {
-                        CategoryName = string.IsNullOrEmpty(g.Key) ? "Uncategorized" : g.Key,
-                        ItemCount = g.Count(),
-                        TotalQuantity = g.Sum(p => p.Inventory?.QuantityOnHand ?? 0)
-                    }).ToList()
+                // Restock Budget Projection: (Target Buffer - Current Stock) * Cost
+                ProjectedRestockBudget = lowStockList.Sum(i =>
+                    ((i.ReorderLevel * 3) - i.QuantityOnHand) * (i.Product?.CostIncVat ?? 0))
             };
-
-            // Calculate restock budget (Target Stock - Current Stock) * Cost
-            viewModel.ProjectedRestockBudget = inventories
-                .Where(i => i.QuantityOnHand <= i.ReorderLevel)
-                .Sum(i => ((i.ReorderLevel * 3) - i.QuantityOnHand) * (i.Product?.CostIncVat ?? 0));
 
             return viewModel;
         }
