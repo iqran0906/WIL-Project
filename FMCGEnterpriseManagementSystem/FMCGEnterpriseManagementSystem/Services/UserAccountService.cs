@@ -29,6 +29,16 @@ namespace FMCGEnterpriseManagementSystem.Services
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Employee>> GetEmployeesWithAccountsAsync()
+        {
+            return await _context.Employees
+                .Include(e => e.User)
+                .Where(e => e.UserId != null)
+                .OrderBy(e => e.FirstName)
+                .ThenBy(e => e.LastName)
+                .ToListAsync();
+        }
+
         public async Task<Employee?> GetEmployeeByIdAsync(string employeeId)
         {
             return await _context.Employees
@@ -160,5 +170,7 @@ namespace FMCGEnterpriseManagementSystem.Services
 
             return true;
         }
+
+
     }
 }

@@ -17,5 +17,6 @@ namespace FMCGEnterpriseManagementSystem.Services.Interfaces
         Task<bool> ActivateAccountAsync(string employeeId);
 
         Task<bool> DeactivateAccountAsync(string employeeId);
+        Task<IEnumerable<Employee>> GetEmployeesWithAccountsAsync();
     }
 }
