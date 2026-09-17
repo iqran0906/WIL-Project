@@ -91,6 +91,14 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             }
         }
 
+        // GET: Invoices/Download/5
+        public async Task<IActionResult> Download(int id)
+        {
+            // TODO: Replace with real PDF generation once the Exports module is built
+            TempData["InfoMessage"] = "Invoice download (PDF export) is coming soon.";
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
         // GET: Invoices/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

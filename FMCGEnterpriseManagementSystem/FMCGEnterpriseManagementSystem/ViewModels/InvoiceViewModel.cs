@@ -18,6 +18,9 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
         public int CustomerId { get; set; }
         public string CustomerName { get; set; }
 
+
+        public string? BusinessName { get; set; }
+
         public List<FMCGEnterpriseManagementSystem.Models.Customer> AvailableCustomers { get; set; } = new();
 
         public string BillingAddress { get; set; }
