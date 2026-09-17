@@ -24,8 +24,6 @@ builder.Services.AddScoped<IQuoteService, QuoteService>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
-builder.Services.AddScoped<IForecastingService, ForecastingService>();
-builder.Services.AddScoped<IForecastingRepository, ForecastingRepository>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 
