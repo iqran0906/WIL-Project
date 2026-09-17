@@ -1,0 +1,75 @@
+﻿@model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.Reports.SalesRepReportViewModel>
+
+@{
+    ViewData["Title"] = "Sales Representative Report";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2>Sales Representative Report</h2>
+            <p class="text-muted">Sales performance, targets and estimated commissions.</p>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-secondary">Back to Reports</a>
+    </div>
+
+    <form method="get" class="row g-3 mb-4">
+        <div class="col-md-4">
+            <label class="form-label">Start Date</label>
+            <input type="date" name="startDate"
+                   value="@ViewBag.StartDate" class="form-control" />
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">End Date</label>
+            <input type="date" name="endDate"
+                   value="@ViewBag.EndDate" class="form-control" />
+        </div>
+
+        <div class="col-md-4 d-flex align-items-end gap-2">
+            <button class="btn btn-primary">Filter</button>
+            <a asp-action="SalesRepReport" class="btn btn-outline-secondary">Clear</a>
+        </div>
+    </form>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            @if (!Model.Any())
+            {
+                <p class="text-muted mb-0">No sales representatives found.</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Sales Representative</th>
+                                <th>Area</th>
+                                <th>Target</th>
+                                <th>Sales</th>
+                                <th>Commission Rate</th>
+                                <th>Estimated Commission</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.SalesRepCode</td>
+                                    <td>@item.EmployeeName</td>
+                                    <td>@item.Area</td>
+                                    <td>R @item.SalesTarget.ToString("N2")</td>
+                                    <td>R @item.TotalSales.ToString("N2")</td>
+                                    <td>@item.CommissionRate.ToString("N2")%</td>
+                                    <td>R @item.EstimatedCommission.ToString("N2")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>
