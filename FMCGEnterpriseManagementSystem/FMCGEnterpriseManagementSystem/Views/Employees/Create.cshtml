@@ -5,7 +5,7 @@
 <div class="content-card">
     <h2 class="font-weight-bold mb-4">New Employee</h2>
 
-    <form asp-controller="Home" asp-action="EmployeeList" method="post">
+    <form asp-controller="Employees" asp-action="Create" method="post">
         <h5 class="mb-3 text-secondary border-bottom pb-2 font-weight-bold">Personal Details</h5>
         <div class="row g-3 mb-4">
             <div class="col-md-4">
@@ -126,7 +126,7 @@
         </div>
 
         <div class="d-flex justify-content-end align-items-center gap-3 pt-2">
-            <a asp-controller="Home" asp-action="EmployeeList" class="text-secondary text-decoration-none">Cancel</a>
+            <a asp-controller="Employees" asp-action="Index" class="text-secondary text-decoration-none">Cancel</a>
             <button type="submit" class="btn btn-custom-save">Save Employee</button>
         </div>
     </form>

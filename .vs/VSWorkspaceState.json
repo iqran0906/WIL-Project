@@ -6,9 +6,10 @@
     "\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Controllers",
     "\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Models",
     "\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views",
+    "\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Employees",
     "\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home",
     "\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Shared"
   ],
-  "SelectedNode": "\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Shared\\_Layout.cshtml",
+  "SelectedNode": "\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.sln",
   "PreviewInSolutionExplorer": false
 }

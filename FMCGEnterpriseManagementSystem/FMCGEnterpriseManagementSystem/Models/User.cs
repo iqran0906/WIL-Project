@@ -1,17 +1,25 @@
-﻿namespace FMCGEnterpriseManagementSystem.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace FMCGEnterpriseManagementSystem.Models
 {
     public class User
     {
-        public string UserID { get; set; }
+        public int Id { get; set; }
 
-        public string RoleID { get; set; }
+        [Required]
+        public string UserID { get; set; } = string.Empty;
 
-        public string Username { get; set; }
+        [Required]
+        public string RoleID { get; set; } = string.Empty;
 
-        public string Password { get; set; }
+        [Required]
+        public string Username { get; set; } = string.Empty;
 
-        public string Email { get; set; }
+        [Required]
+        public string Password { get; set; } = string.Empty;
 
-        public bool IsActive { get; set; }
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; } = string.Empty;
     }
 }
