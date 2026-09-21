@@ -35,6 +35,9 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddScoped<IUserAccountService, UserAccountService>();
 
+builder.Services.AddScoped<ISalesRepresentativeRepository,SalesRepresentativeRepository>();
+builder.Services.AddScoped<ISalesRepresentativeService,SalesRepresentativeService>();
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
