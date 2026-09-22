@@ -1,5 +1,6 @@
 using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;
+using FMCGEnterpriseManagementSystem.Observers;
 using FMCGEnterpriseManagementSystem.Repositories;
 using FMCGEnterpriseManagementSystem.Repositories.Implementations;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
@@ -57,6 +58,16 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
 })
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
+
+
+// Notification Management
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<InventoryNotificationSubject>();
+builder.Services.AddScoped<PaymentNotificationSubject>();
+builder.Services.AddScoped<EmailNotificationObserver>();
+builder.Services.AddScoped<SystemAlertObserver>();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
