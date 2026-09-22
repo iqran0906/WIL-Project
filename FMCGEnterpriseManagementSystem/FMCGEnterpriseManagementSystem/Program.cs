@@ -33,6 +33,7 @@ builder.Services.AddScoped<IReportService, ReportService>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 
+
 builder.Services.AddScoped<IUserAccountService, UserAccountService>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
