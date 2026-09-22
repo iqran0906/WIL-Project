@@ -1,4 +1,5 @@
 using FMCGEnterpriseManagementSystem.Data;
+using FMCGEnterpriseManagementSystem.Factories;
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Observers;
 using FMCGEnterpriseManagementSystem.Repositories;
@@ -6,12 +7,19 @@ using FMCGEnterpriseManagementSystem.Repositories.Implementations;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using FMCGEnterpriseManagementSystem.Services;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
+using FMCGEnterpriseManagementSystem.Strategies;
+using FMCGEnterpriseManagementSystem.Strategies.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
+
 builder.Services.AddControllersWithViews();
+
 
 builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddScoped<ISupplierService, SupplierService>();
@@ -35,10 +43,14 @@ builder.Services.AddScoped<IReportService, ReportService>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 
+builder.Services.AddScoped<IExportStrategy, PdfExportStrategy>();
+builder.Services.AddScoped<IExportStrategy, ExcelExportStrategy>();
+builder.Services.AddScoped<ExportFactory>();
+
 builder.Services.AddScoped<IUserAccountService, UserAccountService>();
 
-builder.Services.AddScoped<ISalesRepresentativeRepository,SalesRepresentativeRepository>();
-builder.Services.AddScoped<ISalesRepresentativeService,SalesRepresentativeService>();
+builder.Services.AddScoped<ISalesRepresentativeRepository, SalesRepresentativeRepository>();
+builder.Services.AddScoped<ISalesRepresentativeService, SalesRepresentativeService>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
