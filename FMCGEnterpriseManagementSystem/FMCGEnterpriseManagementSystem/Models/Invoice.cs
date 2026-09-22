@@ -29,6 +29,7 @@ namespace FMCGEnterpriseManagementSystem.Models
         public string BillingAddress { get; set; } = string.Empty;
         public string? BusinessName { get; set; }
 
+        public string? BusinessName { get; set; }
         public string PaymentTerms { get; set; } = string.Empty;
 
         public int? SalesRepresentativeId { get; set; }

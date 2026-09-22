@@ -1,4 +1,4 @@
-﻿using FMCGEnterpriseManagementSystem.Models;
+using FMCGEnterpriseManagementSystem.Models;
 
 namespace FMCGEnterpriseManagementSystem.Repositories.Interfaces
 {
@@ -6,6 +6,8 @@ namespace FMCGEnterpriseManagementSystem.Repositories.Interfaces
     {
         Task<IEnumerable<Product>> GetAllAsync();
         Task<Product?> GetByIdAsync(int id);
+        Task<Product?> GetByCodeAsync(string productCode);
+
         Task AddAsync(Product product);
         Task UpdateAsync(Product product);
         Task DeleteAsync(int id);
