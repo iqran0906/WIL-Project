@@ -1,7 +1,7 @@
-using Microsoft.EntityFrameworkCore;
-using FMCGEnterpriseManagementSystem.Data;
+﻿using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace FMCGEnterpriseManagementSystem.Repositories
 {

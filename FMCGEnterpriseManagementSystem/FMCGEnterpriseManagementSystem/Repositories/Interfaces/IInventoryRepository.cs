@@ -8,11 +8,10 @@ namespace FMCGEnterpriseManagementSystem.Repositories.Interfaces
         Task<Inventory?> GetByIdAsync(int id);
         Task<Inventory?> GetByProductIdAsync(int productId);
 
+        Task AddAsync(Inventory inventory);
+        Task UpdateAsync(Inventory inventory);
         Task<bool> HasSufficientStockAsync(int productId, int quantity);
         Task DeductStockAsync(int productId, int quantity);
-
-        Task AddAsync(Inventory item);
-        Task UpdateAsync(Inventory item);
         Task DeleteAsync(int id);
     }
 }

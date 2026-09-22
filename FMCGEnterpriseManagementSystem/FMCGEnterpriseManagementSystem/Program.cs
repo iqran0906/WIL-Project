@@ -1,6 +1,7 @@
 using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Repositories;
+using FMCGEnterpriseManagementSystem.Repositories.Implementations;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using FMCGEnterpriseManagementSystem.Services;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
