@@ -1,6 +1,5 @@
 ﻿using FMCGEnterpriseManagementSystem.Api.DTOs;
 using FMCGEnterpriseManagementSystem.Api.Services.Interfaces;
-using FMCGEnterpriseManagementSystem.Api.Services.Interfaces.FMCGEnterpriseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
