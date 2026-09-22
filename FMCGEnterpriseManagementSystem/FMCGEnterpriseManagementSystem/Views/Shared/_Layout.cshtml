@@ -231,6 +231,14 @@
                 </li>
 
                 <li class="nav-item">
+                    <a class="nav-link py-2"
+                       asp-controller="SalesRepresentatives"
+                       asp-action="Index">
+                        Sales Representatives
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a class="nav-link py-2" asp-controller="Home" asp-action="InventoryList">Inventory</a>
                 </li>
 
@@ -247,7 +255,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Home" asp-action="Reports">Reports</a>
+                    <a class="nav-link py-2" asp-controller="Reports" asp-action="Index">Reports</a>
                 </li>
 
                 <li class="nav-item">
@@ -288,6 +296,14 @@
                         </li>
 
                         <li class="nav-item">
+                            <a class="nav-link px-3 py-2"
+                               asp-controller="SalesRepresentatives"
+                               asp-action="Index">
+                                Sales Representatives
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
                             <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="InventoryList">Inventory</a>
                         </li>
 
@@ -304,7 +320,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="Reports">Reports</a>
+                            <a class="nav-link px-3 py-2" asp-controller="Reports" asp-action="Index">Reports</a>
                         </li>
 
                         <li class="nav-item">
@@ -331,8 +347,8 @@
 
                         <div class="d-flex align-items-center gap-3 gap-md-4 text-white">
 
-                            <a asp-controller="Home"
-                               asp-action="Notifications"
+                            <a asp-controller="Notifications"
+                               asp-action="Index"
                                class="text-white text-decoration-none">
                                 <i class="bi bi-bell fs-4" style="cursor: pointer;"></i>
                             </a>

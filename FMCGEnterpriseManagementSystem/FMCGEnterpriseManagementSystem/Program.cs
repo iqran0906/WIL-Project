@@ -1,7 +1,9 @@
 using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Factories;
 using FMCGEnterpriseManagementSystem.Models;
+using FMCGEnterpriseManagementSystem.Observers;
 using FMCGEnterpriseManagementSystem.Repositories;
+using FMCGEnterpriseManagementSystem.Repositories.Implementations;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using FMCGEnterpriseManagementSystem.Services;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
@@ -31,19 +33,33 @@ builder.Services.AddScoped<IQuoteService, QuoteService>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 
+builder.Services.AddScoped<IReportRepository, ReportRepository>();
+builder.Services.AddScoped<IReportService, ReportService>();
+
 builder.Services.AddScoped<IAuthService, AuthService>();
+
 builder.Services.AddScoped<IExportStrategy, PdfExportStrategy>();
 builder.Services.AddScoped<IExportStrategy, ExcelExportStrategy>();
 builder.Services.AddScoped<ExportFactory>();
 
+builder.Services.AddScoped<IUserAccountService, UserAccountService>();
+
+builder.Services.AddScoped<ISalesRepresentativeRepository, SalesRepresentativeRepository>();
+builder.Services.AddScoped<ISalesRepresentativeService, SalesRepresentativeService>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IInvoiceService, InvoiceService>();
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
     options.Password.RequireDigit = true;
@@ -54,6 +70,16 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
 })
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
+
+
+// Notification Management
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<InventoryNotificationSubject>();
+builder.Services.AddScoped<PaymentNotificationSubject>();
+builder.Services.AddScoped<EmailNotificationObserver>();
+builder.Services.AddScoped<SystemAlertObserver>();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {

@@ -1,0 +1,72 @@
+﻿@model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.Reports.CustomerSalesReportViewModel>
+
+@{
+    ViewData["Title"] = "Customer Sales";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2>Customer Sales</h2>
+            <p class="text-muted">Sales and outstanding balances by customer.</p>
+        </div>
+
+        <a asp-action="Index" class="btn btn-outline-secondary">Back to Reports</a>
+    </div>
+
+    <form method="get" class="row g-3 mb-4">
+        <div class="col-md-4">
+            <label class="form-label">Start Date</label>
+            <input type="date" name="startDate"
+                   value="@ViewBag.StartDate" class="form-control" />
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">End Date</label>
+            <input type="date" name="endDate"
+                   value="@ViewBag.EndDate" class="form-control" />
+        </div>
+
+        <div class="col-md-4 d-flex align-items-end gap-2">
+            <button class="btn btn-primary">Filter</button>
+            <a asp-action="CustomerSales" class="btn btn-outline-secondary">Clear</a>
+        </div>
+    </form>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            @if (!Model.Any())
+            {
+                <p class="text-muted mb-0">No customer sales found.</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Customer</th>
+                                <th>Invoices</th>
+                                <th>Total Sales</th>
+                                <th>Paid</th>
+                                <th>Outstanding</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.CustomerName</td>
+                                    <td>@item.InvoiceCount</td>
+                                    <td>R @item.TotalSales.ToString("N2")</td>
+                                    <td>R @item.TotalPaid.ToString("N2")</td>
+                                    <td>R @item.OutstandingBalance.ToString("N2")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>
