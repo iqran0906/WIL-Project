@@ -1,0 +1,197 @@
+﻿@model FMCGEnterpriseManagementSystem.ViewModels.SalesRepresentativeViewModel
+
+@{
+    ViewData["Title"] = "New Sales Representative";
+}
+
+<div class="content-card">
+
+    <h2 class="fw-bold mb-4"
+        style="color: #1c323d;">
+        New Sales Representative
+    </h2>
+
+    <form asp-controller="SalesRepresentatives"
+          asp-action="Create"
+          method="post">
+
+        @Html.AntiForgeryToken()
+
+        <div asp-validation-summary="ModelOnly"
+             class="text-danger mb-3">
+        </div>
+
+        <div class="row g-4">
+
+            <div class="col-md-6">
+
+                <div class="mb-3">
+
+                    <label asp-for="EmployeeID"
+                           class="form-label">
+                    </label>
+
+                    <select asp-for="EmployeeID"
+                            asp-items="ViewBag.Employees"
+                            class="form-select">
+
+                        <option value="">
+                            -- Select Employee --
+                        </option>
+
+                    </select>
+
+                    <span asp-validation-for="EmployeeID"
+                          class="text-danger">
+                    </span>
+
+                    <div class="form-text">
+                        Only active employees who are not already
+                        sales representatives are available.
+                    </div>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="SalesRepCode"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="SalesRepCode"
+                           class="form-control"
+                           placeholder="e.g. SR-001" />
+
+                    <span asp-validation-for="SalesRepCode"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="Area"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="Area"
+                           class="form-control"
+                           placeholder="e.g. Durban North" />
+
+                    <span asp-validation-for="Area"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="mb-3">
+
+                    <label asp-for="Salary"
+                           class="form-label">
+                    </label>
+
+                    <div class="input-group">
+
+                        <span class="input-group-text">
+                            R
+                        </span>
+
+                        <input asp-for="Salary"
+                               class="form-control"
+                               type="number"
+                               min="0"
+                               step="0.01" />
+
+                    </div>
+
+                    <span asp-validation-for="Salary"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="CommissionRate"
+                           class="form-label">
+                    </label>
+
+                    <div class="input-group">
+
+                        <input asp-for="CommissionRate"
+                               class="form-control"
+                               type="number"
+                               min="0"
+                               max="100"
+                               step="0.01" />
+
+                        <span class="input-group-text">
+                            %
+                        </span>
+
+                    </div>
+
+                    <span asp-validation-for="CommissionRate"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="SalesTarget"
+                           class="form-label">
+                    </label>
+
+                    <div class="input-group">
+
+                        <span class="input-group-text">
+                            R
+                        </span>
+
+                        <input asp-for="SalesTarget"
+                               class="form-control"
+                               type="number"
+                               min="0"
+                               step="0.01" />
+
+                    </div>
+
+                    <span asp-validation-for="SalesTarget"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="d-flex justify-content-end gap-3 mt-3">
+
+            <a asp-controller="SalesRepresentatives"
+               asp-action="Index"
+               class="btn btn-link text-decoration-none text-secondary align-self-center">
+                Cancel
+            </a>
+
+            <button type="submit"
+                    class="btn btn-custom-save">
+                Save Sales Representative
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
