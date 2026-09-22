@@ -43,7 +43,7 @@ namespace FMCGEnterpriseManagementSystem.Services
                     EstimatedMonthlyDemand = estimatedDemand,
                     RecommendedReorderQuantity = recommendedOrder,
                     ForecastStatus = status,
-                    UnitPrice = item.Product?.UnitPrice ?? 0m
+                    UnitPrice = item.Product?.SellingPrice ?? 0m
                 });
             }
 
