@@ -1,0 +1,156 @@
+﻿@{
+    ViewData["Title"] = "Report Dashboard";
+}
+
+<!-- Search Bar Header -->
+<div class="mb-5 d-flex justify-content-center justify-content-md-start">
+    <div class="input-group w-100" style="max-width: 400px;">
+        <input type="text"
+               id="reportSearch"
+               class="form-control bg-light border-end-0"
+               placeholder="Search Reports">
+        <span class="input-group-text bg-light border-start-0">
+            <i class="bi bi-search"></i>
+        </span>
+    </div>
+</div>
+
+<!-- 3x4 Grid of Report Navigation Cards -->
+<div class="row g-4 justify-content-center" id="reportGrid">
+
+    <!-- Row 1 -->
+    <div class="col-12 col-md-4 report-card">
+        <a asp-controller="Reports"
+           asp-action="InvoiceReport"
+           class="btn w-100 py-4 shadow-sm text-center d-flex align-items-center justify-content-center border-0 rounded-3 style-card"
+           style="min-height: 120px; background-color: #357383; color: white;">
+            <span class="fw-bold fs-5">Invoice Report</span>
+        </a>
+    </div>
+
+    <div class="col-12 col-md-4 report-card">
+        <a asp-controller="Reports"
+           asp-action="QuoteReport"
+           class="btn w-100 py-4 shadow-sm text-center d-flex align-items-center justify-content-center border-0 rounded-3 style-card"
+           style="min-height: 120px; background-color: #357383; color: white;">
+            <span class="fw-bold fs-5">Quote Report</span>
+        </a>
+    </div>
+
+    <div class="col-12 col-md-4 report-card">
+        <a asp-controller="Reports"
+           asp-action="AgeAnalysis"
+           class="btn w-100 py-4 shadow-sm text-center d-flex align-items-center justify-content-center border-0 rounded-3 style-card"
+           style="min-height: 120px; background-color: #357383; color: white;">
+            <span class="fw-bold fs-5">Age Analysis</span>
+        </a>
+    </div>
+
+    <!-- Row 2 -->
+    <div class="col-12 col-md-4 report-card">
+        <a asp-controller="Reports"
+           asp-action="CustomerReport"
+           class="btn w-100 py-4 shadow-sm text-center d-flex align-items-center justify-content-center border-0 rounded-3 style-card"
+           style="min-height: 120px; background-color: #357383; color: white;">
+            <span class="fw-bold fs-5">Customer Report</span>
+        </a>
+    </div>
+
+    <div class="col-12 col-md-4 report-card">
+        <a asp-controller="Reports"
+           asp-action="CustomerSales"
+           class="btn w-100 py-4 shadow-sm text-center d-flex align-items-center justify-content-center border-0 rounded-3 style-card"
+           style="min-height: 120px; background-color: #357383; color: white;">
+            <span class="fw-bold fs-5">Customer Sales</span>
+        </a>
+    </div>
+
+    <div class="col-12 col-md-4 report-card">
+        <a asp-controller="Reports"
+           asp-action="PaymentsReport"
+           class="btn w-100 py-4 shadow-sm text-center d-flex align-items-center justify-content-center border-0 rounded-3 style-card"
+           style="min-height: 120px; background-color: #357383; color: white;">
+            <span class="fw-bold fs-5">Payments Report</span>
+        </a>
+    </div>
+
+    <!-- Row 3 -->
+    <div class="col-12 col-md-4 report-card">
+        <a asp-controller="Reports"
+           asp-action="InventoryReport"
+           class="btn w-100 py-4 shadow-sm text-center d-flex align-items-center justify-content-center border-0 rounded-3 style-card"
+           style="min-height: 120px; background-color: #357383; color: white;">
+            <span class="fw-bold fs-5">Inventory Report</span>
+        </a>
+    </div>
+
+    <div class="col-12 col-md-4 report-card">
+        <a asp-controller="Reports"
+           asp-action="SalesReport"
+           class="btn w-100 py-4 shadow-sm text-center d-flex align-items-center justify-content-center border-0 rounded-3 style-card"
+           style="min-height: 120px; background-color: #357383; color: white;">
+            <span class="fw-bold fs-5">Sales Report</span>
+        </a>
+    </div>
+
+    <div class="col-12 col-md-4 report-card">
+        <a asp-controller="Reports"
+           asp-action="ItemsPerCustomer"
+           class="btn w-100 py-4 shadow-sm text-center d-flex align-items-center justify-content-center border-0 rounded-3 style-card"
+           style="min-height: 120px; background-color: #357383; color: white;">
+            <span class="fw-bold fs-5">Items Per Customer</span>
+        </a>
+    </div>
+
+    <!-- Row 4 -->
+    <div class="col-12 col-md-4 report-card">
+        <a asp-controller="Reports"
+           asp-action="ItemSalesReport"
+           class="btn w-100 py-4 shadow-sm text-center d-flex align-items-center justify-content-center border-0 rounded-3 style-card"
+           style="min-height: 120px; background-color: #357383; color: white;">
+            <span class="fw-bold fs-5">Item Sales Report</span>
+        </a>
+    </div>
+
+    <div class="col-12 col-md-4 report-card">
+        <a asp-controller="Reports"
+           asp-action="SalesRepReport"
+           class="btn w-100 py-4 shadow-sm text-center d-flex align-items-center justify-content-center border-0 rounded-3 style-card"
+           style="min-height: 120px; background-color: #357383; color: white;">
+            <span class="fw-bold fs-5">Sales Rep Report</span>
+        </a>
+    </div>
+
+    <div class="col-12 col-md-4 report-card">
+        <a asp-controller="Reports"
+           asp-action="SalesVatReport"
+           class="btn w-100 py-4 shadow-sm text-center d-flex align-items-center justify-content-center border-0 rounded-3 style-card"
+           style="min-height: 120px; background-color: #357383; color: white;">
+            <span class="fw-bold fs-5">Sales VAT Report</span>
+        </a>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById("reportSearch")
+            .addEventListener("input", function () {
+
+                const searchValue =
+                    this.value.toLowerCase().trim();
+
+                document.querySelectorAll(".report-card")
+                    .forEach(function (card) {
+
+                        const reportName =
+                            card.innerText.toLowerCase();
+
+                        card.style.display =
+                            reportName.includes(searchValue)
+                                ? ""
+                                : "none";
+                    });
+            });
+    </script>
+}
