@@ -27,6 +27,7 @@ namespace FMCGEnterpriseManagementSystem.Models
         public Customer Customer { get; set; } = null!;
 
         public string BillingAddress { get; set; } = string.Empty;
+        public string? BusinessName { get; set; }
 
         public string? BusinessName { get; set; }
         public string PaymentTerms { get; set; } = string.Empty;
@@ -45,6 +46,9 @@ namespace FMCGEnterpriseManagementSystem.Models
 
         public ICollection<InvoiceItem> InvoiceItems { get; set; } =
             new List<InvoiceItem>();
+
+        public ICollection<Payment> Payments { get; set; } =
+            new List<Payment>();
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

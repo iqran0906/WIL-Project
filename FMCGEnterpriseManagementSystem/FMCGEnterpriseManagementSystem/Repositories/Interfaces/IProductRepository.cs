@@ -1,10 +1,15 @@
-﻿using FMCGEnterpriseManagementSystem.Models;
+using FMCGEnterpriseManagementSystem.Models;
 
 namespace FMCGEnterpriseManagementSystem.Repositories.Interfaces
 {
     public interface IProductRepository
     {
-        Task<Product> GetByIdAsync(int productId);
-        Task<Product> GetByCodeAsync(string productCode);
+        Task<IEnumerable<Product>> GetAllAsync();
+        Task<Product?> GetByIdAsync(int id);
+        Task<Product?> GetByCodeAsync(string productCode);
+
+        Task AddAsync(Product product);
+        Task UpdateAsync(Product product);
+        Task DeleteAsync(int id);
     }
 }
