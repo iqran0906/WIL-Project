@@ -4,15 +4,21 @@ namespace FMCGEnterpriseManagementSystem.Models
 {
     public class Inventory
     {
-        public int Id { get; set; }
+        [Key]
+        public int InventoryId { get; set; }
 
         [Required]
-        public string InventoryID { get; set; } = string.Empty;
-
-        [Required]
-        public string ProductID { get; set; } = string.Empty;
+        public int ProductId { get; set; }
 
         public int QuantityOnHand { get; set; }
         public int ReorderLevel { get; set; }
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public DateTime? UpdatedAt { get; set; }
+
+        public Product Product { get; set; } = null!;
+
+        public ICollection<StockBatch> StockBatches { get; set; } = new List<StockBatch>();
     }
 }

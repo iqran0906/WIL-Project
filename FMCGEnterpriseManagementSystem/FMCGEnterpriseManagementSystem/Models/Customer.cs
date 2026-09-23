@@ -4,16 +4,17 @@ namespace FMCGEnterpriseManagementSystem.Models
 {
     public class Customer
     {
-        public int Id { get; set; }
+        public int CustomerId { get; set; }
 
-        [Required]
-        public string CustomerID { get; set; } = string.Empty;
+        public string Name { get; set; }
 
-        [Required]
-        public string CompanyName { get; set; } = string.Empty;
+        public string Surname { get; set; }
 
-        [Required]
-        public string ContactPerson { get; set; } = string.Empty;
+        public string IdNumber { get; set; }
+
+        public string TelephoneNumber { get; set; }
+
+        public string CellNumber { get; set; }
 
         [Required]
         public string ContactNumber { get; set; } = string.Empty;
@@ -22,11 +23,18 @@ namespace FMCGEnterpriseManagementSystem.Models
         [EmailAddress]
         public string Email { get; set; } = string.Empty;
 
-        public string PhysicalAddress { get; set; } = string.Empty;
-        public string DeliveryAddress { get; set; } = string.Empty;
-        public string CustomerGroup { get; set; } = string.Empty;
-        public string PaymentTerms { get; set; } = string.Empty;
-        public string PaymentMethod { get; set; } = string.Empty;
-        public string VATNumber { get; set; } = string.Empty;
+        public string Notes { get; set; }
+
+        public int? SalesRepresentativeId { get; set; }
+
+        public SalesRepresentative? SalesRepresentative { get; set; }
+
+        public string? VATNumber { get; set; }
+
+        public bool IsActive { get; set; } = true;
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public DateTime? UpdatedAt { get; set; }
     }
 }

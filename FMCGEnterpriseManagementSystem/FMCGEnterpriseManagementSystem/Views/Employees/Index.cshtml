@@ -8,59 +8,123 @@
     <h2 class="text-white fw-bold mb-3">Employees</h2>
 
     <div class="mb-4">
-        <a asp-controller="Employees" asp-action="Create" class="btn btn-action-primary text-decoration-none">
+        <a asp-controller="Employees"
+           asp-action="Create"
+           class="btn btn-action-primary text-decoration-none">
             New Employee
         </a>
     </div>
 
     <div class="d-flex align-items-center gap-2 mb-4">
         <span class="text-white fw-bold">Keyword:</span>
-        <div class="position-relative">
-            <input type="text" class="form-control form-control-sm search-field" placeholder="Employee Code, Name, Area, etc">
-            <i class="bi bi-search position-absolute end-0 top-50 translate-middle-y me-2 text-white-50 small"></i>
-        </div>
+
+        <form asp-controller="Employees"
+              asp-action="Index"
+              method="get"
+              class="d-flex gap-2">
+
+            <input type="text"
+                   name="keyword"
+                   value="@ViewBag.Keyword"
+                   class="form-control form-control-sm search-field"
+                   placeholder="Employee number, name, email, job title" />
+
+            <button type="submit"
+                    class="btn btn-sm btn-light">
+                Search
+            </button>
+
+            <a asp-controller="Employees"
+               asp-action="Index"
+               class="btn btn-sm btn-outline-light">
+                Clear
+            </a>
+        </form>
     </div>
 
     <div class="table-responsive">
         <table class="custom-data-table">
             <thead>
                 <tr>
-                    <th>Employee Code</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
+                    <th>Employee Number</th>
+                    <th>Name</th>
                     <th>Email</th>
                     <th>Contact Number</th>
-                    <th>Position</th>
-                    <th>Department</th>
-                    <th>Hire Date</th>
+                    <th>Job Title</th>
+                    <th>Date Employed</th>
+                    <th>Status</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
+
             <tbody>
                 @if (Model != null && Model.Any())
                 {
-                    @foreach (var item in Model)
+                    foreach (var employee in Model)
                     {
                         <tr>
-                            <td>@item.FirstName @item.LastName</td>
-                            <td>@item.Email</td>
-                            <td>@item.ContactNumber</td>
-                            <td>@item.Position</td>
-                            <td>@item.Department</td>
-                            <td>@item.HireDate.ToString("yyyy-MM-dd")</td>
+                            <td>@employee.EmployeeNumber</td>
+                            <td>@employee.FirstName @employee.LastName</td>
+                            <td>@employee.Email</td>
+                            <td>@employee.ContactNumber</td>
+                            <td>@employee.JobTitle</td>
+                            <td>@employee.DateOfEmployment.ToString("dd/MM/yyyy")</td>
+                            <td>
+    @if (employee.IsActive)
+    {
+        <span class="badge bg-success">
+            Active
+        </span>
+    }
+    else
+    {
+        <span class="badge bg-danger">
+            Inactive
+        </span>
+    }
+<td>
+    <div class="d-flex gap-2">
+
+        <a asp-controller="Employees"
+           asp-action="Edit"
+           asp-route-id="@employee.EmployeeID"
+           class="btn btn-sm btn-warning">
+            <i class="bi bi-pencil-square me-1"></i>
+            Edit
+        </a>
+
+        @if (employee.IsActive)
+        {
+            <form asp-controller="Employees"
+                  asp-action="Deactivate"
+                  asp-route-id="@employee.EmployeeID"
+                  method="post"
+                  class="d-inline">
+
+                @Html.AntiForgeryToken()
+
+                <button type="submit"
+                        class="btn btn-sm btn-danger"
+                        onclick="return confirm('Are you sure you want to deactivate this employee?');">
+                    <i class="bi bi-person-x me-1"></i>
+                    Deactivate
+                </button>
+
+            </form>
+        }
+
+    </div>
+</td>
+
                         </tr>
                     }
                 }
                 else
                 {
                     <tr>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
+                        <td colspan="8" class="text-center">
+                            No employees found.
+                        </td>
                     </tr>
                 }
             </tbody>
