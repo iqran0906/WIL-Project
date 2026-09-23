@@ -9,7 +9,7 @@
         <a asp-controller="Home" asp-action="AddItem" class="btn btn-action-primary text-decoration-none text-center">
             New Item
         </a>
-        <button type="button" class="btn btn-action-primary text-center">
+        <button type="button" class="btn btn-action-primary text-center" data-bs-toggle="modal" data-bs-target="#manageCategoriesModal">
             Manage Categories
         </button>
     </div>
@@ -45,3 +45,138 @@
         </table>
     </div>
 </div>
+
+<!-- MANAGE CATEGORIES MODAL (PURE FRONT-END WORKFLOW) -->
+<div class="modal fade" id="manageCategoriesModal" tabindex="-1" aria-labelledby="manageCategoriesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="background-color: var(--card-bg, #ffffff); border-radius: 12px;">
+            <div class="modal-header border-bottom-0 pb-0">
+                <h5 class="modal-title fw-bold" id="manageCategoriesModalLabel" style="color: #1c323d;">Manage Categories</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <p class="text-muted small mb-3">Select a category below to edit its name or delete it.</p>
+
+                <!-- Categories List Table -->
+                <div class="table-responsive" style="max-height: 280px; overflow-y: auto;">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light sticky-top">
+                            <tr>
+                                <th>Category Name</th>
+                                <th class="text-end" style="width: 140px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categoryListTableBody">
+                            <tr>
+                                <td>
+                                    <span class="category-name-text">Sweets & Confectionery</span>
+                                    <input type="text" class="form-control form-control-sm d-none category-edit-input" value="Sweets & Confectionery" />
+                                </td>
+                                <td class="text-end">
+                                    <button type="button" class="btn btn-sm btn-outline-primary btn-edit-cat me-1" title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-success btn-save-cat me-1 d-none" title="Save">
+                                        <i class="bi bi-check-lg"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger btn-delete-cat" title="Delete">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="category-name-text">Beverages</span>
+                                    <input type="text" class="form-control form-control-sm d-none category-edit-input" value="Beverages" />
+                                </td>
+                                <td class="text-end">
+                                    <button type="button" class="btn btn-sm btn-outline-primary btn-edit-cat me-1" title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-success btn-save-cat me-1 d-none" title="Save">
+                                        <i class="bi bi-check-lg"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger btn-delete-cat" title="Delete">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="category-name-text">Snacks & Chips</span>
+                                    <input type="text" class="form-control form-control-sm d-none category-edit-input" value="Snacks & Chips" />
+                                </td>
+                                <td class="text-end">
+                                    <button type="button" class="btn btn-sm btn-outline-primary btn-edit-cat me-1" title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-success btn-save-cat me-1 d-none" title="Save">
+                                        <i class="bi bi-check-lg"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger btn-delete-cat" title="Delete">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <div class="modal-footer border-top-0 pt-0">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const tableBody = document.getElementById("categoryListTableBody");
+
+            if (tableBody) {
+                tableBody.addEventListener("click", function(e) {
+                    const editBtn = e.target.closest(".btn-edit-cat");
+                    const saveBtn = e.target.closest(".btn-save-cat");
+                    const deleteBtn = e.target.closest(".btn-delete-cat");
+
+                    // 1. EDIT: Switch to input box
+                    if (editBtn) {
+                        const row = editBtn.closest("tr");
+                        row.querySelector(".category-name-text").classList.add("d-none");
+                        row.querySelector(".category-edit-input").classList.remove("d-none");
+                        editBtn.classList.add("d-none");
+                        row.querySelector(".btn-save-cat").classList.remove("d-none");
+                    }
+
+                    // 2. SAVE: Update text in UI instantly
+                    if (saveBtn) {
+                        const row = saveBtn.closest("tr");
+                        const inputVal = row.querySelector(".category-edit-input").value.trim();
+
+                        if (!inputVal) {
+                            alert("Category name cannot be empty.");
+                            return;
+                        }
+
+                        row.querySelector(".category-name-text").innerText = inputVal;
+                        row.querySelector(".category-name-text").classList.remove("d-none");
+                        row.querySelector(".category-edit-input").classList.add("d-none");
+                        saveBtn.classList.add("d-none");
+                        row.querySelector(".btn-edit-cat").classList.remove("d-none");
+                    }
+
+                    // 3. DELETE: Remove row from modal instantly
+                    if (deleteBtn) {
+                        if (confirm("Are you sure you want to delete this category?")) {
+                            const row = deleteBtn.closest("tr");
+                            row.remove();
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+}

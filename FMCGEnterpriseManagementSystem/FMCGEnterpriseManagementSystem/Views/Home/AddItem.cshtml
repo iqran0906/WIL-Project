@@ -6,48 +6,87 @@
     <h2 class="fw-bold mb-4" style="color: #1c323d;">New Item</h2>
 
     <form method="post">
+        @Html.AntiForgeryToken()
+
         <div class="row g-4">
             <div class="col-md-8 offset-md-2">
+                <!-- Item Code (Manual Entry) -->
                 <div class="mb-3">
                     <label class="form-label">Item Code</label>
-                    <input type="text" class="form-control" placeholder="E.g ED001">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Description</label>
-                    <input type="text" class="form-control" placeholder="E.g. Chocolate">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Quantity</label>
-                    <input type="number" class="form-control" placeholder="Enter Quantity">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Unit Value</label>
-                    <input type="text" class="form-control" placeholder="Enter Unit Value">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">VAT</label>
-                    <select class="form-select">
-                        <option selected disabled>Select VAT</option>
-                        <option>Standard (15%)</option>
-                        <option>Zero Rated (0%)</option>
-                        <option>Exempt</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Expiry Date</label>
-                    <select class="form-select">
-                        <option selected disabled>Optional</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Category</label>
-                    <textarea class="form-control" rows="2" placeholder="Enter Category, e.g., Sweets, etc"></textarea>
-                </div>
-                <div class="mb-4">
-                    <label class="form-label">Notes</label>
-                    <textarea class="form-control" rows="3" placeholder="Optional"></textarea>
+                    <input type="text" name="ProductCode" class="form-control" placeholder="E.g ED001" required>
                 </div>
 
+                <!-- Description -->
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <input type="text" name="ProductName" class="form-control" placeholder="E.g. Chocolate" required>
+                </div>
+
+                <!-- Quantity -->
+                <div class="mb-3">
+                    <label class="form-label">Quantity</label>
+                    <input type="number" name="QuantityOnHand" min="0" class="form-control" placeholder="Enter Quantity" required>
+                </div>
+
+                <!-- Unit Value / Selling Price -->
+                <div class="mb-3">
+                    <label class="form-label">Unit Value</label>
+                    <input type="number" step="0.01" min="0" name="SellingPrice" class="form-control" placeholder="Enter Unit Value" required>
+                </div>
+
+                <!-- VAT -->
+                <div class="mb-3">
+                    <label class="form-label">VAT</label>
+                    <select name="VatRate" class="form-select">
+                        <option selected disabled>Select VAT</option>
+                        <option value="15">Standard (15%)</option>
+                        <option value="0">Zero Rated (0%)</option>
+                        <option value="-1">Exempt</option>
+                    </select>
+                </div>
+
+                <!-- Expiry Date (Dropdown + Dynamic Calendar Picker) -->
+                <div class="mb-3">
+                    <label class="form-label">Expiry Date</label>
+                    <select id="expiryOptionSelect" class="form-select mb-2">
+                        <option value="none" selected>Optional / No Expiry Date</option>
+                        <option value="custom">Set Expiry Date...</option>
+                    </select>
+
+                    <div id="expiryDatePickerContainer" style="display: none;">
+                        <input type="date" id="expiryDateInput" name="ExpiryDate" class="form-control" />
+                    </div>
+                </div>
+
+                <!-- Category (Dropdown + Dynamic 'Other' Text Input) -->
+                <div class="mb-3">
+                    <label class="form-label">Category</label>
+                    <select id="categorySelect" class="form-select mb-2">
+                        <option value="" selected disabled>Select Category</option>
+                        <option value="Sweets & Confectionery">Sweets & Confectionery</option>
+                        <option value="Beverages">Beverages</option>
+                        <option value="Snacks & Chips">Snacks & Chips</option>
+                        <option value="Dairy & Frozen">Dairy & Frozen</option>
+                        <option value="Dry Goods & Pantry">Dry Goods & Pantry</option>
+                        <option value="OTHER_OPTION">+ Add New Category...</option>
+                    </select>
+
+                    <!-- Hidden input submitted to C# -->
+                    <input type="hidden" name="CategoryName" id="finalCategoryInput" />
+
+                    <!-- Text input shown when 'Other' is chosen -->
+                    <div id="customCategoryContainer" style="display: none;">
+                        <input type="text" id="customCategoryInput" class="form-control" placeholder="Enter new category name..." />
+                    </div>
+                </div>
+
+                <!-- Notes -->
+                <div class="mb-4">
+                    <label class="form-label">Notes</label>
+                    <textarea name="Notes" class="form-control" rows="3" placeholder="Optional"></textarea>
+                </div>
+
+                <!-- Action Buttons -->
                 <div class="d-flex justify-content-end gap-3 mt-2">
                     <a asp-controller="Home" asp-action="InventoryList" class="btn btn-link text-decoration-none text-secondary align-self-center">Cancel</a>
                     <button type="submit" class="btn btn-custom-save">Save Item</button>
@@ -56,3 +95,51 @@
         </div>
     </form>
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // 1. EXPIRY DATE TOGGLE
+            const expiryOptionSelect = document.getElementById("expiryOptionSelect");
+            const expiryDatePickerContainer = document.getElementById("expiryDatePickerContainer");
+            const expiryDateInput = document.getElementById("expiryDateInput");
+
+            if (expiryOptionSelect) {
+                expiryOptionSelect.addEventListener("change", function() {
+                    if (this.value === "custom") {
+                        expiryDatePickerContainer.style.display = "block";
+                    } else {
+                        expiryDatePickerContainer.style.display = "none";
+                        expiryDateInput.value = ""; // Clears date when hidden
+                    }
+                });
+            }
+
+            // 2. CATEGORY TOGGLE
+            const categorySelect = document.getElementById("categorySelect");
+            const customCategoryContainer = document.getElementById("customCategoryContainer");
+            const customCategoryInput = document.getElementById("customCategoryInput");
+            const finalCategoryInput = document.getElementById("finalCategoryInput");
+
+            if (categorySelect) {
+                categorySelect.addEventListener("change", function() {
+                    if (this.value === "OTHER_OPTION") {
+                        customCategoryContainer.style.display = "block";
+                        customCategoryInput.focus();
+                        finalCategoryInput.value = customCategoryInput.value;
+                    } else {
+                        customCategoryContainer.style.display = "none";
+                        customCategoryInput.value = "";
+                        finalCategoryInput.value = this.value;
+                    }
+                });
+            }
+
+            if (customCategoryInput) {
+                customCategoryInput.addEventListener("input", function() {
+                    finalCategoryInput.value = this.value;
+                });
+            }
+        });
+    </script>
+}
