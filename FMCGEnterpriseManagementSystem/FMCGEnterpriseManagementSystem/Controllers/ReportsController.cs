@@ -1,6 +1,7 @@
 ﻿using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
@@ -162,6 +163,53 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             SetDateFilters(startDate, endDate);
 
             return View(report);
+        }
+
+        
+        [HttpGet]
+        public async Task<IActionResult> Export(string reportType, DateTime? startDate, DateTime? endDate, string format = "csv")
+        {
+            var sb = new StringBuilder();
+            string fileName = $"{reportType}_{DateTime.Now:yyyyMMdd}.{format}";
+
+            if (reportType == "invoices")
+            {
+                var reportData = await _reportService.GetInvoiceReportAsync(startDate, endDate);
+                sb.AppendLine("InvoiceNumber,Date,Customer,Status,TotalAmount");
+                if (reportData != null)
+                {
+                    foreach (var item in reportData)
+                    {
+                        sb.AppendLine($"\"{item.GetType().GetProperty("InvoiceNumber")?.GetValue(item)}\"," +
+                                      $"\"{item.GetType().GetProperty("InvoiceDate")?.GetValue(item):yyyy-MM-dd}\"," +
+                                      $"\"{item.GetType().GetProperty("CustomerName")?.GetValue(item)}\"," +
+                                      $"\"{item.GetType().GetProperty("Status")?.GetValue(item)}\"," +
+                                      $"{item.GetType().GetProperty("TotalAmount")?.GetValue(item)}");
+                    }
+                }
+            }
+            else if (reportType == "inventory")
+            {
+                var reportData = await _reportService.GetInventoryReportAsync();
+                sb.AppendLine("ProductName,StockLevel,UnitPrice");
+                if (reportData != null)
+                {
+                    foreach (var item in reportData)
+                    {
+                        sb.AppendLine($"\"{item.GetType().GetProperty("ProductName")?.GetValue(item) ?? item.GetType().GetProperty("Name")?.GetValue(item)}\"," +
+                                      $"{item.GetType().GetProperty("StockLevel")?.GetValue(item)}," +
+                                      $"{item.GetType().GetProperty("UnitPrice")?.GetValue(item)}");
+                    }
+                }
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Invalid report type selected for export.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var contentType = format.ToLower() == "csv" ? "text/csv" : "application/vnd.ms-excel";
+            return File(Encoding.UTF8.GetBytes(sb.ToString()), contentType, fileName);
         }
 
         private void SetDateFilters(

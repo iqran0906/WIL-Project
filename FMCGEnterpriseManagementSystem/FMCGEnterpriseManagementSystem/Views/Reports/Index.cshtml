@@ -2,7 +2,6 @@
     ViewData["Title"] = "Report Dashboard";
 }
 
-<!-- Search Bar Header -->
 <div class="mb-5 d-flex justify-content-center justify-content-md-start">
     <div class="input-group w-100" style="max-width: 400px;">
         <input type="text"
@@ -15,10 +14,8 @@
     </div>
 </div>
 
-<!-- 3x4 Grid of Report Navigation Cards -->
 <div class="row g-4 justify-content-center" id="reportGrid">
 
-    <!-- Row 1 -->
     <div class="col-12 col-md-4 report-card">
         <a asp-controller="Reports"
            asp-action="InvoiceReport"
@@ -45,8 +42,6 @@
             <span class="fw-bold fs-5">Age Analysis</span>
         </a>
     </div>
-
-    <!-- Row 2 -->
     <div class="col-12 col-md-4 report-card">
         <a asp-controller="Reports"
            asp-action="CustomerReport"
@@ -74,7 +69,6 @@
         </a>
     </div>
 
-    <!-- Row 3 -->
     <div class="col-12 col-md-4 report-card">
         <a asp-controller="Reports"
            asp-action="InventoryReport"
@@ -102,7 +96,6 @@
         </a>
     </div>
 
-    <!-- Row 4 -->
     <div class="col-12 col-md-4 report-card">
         <a asp-controller="Reports"
            asp-action="ItemSalesReport"

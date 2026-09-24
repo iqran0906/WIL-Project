@@ -1,80 +1,144 @@
-﻿@{
+﻿@model FMCGEnterpriseManagementSystem.ViewModels.DashboardViewModel
+@{
     ViewData["Title"] = "Dashboard";
 }
 
-<div class="mb-4 d-flex flex-column align-items-center align-items-md-start">
-    <form asp-controller="Home" asp-action="Search" method="get" class="w-100" style="max-width: 400px;">
-        <div class="input-group">
-            <button type="submit" class="input-group-text bg-light border-end-0 text-muted border-0" style="cursor: pointer;">
-                <i class="bi bi-search"></i>
-            </button>
-            <input type="text" name="query" class="form-control bg-light border-start-0" placeholder="Search Bar" value="@ViewData["SearchQuery"]">
-        </div>
-    </form>
-
-    @if (TempData["SearchWarning"] != null)
-    {
-        <div class="mt-2 text-warning small d-flex align-items-center gap-1">
-            <i class="bi bi-exclamation-circle-fill"></i>
-            <span>@TempData["SearchWarning"]</span>
-        </div>
+<style>
+    .dashboard-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
     }
-    else
-    {
-        <div class="mt-1 text-white-50 small" style="font-size: 0.8rem;">
-            Searchable fields: Customer Name, Email Address, Phone Number
-        </div>
+
+    .sidebar-footer-section {
+        margin-top: auto;
+        padding-top: 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
     }
-</div>
+</style>
 
-<h3 class="text-white text-center mb-4">Create New</h3>
+<div class="dashboard-container">
 
-<div class="row g-3 justify-content-center mb-5">
-    <div class="col-6 col-md-4 col-lg-2">
-        <a asp-action="AddCustomer" class="btn btn-light w-100 py-4 shadow-sm text-center d-flex flex-column align-items-center justify-content-center border-0 style-card" style="min-height: 110px; background-color: #357383; color: white;">
-            <span class="fw-bold fs-5">Customer</span>
-        </a>
-    </div>
-    <div class="col-6 col-md-4 col-lg-2">
-        <a asp-action="AddSupplier" class="btn btn-light w-100 py-4 shadow-sm text-center d-flex flex-column align-items-center justify-content-center border-0 style-card" style="min-height: 110px; background-color: #357383; color: white;">
-            <span class="fw-bold fs-5">Supplier</span>
-        </a>
-    </div>
-    <div class="col-6 col-md-4 col-lg-2">
-        <a asp-action="AddItem" class="btn btn-light w-100 py-4 shadow-sm text-center d-flex flex-column align-items-center justify-content-center border-0 style-card" style="min-height: 110px; background-color: #357383; color: white;">
-            <span class="fw-bold fs-5">Item</span>
-        </a>
-    </div>
-    <div class="col-6 col-md-4 col-lg-2">
-        <a asp-action="CreateInvoice" class="btn btn-light w-100 py-4 shadow-sm text-center d-flex flex-column align-items-center justify-content-center border-0 style-card" style="min-height: 110px; background-color: #357383; color: white;">
-            <span class="fw-bold fs-5">Invoices</span>
-        </a>
-    </div>
-    <div class="col-6 col-md-4 col-lg-2">
-        <a asp-action="CreateQuote" class="btn btn-light w-100 py-4 shadow-sm text-center d-flex flex-column align-items-center justify-content-center border-0 style-card" style="min-height: 110px; background-color: #357383; color: white;">
-            <span class="fw-bold fs-5">Quote</span>
-        </a>
-    </div>
-    <div class="col-6 col-md-4 col-lg-2">
-        <a asp-action="Reports" class="btn btn-light w-100 py-4 shadow-sm text-center d-flex flex-column align-items-center justify-content-center border-0 style-card" style="min-height: 110px; background-color: #357383; color: white;">
-            <span class="fw-bold fs-5">Report</span>
-        </a>
-    </div>
-</div>
+    <div class="mb-2 d-flex flex-column align-items-center align-items-md-start">
+        <form asp-controller="Home" asp-action="Search" method="get" class="w-100" style="max-width: 400px;">
+            <div class="input-group">
+                <button type="submit" class="input-group-text bg-light border-end-0 text-muted border-0" style="cursor: pointer;">
+                    <i class="bi bi-search"></i>
+                </button>
+                <input type="text" name="query" class="form-control bg-light border-start-0" placeholder="Search Bar" value="@ViewData["SearchQuery"]">
+            </div>
+        </form>
 
-<div class="row g-4 mt-4">
-    <div class="col-12 col-md-7">
-        <div class="p-4 rounded shadow-sm" style="background-color: rgba(255,255,255,0.05); min-height: 300px; border: 1px solid rgba(255,255,255,0.1);">
-            <h5 class="text-white mb-3">Income by Month</h5>
-            <div class="d-flex align-items-end justify-content-between h-75 pt-5 text-muted" style="min-height: 200px;">
-                <div class="text-center w-100 text-white-50 small">Monthly Bar Metrics View Dashboard Placeholder</div>
+        @if (TempData["SearchWarning"] != null)
+        {
+            <div class="mt-2 text-warning small d-flex align-items-center gap-1">
+                <i class="bi bi-exclamation-circle-fill"></i>
+                <span>@TempData["SearchWarning"]</span>
+            </div>
+        }
+        else
+        {
+            <div class="mt-1 text-white-50 small" style="font-size: 0.8rem;">
+                Searchable fields: Customer Name, Email Address, Phone Number
+            </div>
+        }
+    </div>
+
+
+    <div>
+        <h3 class="text-white text-center text-md-start mb-3">Create New</h3>
+        <div class="row g-3">
+            <div class="col-6 col-md-4 col-lg-2">
+                <a asp-action="AddCustomer" class="btn btn-light w-100 py-4 shadow-sm text-center d-flex flex-column align-items-center justify-content-center border-0 style-card" style="min-height: 110px; background-color: #357383; color: white;">
+                    <span class="fw-bold fs-5">Customer</span>
+                </a>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <a asp-action="AddSupplier" class="btn btn-light w-100 py-4 shadow-sm text-center d-flex flex-column align-items-center justify-content-center border-0 style-card" style="min-height: 110px; background-color: #357383; color: white;">
+                    <span class="fw-bold fs-5">Supplier</span>
+                </a>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <a asp-action="AddItem" class="btn btn-light w-100 py-4 shadow-sm text-center d-flex flex-column align-items-center justify-content-center border-0 style-card" style="min-height: 110px; background-color: #357383; color: white;">
+                    <span class="fw-bold fs-5">Item</span>
+                </a>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <a asp-action="CreateInvoice" class="btn btn-light w-100 py-4 shadow-sm text-center d-flex flex-column align-items-center justify-content-center border-0 style-card" style="min-height: 110px; background-color: #357383; color: white;">
+                    <span class="fw-bold fs-5">Invoices</span>
+                </a>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <a asp-action="CreateQuote" class="btn btn-light w-100 py-4 shadow-sm text-center d-flex flex-column align-items-center justify-content-center border-0 style-card" style="min-height: 110px; background-color: #357383; color: white;">
+                    <span class="fw-bold fs-5">Quote</span>
+                </a>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <a asp-action="Reports" class="btn btn-light w-100 py-4 shadow-sm text-center d-flex flex-column align-items-center justify-content-center border-0 style-card" style="min-height: 110px; background-color: #357383; color: white;">
+                    <span class="fw-bold fs-5">Report</span>
+                </a>
             </div>
         </div>
     </div>
-    <div class="col-12 col-md-5">
-        <div class="p-4 rounded shadow-sm" style="background-color: rgba(255,255,255,0.05); min-height: 300px; border: 1px solid rgba(255,255,255,0.1);">
-            <h5 class="text-white mb-3">Sales Per Category</h5>
-            <div class="text-center text-white-50 small pt-5">Category Distribution Breakdown Matrix View Placeholder</div>
+
+
+    <div class="row g-4">
+        <div class="col-12 col-md-7">
+            <div class="p-4 rounded shadow-sm" style="background-color: rgba(255,255,255,0.05); min-height: 300px; border: 1px solid rgba(255,255,255,0.1);">
+                <h5 class="text-white mb-3">Income by Month</h5>
+                <div class="d-flex align-items-end justify-content-between h-75 pt-5 text-muted" style="min-height: 200px;">
+                    <div class="text-center w-100 text-white-50 small">Monthly Bar Metrics View Dashboard Placeholder</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-5">
+            <div class="p-4 rounded shadow-sm" style="background-color: rgba(255,255,255,0.05); min-height: 300px; border: 1px solid rgba(255,255,255,0.1);">
+                <h5 class="text-white mb-3">Sales Per Category</h5>
+                <div class="text-center text-white-50 small pt-5">Category Distribution Breakdown Matrix View Placeholder</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-12">
+            <div class="p-4 rounded shadow-sm" style="background-color: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                <h5 class="text-white mb-3">Recent Activity Log</h5>
+                @if (Model.RecentInvoices == null || Model.RecentInvoices.Count == 0)
+                {
+                    <p class="text-white-50 small mb-0">No recent activity recorded yet. Transactions will populate here automatically.</p>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover align-middle mb-0" style="background: transparent;">
+                            <thead>
+                                <tr class="text-white-50">
+                                    <th>Invoice #</th>
+                                    <th>Date</th>
+                                    <th>Customer</th>
+                                    <th>Status</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var inv in Model.RecentInvoices)
+                                {
+                                    <tr class="text-white">
+                                        <td>@inv.InvoiceNumber</td>
+                                        <td>@inv.InvoiceDate.ToString("dd MMM yyyy")</td>
+                                        <td>@inv.Customer?.Name</td>
+                                        <td><span class="badge bg-secondary">@inv.Status</span></td>
+                                        <td>R @inv.Total.ToString("N2")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
         </div>
     </div>
 </div>

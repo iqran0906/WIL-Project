@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
-    // Handles API endpoints for Customer management operations.
     [ApiController]
     [Route("api/[controller]")]
     public class CustomersController : ControllerBase
@@ -16,7 +15,6 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             _customerService = customerService;
         }
 
-        // Retrieves all customer records.
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -24,7 +22,6 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return Ok(customers);
         }
 
-        // Retrieves a single customer by their unique Customer ID.
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -38,7 +35,6 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return Ok(customer);
         }
 
-        // Creates a new customer.
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CustomerViewModel model)
         {
@@ -55,7 +51,6 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             });
         }
 
-        // Updates an existing customer by their unique Customer ID.
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(
             int id,
@@ -79,7 +74,6 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             });
         }
 
-        // Deletes a customer by their unique Customer ID.
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

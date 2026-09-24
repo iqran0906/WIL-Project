@@ -1,4 +1,5 @@
-﻿@{
+﻿@model FMCGEnterpriseManagementSystem.ViewModels.LoginViewModel
+@{
     Layout = null;
     ViewData["Title"] = "Login";
 }
@@ -90,21 +91,36 @@
         <h3 class="fw-bold mb-1" style="color: #1c323d;">Exclusive Distributors</h3>
         <p class="text-muted small mb-4">Enterprise System Portal Prototype</p>
 
-        <form asp-controller="Home" asp-action="Dashboard" method="get">
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger py-2 small text-start">
+                <div asp-validation-summary="All" class="mb-0"></div>
+            </div>
+        }
+
+        <form asp-controller="Account" asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+            @Html.AntiForgeryToken()
             <div class="mb-3 text-start">
-                <label class="form-label fw-bold text-secondary small">Username / Email</label>
+                <label asp-for="Email" class="form-label fw-bold text-secondary small">Username / Email</label>
                 <div class="input-group">
                     <span class="input-group-text bg-white text-muted"><i class="bi bi-person"></i></span>
-                    <input type="text" class="form-control" placeholder="Enter anything to test...">
+                    <input asp-for="Email" type="text" class="form-control" placeholder="Enter email/username...">
                 </div>
+                <span asp-validation-for="Email" class="text-danger small"></span>
             </div>
 
-            <div class="mb-4 text-start">
-                <label class="form-label fw-bold text-secondary small">Password</label>
+            <div class="mb-3 text-start">
+                <label asp-for="Password" class="form-label fw-bold text-secondary small">Password</label>
                 <div class="input-group">
                     <span class="input-group-text bg-white text-muted"><i class="bi bi-lock"></i></span>
-                    <input type="password" class="form-control" placeholder="Enter anything to test...">
+                    <input asp-for="Password" type="password" class="form-control" placeholder="Enter password...">
                 </div>
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-4 text-start form-check">
+                <input asp-for="RememberMe" class="form-check-input" />
+                <label asp-for="RememberMe" class="form-check-label text-secondary small fw-bold">Remember me</label>
             </div>
 
             <button type="submit" class="btn btn-login w-100 shadow-sm">Login to System</button>

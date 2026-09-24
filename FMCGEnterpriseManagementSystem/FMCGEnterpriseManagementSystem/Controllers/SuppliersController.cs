@@ -50,7 +50,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] SupplierViewModel model)
         {
-            // Server-side validation check
+          
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

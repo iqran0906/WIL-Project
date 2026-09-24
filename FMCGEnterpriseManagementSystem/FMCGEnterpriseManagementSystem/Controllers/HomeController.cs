@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;
+using FMCGEnterpriseManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -24,7 +25,30 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
         public IActionResult Index() => View();
         public IActionResult Privacy() => View();
-        public IActionResult Dashboard() => View();
+
+        [HttpGet]
+        public async Task<IActionResult> Dashboard()
+        {
+            var viewModel = new DashboardViewModel
+            {
+                TotalRevenue = await _context.Invoices
+                    .Where(i => i.Status == "Paid")
+                    .SumAsync(i => (decimal?)i.Total) ?? 0,
+
+                TotalInvoices = await _context.Invoices.CountAsync(),
+                TotalCustomers = await _context.Customers.CountAsync(),
+                TotalProducts = await _context.Products.CountAsync(),
+
+                RecentInvoices = await _context.Invoices
+                    .Include(i => i.Customer)
+                    .OrderByDescending(i => i.InvoiceDate)
+                    .Take(5)
+                    .ToListAsync()
+            };
+
+            return View(viewModel);
+        }
+
         public IActionResult Reports() => View();
 
         [HttpGet]
