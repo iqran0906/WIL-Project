@@ -12,9 +12,17 @@
             <p class="text-muted mb-0">View and manage customer payments.</p>
         </div>
 
-        <a asp-action="Create" class="btn btn-success">
-            + New Payment
-        </a>
+        <div>
+            <a asp-action="ExportPdf" class="btn btn-outline-light me-2">
+                Export PDF
+            </a>
+            <a asp-action="ExportExcel" class="btn btn-outline-light me-2">
+                Export Excel
+            </a>
+            <a asp-action="Create" class="btn btn-success">
+                + New Payment
+            </a>
+        </div>
     </div>
 
     @if (TempData["SuccessMessage"] != null)
