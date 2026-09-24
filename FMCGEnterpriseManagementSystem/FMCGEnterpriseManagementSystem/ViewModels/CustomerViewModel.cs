@@ -44,6 +44,7 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
         public string SalesRep { get; set; } = string.Empty;
 
         public string? VATNumber { get; set; }
+
         public int? SalesRepresentativeId { get; set; }
     }
 }

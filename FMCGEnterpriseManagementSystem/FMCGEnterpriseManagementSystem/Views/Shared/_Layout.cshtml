@@ -25,7 +25,12 @@
             min-height: auto;
             color: white;
             padding-top: 20px;
+            transition: margin-left 0.3s ease-in-out;
         }
+
+            .sidebar.collapsed-sidebar {
+                display: none !important;
+            }
 
         @@media (min-width: 768px) {
             .sidebar {
@@ -84,7 +89,7 @@
             border-radius: 6px;
             padding: 8px 16px;
             transition: all 0.2s ease;
-            text-decoration: none;
+            width: 100%;
         }
 
             .btn-sidebar-logout:hover {
@@ -199,18 +204,6 @@
                 font-weight: 600;
                 background: #ffffff;
             }
-
-        .search-field {
-            max-width: 250px;
-            background-color: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            padding-right: 30px;
-        }
-
-            .search-field::placeholder {
-                color: rgba(255, 255, 255, 0.6);
-            }
     </style>
 </head>
 <body>
@@ -229,55 +222,17 @@
 
         <div class="collapse mobile-dropdown" id="mobileMenu">
             <ul class="nav flex-column text-center pb-3">
-
-                <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Home" asp-action="Dashboard">Dashboard</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Home" asp-action="CustomerList">Customers</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Home" asp-action="SupplierList">Suppliers</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Employees" asp-action="Index">Employees</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link py-2"
-                       asp-controller="SalesRepresentatives"
-                       asp-action="Index">
-                        Sales Representatives
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Home" asp-action="InventoryList">Inventory</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Home" asp-action="InvoiceList">Invoices</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Payments" asp-action="Index">Payments</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Quotes" asp-action="Index">Quotes</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Reports" asp-action="Index">Reports</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Home" asp-action="Settings">Settings</a>
-                </li>
-
+                <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="Dashboard">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="CustomerList">Customers</a></li>
+                <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="SupplierList">Suppliers</a></li>
+                <li class="nav-item"><a class="nav-link py-2" asp-controller="Employees" asp-action="Index">Employees</a></li>
+                <li class="nav-item"><a class="nav-link py-2" asp-controller="SalesRepresentatives" asp-action="Index">Sales Representatives</a></li>
+                <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="InventoryList">Inventory</a></li>
+                <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="InvoiceList">Invoices</a></li>
+                <li class="nav-item"><a class="nav-link py-2" asp-controller="Payments" asp-action="Index">Payments</a></li>
+                <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="QuoteList">Quotes</a></li>
+                <li class="nav-item"><a class="nav-link py-2" asp-controller="Reports" asp-action="Index">Reports</a></li>
+                <li class="nav-item"><a class="nav-link py-2" asp-controller="Home" asp-action="Settings">Settings</a></li>
             </ul>
         </div>
     </div>
@@ -285,113 +240,68 @@
     <div class="container-fluid p-0">
         <div class="row g-0">
 
-            <div class="col-md-3 col-lg-2 sidebar d-none d-md-flex flex-column justify-content-between">
-
+            <div id="sidebarCol" class="col-md-3 col-lg-2 sidebar d-none d-md-flex flex-column justify-content-between">
                 <div>
-
                     <div class="px-3 mb-4">
                         <h4 class="text-center font-weight-bold tracking-wide py-2 m-0">Exclusive Distributors</h4>
                     </div>
 
                     <ul class="nav flex-column justify-content-start">
-
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="Dashboard">Dashboard</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="CustomerList">Customers</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="SupplierList">Suppliers</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Employees" asp-action="Index">Employees</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2"
-                               asp-controller="SalesRepresentatives"
-                               asp-action="Index">
-                                Sales Representatives
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="InventoryList">Inventory</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="InvoiceList">Invoices</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Payments" asp-action="Index">Payments</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Quotes" asp-action="Index">Quotes</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Reports" asp-action="Index">Reports</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="Settings">Settings</a>
-                        </li>
-
+                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="Dashboard">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="CustomerList">Customers</a></li>
+                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="SupplierList">Suppliers</a></li>
+                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Employees" asp-action="Index">Employees</a></li>
+                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="SalesRepresentatives" asp-action="Index">Sales Representatives</a></li>
+                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="InventoryList">Inventory</a></li>
+                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="InvoiceList">Invoices</a></li>
+                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Payments" asp-action="Index">Payments</a></li>
+                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="QuoteList">Quotes</a></li>
+                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Reports" asp-action="Index">Reports</a></li>
+                        <li class="nav-item"><a class="nav-link px-3 py-2" asp-controller="Home" asp-action="Settings">Settings</a></li>
                     </ul>
                 </div>
 
-                <div class="sidebar-bottom-wrapper d-flex flex-column align-items-center gap-3">
-                    <a class="btn-sidebar-logout d-inline-flex align-items-center gap-2" asp-controller="Home" asp-action="Login">
-                        <i class="bi bi-box-arrow-right"></i>
-                        <span>Logout</span>
-                    </a>
+                <div class="sidebar-bottom-wrapper d-flex flex-column align-items-center gap-3 px-3">
+                    <form asp-controller="Account" asp-action="Logout" method="post" class="w-100 m-0">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-sidebar-logout d-inline-flex align-items-center justify-content-center gap-2">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span>Logout</span>
+                        </button>
+                    </form>
                     <div class="brand-logo-container">
                         <img src="~/images/logo.png" alt="Exclusive Distributors Logo" />
                     </div>
                 </div>
-
             </div>
 
-            <div class="col-12 col-md-9 col-lg-10 d-flex flex-column">
+            <div id="contentCol" class="col-12 col-md-9 col-lg-10 d-flex flex-column">
 
                 <header>
                     <nav class="navbar navbar-expand navbar-light top-navbar d-flex justify-content-between align-items-center">
 
-                        <span class="navbar-brand">Exclusive Distributors</span>
+                        <div class="d-flex align-items-center gap-2">
+                            <button id="toggleSidebarBtn" type="button" class="btn text-white p-1 border-0 me-2" title="Hide/Show Taskbar">
+                                <i class="bi bi-list fs-3"></i>
+                            </button>
+                            <span class="navbar-brand">Exclusive Distributors</span>
+                        </div>
 
                         <div class="d-flex align-items-center gap-3 gap-md-4 text-white">
 
-                            <a asp-controller="Notifications"
-                               asp-action="Index"
-                               class="text-white text-decoration-none">
+                            <a asp-controller="Notifications" asp-action="Index" class="text-white text-decoration-none">
                                 <i class="bi bi-bell fs-4" style="cursor: pointer;"></i>
                             </a>
 
-                            <a asp-controller="Home"
-                               asp-action="UserProfile"
-                               class="text-white text-decoration-none">
+                            <a asp-controller="Home" asp-action="UserProfile" class="text-white text-decoration-none">
                                 <i class="bi bi-person-circle fs-3" style="cursor: pointer;"></i>
                             </a>
 
-                            <form asp-controller="Account"
-                                  asp-action="Logout"
-                                  method="post"
-                                  class="m-0">
-
+                            <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
                                 @Html.AntiForgeryToken()
-
-                                <button type="submit"
-                                        class="btn p-0 border-0 text-white"
-                                        title="Logout">
+                                <button type="submit" class="btn p-0 border-0 text-white" title="Logout">
                                     <i class="bi bi-box-arrow-right fs-4"></i>
                                 </button>
-
                             </form>
 
                         </div>
@@ -400,11 +310,9 @@
                 </header>
 
                 <div class="container-fluid px-2 px-md-4">
-
                     <main role="main" class="pb-3">
                         @RenderBody()
                     </main>
-
                 </div>
 
             </div>
@@ -415,6 +323,22 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        document.getElementById('toggleSidebarBtn').addEventListener('click', function () {
+            var sidebar = document.getElementById('sidebarCol');
+            var content = document.getElementById('contentCol');
+
+            sidebar.classList.toggle('collapsed-sidebar');
+            if (sidebar.classList.contains('collapsed-sidebar')) {
+                content.classList.remove('col-md-9', 'col-lg-10');
+                content.classList.add('col-12');
+            } else {
+                content.classList.remove('col-12');
+                content.classList.add('col-md-9', 'col-lg-10');
+            }
+        });
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 

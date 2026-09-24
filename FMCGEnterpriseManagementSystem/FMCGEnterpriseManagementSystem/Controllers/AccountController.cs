@@ -1,68 +1,61 @@
-﻿using FMCGEnterpriseManagementSystem.Services.Interfaces;
+﻿using System.Threading.Tasks;
+using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IAuthService _authService;
+        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManager;
 
-        public AccountController(IAuthService authService)
+        public AccountController(
+            SignInManager<User> signInManager,
+            UserManager<User> userManager)
         {
-            _authService = authService;
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Login()
+        public IActionResult Login(string? returnUrl = null)
         {
-            if (User.Identity?.IsAuthenticated == true)
-            {
-                return RedirectToAction("Dashboard", "Home");
-            }
-
-            return View(new LoginViewModel());
+            ViewData["ReturnUrl"] = returnUrl;
+            return View();
         }
 
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl = null)
         {
-            if (!ModelState.IsValid)
+            ViewData["ReturnUrl"] = returnUrl;
+
+            if (ModelState.IsValid)
             {
-                return View(model);
+                var result = await _signInManager.PasswordSignInAsync(
+                    model.Email,
+                    model.Password,
+                    model.RememberMe,
+                    lockoutOnFailure: false);
+
+                if (result.Succeeded)
+                {
+                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
+                    return RedirectToAction("Dashboard", "Home");
+                }
+
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             }
 
-            var isActive =
-                await _authService.IsUserActiveAsync(model.Email);
-
-            if (!isActive)
-            {
-                ModelState.AddModelError(
-                    string.Empty,
-                    "Invalid email address or password.");
-
-                return View(model);
-            }
-
-            var loggedIn = await _authService.LoginAsync(
-                model.Email,
-                model.Password,
-                model.RememberMe);
-
-            if (!loggedIn)
-            {
-                ModelState.AddModelError(
-                    string.Empty,
-                    "Invalid email address or password.");
-
-                return View(model);
-            }
-
-            return RedirectToAction("Dashboard", "Home");
+            return View(model);
         }
 
         [HttpPost]
@@ -70,9 +63,8 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
-            await _authService.LogoutAsync();
-
-            return RedirectToAction(nameof(Login));
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Login", "Account");
         }
 
         [HttpGet]
