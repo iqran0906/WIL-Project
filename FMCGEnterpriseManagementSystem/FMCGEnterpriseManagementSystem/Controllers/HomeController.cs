@@ -23,7 +23,6 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         }
 
         public IActionResult Index() => View();
-        public IActionResult Settings() => View();
         public IActionResult Privacy() => View();
         public IActionResult Dashboard() => View();
         public IActionResult Reports() => View();
@@ -42,6 +41,46 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         public IActionResult AddItem() => View();
         public IActionResult CreateInvoice() => View();
         public IActionResult CreateQuote() => View();
+
+        [HttpGet]
+        public async Task<IActionResult> Settings()
+        {
+            var users = await _userManager.Users.ToListAsync();
+            ViewBag.UserList = users;
+            return View(new RegisterUserViewModel());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Settings(RegisterUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new User
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    EmailConfirmed = true,
+                    IsActive = true
+                };
+
+                var result = await _userManager.CreateAsync(user, model.Password);
+
+                if (result.Succeeded)
+                {
+                    TempData["SettingsSuccess"] = $"User {model.Email} created successfully!";
+                    return RedirectToAction("Settings");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+
+            ViewBag.UserList = await _userManager.Users.ToListAsync();
+            return View(model);
+        }
 
         [HttpGet]
         public async Task<IActionResult> UserProfile()
