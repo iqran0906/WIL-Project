@@ -27,14 +27,84 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         public IActionResult Dashboard() => View();
         public IActionResult Reports() => View();
 
-        public IActionResult CustomerList() => View();
+        [HttpGet]
+        public async Task<IActionResult> CustomerList()
+        {
+            var customers = await _context.Customers.ToListAsync();
+            return View(customers);
+        }
+
         public IActionResult SupplierList() => View();
         public IActionResult EmployeeList() => View();
         public IActionResult InventoryList() => View();
         public IActionResult InvoiceList() => View();
         public IActionResult QuoteList() => View();
 
-        public IActionResult AddCustomer() => View();
+        [HttpGet]
+        public IActionResult AddCustomer()
+        {
+            return View(new Customer());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddCustomer(Customer customer, string? CustomGroup)
+        {
+            if (!string.IsNullOrWhiteSpace(CustomGroup))
+            {
+                customer.CustomerGroup = CustomGroup;
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    customer.CreatedAt = DateTime.UtcNow;
+                    _context.Customers.Add(customer);
+                    await _context.SaveChangesAsync();
+
+                    TempData["SuccessMessage"] = $"Customer '{customer.Name}' added successfully!";
+                    return RedirectToAction("CustomerList");
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error occurred while saving new customer.");
+                    TempData["Error"] = "An error occurred while saving the customer. Please try again.";
+                }
+            }
+
+            return View(customer);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteCustomer(int id)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            bool isAdminRole = User.IsInRole("Admin");
+            bool isTestAdmin = currentUser?.Email?.Equals("admin.test@example.com", StringComparison.OrdinalIgnoreCase) == true;
+
+            if (!isAdminRole && !isTestAdmin)
+            {
+                TempData["Error"] = "Unauthorized: Only administrators can delete customers.";
+                return RedirectToAction("CustomerList");
+            }
+
+            var customer = await _context.Customers.FindAsync(id);
+            if (customer != null)
+            {
+                _context.Customers.Remove(customer);
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = $"Customer '{customer.Name}' deleted successfully!";
+            }
+            else
+            {
+                TempData["Error"] = "Customer not found.";
+            }
+
+            return RedirectToAction("CustomerList");
+        }
+
         public IActionResult AddSupplier() => View();
         public IActionResult AddSalesRep() => View();
         public IActionResult AddEmployee() => View();
@@ -80,6 +150,47 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
             ViewBag.UserList = await _userManager.Users.ToListAsync();
             return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            bool isAdminRole = User.IsInRole("Admin");
+            bool isTestAdmin = currentUser?.Email?.Equals("admin.test@example.com", StringComparison.OrdinalIgnoreCase) == true;
+
+            if (!isAdminRole && !isTestAdmin)
+            {
+                TempData["SettingsError"] = "Unauthorized: Only administrators can delete system accounts.";
+                return RedirectToAction("Settings");
+            }
+
+            var userToDelete = await _userManager.FindByIdAsync(id);
+            if (userToDelete != null)
+            {
+                if (userToDelete.Id == currentUser?.Id)
+                {
+                    TempData["SettingsError"] = "You cannot delete your own currently active account.";
+                    return RedirectToAction("Settings");
+                }
+
+                var result = await _userManager.DeleteAsync(userToDelete);
+                if (result.Succeeded)
+                {
+                    TempData["SettingsSuccess"] = $"User account '{userToDelete.Email}' deleted successfully!";
+                }
+                else
+                {
+                    TempData["SettingsError"] = "Failed to delete the user account.";
+                }
+            }
+            else
+            {
+                TempData["SettingsError"] = "User account not found.";
+            }
+
+            return RedirectToAction("Settings");
         }
 
         [HttpGet]

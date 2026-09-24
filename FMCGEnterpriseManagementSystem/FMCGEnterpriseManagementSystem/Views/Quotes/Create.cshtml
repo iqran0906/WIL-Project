@@ -1,6 +1,9 @@
 ﻿@model FMCGEnterpriseManagementSystem.Models.Quote
 @{
     ViewData["Title"] = "New Quote";
+    var customers = ViewBag.Customers as List<FMCGEnterpriseManagementSystem.Models.Customer> ?? new List<FMCGEnterpriseManagementSystem.Models.Customer>();
+    var salesReps = ViewBag.SalesRepresentatives as List<FMCGEnterpriseManagementSystem.Models.SalesRepresentative> ?? new List<FMCGEnterpriseManagementSystem.Models.SalesRepresentative>();
+    var products = ViewBag.Products as List<FMCGEnterpriseManagementSystem.Models.Product> ?? new List<FMCGEnterpriseManagementSystem.Models.Product>();
 }
 
 <div class="content-card">
@@ -17,7 +20,7 @@
                 </div>
                 <div class="d-flex align-items-center justify-content-between gap-2">
                     <label class="small text-secondary fw-bold text-nowrap m-0">Quote Number:</label>
-                    <input type="text" class="form-control form-control-sm text-center fw-bold" value="Auto-generated" readonly style="width:160px;">
+                    <input asp-for="QuoteNumber" type="text" class="form-control form-control-sm text-center fw-bold" readonly style="width:160px;">
                 </div>
             </div>
         </div>
@@ -25,19 +28,29 @@
 
     <h2 class="fw-bold mb-4 text-center text-sm-start" style="color: #1c323d;">New Quote</h2>
 
-    <form asp-controller="Quotes" asp-action="Create" method="post">
+    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+    <form asp-controller="Quotes" asp-action="Create" method="post" id="quoteForm">
         <div class="row g-3 mb-4">
             <div class="col-md-6">
                 <div class="row align-items-center mb-3 g-2">
                     <label class="col-12 col-sm-3 fw-bold text-secondary">Customer</label>
                     <div class="col-12 col-sm-9">
-                        <select asp-for="CustomerId" class="form-select"><option>Select Customer</option></select>
+                        <select asp-for="CustomerId" id="customerSelect" class="form-select">
+                            <option value="">-- Select Customer --</option>
+                            @foreach (var customer in customers)
+                            {
+                                <option value="@customer.CustomerId" data-address="@customer.DeliveryAddress" data-terms="@customer.PaymentTerms" data-salesrep="@customer.SalesRepresentativeId">
+                                    @customer.Name @customer.Surname (@customer.Email)
+                                </option>
+                            }
+                        </select>
                     </div>
                 </div>
                 <div class="row align-items-start g-2">
                     <label class="col-12 col-sm-3 fw-bold text-secondary">Billing Address:</label>
                     <div class="col-12 col-sm-9">
-                        <textarea asp-for="BillingAddress" class="form-control bg-white shadow-sm" rows="3"></textarea>
+                        <textarea asp-for="BillingAddress" id="billingAddress" class="form-control bg-white shadow-sm" rows="3" readonly></textarea>
                     </div>
                 </div>
             </div>
@@ -45,13 +58,21 @@
                 <div class="row align-items-center mb-3 g-2">
                     <label class="col-12 col-sm-4 fw-bold text-secondary text-sm-end">Payment Terms:</label>
                     <div class="col-12 col-sm-8">
-                        <select asp-for="PaymentTerms" class="form-select"><option>COD</option></select>
+                        <input asp-for="PaymentTerms" id="paymentTerms" class="form-control" readonly />
                     </div>
                 </div>
                 <div class="row align-items-center g-2">
                     <label class="col-12 col-sm-4 fw-bold text-secondary text-sm-end">Sales Person:</label>
                     <div class="col-12 col-sm-8">
-                        <select asp-for="SalesRepresentativeId" class="form-select"><option>All</option></select>
+                        <select asp-for="SalesRepresentativeId" id="salesRepSelect" class="form-select">
+                            <option value="">-- Select Sales Representative --</option>
+                            @foreach (var sr in salesReps)
+                            {
+                                <option value="@sr.SalesRepresentativeId">
+                                    @(sr.Employee != null ? $"{sr.Employee.FirstName} {sr.Employee.LastName}" : $"Rep #{sr.SalesRepresentativeId}")
+                                </option>
+                            }
+                        </select>
                     </div>
                 </div>
             </div>
@@ -62,29 +83,16 @@
                 <thead class="table-secondary text-secondary small">
                     <tr>
                         <th style="width: 8%;">Qty</th>
-                        <th style="width: 15%;">Item Code</th>
+                        <th style="width: 15%;">Product</th>
                         <th style="width: 35%;">Description</th>
                         <th style="width: 12%;">Unit Price</th>
-                        <th style="width: 10%;">Disc</th>
+                        <th style="width: 10%;">Disc %</th>
                         <th style="width: 10%;">VAT</th>
                         <th style="width: 10%;">Total</th>
+                        <th style="width: 5%;"></th>
                     </tr>
                 </thead>
                 <tbody id="quoteItemsBody">
-                    <tr class="quote-item-row">
-                        <td><input type="number" name="QuoteItems[0].Quantity" class="form-control form-control-sm text-center" value="1"></td>
-                        <td><select name="QuoteItems[0].ProductId" class="form-select form-select-sm"><option>Select Product</option></select></td>
-                        <td><input type="text" class="form-control form-control-sm" readonly value=""></td>
-                        <td><input type="text" name="QuoteItems[0].UnitPrice" class="form-control form-control-sm text-end" readonly value="R0.00"></td>
-                        <td><input type="text" name="QuoteItems[0].DiscountPercent" class="form-control form-control-sm text-center" value="0.00"></td>
-                        <td>
-                            <select name="QuoteItems[0].VatCategory" class="form-select form-select-sm">
-                                <option>[NONE]</option>
-                                <option>STANDARD</option>
-                            </select>
-                        </td>
-                        <td><input type="text" class="form-control form-control-sm text-end" readonly value="R0.00"></td>
-                    </tr>
                 </tbody>
             </table>
             <div class="p-2">
@@ -94,8 +102,9 @@
 
         <div class="row justify-content-end text-end g-0 mb-4 fw-bold text-secondary">
             <div class="col-12 col-md-4 border-top pt-2">
-                <div class="d-flex justify-content-between py-1"><span>Subtotal</span><span>R0.00</span></div>
-                <div class="d-flex justify-content-between py-1 border-top border-dark mt-2 text-dark fs-5"><span>Total</span><span>R0.00</span></div>
+                <div class="d-flex justify-content-between py-1"><span>Subtotal</span><span id="subtotalDisplay">R0.00</span></div>
+                <div class="d-flex justify-content-between py-1"><span>VAT</span><span id="vatDisplay">R0.00</span></div>
+                <div class="d-flex justify-content-between py-1 border-top border-dark mt-2 text-dark fs-5"><span>Total</span><span id="totalDisplay">R0.00</span></div>
             </div>
         </div>
 
@@ -108,32 +117,120 @@
 
 @section Scripts {
     <script>
-        let quoteItemIndex = 1;
+        const VAT_RATE = 0.15;
+        let quoteItemIndex = 0;
+        const productsData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(products));
 
-        document.getElementById('addItemBtn').addEventListener('click', function() {
+        function addQuoteItemRow() {
             const tbody = document.getElementById('quoteItemsBody');
-            const newRow = tbody.querySelector('.quote-item-row').cloneNode(true);
+            const row = document.createElement('tr');
+            row.className = "quote-item-row";
 
-            newRow.querySelectorAll('input, select').forEach(function(field) {
-                if (field.name) {
-                    field.name = field.name.replace(/QuoteItems\[\d+\]/, `QuoteItems[${quoteItemIndex}]`);
-                }
-                if (field.tagName === 'INPUT') {
-                    if (field.type === 'number') {
-                        field.value = '1';
-                    } else if (field.readOnly) {
-                        field.value = field.classList.contains('text-end') ? 'R0.00' : '';
-                    } else {
-                        field.value = '0.00';
-                    }
-                }
-                if (field.tagName === 'SELECT') {
-                    field.selectedIndex = 0;
-                }
+            let productOptions = '<option value="">-- Select Product --</option>';
+            productsData.forEach(p => {
+                productOptions += `<option value="${p.productId}" data-price="${p.unitPrice || 0}" data-desc="${p.description || p.name || ''}">${p.name}</option>`;
             });
 
-            tbody.appendChild(newRow);
+            row.innerHTML = `
+                <td><input type="number" name="QuoteItems[${quoteItemIndex}].Quantity" class="form-control form-control-sm text-center item-qty" value="1" min="1"></td>
+                <td><select name="QuoteItems[${quoteItemIndex}].ProductId" class="form-select form-select-sm item-product">${productOptions}</select></td>
+                <td><input type="text" class="form-control form-control-sm item-desc" readonly value=""></td>
+                <td><input type="number" step="0.01" name="QuoteItems[${quoteItemIndex}].UnitPrice" class="form-control form-control-sm text-end item-price" value="0.00"></td>
+                <td><input type="number" step="0.01" name="QuoteItems[${quoteItemIndex}].DiscountPercent" class="form-control form-control-sm text-center item-disc" value="0.00"></td>
+                <td>
+                    <select name="QuoteItems[${quoteItemIndex}].VatCategory" class="form-select form-select-sm item-vat">
+                        <option value="STANDARD">Standard</option>
+                        <option value="[NONE]">None</option>
+                    </select>
+                </td>
+                <td><span class="line-total">R0.00</span></td>
+                <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger remove-row" title="Remove"><i class="bi bi-trash"></i></button></td>
+            `;
+
+            tbody.appendChild(row);
             quoteItemIndex++;
+            attachRowEvents(row);
+        }
+
+        function attachRowEvents(row) {
+            const productSelect = row.querySelector('.item-product');
+            const priceInput = row.querySelector('.item-price');
+            const descInput = row.querySelector('.item-desc');
+            const inputs = row.querySelectorAll('.item-qty, .item-price, .item-disc, .item-vat');
+
+            productSelect.addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                const price = parseFloat(selectedOption.getAttribute('data-price')) || 0;
+                const desc = selectedOption.getAttribute('data-desc') || '';
+                priceInput.value = price.toFixed(2);
+                descInput.value = desc;
+                calculateRow(row);
+                calculateTotals();
+            });
+
+            inputs.forEach(input => input.addEventListener('input', () => {
+                calculateRow(row);
+                calculateTotals();
+            }));
+
+            row.querySelector('.remove-row').addEventListener('click', () => {
+                row.remove();
+                calculateTotals();
+            });
+        }
+
+        function calculateRow(row) {
+            const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
+            const price = parseFloat(row.querySelector('.item-price').value) || 0;
+            const disc = parseFloat(row.querySelector('.item-disc').value) || 0;
+            const vatCategory = row.querySelector('.item-vat').value;
+
+            const lineSubtotal = qty * price;
+            const afterDiscount = lineSubtotal - (lineSubtotal * disc / 100);
+            const vatAmount = vatCategory === '[NONE]' ? 0 : afterDiscount * VAT_RATE;
+            const lineTotal = afterDiscount + vatAmount;
+
+            row.querySelector('.line-total').textContent = 'R' + lineTotal.toFixed(2);
+            return lineTotal;
+        }
+
+        function calculateTotals() {
+            let subtotal = 0;
+            let vatTotal = 0;
+            let total = 0;
+
+            document.querySelectorAll('#quoteItemsBody tr').forEach(row => {
+                const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
+                const price = parseFloat(row.querySelector('.item-price').value) || 0;
+                const disc = parseFloat(row.querySelector('.item-disc').value) || 0;
+                const vatCategory = row.querySelector('.item-vat').value;
+
+                const lineSubtotal = qty * price;
+                const afterDiscount = lineSubtotal - (lineSubtotal * disc / 100);
+                const vatAmount = vatCategory === '[NONE]' ? 0 : afterDiscount * VAT_RATE;
+
+                subtotal += afterDiscount;
+                vatTotal += vatAmount;
+                total += afterDiscount + vatAmount;
+            });
+
+            document.getElementById('subtotalDisplay').textContent = 'R' + subtotal.toFixed(2);
+            document.getElementById('vatDisplay').textContent = 'R' + vatTotal.toFixed(2);
+            document.getElementById('totalDisplay').textContent = 'R' + total.toFixed(2);
+        }
+
+        document.getElementById('addItemBtn').addEventListener('click', addQuoteItemRow);
+
+        addQuoteItemRow();
+
+        document.getElementById('customerSelect').addEventListener('change', function() {
+            const selected = this.options[this.selectedIndex];
+            document.getElementById('billingAddress').value = selected.getAttribute('data-address') || '';
+            document.getElementById('paymentTerms').value = selected.getAttribute('data-terms') || '';
+            const salesRepId = selected.getAttribute('data-salesrep');
+            if (salesRepId) {
+                document.getElementById('salesRepSelect').value = salesRepId;
+            }
         });
     </script>
 }

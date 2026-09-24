@@ -1,45 +1,53 @@
-﻿@{
+﻿@model IEnumerable<FMCGEnterpriseManagementSystem.Models.Quote>
+
+@{
     ViewData["Title"] = "Quotes";
 }
 
 <div class="px-2 py-3">
-    <div class="row align-items-start mb-3">
-        <div class="col-md-4">
-            <h2 class="text-white fw-bold mb-3">Quotes</h2>
-            <a asp-controller="Quotes" asp-action="Create" class="btn btn-action-primary text-decoration-none">
-                New Quote
-            </a>
-        </div>
-
-        <div class="col-md-8">
-            <div class="row g-2 justify-content-md-end text-white">
-                <div class="col-6 col-sm-3">
-                    <label class="small fw-bold">Period:</label>
-                    <select class="form-select form-select-sm"><option>All</option></select>
-                </div>
-                <div class="col-6 col-sm-3">
-                    <label class="small fw-bold">Customer:</label>
-                    <select class="form-select form-select-sm"><option>All</option></select>
-                </div>
-                <div class="col-6 col-sm-3">
-                    <label class="small fw-bold">Start:</label>
-                    <input type="date" class="form-control form-control-sm">
-                </div>
-                <div class="col-6 col-sm-3">
-                    <label class="small fw-bold">End:</label>
-                    <input type="date" class="form-control form-control-sm">
-                </div>
+    <form asp-controller="Quotes" asp-action="Index" method="get">
+        <div class="row align-items-start mb-3">
+            <div class="col-md-4">
+                <h2 class="text-white fw-bold mb-3">Quotes</h2>
+                <a asp-controller="Quotes" asp-action="Create" class="btn btn-action-primary text-decoration-none">
+                    New Quote
+                </a>
             </div>
 
-            <div class="d-flex justify-content-md-end align-items-center gap-2 mt-3">
-                <span class="text-white fw-bold small">Keyword:</span>
-                <div class="position-relative">
-                    <input type="text" class="form-control form-control-sm search-field" placeholder="Quote No, Customer, etc">
-                    <i class="bi bi-search position-absolute end-0 top-50 translate-middle-y me-2 text-white-50 small"></i>
+            <div class="col-md-8">
+                <div class="row g-2 justify-content-md-end text-white">
+                    <div class="col-6 col-sm-3">
+                        <label class="small fw-bold">Period:</label>
+                        <select name="period" class="form-select form-select-sm">
+                            <option value="">All</option>
+                        </select>
+                    </div>
+                    <div class="col-6 col-sm-3">
+                        <label class="small fw-bold">Customer:</label>
+                        <input type="text" name="customer" value="@ViewBag.Customer" class="form-control form-control-sm" placeholder="Customer Name">
+                    </div>
+                    <div class="col-6 col-sm-3">
+                        <label class="small fw-bold">Start:</label>
+                        <input type="date" name="startDate" value="@ViewBag.StartDate" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-6 col-sm-3">
+                        <label class="small fw-bold">End:</label>
+                        <input type="date" name="endDate" value="@ViewBag.EndDate" class="form-control form-control-sm">
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-md-end align-items-center gap-2 mt-3">
+                    <span class="text-white fw-bold small">Keyword:</span>
+                    <div class="position-relative">
+                        <input type="text" name="keyword" value="@ViewBag.Keyword" class="form-control form-control-sm search-field" placeholder="Quote No, Customer, etc">
+                        <i class="bi bi-search position-absolute end-0 top-50 translate-middle-y me-2 text-white-50 small"></i>
+                    </div>
+                    <button type="submit" class="btn btn-sm btn-light">Filter</button>
+                    <a asp-controller="Quotes" asp-action="Index" class="btn btn-sm btn-outline-light">Clear</a>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 
     <div class="d-flex align-items-center gap-2 mb-3 text-white">
         <span class="fw-bold">View:</span>
@@ -53,29 +61,39 @@
                     <th>Date</th>
                     <th>Quote No.</th>
                     <th>Customer</th>
-                    <th>Expiry Date</th>
                     <th>Total</th>
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                @if (Model != null)
+                @if (Model != null && Model.Any())
                 {
-                    @foreach (var quote in (IEnumerable<FMCGEnterpriseManagementSystem.Models.Quote>)Model)
+                    @foreach (var quote in Model)
                     {
                         <tr>
                             <td>@quote.QuoteDate.ToShortDateString()</td>
                             <td>@quote.QuoteNumber</td>
-                            <td>@quote.Customer?.CustomerId</td>
-                            
+                            <td>@(quote.Customer != null ? quote.Customer.CustomerId : "-")</td>
                             <td>R@quote.Total.ToString("N2")</td>
                             <td>@quote.Status</td>
                             <td>
-                                <a asp-controller="Quotes" asp-action="Details" asp-route-id="@quote.QuoteId">View</a>
+                                <div class="d-flex gap-2">
+                                    <a asp-controller="Quotes" asp-action="Details" asp-route-id="@quote.QuoteId" class="btn btn-sm btn-outline-secondary">View</a>
+                                    <form asp-controller="Quotes" asp-action="Delete" asp-route-id="@quote.QuoteId" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this quote?');">Delete</button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-white-50">No quotes found.</td>
+                    </tr>
                 }
             </tbody>
         </table>

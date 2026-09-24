@@ -16,45 +16,63 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] string? keyword)
         {
-            var suppliers = await _supplierService.GetAllSuppliersAsync();
-            return Ok(suppliers);
+            try
+            {
+                var suppliers = await _supplierService.GetAllSuppliersAsync();
+
+                if (!string.IsNullOrWhiteSpace(keyword))
+                {
+                    suppliers = suppliers.Where(s =>
+                        (!string.IsNullOrEmpty(s.CompanyName) && s.CompanyName.Contains(keyword, StringComparison.OrdinalIgnoreCase)) ||
+                        (!string.IsNullOrEmpty(s.Email) && s.Email.Contains(keyword, StringComparison.OrdinalIgnoreCase)) ||
+                        (!string.IsNullOrEmpty(s.ContactPerson) && s.ContactPerson.Contains(keyword, StringComparison.OrdinalIgnoreCase))
+                    );
+                }
+
+                return Ok(suppliers);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while retrieving suppliers.", error = ex.Message });
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             var supplier = await _supplierService.GetSupplierByIdAsync(id);
-
-            if (supplier == null)
-            {
-                return NotFound();
-            }
-
+            if (supplier == null) return NotFound(new { message = "Supplier not found." });
             return Ok(supplier);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] SupplierViewModel model)
         {
+            // Server-side validation check
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            await _supplierService.CreateSupplierAsync(model);
-
-            return Ok(new
+            try
             {
-                message = "Supplier created successfully"
-            });
+                await _supplierService.CreateSupplierAsync(model);
+                return Ok(new { message = "Supplier created successfully" });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new { message = "An unexpected error occurred while creating the supplier." });
+            }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(
-            int id,
-            [FromBody] SupplierViewModel model)
+        public async Task<IActionResult> Update(int id, [FromBody] SupplierViewModel model)
         {
             if (id != model.SupplierId)
             {
@@ -66,23 +84,29 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 return BadRequest(ModelState);
             }
 
-            await _supplierService.UpdateSupplierAsync(model);
-
-            return Ok(new
+            try
             {
-                message = "Supplier updated successfully"
-            });
+                await _supplierService.UpdateSupplierAsync(model);
+                return Ok(new { message = "Supplier updated successfully" });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _supplierService.DeleteSupplierAsync(id);
-
-            return Ok(new
+            try
             {
-                message = "Supplier deleted successfully"
-            });
+                await _supplierService.DeleteSupplierAsync(id);
+                return Ok(new { message = "Supplier deleted successfully" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Could not delete supplier.", error = ex.Message });
+            }
         }
     }
 }

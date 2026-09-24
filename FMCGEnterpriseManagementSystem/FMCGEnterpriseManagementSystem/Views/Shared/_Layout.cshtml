@@ -1,4 +1,27 @@
-﻿<!DOCTYPE html>
+﻿@{
+    string userEmail = User.Identity?.IsAuthenticated == true ? User.Identity.Name ?? "User" : "Guest";
+    string currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "Index";
+    string currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "Home";
+
+    string autoMessage = (currentController, currentAction) switch
+    {
+        ("Home", "Dashboard") => "Welcome back to your central command dashboard. Monitor system metrics and shortcuts below.",
+        ("Home", "CustomerList") => "Manage, view, and organize your client database records from this active customer register.",
+        ("Home", "AddCustomer") => "Fill out the required information below to register a new customer into the enterprise system.",
+        ("Home", "SupplierList") => "Review and maintain your supplier and vendor network directory.",
+        ("Employees", "Index") => "View and manage all active company employee records and personnel details.",
+        ("SalesRepresentatives", "Index") => "Access and track sales representative profiles, regions, and performance logs.",
+        ("Home", "InventoryList") => "Manage and track inventory levels, stock availability, and warehouse storage items.",
+        ("Home", "InvoiceList") => "Review, track, and generate customer billing invoices and payment histories.",
+        ("Payments", "Index") => "Monitor incoming financial transactions, payment statuses, and settlement logs.",
+        ("Home", "QuoteList") => "Review and manage pending and approved customer price quotations.",
+        ("Reports", "Index") => "Analyze operational performance data, sales reports, and summary metrics.",
+        ("Home", "Settings") => "Manage system user registrations, administrative access, and account settings.",
+        ("Home", "UserProfile") => "View and update your personal account credentials and profile details.",
+        _ => $"You are currently viewing the {currentAction} management portal for Exclusive Distributors."
+    };
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -288,12 +311,15 @@
                         </div>
 
                         <div class="d-flex align-items-center gap-3 gap-md-4 text-white">
+                            <span class="text-white-50 small d-none d-lg-inline">
+                                <i class="bi bi-envelope me-1 text-info"></i><strong class="text-white">@userEmail</strong>
+                            </span>
 
                             <a asp-controller="Notifications" asp-action="Index" class="text-white text-decoration-none">
                                 <i class="bi bi-bell fs-4" style="cursor: pointer;"></i>
                             </a>
 
-                            <a asp-controller="Home" asp-action="UserProfile" class="text-white text-decoration-none">
+                            <a asp-controller="Home" asp-action="UserProfile" class="text-white text-decoration-none" title="@userEmail">
                                 <i class="bi bi-person-circle fs-3" style="cursor: pointer;"></i>
                             </a>
 
@@ -310,6 +336,13 @@
                 </header>
 
                 <div class="container-fluid px-2 px-md-4">
+                    <div id="autoDismissNotice" class="alert alert-info bg-dark text-info border-info border-opacity-25 d-flex align-items-center mb-4 shadow-sm" role="alert" style="transition: opacity 0.5s ease;">
+                        <i class="bi bi-info-circle-fill flex-shrink-0 me-2 fs-5"></i>
+                        <div>
+                            <strong>System Notice:</strong> @autoMessage
+                        </div>
+                    </div>
+
                     <main role="main" class="pb-3">
                         @RenderBody()
                     </main>
@@ -337,6 +370,18 @@
                 content.classList.remove('col-12');
                 content.classList.add('col-md-9', 'col-lg-10');
             }
+        });
+
+        window.addEventListener('DOMContentLoaded', (event) => {
+            setTimeout(function() {
+                var noticeBanner = document.getElementById('autoDismissNotice');
+                if (noticeBanner) {
+                    noticeBanner.style.opacity = '0';
+                    setTimeout(function() {
+                        noticeBanner.style.display = 'none';
+                    }, 500); 
+                }
+            }, 5000); 
         });
     </script>
 

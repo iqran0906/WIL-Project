@@ -17,13 +17,13 @@
     <div class="d-flex align-items-center gap-2 mb-4">
         <span class="text-white fw-bold">Keyword:</span>
         <div class="position-relative">
-            <input type="text" class="form-control form-control-sm search-field" placeholder="Item Code, Category, etc">
+            <input type="text" id="inventorySearchInput" class="form-control form-control-sm search-field" placeholder="Item Code, Category, etc">
             <i class="bi bi-search position-absolute end-0 top-50 translate-middle-y me-2 text-white-50 small"></i>
         </div>
     </div>
 
     <div class="table-responsive">
-        <table class="custom-data-table">
+        <table class="custom-data-table" id="inventoryTable">
             <thead>
                 <tr>
                     <th>Item Code</th>
@@ -45,3 +45,16 @@
         </table>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#inventorySearchInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#inventoryTable tbody tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+        });
+    </script>
+}

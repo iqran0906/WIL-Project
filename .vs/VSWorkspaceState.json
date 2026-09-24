@@ -8,8 +8,9 @@
     "\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views",
     "\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Account",
     "\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Employees",
+    "\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home",
     "\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Shared"
   ],
-  "SelectedNode": "\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem.sln",
+  "SelectedNode": "\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Home\\Settings.cshtml",
   "PreviewInSolutionExplorer": false
 }

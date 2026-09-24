@@ -24,6 +24,12 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         public async Task<IActionResult> Index(int? customerId, DateTime? startDate, DateTime? endDate, string keyword)
         {
             var invoices = await _invoiceService.SearchAsync(customerId, startDate, endDate, keyword);
+
+            ViewBag.CustomerId = customerId;
+            ViewBag.Keyword = keyword;
+            ViewBag.StartDate = startDate?.ToString("yyyy-MM-dd");
+            ViewBag.EndDate = endDate?.ToString("yyyy-MM-dd");
+
             return View(invoices);
         }
 
@@ -37,13 +43,14 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
             return View(invoice);
         }
+
         // GET: Invoices/Create
         public async Task<IActionResult> Create()
         {
             var customers = await _context.Customers
-     .Include(c => c.SalesRepresentative)
-         .ThenInclude(sr => sr.Employee)
-     .ToListAsync();
+                .Include(c => c.SalesRepresentative)
+                    .ThenInclude(sr => sr.Employee)
+                .ToListAsync();
 
             return View(new InvoiceViewModel
             {
@@ -59,17 +66,36 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         {
             if (!ModelState.IsValid)
             {
+                // Re-populate AvailableCustomers so the dropdown doesn't throw a null reference exception on return View(model)
+                model.AvailableCustomers = await _context.Customers
+                    .Include(c => c.SalesRepresentative)
+                        .ThenInclude(sr => sr.Employee)
+                    .ToListAsync();
                 return View(model);
             }
 
             try
             {
                 await _invoiceService.CreateAsync(model);
+                TempData["SuccessMessage"] = "Invoice created successfully!";
                 return RedirectToAction(nameof(Index));
             }
             catch (InvalidOperationException ex)
             {
                 ModelState.AddModelError(string.Empty, ex.Message);
+                model.AvailableCustomers = await _context.Customers
+                    .Include(c => c.SalesRepresentative)
+                        .ThenInclude(sr => sr.Employee)
+                    .ToListAsync();
+                return View(model);
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError(string.Empty, "An unexpected error occurred while saving the invoice.");
+                model.AvailableCustomers = await _context.Customers
+                    .Include(c => c.SalesRepresentative)
+                        .ThenInclude(sr => sr.Employee)
+                    .ToListAsync();
                 return View(model);
             }
         }
@@ -82,11 +108,12 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             try
             {
                 await _invoiceService.UpdateStatusAsync(id, status);
+                TempData["SuccessMessage"] = "Invoice status updated.";
                 return RedirectToAction(nameof(Details), new { id });
             }
             catch (InvalidOperationException ex)
             {
-                ModelState.AddModelError(string.Empty, ex.Message);
+                TempData["ErrorMessage"] = ex.Message;
                 return RedirectToAction(nameof(Details), new { id });
             }
         }
@@ -94,7 +121,6 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         // GET: Invoices/Download/5
         public async Task<IActionResult> Download(int id)
         {
-            // TODO: Replace with real PDF generation once the Exports module is built
             TempData["InfoMessage"] = "Invoice download (PDF export) is coming soon.";
             return RedirectToAction(nameof(Details), new { id });
         }
@@ -115,7 +141,15 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _invoiceService.DeleteAsync(id);
+            try
+            {
+                await _invoiceService.DeleteAsync(id);
+                TempData["SuccessMessage"] = "Invoice deleted successfully.";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Failed to delete invoice: {ex.Message}";
+            }
             return RedirectToAction(nameof(Index));
         }
     }
