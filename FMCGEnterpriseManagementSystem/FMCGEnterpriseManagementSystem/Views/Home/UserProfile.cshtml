@@ -1,74 +1,60 @@
-﻿@{
+﻿@model FMCGEnterpriseManagementSystem.Models.UserProfileViewModel
+
+@{
     ViewData["Title"] = "User Profile";
 }
 
-<div class="content-card">
-    <div class="d-flex align-items-center gap-3 mb-4 border-bottom pb-3">
-        <i class="bi bi-person-badge fs-2" style="color: #357383;"></i>
-        <h2 class="fw-bold m-0" style="color: #1c323d;">User Profile</h2>
-    </div>
-
-    <div class="row g-4">
-        <div class="col-12">
-            <h5 class="fw-bold text-secondary mb-3">Personal Information</h5>
-            <div class="row g-3">
-                <div class="col-12 col-md-6">
-                    <label class="form-label fw-bold">Name</label>
-                    <div class="form-control bg-light text-muted border shadow-sm py-2">
-                        [Name Placeholder]
-                    </div>
-                </div>
-                <div class="col-12 col-md-6">
-                    <label class="form-label fw-bold">Surname</label>
-                    <div class="form-control bg-light text-muted border shadow-sm py-2">
-                        [Surname Placeholder]
-                    </div>
-                </div>
-            </div>
+<div class="container py-4">
+    <div class="card shadow-sm border-0 mx-auto" style="max-width: 650px; background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);">
+        <div class="card-header bg-transparent border-bottom border-secondary text-white py-3">
+            <h4 class="mb-0 fw-bold"><i class="bi bi-person-circle me-2"></i>User Profile</h4>
+            <small class="text-white-50">View and update your personal account details</small>
         </div>
 
-        <hr class="my-4 text-muted" />
+        <div class="card-body p-4 text-white">
+            @if (TempData["ProfileSuccess"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i>@TempData["ProfileSuccess"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
 
-        <div class="col-12">
-            <h5 class="fw-bold text-secondary mb-3">Contact Details</h5>
-            <div class="row g-3">
-                <div class="col-12 col-md-6">
-                    <label class="form-label fw-bold">Email Address</label>
-                    <div class="form-control bg-light text-muted border shadow-sm py-2">
-                        [Email Placeholder]
-                    </div>
+            <form asp-controller="Home" asp-action="UserProfile" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="mb-3">
+                    <label asp-for="FullName" class="form-label text-white-50 small fw-bold"></label>
+                    <input asp-for="FullName" class="form-control bg-dark text-white border-secondary" placeholder="Enter full name" />
+                    <span asp-validation-for="FullName" class="text-danger small"></span>
                 </div>
-                <div class="col-12 col-md-6">
-                    <label class="form-label fw-bold">Contact Number</label>
-                    <div class="form-control bg-light text-muted border shadow-sm py-2">
-                        [Contact Number Placeholder]
-                    </div>
+
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label text-white-50 small fw-bold"></label>
+                    <input asp-for="Email" class="form-control bg-dark text-white border-secondary" placeholder="name@company.com" />
+                    <span asp-validation-for="Email" class="text-danger small"></span>
                 </div>
-            </div>
+
+                <div class="mb-3">
+                    <label asp-for="PhoneNumber" class="form-label text-white-50 small fw-bold"></label>
+                    <input asp-for="PhoneNumber" class="form-control bg-dark text-white border-secondary" placeholder="+27 82 123 4567" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Role" class="form-label text-white-50 small fw-bold"></label>
+                    <input asp-for="Role" class="form-control bg-dark text-white-50 border-secondary" readonly disabled />
+                    <small class="text-white-50">Role permissions are managed by the System Administrator.</small>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 pt-2">
+                    <a asp-action="Dashboard" class="btn btn-outline-light px-4">Cancel</a>
+                    <button type="submit" class="btn text-white px-4" style="background-color: #357383;">Save Changes</button>
+                </div>
+            </form>
         </div>
-
-        <hr class="my-4 text-muted" />
-
-        <div class="col-12 mb-4">
-            <h5 class="fw-bold text-secondary mb-3">Business Profile</h5>
-            <div class="row g-3">
-                <div class="col-12 col-md-6">
-                    <label class="form-label fw-bold">Business Position / Role</label>
-                    <div class="form-control bg-light text-muted border shadow-sm py-2">
-                        [Business Position Placeholder]
-                    </div>
-                </div>
-                <div class="col-12 col-md-6">
-                    <label class="form-label fw-bold">Assigned Department</label>
-                    <div class="form-control bg-light text-muted border shadow-sm py-2">
-                        [Department Placeholder]
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="d-flex justify-content-end gap-3 border-top pt-3">
-        <a asp-action="Dashboard" class="btn btn-outline-secondary px-4 w-100 w-sm-auto text-center">Back to Dashboard</a>
     </div>
 </div>

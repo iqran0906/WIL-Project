@@ -3,6 +3,14 @@
   "WorkspaceRootPath": "C:\\Users\\nuk3t\\OneDrive\\Documents\\GitHub\\WIL-Project\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\nuk3t\\OneDrive\\Documents\\GitHub\\WIL-Project\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Controllers\\AccountController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Controllers\\AccountController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\nuk3t\\OneDrive\\Documents\\GitHub\\WIL-Project\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Account\\Login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Account\\Login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\nuk3t\\OneDrive\\Documents\\GitHub\\WIL-Project\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
@@ -27,6 +35,32 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "C:\\Users\\nuk3t\\OneDrive\\Documents\\GitHub\\WIL-Project\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Controllers\\AccountController.cs",
+              "ToolTip": "C:\\Users\\nuk3t\\OneDrive\\Documents\\GitHub\\WIL-Project\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Controllers\\AccountController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-24T12:31:03.318Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "C:\\Users\\nuk3t\\OneDrive\\Documents\\GitHub\\WIL-Project\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Account\\Login.cshtml",
+              "RelativeDocumentMoniker": "FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Account\\Login.cshtml",
+              "ToolTip": "C:\\Users\\nuk3t\\OneDrive\\Documents\\GitHub\\WIL-Project\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Account\\Login.cshtml",
+              "RelativeToolTip": "FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Views\\Account\\Login.cshtml",
+              "ViewState": "AgIAAFsAAAAAAAAAAAAgwGMAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-09-24T12:30:19.887Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\nuk3t\\OneDrive\\Documents\\GitHub\\WIL-Project\\FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Program.cs",
               "RelativeDocumentMoniker": "FMCGEnterpriseManagementSystem\\FMCGEnterpriseManagementSystem\\Program.cs",

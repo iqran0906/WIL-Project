@@ -2,11 +2,29 @@
     ViewData["Title"] = "Dashboard";
 }
 
-<div class="mb-4 d-flex justify-content-center justify-content-md-start">
-    <div class="input-group w-100" style="max-width: 400px;">
-        <span class="input-group-text bg-light border-end-0"><i class="bi bi-search"></i></span>
-        <input type="text" class="form-control bg-light border-start-0" placeholder="Search Bar">
-    </div>
+<div class="mb-4 d-flex flex-column align-items-center align-items-md-start">
+    <form asp-controller="Home" asp-action="Search" method="get" class="w-100" style="max-width: 400px;">
+        <div class="input-group">
+            <button type="submit" class="input-group-text bg-light border-end-0 text-muted border-0" style="cursor: pointer;">
+                <i class="bi bi-search"></i>
+            </button>
+            <input type="text" name="query" class="form-control bg-light border-start-0" placeholder="Search Bar" value="@ViewData["SearchQuery"]">
+        </div>
+    </form>
+
+    @if (TempData["SearchWarning"] != null)
+    {
+        <div class="mt-2 text-warning small d-flex align-items-center gap-1">
+            <i class="bi bi-exclamation-circle-fill"></i>
+            <span>@TempData["SearchWarning"]</span>
+        </div>
+    }
+    else
+    {
+        <div class="mt-1 text-white-50 small" style="font-size: 0.8rem;">
+            Searchable fields: Customer Name, Email Address, Phone Number
+        </div>
+    }
 </div>
 
 <h3 class="text-white text-center mb-4">Create New</h3>
