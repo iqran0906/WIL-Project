@@ -6,6 +6,7 @@ using FMCGEnterpriseManagementSystem.Services;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +36,12 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 
 
 builder.Services.AddScoped<IUserAccountService, UserAccountService>();
+
+builder.Services.AddHttpClient<FMCGEnterpriseManagementSystem.Services.Interfaces.IEmailApiClientService,
+                                FMCGEnterpriseManagementSystem.Services.EmailApiClientService>(client =>
+                                {
+                                    client.BaseAddress = new Uri("https://localhost:7194/");
+                                });
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
