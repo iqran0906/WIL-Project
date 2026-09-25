@@ -1,0 +1,65 @@
+﻿@model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.Reports.AgeAnalysisReportViewModel>
+
+@{
+    ViewData["Title"] = "Age Analysis";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2>Age Analysis</h2>
+            <p class="text-muted">Outstanding customer balances grouped by invoice age.</p>
+        </div>
+
+        <a asp-action="Index" class="btn btn-outline-secondary">Back to Reports</a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            @if (!Model.Any())
+            {
+                <p class="text-muted mb-0">There are no outstanding invoices.</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Invoice</th>
+                                <th>Customer</th>
+                                <th>Date</th>
+                                <th>Age</th>
+                                <th>Bracket</th>
+                                <th>Total</th>
+                                <th>Paid</th>
+                                <th>Outstanding</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.InvoiceNumber</td>
+                                    <td>@item.CustomerName</td>
+                                    <td>@item.InvoiceDate.ToString("dd MMM yyyy")</td>
+                                    <td>@item.AgeInDays days</td>
+                                    <td>@item.AgeBracket</td>
+                                    <td>R @item.InvoiceTotal.ToString("N2")</td>
+                                    <td>R @item.AmountPaid.ToString("N2")</td>
+                                    <td>R @item.OutstandingBalance.ToString("N2")</td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr class="fw-bold">
+                                <td colspan="7">Total Outstanding</td>
+                                <td>R @Model.Sum(x => x.OutstandingBalance).ToString("N2")</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>

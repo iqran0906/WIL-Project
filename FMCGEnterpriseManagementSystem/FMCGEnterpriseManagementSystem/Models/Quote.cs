@@ -15,7 +15,7 @@ namespace FMCGEnterpriseManagementSystem.Models
         [Required]
         public DateTime QuoteDate { get; set; }
 
-        public DateTime ExpiryDate { get; set; }
+       
 
         [Required]
         public int CustomerId { get; set; }
