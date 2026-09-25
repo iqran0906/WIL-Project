@@ -1,8 +1,11 @@
-﻿using FMCGEnterpriseManagementSystem.Services.Interfaces;
+﻿using System.Threading.Tasks;
+using FMCGEnterpriseManagementSystem.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
+    [Authorize]
     public class DashboardController : Controller
     {
         private readonly IDashboardService _dashboardService;
@@ -12,11 +15,10 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             _dashboardService = dashboardService;
         }
 
-        // GET: /Dashboard
         public async Task<IActionResult> Index()
         {
-            var analytics = await _dashboardService.GetDashboardAnalyticsAsync();
-            return View("~/Views/Dashboard/Index.cshtml", analytics);
+            var model = await _dashboardService.GetDashboardAnalyticsAsync();
+            return View(model);
         }
     }
 }

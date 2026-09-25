@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using FMCGEnterpriseManagementSystem.Repositories; // Matches your flat repository namespace
+using FMCGEnterpriseManagementSystem.Repositories;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;
 
@@ -18,7 +18,6 @@ namespace FMCGEnterpriseManagementSystem.Services.Implementations
 
         public async Task<DashboardViewModel> GetDashboardAnalyticsAsync()
         {
-            // Updated to match GetAllAsync()
             var products = (await _productRepository.GetAllAsync()).ToList();
 
             int totalProducts = products.Count;
@@ -50,7 +49,7 @@ namespace FMCGEnterpriseManagementSystem.Services.Implementations
                 .Take(10)
                 .Select(p => new CriticalStockAlert
                 {
-                    ProductCode = p.ProductCode ?? $"ED-{p.Id:D4}", // Updated to p.Id
+                    ProductCode = p.ProductCode ?? $"ED-{p.Id:D4}",
                     ProductName = p.ProductName,
                     CurrentStock = p.QuantityInStock,
                     ReorderLevel = p.ReorderLevel,
