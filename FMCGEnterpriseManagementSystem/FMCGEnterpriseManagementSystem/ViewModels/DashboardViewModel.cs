@@ -2,18 +2,22 @@
 {
     public class DashboardViewModel
     {
-        // Summary Cards
+        // KPI Summary Cards
         public int TotalProducts { get; set; }
         public int TotalSuppliers { get; set; }
         public int TotalCustomers { get; set; }
         public int LowStockItems { get; set; }
         public int OutOfStockItems { get; set; }
-
-        // Analytics & Projections
         public decimal TotalInventoryValue { get; set; }
         public decimal ProjectedRestockBudget { get; set; }
+
+        // Lists
         public List<CategoryStockSummary> CategorySummaries { get; set; } = new();
         public List<LowStockAlertItem> CriticalStockAlerts { get; set; } = new();
+
+        // Chart Data Formatters
+        public string[] CategoryNames => CategorySummaries.Select(c => c.CategoryName).ToArray();
+        public int[] CategoryQuantities => CategorySummaries.Select(c => c.TotalQuantity).ToArray();
     }
 
     public class CategoryStockSummary
