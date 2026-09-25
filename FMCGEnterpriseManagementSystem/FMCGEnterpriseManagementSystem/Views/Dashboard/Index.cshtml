@@ -4,74 +4,218 @@
     ViewData["Title"] = "Dashboard & Analytics";
 }
 
-<!-- KPI Cards Header -->
-<div class="row mb-4">
-    <div class="col-md-3">
-        <div class="card bg-primary text-white">
-            <div class="card-body">
-                <h5>Total Products</h5>
-                <h3>@Model.TotalProducts</h3>
+<!-- Search Bar -->
+<div class="mb-4 d-flex justify-content-center justify-content-md-start">
+    <div class="input-group w-100" style="max-width: 400px;">
+        <span class="input-group-text bg-light border-end-0"><i class="bi bi-search"></i></span>
+        <input type="text" class="form-control bg-light border-start-0" placeholder="Search Bar">
+    </div>
+</div>
+
+<!-- Create New Quick Actions -->
+<h3 class="text-white text-center mb-4">Create New</h3>
+<div class="row g-3 justify-content-center mb-4">
+    <div class="col-6 col-md-4 col-lg-2">
+        <a asp-controller="Home" asp-action="AddCustomer" class="btn btn-light w-100 py-4 shadow-sm text-center d-flex flex-column align-items-center justify-content-center border-0 style-card" style="min-height: 110px; background-color: #357383; color: white;">
+            <span class="fw-bold fs-5">Customer</span>
+        </a>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+        <a asp-controller="Home" asp-action="AddSupplier" class="btn btn-light w-100 py-4 shadow-sm text-center d-flex flex-column align-items-center justify-content-center border-0 style-card" style="min-height: 110px; background-color: #357383; color: white;">
+            <span class="fw-bold fs-5">Supplier</span>
+        </a>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+        <a asp-controller="Home" asp-action="AddItem" class="btn btn-light w-100 py-4 shadow-sm text-center d-flex flex-column align-items-center justify-content-center border-0 style-card" style="min-height: 110px; background-color: #357383; color: white;">
+            <span class="fw-bold fs-5">Item</span>
+        </a>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+        <a asp-controller="Home" asp-action="CreateInvoice" class="btn btn-light w-100 py-4 shadow-sm text-center d-flex flex-column align-items-center justify-content-center border-0 style-card" style="min-height: 110px; background-color: #357383; color: white;">
+            <span class="fw-bold fs-5">Invoices</span>
+        </a>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+        <a asp-controller="Quotes" asp-action="Index" class="btn btn-light w-100 py-4 shadow-sm text-center d-flex flex-column align-items-center justify-content-center border-0 style-card" style="min-height: 110px; background-color: #357383; color: white;">
+            <span class="fw-bold fs-5">Quote</span>
+        </a>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+        <a asp-controller="Reports" asp-action="Index" class="btn btn-light w-100 py-4 shadow-sm text-center d-flex flex-column align-items-center justify-content-center border-0 style-card" style="min-height: 110px; background-color: #357383; color: white;">
+            <span class="fw-bold fs-5">Report</span>
+        </a>
+    </div>
+</div>
+
+<!-- Dynamic Operational KPI Metrics -->
+<div class="row g-3 mb-4">
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="p-3 rounded shadow-sm text-white h-100 d-flex align-items-center justify-content-between" style="background-color: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+            <div>
+                <span class="text-white-50 small d-block">Total Active Products</span>
+                <h4 class="fw-bold my-1">@Model.TotalProducts</h4>
+                <span class="small text-success"><i class="bi bi-box-seam me-1"></i>In Catalog</span>
+            </div>
+            <div class="rounded-circle p-3 text-white" style="background-color: #357383;">
+                <i class="bi bi-boxes fs-4"></i>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card bg-success text-white">
-            <div class="card-body">
-                <h5>Total Inventory Value</h5>
-                <h3>@Model.TotalInventoryValue.ToString("C")</h3>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="p-3 rounded shadow-sm text-white h-100 d-flex align-items-center justify-content-between" style="background-color: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+            <div>
+                <span class="text-white-50 small d-block">Low / Out Stock</span>
+                <h4 class="fw-bold my-1 text-warning">@Model.LowStockItems <span class="fs-6 text-danger">(@Model.OutOfStockItems Critical)</span></h4>
+                <span class="small text-warning"><i class="bi bi-exclamation-triangle me-1"></i>Reorder Watchlist</span>
+            </div>
+            <div class="rounded-circle p-3 text-white bg-warning">
+                <i class="bi bi-graph-down-arrow fs-4"></i>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card bg-warning text-dark">
-            <div class="card-body">
-                <h5>Low Stock Items</h5>
-                <h3>@Model.LowStockItems</h3>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="p-3 rounded shadow-sm text-white h-100 d-flex align-items-center justify-content-between" style="background-color: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+            <div>
+                <span class="text-white-50 small d-block">Total Inventory Value</span>
+                <h4 class="fw-bold my-1">R @Model.TotalInventoryValue.ToString("N2")</h4>
+                <span class="small text-info"><i class="bi bi-cash-stack me-1"></i>Valuation</span>
+            </div>
+            <div class="rounded-circle p-3 text-white bg-success">
+                <i class="bi bi-currency-dollar fs-4"></i>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card bg-danger text-white">
-            <div class="card-body">
-                <h5>Out of Stock</h5>
-                <h3>@Model.OutOfStockItems</h3>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="p-3 rounded shadow-sm text-white h-100 d-flex align-items-center justify-content-between" style="background-color: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+            <div>
+                <span class="text-white-50 small d-block">Projected Restock Budget</span>
+                <h4 class="fw-bold my-1">R @Model.ProjectedRestockBudget.ToString("N2")</h4>
+                <span class="small text-white-50"><i class="bi bi-calculator me-1"></i>Target Buffer</span>
+            </div>
+            <div class="rounded-circle p-3 text-white bg-secondary">
+                <i class="bi bi-wallet2 fs-4"></i>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Analytics & Alerts Table -->
-<div class="card">
-    <div class="card-header">
-        <h4>Critical Stock Alerts</h4>
+<!-- Analytics Charts & Critical Stock Alerts Row -->
+<div class="row g-4 mt-2">
+    <!-- Sales Per Category Chart -->
+    <div class="col-12 col-md-5">
+        <div class="p-4 rounded shadow-sm h-100" style="background-color: rgba(255,255,255,0.05); min-height: 350px; border: 1px solid rgba(255,255,255,0.1);">
+            <h5 class="text-white mb-3">Stock Per Category</h5>
+            <div style="height: 260px; position: relative;" class="d-flex align-items-center justify-content-center">
+                <canvas id="categoryChart"></canvas>
+            </div>
+        </div>
     </div>
-    <div class="card-body">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Code</th>
-                    <th>Product</th>
-                    <th>Current Stock</th>
-                    <th>Reorder Level</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var alert in Model.CriticalStockAlerts)
-                {
-                    <tr>
-                        <td>@alert.ProductCode</td>
-                        <td>@alert.ProductName</td>
-                        <td>@alert.CurrentStock</td>
-                        <td>@alert.ReorderLevel</td>
-                        <td>
-                            <span class="badge @(alert.HealthStatus == "Critical" ? "bg-danger" : "bg-warning")">
-                                @alert.HealthStatus
-                            </span>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+
+    <!-- Critical Stock Alerts Watchlist Table -->
+    <div class="col-12 col-md-7">
+        <div class="p-4 rounded shadow-sm h-100 text-white" style="background-color: rgba(255,255,255,0.05); min-height: 350px; border: 1px solid rgba(255,255,255,0.1);">
+            <h5 class="text-white mb-3">Critical Stock Alerts</h5>
+            @if (Model.CriticalStockAlerts != null && Model.CriticalStockAlerts.Any())
+            {
+                <div class="table-responsive" style="max-height: 260px; overflow-y: auto;">
+                    <table class="table table-dark table-hover align-middle m-0" style="background: transparent;">
+                        <thead>
+                            <tr class="text-white-50">
+                                <th>Code</th>
+                                <th>Product</th>
+                                <th>Current Stock</th>
+                                <th>Reorder Level</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var alert in Model.CriticalStockAlerts)
+                            {
+                                <tr>
+                                    <td class="fw-bold">@alert.ProductCode</td>
+                                    <td>@alert.ProductName</td>
+                                    <td>@alert.CurrentStock</td>
+                                    <td>@alert.ReorderLevel</td>
+                                    <td>
+                                        <span class="badge @(alert.HealthStatus == "Critical" ? "bg-danger" : "bg-warning text-dark")">
+                                            @alert.HealthStatus
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5 text-white-50">
+                    <i class="bi bi-check-circle-fill text-success fs-1 d-block mb-2"></i>
+                    <p class="m-0">All stock levels are optimal above reorder points.</p>
+                </div>
+            }
+        </div>
     </div>
 </div>
+
+@section Scripts {
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const canvas = document.getElementById('categoryChart');
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+            
+            // Raw arrays from ViewModel
+            let categoryLabels = @Html.Raw(Json.Serialize(Model.CategoryNames ?? Array.Empty<string>()));
+            let categoryData = @Html.Raw(Json.Serialize(Model.CategoryQuantities ?? Array.Empty<int>()));
+
+            // Fallback rendering logic if database contains no stock summaries
+            if (!categoryLabels || categoryLabels.length === 0 || categoryData.every(val => val === 0)) {
+                categoryLabels = ["No Category Data"];
+                categoryData = [1]; // Renders placeholder visual slice
+            }
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: categoryLabels,
+                    datasets: [{
+                        label: 'Quantity',
+                        data: categoryData,
+                        backgroundColor: [
+                            '#357383',
+                            '#198754',
+                            '#ffc107',
+                            '#dc3545',
+                            '#0dcaf0',
+                            '#6c757d'
+                        ],
+                        borderWidth: 2,
+                        borderColor: 'rgba(255,255,255,0.1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: 'rgba(255,255,255,0.85)',
+                                padding: 12,
+                                font: { size: 12 }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}
