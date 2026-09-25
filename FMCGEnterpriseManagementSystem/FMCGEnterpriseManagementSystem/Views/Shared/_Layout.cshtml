@@ -199,6 +199,7 @@
 </head>
 <body>
 
+    <!-- MOBILE NAVIGATION DROPDOWN -->
     <div class="d-md-none text-white" style="background-color: var(--sidebar-bg);">
         <div class="d-flex justify-content-between align-items-center px-3 py-2">
             <div class="d-flex align-items-center gap-2">
@@ -215,7 +216,7 @@
             <ul class="nav flex-column text-center pb-3">
 
                 <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Home" asp-action="Dashboard">Dashboard</a>
+                    <a class="nav-link py-2" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
                 </li>
 
                 <li class="nav-item">
@@ -231,7 +232,19 @@
                 </li>
 
                 <li class="nav-item">
+                    <a class="nav-link py-2" asp-controller="SalesRepresentatives" asp-action="Index">Sales Representatives</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link py-2" asp-controller="Home" asp-action="Products">Products</a>
+                </li>
+
+                <li class="nav-item">
                     <a class="nav-link py-2" asp-controller="Home" asp-action="InventoryList">Inventory</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link py-2" asp-controller="Forecasting" asp-action="Index">Forecasting</a>
                 </li>
 
                 <li class="nav-item">
@@ -247,7 +260,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Home" asp-action="Reports">Reports</a>
+                    <a class="nav-link py-2" asp-controller="Reports" asp-action="Index">Reports</a>
                 </li>
 
                 <li class="nav-item">
@@ -258,9 +271,11 @@
         </div>
     </div>
 
+    <!-- MAIN DESKTOP LAYOUT -->
     <div class="container-fluid p-0">
         <div class="row g-0">
 
+            <!-- SIDEBAR NAVIGATION -->
             <div class="col-md-3 col-lg-2 sidebar d-none d-md-flex flex-column justify-content-between">
 
                 <div>
@@ -272,7 +287,7 @@
                     <ul class="nav flex-column justify-content-start">
 
                         <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="Dashboard">Dashboard</a>
+                            <a class="nav-link px-3 py-2" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
                         </li>
 
                         <li class="nav-item">
@@ -288,7 +303,19 @@
                         </li>
 
                         <li class="nav-item">
+                            <a class="nav-link px-3 py-2" asp-controller="SalesRepresentatives" asp-action="Index">Sales Representatives</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="Products">Products</a>
+                        </li>
+
+                        <li class="nav-item">
                             <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="InventoryList">Inventory</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link px-3 py-2" asp-controller="Forecasting" asp-action="Index">Forecasting</a>
                         </li>
 
                         <li class="nav-item">
@@ -304,7 +331,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="Reports">Reports</a>
+                            <a class="nav-link px-3 py-2" asp-controller="Reports" asp-action="Index">Reports</a>
                         </li>
 
                         <li class="nav-item">
@@ -322,6 +349,7 @@
 
             </div>
 
+            <!-- CONTENT BODY AREA -->
             <div class="col-12 col-md-9 col-lg-10 d-flex flex-column">
 
                 <header>
@@ -331,31 +359,19 @@
 
                         <div class="d-flex align-items-center gap-3 gap-md-4 text-white">
 
-                            <a asp-controller="Home"
-                               asp-action="Notifications"
-                               class="text-white text-decoration-none">
+                            <a asp-controller="Home" asp-action="Notifications" class="text-white text-decoration-none">
                                 <i class="bi bi-bell fs-4" style="cursor: pointer;"></i>
                             </a>
 
-                            <a asp-controller="Home"
-                               asp-action="UserProfile"
-                               class="text-white text-decoration-none">
+                            <a asp-controller="Home" asp-action="UserProfile" class="text-white text-decoration-none">
                                 <i class="bi bi-person-circle fs-3" style="cursor: pointer;"></i>
                             </a>
 
-                            <form asp-controller="Account"
-                                  asp-action="Logout"
-                                  method="post"
-                                  class="m-0">
-
+                            <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
                                 @Html.AntiForgeryToken()
-
-                                <button type="submit"
-                                        class="btn p-0 border-0 text-white"
-                                        title="Logout">
+                                <button type="submit" class="btn p-0 border-0 text-white" title="Logout">
                                     <i class="bi bi-box-arrow-right fs-4"></i>
                                 </button>
-
                             </form>
 
                         </div>
@@ -364,11 +380,9 @@
                 </header>
 
                 <div class="container-fluid px-2 px-md-4">
-
                     <main role="main" class="pb-3">
                         @RenderBody()
                     </main>
-
                 </div>
 
             </div>
@@ -376,10 +390,12 @@
         </div>
     </div>
 
+    <!-- CORE SCRIPTS -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
+    <!-- PAGE-SPECIFIC SCRIPT INJECTION AREA -->
     @await RenderSectionAsync("Scripts", required: false)
 
 </body>
