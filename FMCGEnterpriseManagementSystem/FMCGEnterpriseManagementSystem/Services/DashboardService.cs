@@ -1,75 +1,81 @@
-﻿using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
-namespace FMCGEnterpriseManagementSystem.Services.Implementations
+namespace FMCGEnterpriseManagementSystem.Services
 {
     public class DashboardService : IDashboardService
     {
-        private readonly IDashboardRepository _dashboardRepository;
+        private readonly ApplicationDbContext _context;
 
-        // Injects only IDashboardRepository to remain independent of unmerged repositories
-        public DashboardService(IDashboardRepository dashboardRepository)
+        public DashboardService(ApplicationDbContext context)
         {
-            _dashboardRepository = dashboardRepository;
+            _context = context;
         }
 
         public async Task<DashboardViewModel> GetDashboardAnalyticsAsync()
         {
-            // Execute parallel aggregation queries
-            var totalProductsTask = _dashboardRepository.GetTotalProductsCountAsync();
-            var totalSuppliersTask = _dashboardRepository.GetTotalSuppliersCountAsync();
-            var totalCustomersTask = _dashboardRepository.GetTotalCustomersCountAsync();
-            var totalInventoryValueTask = _dashboardRepository.GetTotalInventoryValueAsync();
-            var lowStockInventoriesTask = _dashboardRepository.GetLowStockInventoriesAsync();
-            var categorySummariesTask = _dashboardRepository.GetCategoryStockSummariesAsync();
+            var products = await _context.Products
+                .Include(p => p.Category)
+                .AsNoTracking()
+                .ToListAsync();
 
-            await Task.WhenAll(
-                totalProductsTask,
-                totalSuppliersTask,
-                totalCustomersTask,
-                totalInventoryValueTask,
-                lowStockInventoriesTask,
-                categorySummariesTask
-            );
+            // Calculate Metrics
+            int totalProducts = products.Count;
+            int lowStockItems = products.Count(p => p.QuantityInStock > 0 && p.QuantityInStock <= p.ReorderLevel);
+            int outOfStockItems = products.Count(p => p.QuantityInStock <= 0);
 
-            var lowStockList = await lowStockInventoriesTask;
-            var categoryDict = await categorySummariesTask;
+            decimal totalInventoryValue = products.Sum(p => p.QuantityInStock * p.UnitPrice);
 
-            // Map repository outputs directly into DashboardViewModel
-            var viewModel = new DashboardViewModel
+            // Estimate restock cost to bring low/out-of-stock items up to 2x reorder point
+            decimal projectedRestockBudget = products
+                .Where(p => p.QuantityInStock <= p.ReorderLevel)
+                .Sum(p => (Math.Max(p.ReorderLevel * 2, 10) - p.QuantityInStock) * p.CostPrice);
+
+            // Group Stock Count by Category
+            var categoryGroupings = products
+                .GroupBy(p => p.Category != null ? p.Category.CategoryName : "Unassigned")
+                .Select(g => new
+                {
+                    CategoryName = g.Key,
+                    TotalQuantity = g.Sum(p => p.QuantityInStock)
+                })
+                .OrderByDescending(g => g.TotalQuantity)
+                .ToList();
+
+            string[] categoryNames = categoryGroupings.Select(g => g.CategoryName).ToArray();
+            int[] categoryQuantities = categoryGroupings.Select(g => g.TotalQuantity).ToArray();
+
+            // Generate Critical Stock Watchlist
+            var criticalAlerts = products
+                .Where(p => p.QuantityInStock <= p.ReorderLevel)
+                .OrderBy(p => p.QuantityInStock)
+                .Take(10)
+                .Select(p => new CriticalStockAlert
+                {
+                    ProductCode = p.ProductCode ?? $"ED-{p.ProductID:D4}",
+                    ProductName = p.ProductName,
+                    CurrentStock = p.QuantityInStock,
+                    ReorderLevel = p.ReorderLevel,
+                    HealthStatus = p.QuantityInStock == 0 ? "Critical" : "Low"
+                })
+                .ToList();
+
+            return new DashboardViewModel
             {
-                TotalProducts = await totalProductsTask,
-                TotalSuppliers = await totalSuppliersTask,
-                TotalCustomers = await totalCustomersTask,
-                TotalInventoryValue = await totalInventoryValueTask,
-                LowStockItems = lowStockList.Count(i => i.QuantityOnHand > 0),
-                OutOfStockItems = lowStockList.Count(i => i.QuantityOnHand == 0),
-
-                // Critical Stock Alerts
-                CriticalStockAlerts = lowStockList.Select(i => new LowStockAlertItem
-                {
-                    ProductCode = i.Product?.ProductCode ?? "N/A",
-                    ProductName = i.Product?.ProductName ?? "Unknown Item",
-                    CurrentStock = i.QuantityOnHand,
-                    ReorderLevel = i.ReorderLevel,
-                    HealthStatus = i.QuantityOnHand == 0 ? "Critical" : "Warning"
-                }).ToList(),
-
-                // Category Summaries
-                CategorySummaries = categoryDict.Select(kvp => new CategoryStockSummary
-                {
-                    CategoryName = kvp.Key,
-                    ItemCount = kvp.Value.ItemCount,
-                    TotalQuantity = kvp.Value.TotalQty
-                }).ToList(),
-
-                // Restock Budget Projection: (Target Buffer - Current Stock) * Cost
-                ProjectedRestockBudget = lowStockList.Sum(i =>
-                    ((i.ReorderLevel * 3) - i.QuantityOnHand) * (i.Product?.CostIncVat ?? 0))
+                TotalProducts = totalProducts,
+                LowStockItems = lowStockItems,
+                OutOfStockItems = outOfStockItems,
+                TotalInventoryValue = totalInventoryValue,
+                ProjectedRestockBudget = projectedRestockBudget,
+                CategoryNames = categoryNames,
+                CategoryQuantities = categoryQuantities,
+                CriticalStockAlerts = criticalAlerts
             };
-
-            return viewModel;
         }
     }
 }
