@@ -1,12 +1,11 @@
-﻿using FMCGEnterpriseManagementSystem.Repositories;
-using FMCGEnterpriseManagementSystem.Services;
-using FMCGEnterpriseManagementSystem.Services.Interfaces;
-using FMCGEnterpriseManagementSystem.ViewModels;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
+using FMCGEnterpriseManagementSystem.Services.Interfaces;
+using FMCGEnterpriseManagementSystem.ViewModels;
 
-namespace FMCGEnterpriseManagementSystem.Services
+namespace FMCGEnterpriseManagementSystem.Services.Implementations
 {
     public class DashboardService : IDashboardService
     {
