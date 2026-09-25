@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using FMCGEnterpriseManagementSystem.Repositories.Interfaces; // <-- Required for IProductRepository
+using FMCGEnterpriseManagementSystem.Repositories.Interfaces; 
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;
 
