@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.Data;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -14,36 +17,54 @@ namespace FMCGEnterpriseManagementSystem.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Product>> GetAllAsync()
+        public async Task<IEnumerable<Product>> GetAllProductsAsync()
         {
-            return await _context.Products.ToListAsync();
+            return await _context.Products
+                .Include(p => p.Category)
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public async Task<Product?> GetByIdAsync(int id)
+        public async Task<Product?> GetProductByIdAsync(int id)
         {
-            return await _context.Products.FirstOrDefaultAsync(p => p.ProductId == id);
+            return await _context.Products
+                .Include(p => p.Category)
+                .FirstOrDefaultAsync(p => p.ProductID == id);
         }
 
-        public async Task AddAsync(Product product)
+        public async Task<IEnumerable<Product>> GetLowStockProductsAsync()
+        {
+            return await _context.Products
+                .Include(p => p.Category)
+                .Where(p => p.QuantityInStock <= p.ReorderLevel)
+                .OrderBy(p => p.QuantityInStock)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        public async Task AddProductAsync(Product product)
         {
             await _context.Products.AddAsync(product);
-            await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(Product product)
+        public async Task UpdateProductAsync(Product product)
         {
             _context.Products.Update(product);
-            await _context.SaveChangesAsync();
+            await Task.CompletedTask;
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteProductAsync(int id)
         {
-            var product = await GetByIdAsync(id);
+            var product = await _context.Products.FindAsync(id);
             if (product != null)
             {
                 _context.Products.Remove(product);
-                await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task<bool> SaveChangesAsync()
+        {
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }
