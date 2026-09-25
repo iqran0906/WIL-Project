@@ -5,7 +5,7 @@ using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;
 
-namespace FMCGEnterpriseManagementSystem.Services.Implementations
+namespace FMCGEnterpriseManagementSystem.Repositories
 {
     public class DashboardService : IDashboardService
     {
