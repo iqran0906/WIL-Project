@@ -29,7 +29,7 @@ namespace FMCGEnterpriseManagementSystem.Repositories
         {
             return await _context.Products
                 .Include(p => p.Category)
-                .FirstOrDefaultAsync(p => p.ProductID == id);
+                .FirstOrDefaultAsync(p => p.ProductId == id);
         }
 
         public async Task AddAsync(Product product)
