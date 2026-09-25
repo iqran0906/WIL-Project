@@ -3,22 +3,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;
+using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace FMCGEnterpriseManagementSystem.Repositories
+namespace FMCGEnterpriseManagementSystem.Repositories.Implementations
 {
-    // Interface declared directly above the implementation
-    public interface IProductRepository
-    {
-        Task<IEnumerable<Product>> GetAllProductsAsync();
-        Task<Product?> GetProductByIdAsync(int id);
-        Task<IEnumerable<Product>> GetLowStockProductsAsync();
-        Task AddProductAsync(Product product);
-        Task UpdateProductAsync(Product product);
-        Task DeleteProductAsync(int id);
-        Task<bool> SaveChangesAsync();
-    }
-
     public class ProductRepository : IProductRepository
     {
         private readonly ApplicationDbContext _context;
