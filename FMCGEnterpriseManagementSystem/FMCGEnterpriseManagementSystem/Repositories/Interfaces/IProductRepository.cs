@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using FMCGEnterpriseManagementSystem.Models;
 
-namespace FMCGEnterpriseManagementSystem.Repositories.Interfaces
+namespace FMCGEnterpriseManagementSystem.Repositories
 {
     public interface IProductRepository
     {
