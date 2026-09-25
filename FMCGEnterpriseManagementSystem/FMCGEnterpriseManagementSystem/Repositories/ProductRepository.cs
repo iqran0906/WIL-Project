@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;
+using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace FMCGEnterpriseManagementSystem.Repositories
@@ -28,7 +29,7 @@ namespace FMCGEnterpriseManagementSystem.Repositories
         {
             return await _context.Products
                 .Include(p => p.Category)
-                .FirstOrDefaultAsync(p => p.Id == id);
+                .FirstOrDefaultAsync(p => p.ProductID == id);
         }
 
         public async Task AddAsync(Product product)
