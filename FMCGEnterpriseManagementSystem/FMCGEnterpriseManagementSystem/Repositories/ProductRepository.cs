@@ -6,7 +6,7 @@ using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace FMCGEnterpriseManagementSystem.Repositories
+namespace FMCGEnterpriseManagementSystem.Repositories.Implementations
 {
     public class ProductRepository : IProductRepository
     {
