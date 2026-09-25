@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using FMCGEnterpriseManagementSystem.Repositories;
+using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;
 
-namespace FMCGEnterpriseManagementSystem.Services.Implementations
+namespace FMCGEnterpriseManagementSystem.Services
 {
     public class DashboardService : IDashboardService
     {
@@ -49,7 +49,7 @@ namespace FMCGEnterpriseManagementSystem.Services.Implementations
                 .Take(10)
                 .Select(p => new CriticalStockAlert
                 {
-                    ProductCode = p.ProductCode ?? $"ED-{p.Id:D4}",
+                    ProductCode = p.ProductCode ?? $"ED-{p.ProductID:D4}",
                     ProductName = p.ProductName,
                     CurrentStock = p.QuantityInStock,
                     ReorderLevel = p.ReorderLevel,
