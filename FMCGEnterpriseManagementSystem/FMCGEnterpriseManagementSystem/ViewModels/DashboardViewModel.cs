@@ -8,6 +8,9 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
         public int TotalProducts { get; set; }
         public int LowStockItems { get; set; }
         public int OutOfStockItems { get; set; }
+        public int TotalCustomers { get; set; }
+        public decimal TotalSales { get; set; }
+        public decimal OutstandingPayments { get; set; }
         public decimal TotalInventoryValue { get; set; }
         public decimal ProjectedRestockBudget { get; set; }
 
