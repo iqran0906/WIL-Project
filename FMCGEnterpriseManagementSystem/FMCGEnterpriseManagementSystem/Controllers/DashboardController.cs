@@ -17,8 +17,10 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
         public async Task<IActionResult> Index()
         {
+            // Fetch  live database calculations
             var model = await _dashboardService.GetDashboardAnalyticsAsync();
-            return View(model);
+
+            return View("~/Views/Home/Dashboard.cshtml", model);
         }
     }
 }

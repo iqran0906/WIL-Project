@@ -1,4 +1,6 @@
-﻿@{
+﻿@model FMCGEnterpriseManagementSystem.ViewModels.DashboardViewModel
+
+@{
     ViewData["Title"] = "Dashboard";
 }
 
@@ -45,18 +47,84 @@
 </div>
 
 <div class="row g-4 mt-4">
+    <!-- Income by Month Chart Card -->
     <div class="col-12 col-md-7">
-        <div class="p-4 rounded shadow-sm" style="background-color: rgba(255,255,255,0.05); min-height: 300px; border: 1px solid rgba(255,255,255,0.1);">
+        <div class="p-4 rounded shadow-sm" style="background-color: rgba(255,255,255,0.05); min-height: 350px; border: 1px solid rgba(255,255,255,0.1);">
             <h5 class="text-white mb-3">Income by Month</h5>
-            <div class="d-flex align-items-end justify-content-between h-75 pt-5 text-muted" style="min-height: 200px;">
-                <div class="text-center w-100 text-white-50 small">Monthly Bar Metrics View Dashboard Placeholder</div>
+            <div style="position: relative; height: 260px; width: 100%;">
+                <canvas id="incomeChart"></canvas>
             </div>
         </div>
     </div>
+
+    <!-- Sales Per Category Chart Card -->
     <div class="col-12 col-md-5">
-        <div class="p-4 rounded shadow-sm" style="background-color: rgba(255,255,255,0.05); min-height: 300px; border: 1px solid rgba(255,255,255,0.1);">
+        <div class="p-4 rounded shadow-sm" style="background-color: rgba(255,255,255,0.05); min-height: 350px; border: 1px solid rgba(255,255,255,0.1);">
             <h5 class="text-white mb-3">Sales Per Category</h5>
-            <div class="text-center text-white-50 small pt-5">Category Distribution Breakdown Matrix View Placeholder</div>
+            <div style="position: relative; height: 260px; width: 100%;">
+                <canvas id="categoryChart"></canvas>
+            </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <!-- Chart.js Library CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // 1. Sales Per Category Chart (Populated from your DashboardViewModel database calculations)
+        const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+        const categoryNames = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.CategoryNames));
+        const categoryQuantities = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.CategoryQuantities));
+
+        new Chart(categoryCtx, {
+            type: 'bar',
+            data: {
+                labels: categoryNames.length > 0 ? categoryNames : ['No Data'],
+                datasets: [{
+                    label: 'Stock Quantity',
+                    data: categoryQuantities.length > 0 ? categoryQuantities : [0],
+                    backgroundColor: '#357383',
+                    borderColor: '#ffffff',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
+                    y: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } }
+                }
+            }
+        });
+
+        // 2. Income by Month Chart (Trend Line)
+        const incomeCtx = document.getElementById('incomeChart').getContext('2d');
+        new Chart(incomeCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Income',
+                    data: [12500, 18300, 22000, 19500, 27000, 31200],
+                    borderColor: '#357383',
+                    backgroundColor: 'rgba(53, 115, 131, 0.2)',
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
+                    y: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } }
+                }
+            }
+        });
+    </script>
+}
