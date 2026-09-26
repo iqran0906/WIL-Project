@@ -2,10 +2,10 @@
 {
     public interface IAuthService 
     {
-        Task<bool> LoginAsync(string usernameOrEmail, string password, bool rememberMe);
+        Task<bool> LoginAsync(string email, string password, bool rememberMe);
 
         Task LogoutAsync();
 
-        Task<bool> IsUserActiveAsync(string usernameOrEmail);
+        Task<bool> IsUserActiveAsync(string email);
     }
 }

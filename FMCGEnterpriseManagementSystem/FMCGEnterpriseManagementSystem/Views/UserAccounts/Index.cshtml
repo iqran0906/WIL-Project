@@ -1,0 +1,197 @@
+﻿@model IEnumerable<FMCGEnterpriseManagementSystem.Models.Employee>
+
+@{
+    ViewData["Title"] = "User Account Management";
+
+    var employeesWithoutAccounts =
+        ViewBag.EmployeesWithoutAccounts
+        as IEnumerable<FMCGEnterpriseManagementSystem.Models.Employee>
+        ?? Enumerable.Empty<FMCGEnterpriseManagementSystem.Models.Employee>();
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2>User Account Management</h2>
+            <p class="text-muted">
+                Create, activate and deactivate employee system accounts.
+            </p>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Existing User Accounts</h5>
+        </div>
+
+        <div class="card-body">
+            @if (!Model.Any())
+            {
+                <p class="text-muted mb-0">
+                    No employee user accounts have been created yet.
+                </p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Employee Number</th>
+                                <th>Employee</th>
+                                <th>Email</th>
+                                <th>Account Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var employee in Model)
+                            {
+                                <tr>
+                                    <td>@employee.EmployeeNumber</td>
+
+                                    <td>
+                                        @employee.FirstName @employee.LastName
+                                    </td>
+
+                                    <td>@employee.User?.Email</td>
+
+                                    <td>
+                                        @if (employee.User?.IsActive == true)
+                                        {
+                                            <span class="badge bg-success">
+                                                Active
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">
+                                                Inactive
+                                            </span>
+                                        }
+                                    </td>
+
+                                    <td>
+                                        @if (employee.User?.IsActive == true)
+                                        {
+                                            <form asp-controller="UserAccounts"
+                                                  asp-action="Deactivate"
+                                                  method="post"
+                                                  class="d-inline">
+
+                                                @Html.AntiForgeryToken()
+
+                                                <input type="hidden"
+                                                       name="employeeId"
+                                                       value="@employee.EmployeeID" />
+
+                                                <button type="submit"
+                                                        class="btn btn-sm btn-outline-danger"
+                                                        onclick="return confirm('Deactivate this user account?');">
+                                                    Deactivate
+                                                </button>
+                                            </form>
+                                        }
+                                        else
+                                        {
+                                            <form asp-controller="UserAccounts"
+                                                  asp-action="Activate"
+                                                  method="post"
+                                                  class="d-inline">
+
+                                                @Html.AntiForgeryToken()
+
+                                                <input type="hidden"
+                                                       name="employeeId"
+                                                       value="@employee.EmployeeID" />
+
+                                                <button type="submit"
+                                                        class="btn btn-sm btn-outline-success">
+                                                    Activate
+                                                </button>
+                                            </form>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Employees Without User Accounts</h5>
+        </div>
+
+        <div class="card-body">
+            @if (!employeesWithoutAccounts.Any())
+            {
+                <p class="text-muted mb-0">
+                    All active employees currently have user accounts.
+                </p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Employee Number</th>
+                                <th>Employee</th>
+                                <th>Email</th>
+                                <th>Job Title</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var employee in employeesWithoutAccounts)
+                            {
+                                <tr>
+                                    <td>@employee.EmployeeNumber</td>
+
+                                    <td>
+                                        @employee.FirstName @employee.LastName
+                                    </td>
+
+                                    <td>@employee.Email</td>
+
+                                    <td>@employee.JobTitle</td>
+
+                                    <td>
+                                        <a asp-controller="UserAccounts"
+                                           asp-action="Create"
+                                           asp-route-employeeId="@employee.EmployeeID"
+                                           class="btn btn-sm btn-primary">
+                                            Create Account
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+
+</div>

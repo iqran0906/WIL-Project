@@ -38,7 +38,6 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         public IActionResult UserProfile() => View();
         public IActionResult Privacy() => View();
         public IActionResult Reports() => View();
-        public IActionResult Notifications() => View();
 
         // Listing Views
         public IActionResult CustomerList() => View();
