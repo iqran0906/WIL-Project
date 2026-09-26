@@ -18,31 +18,24 @@ namespace FMCGEnterpriseManagementSystem.Services
         }
 
         public async Task<bool> LoginAsync(
-            string usernameOrEmail,
+            string email,
             string password,
             bool rememberMe)
         {
-            User? user;
-
-            if (usernameOrEmail.Contains("@"))
-            {
-                user = await _userManager.FindByEmailAsync(usernameOrEmail);
-            }
-            else
-            {
-                user = await _userManager.FindByNameAsync(usernameOrEmail);
-            }
+            var user =
+                await _userManager.FindByEmailAsync(email);
 
             if (user == null || !user.IsActive)
             {
                 return false;
             }
 
-            var result = await _signInManager.PasswordSignInAsync(
-                user,
-                password,
-                rememberMe,
-                lockoutOnFailure: true);
+            var result =
+                await _signInManager.PasswordSignInAsync(
+                    user,
+                    password,
+                    rememberMe,
+                    lockoutOnFailure: true);
 
             return result.Succeeded;
         }
@@ -52,18 +45,10 @@ namespace FMCGEnterpriseManagementSystem.Services
             await _signInManager.SignOutAsync();
         }
 
-        public async Task<bool> IsUserActiveAsync(string usernameOrEmail)
+        public async Task<bool> IsUserActiveAsync(string email)
         {
-            User? user;
-
-            if (usernameOrEmail.Contains("@"))
-            {
-                user = await _userManager.FindByEmailAsync(usernameOrEmail);
-            }
-            else
-            {
-                user = await _userManager.FindByNameAsync(usernameOrEmail);
-            }
+            var user =
+                await _userManager.FindByEmailAsync(email);
 
             return user != null && user.IsActive;
         }

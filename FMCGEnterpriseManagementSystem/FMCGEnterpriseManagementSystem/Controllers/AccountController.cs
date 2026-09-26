@@ -37,19 +37,19 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             }
 
             var isActive =
-                await _authService.IsUserActiveAsync(model.UsernameOrEmail);
+                await _authService.IsUserActiveAsync(model.Email);
 
             if (!isActive)
             {
                 ModelState.AddModelError(
                     string.Empty,
-                    "Invalid login attempt.");
+                    "Invalid email address or password.");
 
                 return View(model);
             }
 
             var loggedIn = await _authService.LoginAsync(
-                model.UsernameOrEmail,
+                model.Email,
                 model.Password,
                 model.RememberMe);
 
@@ -57,7 +57,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             {
                 ModelState.AddModelError(
                     string.Empty,
-                    "Invalid username/email or password.");
+                    "Invalid email address or password.");
 
                 return View(model);
             }

@@ -24,6 +24,7 @@ namespace FMCGEnterpriseManagementSystem.Data
         public DbSet<NextOfKin> NextOfKins { get; set; }
         public DbSet<SalesRepresentative> SalesRepresentatives { get; set; }
         public DbSet<StockBatch> StockBatches { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
