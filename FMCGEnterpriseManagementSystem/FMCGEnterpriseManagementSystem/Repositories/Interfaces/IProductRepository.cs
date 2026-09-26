@@ -11,6 +11,5 @@ namespace FMCGEnterpriseManagementSystem.Repositories.Interfaces
         Task AddAsync(Product product);
         Task UpdateAsync(Product product);
         Task DeleteAsync(int id);
-        Task<bool> SaveChangesAsync();
     }
 }
