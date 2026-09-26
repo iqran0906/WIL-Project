@@ -7,10 +7,12 @@ namespace FMCGEnterpriseManagementSystem.Controllers
     public class QuotesController : Controller
     {
         private readonly IQuoteService _quoteService;
+        private readonly IEmailApiClientService _emailApiClientService;
 
-        public QuotesController(IQuoteService quoteService)
+        public QuotesController(IQuoteService quoteService, IEmailApiClientService emailApiClientService)
         {
             _quoteService = quoteService;
+            _emailApiClientService = emailApiClientService;
         }
 
         // GET: Quotes
@@ -53,6 +55,25 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 return NotFound();
             }
             return View(quote);
+        }
+
+        // POST: Quotes/EmailQuote/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EmailQuote(int id, string recipientEmail)
+        {
+            var result = await _emailApiClientService.EmailQuoteAsync(id, recipientEmail);
+
+            if (result.Success)
+            {
+                TempData["SuccessMessage"] = result.Message;
+            }
+            else
+            {
+                TempData["ErrorMessage"] = result.Message;
+            }
+
+            return RedirectToAction(nameof(Details), new { id });
         }
 
         // POST: Quotes/Delete/5

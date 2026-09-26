@@ -12,12 +12,14 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         private readonly IInvoiceService _invoiceService;
         private readonly ICustomerRepository _customerRepository;
         private readonly ApplicationDbContext _context;
+        private readonly IEmailApiClientService _emailApiClientService;
 
-        public InvoicesController(IInvoiceService invoiceService, ICustomerRepository customerRepository, ApplicationDbContext context)
+        public InvoicesController(IInvoiceService invoiceService, ICustomerRepository customerRepository, ApplicationDbContext context, IEmailApiClientService emailApiClientService)
         {
             _invoiceService = invoiceService;
             _customerRepository = customerRepository;
             _context = context;
+            _emailApiClientService = emailApiClientService;
         }
 
         // GET: Invoices
@@ -96,6 +98,25 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         {
             // TODO: Replace with real PDF generation once the Exports module is built
             TempData["InfoMessage"] = "Invoice download (PDF export) is coming soon.";
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        // POST: Invoices/EmailInvoice/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EmailInvoice(int id, string recipientEmail)
+        {
+            var result = await _emailApiClientService.EmailInvoiceAsync(id, recipientEmail);
+
+            if (result.Success)
+            {
+                TempData["SuccessMessage"] = result.Message;
+            }
+            else
+            {
+                TempData["ErrorMessage"] = result.Message;
+            }
+
             return RedirectToAction(nameof(Details), new { id });
         }
 

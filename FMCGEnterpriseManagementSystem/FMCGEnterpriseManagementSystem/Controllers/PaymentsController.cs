@@ -11,11 +11,13 @@ namespace FMCGEnterpriseManagementSystem.Controllers
     {
         private readonly IPaymentService _paymentService;
         private readonly ExportFactory _exportFactory;
+        private readonly IEmailApiClientService _emailApiClientService;
 
-        public PaymentsController(IPaymentService paymentService, ExportFactory exportFactory)
+        public PaymentsController(IPaymentService paymentService, ExportFactory exportFactory, IEmailApiClientService emailApiClientService)
         {
             _paymentService = paymentService;
             _exportFactory = exportFactory;
+            _emailApiClientService = emailApiClientService;
         }
 
         public async Task<IActionResult> Index()
@@ -59,6 +61,26 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 return NotFound();
 
             return View(payment);
+        }
+
+
+        // POST: Payments/EmailPayment/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EmailPayment(int id, string recipientEmail)
+        {
+            var result = await _emailApiClientService.EmailPaymentAsync(id, recipientEmail);
+
+            if (result.Success)
+            {
+                TempData["SuccessMessage"] = result.Message;
+            }
+            else
+            {
+                TempData["ErrorMessage"] = result.Message;
+            }
+
+            return RedirectToAction(nameof(View), new { id });
         }
 
         public async Task<IActionResult> ExportPdf()
