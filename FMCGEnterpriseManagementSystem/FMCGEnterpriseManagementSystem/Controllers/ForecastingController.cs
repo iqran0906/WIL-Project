@@ -2,9 +2,11 @@
 using FMCGEnterpriseManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
+    [Authorize(Roles = "Administrator,Employee")]
     public class ForecastingController : Controller
     {
         private readonly IForecastingService _forecastingService;

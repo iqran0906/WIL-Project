@@ -1,9 +1,11 @@
 ﻿using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
+    [Authorize(Roles = "Administrator,Employee")]
     public class ProductsController : Controller
     {
         private readonly IProductService _productService;

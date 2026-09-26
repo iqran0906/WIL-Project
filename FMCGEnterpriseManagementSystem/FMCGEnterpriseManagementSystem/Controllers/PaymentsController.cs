@@ -4,9 +4,11 @@ using FMCGEnterpriseManagementSystem.ViewModels;
 using FMCGEnterpriseManagementSystem.Helpers;
 using FMCGEnterpriseManagementSystem.Enums;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
+    [Authorize(Roles = "Administrator,Employee,SalesRepresentative")]
     public class PaymentsController : Controller
     {
         private readonly IPaymentService _paymentService;

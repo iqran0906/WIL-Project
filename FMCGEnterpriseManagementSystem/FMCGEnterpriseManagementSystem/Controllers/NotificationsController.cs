@@ -1,9 +1,11 @@
 ﻿using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
+    [Authorize(Roles = "Administrator,Employee,SalesRepresentative")]
     public class NotificationsController : Controller
     {
         private readonly INotificationService _notificationService;
@@ -29,6 +31,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
         // POST: Notifications/MarkAsRead/5
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> MarkAsRead(int id)
         {
             await _notificationService.MarkAsReadAsync(id);
