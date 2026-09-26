@@ -5,37 +5,77 @@
 }
 
 <div class="content-card">
-    <h2>Create New Product</h2>
-    <hr />
+    <h2 class="fw-bold mb-4" style="color: #1c323d;">Create New Product</h2>
 
     <form asp-action="Create" method="post">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @Html.AntiForgeryToken()
 
-        <div class="mb-3">
-            <label asp-for="ProductName" class="form-label"></label>
-            <input asp-for="ProductName" class="form-control" />
-            <span asp-validation-for="ProductName" class="text-danger"></span>
+        <!-- Validation Summary to catch any hidden validation errors -->
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="row g-4">
+            <div class="col-md-8 offset-md-2">
+                
+                <!-- Supplier Selection (Required by ViewModel) -->
+                <div class="mb-3">
+                    <label asp-for="SupplierId" class="form-label">Supplier ID / Supplier</label>
+                    <input asp-for="SupplierId" class="form-control" type="number" placeholder="Enter Supplier ID" />
+                    <span asp-validation-for="SupplierId" class="text-danger"></span>
+                </div>
+
+                <!-- Product Code -->
+                <div class="mb-3">
+                    <label asp-for="ProductCode" class="form-label">Product Code</label>
+                    <input asp-for="ProductCode" class="form-control" placeholder="E.g. ED001" />
+                    <span asp-validation-for="ProductCode" class="text-danger"></span>
+                </div>
+
+                <!-- Product Name -->
+                <div class="mb-3">
+                    <label asp-for="ProductName" class="form-label">Product Name</label>
+                    <input asp-for="ProductName" class="form-control" placeholder="E.g. Chocolate Bar" />
+                    <span asp-validation-for="ProductName" class="text-danger"></span>
+                </div>
+
+                <!-- Description -->
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label">Description</label>
+                    <textarea asp-for="Description" class="form-control" rows="2" placeholder="Optional product description"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <!-- Category -->
+                <div class="mb-3">
+                    <label asp-for="Category" class="form-label">Category</label>
+                    <input asp-for="Category" class="form-control" placeholder="E.g. Sweets & Confectionery" />
+                    <span asp-validation-for="Category" class="text-danger"></span>
+                </div>
+
+                <!-- Cost Excl. VAT (Required by ViewModel) -->
+                <div class="mb-3">
+                    <label asp-for="CostExVat" class="form-label">Cost (Excl. VAT)</label>
+                    <input asp-for="CostExVat" class="form-control" type="number" step="0.01" />
+                    <span asp-validation-for="CostExVat" class="text-danger"></span>
+                </div>
+
+                <!-- Selling Price -->
+                <div class="mb-3">
+                    <label asp-for="SellingPrice" class="form-label">Selling Price</label>
+                    <input asp-for="SellingPrice" class="form-control" type="number" step="0.01" />
+                    <span asp-validation-for="SellingPrice" class="text-danger"></span>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-flex justify-content-end gap-3 mt-4">
+                    <a asp-action="Index" class="btn btn-secondary align-self-center">Cancel</a>
+                    <button type="submit" class="btn btn-action-primary">Save Product</button>
+                </div>
+
+            </div>
         </div>
-
-        <div class="mb-3">
-            <label asp-for="ProductCode" class="form-label"></label>
-            <input asp-for="ProductCode" class="form-control" />
-            <span asp-validation-for="ProductCode" class="text-danger"></span>
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="Category" class="form-label"></label>
-            <input asp-for="Category" class="form-control" />
-            <span asp-validation-for="Category" class="text-danger"></span>
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="SellingPrice" class="form-label"></label>
-            <input asp-for="SellingPrice" class="form-control" />
-            <span asp-validation-for="SellingPrice" class="text-danger"></span>
-        </div>
-
-        <button type="submit" class="btn btn-action-primary">Create</button>
-        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
