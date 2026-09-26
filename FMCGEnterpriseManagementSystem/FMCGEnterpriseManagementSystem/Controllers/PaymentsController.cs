@@ -1,16 +1,23 @@
-﻿using FMCGEnterpriseManagementSystem.Services.Interfaces;
+﻿using FMCGEnterpriseManagementSystem.Factories;
+using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;
+using FMCGEnterpriseManagementSystem.Helpers;
+using FMCGEnterpriseManagementSystem.Enums;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
+    [Authorize(Roles = "Administrator,Employee,SalesRepresentative")]
     public class PaymentsController : Controller
     {
         private readonly IPaymentService _paymentService;
+        private readonly ExportFactory _exportFactory;
 
-        public PaymentsController(IPaymentService paymentService)
+        public PaymentsController(IPaymentService paymentService, ExportFactory exportFactory)
         {
             _paymentService = paymentService;
+            _exportFactory = exportFactory;
         }
 
         public async Task<IActionResult> Index()
@@ -54,6 +61,22 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 return NotFound();
 
             return View(payment);
+        }
+
+        public async Task<IActionResult> ExportPdf()
+        {
+            var payments = await _paymentService.GetAllPaymentsAsync();
+            var strategy = _exportFactory.GetStrategy(ExportType.Pdf);
+            var result = strategy.Export(payments, "Payments");
+            return FileExportHelper.ToFileResult(result);
+        }
+
+        public async Task<IActionResult> ExportExcel()
+        {
+            var payments = await _paymentService.GetAllPaymentsAsync();
+            var strategy = _exportFactory.GetStrategy(ExportType.Excel);
+            var result = strategy.Export(payments, "Payments");
+            return FileExportHelper.ToFileResult(result);
         }
     }
 }

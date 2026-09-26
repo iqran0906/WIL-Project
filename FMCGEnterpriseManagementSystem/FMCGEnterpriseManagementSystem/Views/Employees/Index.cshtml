@@ -70,35 +70,51 @@
                             <td>@employee.JobTitle</td>
                             <td>@employee.DateOfEmployment.ToString("dd/MM/yyyy")</td>
                             <td>
-                                @(employee.IsActive ? "Active" : "Inactive")
-                            </td>
+    @if (employee.IsActive)
+    {
+        <span class="badge bg-success">
+            Active
+        </span>
+    }
+    else
+    {
+        <span class="badge bg-danger">
+            Inactive
+        </span>
+    }
+<td>
+    <div class="d-flex gap-2">
 
-                            <td>
-                                <a asp-controller="Employees"
-                                   asp-action="Edit"
-                                   asp-route-id="@employee.EmployeeID"
-                                   class="btn btn-sm btn-outline-secondary">
-                                    Edit
-                                </a>
+        <a asp-controller="Employees"
+           asp-action="Edit"
+           asp-route-id="@employee.EmployeeID"
+           class="btn btn-sm btn-warning">
+            <i class="bi bi-pencil-square me-1"></i>
+            Edit
+        </a>
 
-                                @if (employee.IsActive)
-                                {
-                                    <form asp-controller="Employees"
-                                          asp-action="Deactivate"
-                                          asp-route-id="@employee.EmployeeID"
-                                          method="post"
-                                          class="d-inline">
+        @if (employee.IsActive)
+        {
+            <form asp-controller="Employees"
+                  asp-action="Deactivate"
+                  asp-route-id="@employee.EmployeeID"
+                  method="post"
+                  class="d-inline">
 
-                                        @Html.AntiForgeryToken()
+                @Html.AntiForgeryToken()
 
-                                        <button type="submit"
-                                                class="btn btn-sm btn-outline-danger">
-                                            Deactivate
-                                        </button>
-                                    </form>
-                                }
-                            </td>
+                <button type="submit"
+                        class="btn btn-sm btn-danger"
+                        onclick="return confirm('Are you sure you want to deactivate this employee?');">
+                    <i class="bi bi-person-x me-1"></i>
+                    Deactivate
+                </button>
 
+            </form>
+        }
+
+    </div>
+</td>
 
                         </tr>
                     }

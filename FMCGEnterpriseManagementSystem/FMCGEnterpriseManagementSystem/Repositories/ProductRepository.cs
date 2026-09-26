@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace FMCGEnterpriseManagementSystem.Repositories
 {
@@ -45,7 +45,8 @@ namespace FMCGEnterpriseManagementSystem.Repositories
 
         public async Task DeleteAsync(int id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await GetByIdAsync(id);
+
             if (product != null)
             {
                 _context.Products.Remove(product);
