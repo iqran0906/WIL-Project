@@ -1,0 +1,29 @@
+﻿@model IEnumerable<FMCGEnterpriseManagementSystem.Models.Product>
+
+@{
+    ViewData["Title"] = "Products Management";
+}
+
+<h2>Products</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product Code</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Category</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.ProductCode</td>
+                <td>@item.ProductName</td>
+                <td>@item.SellingPrice.ToString("C")</td>
+                <td>@item.Category</td>
+            </tr>
+        }
+    </tbody>
+</table>
