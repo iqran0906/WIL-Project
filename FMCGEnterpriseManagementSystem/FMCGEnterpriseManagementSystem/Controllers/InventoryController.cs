@@ -21,6 +21,27 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return View(inventory);
         }
 
+        [HttpGet]
+        public IActionResult AddItem()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddItem(ProductViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            // Uncomment and use your service method to persist the new item
+            // await _inventoryService.AddItemAsync(model);
+
+            return RedirectToAction(nameof(Index));
+        }
+
         public async Task<IActionResult> AdjustStock(int id)
         {
             var item = await _inventoryService.GetByIdAsync(id);
