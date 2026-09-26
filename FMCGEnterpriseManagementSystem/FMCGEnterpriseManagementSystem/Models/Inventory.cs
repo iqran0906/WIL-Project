@@ -13,14 +13,8 @@ public class Inventory
     [ForeignKey("ProductId")]
     public Product Product { get; set; } = null!;
 
+    // Use only QuantityOnHand everywhere
     public int QuantityOnHand { get; set; }
-
-  
-    public int QuantityInStock
-    {
-        get => QuantityOnHand;
-        set => QuantityOnHand = value;
-    }
 
     public int ReorderLevel { get; set; }
 
