@@ -2,7 +2,7 @@
 {
     public class Supplier
     {
-        public string SupplierID { get; set; }
+        public int SupplierId { get; set; }
 
         public string CompanyName { get; set; }
 
@@ -19,5 +19,13 @@
         public string CreditTerms { get; set; }
 
         public string VATNumber { get; set; }
+
+        public string Notes { get; set; }
+
+        public bool IsActive { get; set; } = true;
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public DateTime? UpdatedAt { get; set; }
     }
 }

@@ -1,9 +1,11 @@
 using System.Diagnostics;
 using FMCGEnterpriseManagementSystem.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -14,13 +16,11 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         }
 
         public IActionResult Index() => View();
-        public IActionResult Login() => View();
         public IActionResult Settings() => View();
         public IActionResult UserProfile() => View();
         public IActionResult Privacy() => View();
         public IActionResult Dashboard() => View();
         public IActionResult Reports() => View();
-        public IActionResult Notifications() => View();
 
         public IActionResult CustomerList() => View();
         public IActionResult SupplierList() => View();

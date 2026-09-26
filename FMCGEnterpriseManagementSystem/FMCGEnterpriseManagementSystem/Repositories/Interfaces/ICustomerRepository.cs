@@ -6,12 +6,12 @@ namespace FMCGEnterpriseManagementSystem.Repositories.Interfaces
     {
         Task<IEnumerable<Customer>> GetAllAsync();
 
-        Task<Customer?> GetByIdAsync(string id);
+        Task<Customer?> GetByIdAsync(int id);
 
         Task AddAsync(Customer customer);
 
         Task UpdateAsync(Customer customer);
 
-        Task DeleteAsync(string id);
+        Task DeleteAsync(int id);
     }
 }

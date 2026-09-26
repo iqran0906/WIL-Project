@@ -20,7 +20,7 @@ namespace FMCGEnterpriseManagementSystem.Services
             return customers.Select(c => MapToViewModel(c));
         }
 
-        public async Task<CustomerViewModel?> GetCustomerByIdAsync(string id)
+        public async Task<CustomerViewModel?> GetCustomerByIdAsync(int id)
         {
             var customer = await _customerRepository.GetByIdAsync(id);
             return customer == null ? null : MapToViewModel(customer);
@@ -45,14 +45,14 @@ namespace FMCGEnterpriseManagementSystem.Services
             await _customerRepository.UpdateAsync(customer);
         }
 
-        public async Task DeleteCustomerAsync(string id)
+        public async Task DeleteCustomerAsync(int id)
         {
             await _customerRepository.DeleteAsync(id);
         }
 
         private static CustomerViewModel MapToViewModel(Customer c) => new()
         {
-            CustomerID = c.CustomerID,
+            CustomerId = c.CustomerId,
             Name = c.Name,
             Surname = c.Surname,
             IdNumber = c.IdNumber,
@@ -65,13 +65,13 @@ namespace FMCGEnterpriseManagementSystem.Services
             PaymentTerms = c.PaymentTerms,
             PaymentMethod = c.PaymentMethod,
             Notes = c.Notes,
-            SalesRep = c.SalesRep,
+            SalesRepresentativeId = c.SalesRepresentativeId,
             VATNumber = c.VATNumber
         };
 
         private static Customer MapToEntity(CustomerViewModel vm) => new()
         {
-            CustomerID = vm.CustomerID,
+            CustomerId = vm.CustomerId,
             Name = vm.Name,
             Surname = vm.Surname,
             IdNumber = vm.IdNumber,
@@ -84,8 +84,8 @@ namespace FMCGEnterpriseManagementSystem.Services
             PaymentTerms = vm.PaymentTerms,
             PaymentMethod = vm.PaymentMethod,
             Notes = vm.Notes,
-            SalesRep = vm.SalesRep,
+            SalesRepresentativeId = vm.SalesRepresentativeId,
             VATNumber = vm.VATNumber
         };
+    };
     }
-}

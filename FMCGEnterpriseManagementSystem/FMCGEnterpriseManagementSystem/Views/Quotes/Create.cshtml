@@ -1,0 +1,139 @@
+﻿@model FMCGEnterpriseManagementSystem.Models.Quote
+@{
+    ViewData["Title"] = "New Quote";
+}
+
+<div class="content-card">
+    <div class="row align-items-center mb-4 g-3">
+        <div class="col-12 col-sm-6 text-center text-sm-start">
+            <h5 class="fw-bold m-0" style="color: #1c323d;">Exclusive Distributors (pty) LTD</h5>
+            <small class="text-muted d-block">Durban <i class="bi bi-pencil small ms-1" style="cursor:pointer;"></i></small>
+        </div>
+        <div class="col-12 col-sm-6 text-center text-sm-end">
+            <div class="d-inline-block text-start w-100" style="max-width: 280px;">
+                <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
+                    <label class="small text-secondary fw-bold text-nowrap m-0">Date:</label>
+                    <input asp-for="QuoteDate" type="date" class="form-control form-control-sm" style="width:160px;">
+                </div>
+                <div class="d-flex align-items-center justify-content-between gap-2">
+                    <label class="small text-secondary fw-bold text-nowrap m-0">Quote Number:</label>
+                    <input type="text" class="form-control form-control-sm text-center fw-bold" value="Auto-generated" readonly style="width:160px;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="fw-bold mb-4 text-center text-sm-start" style="color: #1c323d;">New Quote</h2>
+
+    <form asp-controller="Quotes" asp-action="Create" method="post">
+        <div class="row g-3 mb-4">
+            <div class="col-md-6">
+                <div class="row align-items-center mb-3 g-2">
+                    <label class="col-12 col-sm-3 fw-bold text-secondary">Customer</label>
+                    <div class="col-12 col-sm-9">
+                        <select asp-for="CustomerId" class="form-select"><option>Select Customer</option></select>
+                    </div>
+                </div>
+                <div class="row align-items-start g-2">
+                    <label class="col-12 col-sm-3 fw-bold text-secondary">Billing Address:</label>
+                    <div class="col-12 col-sm-9">
+                        <textarea asp-for="BillingAddress" class="form-control bg-white shadow-sm" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row align-items-center mb-3 g-2">
+                    <label class="col-12 col-sm-4 fw-bold text-secondary text-sm-end">Payment Terms:</label>
+                    <div class="col-12 col-sm-8">
+                        <select asp-for="PaymentTerms" class="form-select"><option>COD</option></select>
+                    </div>
+                </div>
+                <div class="row align-items-center g-2">
+                    <label class="col-12 col-sm-4 fw-bold text-secondary text-sm-end">Sales Person:</label>
+                    <div class="col-12 col-sm-8">
+                        <select asp-for="SalesRepresentativeId" class="form-select"><option>All</option></select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive border rounded bg-light p-2 mb-3">
+            <table class="table align-middle m-0 bg-white shadow-sm rounded" style="min-width: 700px;">
+                <thead class="table-secondary text-secondary small">
+                    <tr>
+                        <th style="width: 8%;">Qty</th>
+                        <th style="width: 15%;">Item Code</th>
+                        <th style="width: 35%;">Description</th>
+                        <th style="width: 12%;">Unit Price</th>
+                        <th style="width: 10%;">Disc</th>
+                        <th style="width: 10%;">VAT</th>
+                        <th style="width: 10%;">Total</th>
+                    </tr>
+                </thead>
+                <tbody id="quoteItemsBody">
+                    <tr class="quote-item-row">
+                        <td><input type="number" name="QuoteItems[0].Quantity" class="form-control form-control-sm text-center" value="1"></td>
+                        <td><select name="QuoteItems[0].ProductId" class="form-select form-select-sm"><option>Select Product</option></select></td>
+                        <td><input type="text" class="form-control form-control-sm" readonly value=""></td>
+                        <td><input type="text" name="QuoteItems[0].UnitPrice" class="form-control form-control-sm text-end" readonly value="R0.00"></td>
+                        <td><input type="text" name="QuoteItems[0].DiscountPercent" class="form-control form-control-sm text-center" value="0.00"></td>
+                        <td>
+                            <select name="QuoteItems[0].VatCategory" class="form-select form-select-sm">
+                                <option>[NONE]</option>
+                                <option>STANDARD</option>
+                            </select>
+                        </td>
+                        <td><input type="text" class="form-control form-control-sm text-end" readonly value="R0.00"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="p-2">
+                <button type="button" id="addItemBtn" class="btn btn-sm btn-link text-decoration-none text-dark fw-bold p-0"><i class="bi bi-plus-lg me-1"></i>Add Item</button>
+            </div>
+        </div>
+
+        <div class="row justify-content-end text-end g-0 mb-4 fw-bold text-secondary">
+            <div class="col-12 col-md-4 border-top pt-2">
+                <div class="d-flex justify-content-between py-1"><span>Subtotal</span><span>R0.00</span></div>
+                <div class="d-flex justify-content-between py-1 border-top border-dark mt-2 text-dark fs-5"><span>Total</span><span>R0.00</span></div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2 gap-sm-3">
+            <a asp-controller="Quotes" asp-action="Index" class="btn btn-link text-decoration-none text-secondary align-self-center">Cancel</a>
+            <button type="submit" class="btn btn-custom-save">Create Quote</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        let quoteItemIndex = 1;
+
+        document.getElementById('addItemBtn').addEventListener('click', function() {
+            const tbody = document.getElementById('quoteItemsBody');
+            const newRow = tbody.querySelector('.quote-item-row').cloneNode(true);
+
+            newRow.querySelectorAll('input, select').forEach(function(field) {
+                if (field.name) {
+                    field.name = field.name.replace(/QuoteItems\[\d+\]/, `QuoteItems[${quoteItemIndex}]`);
+                }
+                if (field.tagName === 'INPUT') {
+                    if (field.type === 'number') {
+                        field.value = '1';
+                    } else if (field.readOnly) {
+                        field.value = field.classList.contains('text-end') ? 'R0.00' : '';
+                    } else {
+                        field.value = '0.00';
+                    }
+                }
+                if (field.tagName === 'SELECT') {
+                    field.selectedIndex = 0;
+                }
+            });
+
+            tbody.appendChild(newRow);
+            quoteItemIndex++;
+        });
+    </script>
+}
