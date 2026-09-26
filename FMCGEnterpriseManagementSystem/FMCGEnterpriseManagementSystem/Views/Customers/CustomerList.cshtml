@@ -65,23 +65,23 @@
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end shadow rounded-0">
                                         <li>
-                                            <a class="dropdown-item small" asp-controller="Home" asp-action="EditCustomer" asp-route-id="@customer.CustomerID">
+                                            <a class="dropdown-item small" asp-controller="Home" asp-action="EditCustomer" asp-route-id="@customer.CustomerId">
                                                 <i class="bi bi-pencil me-2"></i>Edit
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item small" asp-controller="Home" asp-action="DownloadCustomerPdf" asp-route-id="@customer.CustomerID">
+                                            <a class="dropdown-item small" asp-controller="Home" asp-action="DownloadCustomerPdf" asp-route-id="@customer.CustomerId">
                                                 <i class="bi bi-file-earmark-arrow-down me-2"></i>Download PDF
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item small" asp-controller="Home" asp-action="ViewCustomerPdf" asp-route-id="@customer.CustomerID" target="_blank">
+                                            <a class="dropdown-item small" asp-controller="Home" asp-action="ViewCustomerPdf" asp-route-id="@customer.CustomerId" target="_blank">
                                                 <i class="bi bi-file-earmark-pdf me-2"></i>View PDF
                                             </a>
                                         </li>
                                         <li><hr class="dropdown-divider"></li>
                                         <li>
-                                            <a class="dropdown-item small text-danger" asp-controller="Home" asp-action="DeleteCustomer" asp-route-id="@customer.CustomerID">
+                                            <a class="dropdown-item small text-danger" asp-controller="Home" asp-action="DeleteCustomer" asp-route-id="@customer.CustomerId">
                                                 <i class="bi bi-trash me-2"></i>Delete
                                             </a>
                                         </li>
