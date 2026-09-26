@@ -4,8 +4,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Exclusive Distributors</title>
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
     <style>
             :root {
                 --sidebar-bg: #357383;
@@ -33,7 +36,8 @@
                 }
             }
 
-            .sidebar .nav-link, .mobile-dropdown .nav-link {
+            .sidebar .nav-link,
+            .mobile-dropdown .nav-link {
                 color: rgba(255, 255, 255, 0.85);
                 font-weight: 600;
                 font-size: 1.1rem;
@@ -42,8 +46,10 @@
                 transition: all 0.2s ease;
             }
 
-                .sidebar .nav-link:hover, .sidebar .nav-link.active,
-                .mobile-dropdown .nav-link:hover, .mobile-dropdown .nav-link.active {
+                .sidebar .nav-link:hover,
+                .sidebar .nav-link.active,
+                .mobile-dropdown .nav-link:hover,
+                .mobile-dropdown .nav-link.active {
                     color: #ffffff;
                     background-color: rgba(255, 255, 255, 0.1);
                     border-left: 4px solid #ffffff;
@@ -122,14 +128,16 @@
                 margin-bottom: 4px;
             }
 
-            .form-control, .form-select {
+            .form-control,
+            .form-select {
                 border-radius: 6px;
                 border: 1px solid #ced4da;
                 padding: 8px 12px;
                 background-color: #f8f9fa;
             }
 
-                .form-control:focus, .form-select:focus {
+                .form-control:focus,
+                .form-select:focus {
                     background-color: #fff;
                     border-color: #357383;
                     box-shadow: 0 0 0 0.25rem rgba(53, 115, 131, 0.25);
@@ -170,7 +178,8 @@
                 width: 100%;
             }
 
-                .custom-data-table th, .custom-data-table td {
+                .custom-data-table th,
+                .custom-data-table td {
                     background: white;
                     padding: 10px 15px;
                     text-align: center;
@@ -197,40 +206,42 @@
                 }
     </style>
 </head>
+
 <body>
 
     <!-- MOBILE NAVIGATION (COLLAPSED) -->
     <div class="d-md-none text-white" style="background-color: var(--sidebar-bg);">
         <div class="d-flex justify-content-between align-items-center px-3 py-2">
+
             <div class="d-flex align-items-center gap-2">
-                <img src="~/images/logo.png" alt="Logo" style="width: 32px; height: 32px; border-radius: 50%; object-fit: contain; background: white; padding: 2px;" />
+                <img src="~/images/logo.png"
+                     alt="Logo"
+                     style="width:32px;
+                height:32px;
+                border-radius:50%;
+                object-fit:contain;
+                background:white;
+                padding:2px;" />
+
                 <span class="fw-bold fs-5">Menu</span>
             </div>
 
-            <button class="btn text-white p-1 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu">
+            <button class="btn text-white p-1 border-0"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#mobileMenu">
+
                 <i class="bi bi-list fs-1"></i>
             </button>
+
         </div>
 
+
         <div class="collapse mobile-dropdown" id="mobileMenu">
+
             <ul class="nav flex-column text-center pb-3">
 
-                <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Home" asp-action="Dashboard">Dashboard</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Home" asp-action="CustomerList">Customers</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Home" asp-action="SupplierList">Suppliers</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Employees" asp-action="Index">Employees</a>
-                </li>
-
+                <!-- ALL AUTHENTICATED USERS -->
                 <li class="nav-item">
                     <a class="nav-link py-2" asp-controller="SalesRepresentatives" asp-action="Index">Sales Representatives</a>
                 </li>
@@ -238,11 +249,137 @@
                 <!-- ADDED: Products Mobile Link -->
                 <li class="nav-item">
                     <a class="nav-link py-2" asp-controller="Home" asp-action="Products">Products</a>
+                    <a class="nav-link py-2"
+                       asp-controller="Home"
+                       asp-action="Dashboard">
+                        Dashboard
+                    </a>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Home" asp-action="InventoryList">Inventory</a>
-                </li>
+
+                @if (canUseSales)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link py-2"
+                           asp-controller="Home"
+                           asp-action="CustomerList">
+                            Customers
+                        </a>
+                    </li>
+                }
+
+
+                @if (canUseOperations)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link py-2"
+                           asp-controller="Home"
+                           asp-action="SupplierList">
+                            Suppliers
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link py-2"
+                           asp-controller="Products"
+                           asp-action="Index">
+                            Products
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link py-2"
+                           asp-controller="Inventory"
+                           asp-action="Index">
+                            Inventory
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link py-2"
+                           asp-controller="Forecasting"
+                           asp-action="Index">
+                            Forecasting
+                        </a>
+                    </li>
+                }
+
+
+                @if (isAdministrator)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link py-2"
+                           asp-controller="Employees"
+                           asp-action="Index">
+                            Employees
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link py-2"
+                           asp-controller="SalesRepresentatives"
+                           asp-action="Index">
+                            Sales Representatives
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link py-2"
+                           asp-controller="UserAccounts"
+                           asp-action="Index">
+                            User Accounts
+                        </a>
+                    </li>
+                }
+
+
+                @if (canUseSales)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link py-2"
+                           asp-controller="Quotes"
+                           asp-action="Index">
+                            Quotes
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link py-2"
+                           asp-controller="Invoices"
+                           asp-action="Index">
+                            Invoices
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link py-2"
+                           asp-controller="Payments"
+                           asp-action="Index">
+                            Payments
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link py-2"
+                           asp-controller="Notifications"
+                           asp-action="Index">
+                            Notifications
+                        </a>
+                    </li>
+                }
+
+
+                @if (isAdministrator)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link py-2"
+                           asp-controller="Reports"
+                           asp-action="Index">
+                            Reports
+                        </a>
+                    </li>
+                }
+
 
                 <!-- ADDED: Forecasting Mobile Link -->
                 <li class="nav-item">
@@ -250,31 +387,22 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Home" asp-action="InvoiceList">Invoices</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Payments" asp-action="Index">Payments</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Quotes" asp-action="Index">Quotes</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Reports" asp-action="Index">Reports</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Home" asp-action="Settings">Settings</a>
+                    <a class="nav-link py-2"
+                       asp-controller="Home"
+                       asp-action="Settings">
+                        Settings
+                    </a>
                 </li>
 
             </ul>
+
         </div>
+
     </div>
 
     <!-- MAIN DESKTOP LAYOUT -->
     <div class="container-fluid p-0">
+
         <div class="row g-0">
 
             <!-- SIDEBAR -->
@@ -283,27 +411,15 @@
                 <div>
 
                     <div class="px-3 mb-4">
-                        <h4 class="text-center font-weight-bold tracking-wide py-2 m-0">Exclusive</h4>
+                        <h4 class="text-center font-weight-bold tracking-wide py-2 m-0">
+                            Exclusive
+                        </h4>
                     </div>
+
 
                     <ul class="nav flex-column justify-content-start">
 
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="Dashboard">Dashboard</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="CustomerList">Customers</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="SupplierList">Suppliers</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Employees" asp-action="Index">Employees</a>
-                        </li>
-
+                        <!-- ALL AUTHENTICATED USERS -->
                         <li class="nav-item">
                             <a class="nav-link px-3 py-2" asp-controller="SalesRepresentatives" asp-action="Index">Sales Representatives</a>
                         </li>
@@ -311,11 +427,13 @@
                         <!-- ADDED: Products Link -->
                         <li class="nav-item">
                             <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="Products">Products</a>
+                            <a class="nav-link px-3 py-2"
+                               asp-controller="Home"
+                               asp-action="Dashboard">
+                                Dashboard
+                            </a>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="InventoryList">Inventory</a>
-                        </li>
 
                         <!-- ADDED: Forecasting Link -->
                         <li class="nav-item">
@@ -325,43 +443,183 @@
                         <li class="nav-item">
                             <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="InvoiceList">Invoices</a>
                         </li>
+                        <!-- SALES FUNCTIONS -->
+                        @if (canUseSales)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link px-3 py-2"
+                                   asp-controller="Home"
+                                   asp-action="CustomerList">
+                                    Customers
+                                </a>
+                            </li>
+                        }
 
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Payments" asp-action="Index">Payments</a>
-                        </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Quotes" asp-action="Index">Quotes</a>
-                        </li>
+                        <!-- OPERATIONAL FUNCTIONS -->
+                        @if (canUseOperations)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link px-3 py-2"
+                                   asp-controller="Home"
+                                   asp-action="SupplierList">
+                                    Suppliers
+                                </a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Reports" asp-action="Index">Reports</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link px-3 py-2"
+                                   asp-controller="Products"
+                                   asp-action="Index">
+                                    Products
+                                </a>
+                            </li>
 
+                            <li class="nav-item">
+                                <a class="nav-link px-3 py-2"
+                                   asp-controller="Inventory"
+                                   asp-action="Index">
+                                    Inventory
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link px-3 py-2"
+                                   asp-controller="Forecasting"
+                                   asp-action="Index">
+                                    Forecasting
+                                </a>
+                            </li>
+                        }
+
+
+                        <!-- ADMINISTRATION -->
+                        @if (isAdministrator)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link px-3 py-2"
+                                   asp-controller="Employees"
+                                   asp-action="Index">
+                                    Employees
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link px-3 py-2"
+                                   asp-controller="SalesRepresentatives"
+                                   asp-action="Index">
+                                    Sales Representatives
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link px-3 py-2"
+                                   asp-controller="UserAccounts"
+                                   asp-action="Index">
+                                    User Accounts
+                                </a>
+                            </li>
+                        }
+
+
+                        <!-- SALES TRANSACTIONS -->
+                        @if (canUseSales)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link px-3 py-2"
+                                   asp-controller="Quotes"
+                                   asp-action="Index">
+                                    Quotes
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link px-3 py-2"
+                                   asp-controller="Invoices"
+                                   asp-action="Index">
+                                    Invoices
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link px-3 py-2"
+                                   asp-controller="Payments"
+                                   asp-action="Index">
+                                    Payments
+                                </a>
+                            </li>
+                        }
+
+
+                        <!-- ADMIN REPORTING -->
+                        @if (isAdministrator)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link px-3 py-2"
+                                   asp-controller="Reports"
+                                   asp-action="Index">
+                                    Reports
+                                </a>
+                            </li>
+                        }
+
+
+                        <!-- ALL AUTHENTICATED USERS -->
                         <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="Settings">Settings</a>
+                            <a class="nav-link px-3 py-2"
+                               asp-controller="Home"
+                               asp-action="Settings">
+                                Settings
+                            </a>
                         </li>
 
                     </ul>
+
                 </div>
 
+
                 <div class="text-center sidebar-logo-wrapper">
+
                     <div class="brand-logo-container">
-                        <img src="~/images/logo.png" alt="Exclusive Distributors Logo" />
+
+                        <img src="~/images/logo.png"
+                             alt="Exclusive Distributors Logo" />
+
                     </div>
+
                 </div>
 
             </div>
 
-            <!-- MAIN CONTENT AREA -->
+
+            <!-- =================================================
+                 MAIN CONTENT
+                 ================================================= -->
+
             <div class="col-12 col-md-9 col-lg-10 d-flex flex-column">
 
                 <header>
-                    <nav class="navbar navbar-expand navbar-light top-navbar d-flex justify-content-between align-items-center">
 
-                        <span class="navbar-brand">Exclusive Distributors</span>
+                    <nav class="navbar navbar-expand navbar-light top-navbar
+                        d-flex justify-content-between align-items-center">
 
-                        <div class="d-flex align-items-center gap-3 gap-md-4 text-white">
+                        <span class="navbar-brand">
+                            Exclusive Distributors
+                        </span>
+
+
+                        <div class="d-flex align-items-center
+                            gap-3 gap-md-4 text-white">
+
+
+                            <!-- NOTIFICATIONS -->
+                            <a asp-controller="Notifications"
+                               asp-action="Index"
+                               class="text-white text-decoration-none"
+                               title="Notifications">
+
+                                <i class="bi bi-bell fs-4"
+                                   style="cursor:pointer;"></i>
 
                             <a asp-controller="Home" asp-action="Notifications" class="text-white text-decoration-none">
                                 <i class="bi bi-bell fs-4" style="cursor: pointer;"></i>
@@ -375,24 +633,31 @@
                                 @Html.AntiForgeryToken()
                                 <button type="submit" class="btn p-0 border-0 text-white" title="Logout">
                                     <i class="bi bi-box-arrow-right fs-4"></i>
+
                                 </button>
                             </form>
 
                         </div>
 
                     </nav>
+
                 </header>
+
 
                 <div class="container-fluid px-2 px-md-4">
                     <main role="main" class="pb-3">
+
                         @RenderBody()
+
                     </main>
                 </div>
 
             </div>
 
         </div>
+
     </div>
+
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
