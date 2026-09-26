@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using FMCGEnterpriseManagementSystem.Repositories.Interfaces; 
+using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;
 
@@ -21,21 +21,26 @@ namespace FMCGEnterpriseManagementSystem.Services
             var products = (await _productRepository.GetAllAsync()).ToList();
 
             int totalProducts = products.Count;
-            int lowStockItems = products.Count(p => p.QuantityInStock > 0 && p.QuantityInStock <= p.ReorderLevel);
-            int outOfStockItems = products.Count(p => p.QuantityInStock <= 0);
 
-            decimal totalInventoryValue = products.Sum(p => p.QuantityInStock * p.UnitPrice);
+            // Access stock quantities and reorder levels safely through the Inventory navigation property
+            int lowStockItems = products.Count(p => p.Inventory != null && p.Inventory.QuantityInStock > 0 && p.Inventory.QuantityInStock <= p.Inventory.ReorderLevel);
+            int outOfStockItems = products.Count(p => p.Inventory == null || p.Inventory.QuantityInStock <= 0);
 
+            // Calculate total inventory value using SellingPrice and Inventory QuantityInStock
+            decimal totalInventoryValue = products.Sum(p => (p.Inventory?.QuantityInStock ?? 0) * p.SellingPrice);
+
+            // Calculate restock budget using CostIncVat
             decimal projectedRestockBudget = products
-                .Where(p => p.QuantityInStock <= p.ReorderLevel)
-                .Sum(p => (Math.Max(p.ReorderLevel * 2, 10) - p.QuantityInStock) * p.CostPrice);
+                .Where(p => p.Inventory != null && p.Inventory.QuantityInStock <= p.Inventory.ReorderLevel)
+                .Sum(p => (Math.Max(p.Inventory.ReorderLevel * 2, 10) - p.Inventory.QuantityInStock) * p.CostIncVat);
 
+            // Group by Category property on Product
             var categoryGroupings = products
-                .GroupBy(p => p.Category != null ? p.Category.CategoryName : "Unassigned")
+                .GroupBy(p => string.IsNullOrEmpty(p.Category) ? "Unassigned" : p.Category)
                 .Select(g => new
                 {
                     CategoryName = g.Key,
-                    TotalQuantity = g.Sum(p => p.QuantityInStock)
+                    TotalQuantity = g.Sum(p => p.Inventory?.QuantityInStock ?? 0)
                 })
                 .OrderByDescending(g => g.TotalQuantity)
                 .ToList();
@@ -44,16 +49,16 @@ namespace FMCGEnterpriseManagementSystem.Services
             int[] categoryQuantities = categoryGroupings.Select(g => g.TotalQuantity).ToArray();
 
             var criticalAlerts = products
-                .Where(p => p.QuantityInStock <= p.ReorderLevel)
-                .OrderBy(p => p.QuantityInStock)
+                .Where(p => p.Inventory != null && p.Inventory.QuantityInStock <= p.Inventory.ReorderLevel)
+                .OrderBy(p => p.Inventory.QuantityInStock)
                 .Take(10)
                 .Select(p => new CriticalStockAlert
                 {
-                    ProductCode = p.ProductCode ?? $"ED-{p.ProductID:D4}",
+                    ProductCode = p.ProductCode ?? $"ED-{p.ProductId:D4}",
                     ProductName = p.ProductName,
-                    CurrentStock = p.QuantityInStock,
-                    ReorderLevel = p.ReorderLevel,
-                    HealthStatus = p.QuantityInStock == 0 ? "Critical" : "Low"
+                    CurrentStock = p.Inventory.QuantityInStock,
+                    ReorderLevel = p.Inventory.ReorderLevel,
+                    HealthStatus = p.Inventory.QuantityInStock == 0 ? "Critical" : "Low"
                 })
                 .ToList();
 
