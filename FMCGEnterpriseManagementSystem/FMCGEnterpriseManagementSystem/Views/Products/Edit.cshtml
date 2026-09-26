@@ -1,0 +1,42 @@
+﻿@model FMCGEnterpriseManagementSystem.ViewModels.ProductViewModel
+
+@{
+    ViewData["Title"] = "Edit Product";
+}
+
+<div class="content-card">
+    <h2>Edit Product</h2>
+    <hr />
+
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="ProductId" />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="mb-3">
+            <label asp-for="ProductName" class="form-label"></label>
+            <input asp-for="ProductName" class="form-control" />
+            <span asp-validation-for="ProductName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="ProductCode" class="form-label"></label>
+            <input asp-for="ProductCode" class="form-control" />
+            <span asp-validation-for="ProductCode" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Category" class="form-label"></label>
+            <input asp-for="Category" class="form-control" />
+            <span asp-validation-for="Category" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="SellingPrice" class="form-label"></label>
+            <input asp-for="SellingPrice" class="form-control" />
+            <span asp-validation-for="SellingPrice" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-action-primary">Save Changes</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
