@@ -20,16 +20,22 @@ namespace FMCGEnterpriseManagementSystem.Repositories
         public async Task<IEnumerable<Product>> GetAllAsync()
         {
             return await _context.Products
-                .Include(p => p.Inventory)   
-                .Include(p => p.Supplier)    
+                .Include(p => p.Supplier)
                 .ToListAsync();
         }
 
         public async Task<Product?> GetByIdAsync(int id)
         {
             return await _context.Products
-                .Include(p => p.Category)
+                .Include(p => p.Supplier)
                 .FirstOrDefaultAsync(p => p.ProductId == id);
+        }
+
+        public async Task<Product?> GetByCodeAsync(string productCode)
+        {
+            return await _context.Products
+                .Include(p => p.Supplier)
+                .FirstOrDefaultAsync(p => p.ProductCode == productCode);
         }
 
         public async Task AddAsync(Product product)
