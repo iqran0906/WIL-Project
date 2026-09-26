@@ -4,345 +4,639 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Exclusive Distributors</title>
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
     <style>
-        :root {
-            --sidebar-bg: #357383;
-            --main-bg: #1c323d;
-            --card-bg: rgba(255, 255, 255, 0.95);
-            --text-dark: #212529;
-        }
+            :root {
+                --sidebar-bg: #357383;
+                --main-bg: #1c323d;
+                --card-bg: rgba(255, 255, 255, 0.95);
+                --text-dark: #212529;
+            }
 
-        body {
-            background-color: var(--main-bg);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow-x: hidden;
-        }
+            body {
+                background-color: var(--main-bg);
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                overflow-x: hidden;
+            }
 
-        .sidebar {
-            background-color: var(--sidebar-bg);
-            min-height: auto;
-            color: white;
-            padding-top: 20px;
-        }
-
-        @@media (min-width: 768px) {
             .sidebar {
-                min-height: 100vh;
-            }
-        }
-
-        .sidebar .nav-link, .mobile-dropdown .nav-link {
-            color: rgba(255, 255, 255, 0.85);
-            font-weight: 600;
-            font-size: 1.1rem;
-            padding: 12px 20px;
-            border-left: 4px solid transparent;
-            transition: all 0.2s ease;
-        }
-
-            .sidebar .nav-link:hover, .sidebar .nav-link.active,
-            .mobile-dropdown .nav-link:hover, .mobile-dropdown .nav-link.active {
-                color: #ffffff;
-                background-color: rgba(255, 255, 255, 0.1);
-                border-left: 4px solid #ffffff;
-                text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-            }
-
-        .brand-logo-container {
-            width: 80px;
-            height: 80px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto;
-            overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            padding: 5px;
-        }
-
-            .brand-logo-container img {
-                width: 100%;
-                height: 100%;
-                object-fit: contain;
-                border-radius: 50%;
-            }
-
-        .sidebar-logo-wrapper {
-            padding-bottom: 30px;
-            padding-top: 30px;
-            margin-top: auto;
-        }
-
-        .top-navbar {
-            background-color: transparent !important;
-            padding: 15px 15px;
-        }
-
-        @@media (min-width: 768px) {
-            .top-navbar {
-                padding: 15px 30px;
-            }
-        }
-
-        .top-navbar .navbar-brand {
-            color: white !important;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        @@media (min-width: 768px) {
-            .top-navbar .navbar-brand {
-                font-size: 1.5rem;
-            }
-        }
-
-        .content-card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-            min-height: 80vh;
-            margin-bottom: 30px;
-        }
-
-        @@media (min-width: 768px) {
-            .content-card {
-                padding: 30px;
-            }
-        }
-
-        .form-label {
-            font-weight: 500;
-            color: #495057;
-            font-size: 0.9rem;
-            margin-bottom: 4px;
-        }
-
-        .form-control, .form-select {
-            border-radius: 6px;
-            border: 1px solid #ced4da;
-            padding: 8px 12px;
-            background-color: #f8f9fa;
-        }
-
-            .form-control:focus, .form-select:focus {
-                background-color: #fff;
-                border-color: #357383;
-                box-shadow: 0 0 0 0.25rem rgba(53, 115, 131, 0.25);
-            }
-
-        .btn-custom-save {
-            background-color: #212529;
-            color: white;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 6px;
-            font-weight: 500;
-        }
-
-            .btn-custom-save:hover {
-                background-color: #000000;
+                background-color: var(--sidebar-bg);
+                min-height: auto;
                 color: white;
+                padding-top: 20px;
             }
 
-        .btn-action-primary {
-            background-color: #357383;
-            color: white;
-            font-weight: 600;
-            padding: 8px 24px;
-            border-radius: 4px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
-        }
-
-            .btn-action-primary:hover {
-                background-color: #2b5e6b;
-                color: white;
+            @@media (min-width: 768px) {
+                .sidebar {
+                    min-height: 100vh;
+                }
             }
 
-        .custom-data-table {
-            border-collapse: separate;
-            border-spacing: 0 8px;
-            width: 100%;
-        }
+            .sidebar .nav-link,
+            .mobile-dropdown .nav-link {
+                color: rgba(255, 255, 255, 0.85);
+                font-weight: 600;
+                font-size: 1.1rem;
+                padding: 12px 20px;
+                border-left: 4px solid transparent;
+                transition: all 0.2s ease;
+            }
 
-            .custom-data-table th, .custom-data-table td {
+                .sidebar .nav-link:hover,
+                .sidebar .nav-link.active,
+                .mobile-dropdown .nav-link:hover,
+                .mobile-dropdown .nav-link.active {
+                    color: #ffffff;
+                    background-color: rgba(255, 255, 255, 0.1);
+                    border-left: 4px solid #ffffff;
+                    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+                }
+
+            .brand-logo-container {
+                width: 80px;
+                height: 80px;
                 background: white;
-                padding: 10px 15px;
-                text-align: center;
-                border: 1px solid #c8d6e5;
-                color: #212529;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto;
+                overflow: hidden;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+                padding: 5px;
+            }
+
+                .brand-logo-container img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain;
+                    border-radius: 50%;
+                }
+
+            .sidebar-logo-wrapper {
+                padding-bottom: 30px;
+                padding-top: 30px;
+                margin-top: auto;
+            }
+
+            .top-navbar {
+                background-color: transparent !important;
+                padding: 15px 15px;
+            }
+
+            @@media (min-width: 768px) {
+                .top-navbar {
+                    padding: 15px 30px;
+                }
+            }
+
+            .top-navbar .navbar-brand {
+                color: white !important;
+                font-weight: bold;
+                font-size: 1.2rem;
+            }
+
+            @@media (min-width: 768px) {
+                .top-navbar .navbar-brand {
+                    font-size: 1.5rem;
+                }
+            }
+
+            .content-card {
+                background: var(--card-bg);
+                border-radius: 12px;
+                padding: 20px;
+                box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+                min-height: 80vh;
+                margin-bottom: 30px;
+            }
+
+            @@media (min-width: 768px) {
+                .content-card {
+                    padding: 30px;
+                }
+            }
+
+            .form-label {
+                font-weight: 500;
+                color: #495057;
+                font-size: 0.9rem;
+                margin-bottom: 4px;
+            }
+
+            .form-control,
+            .form-select {
+                border-radius: 6px;
+                border: 1px solid #ced4da;
+                padding: 8px 12px;
+                background-color: #f8f9fa;
+            }
+
+                .form-control:focus,
+                .form-select:focus {
+                    background-color: #fff;
+                    border-color: #357383;
+                    box-shadow: 0 0 0 0.25rem rgba(53, 115, 131, 0.25);
+                }
+
+            .btn-custom-save {
+                background-color: #212529;
+                color: white;
+                border: none;
+                padding: 10px 24px;
+                border-radius: 6px;
                 font-weight: 500;
             }
 
-            .custom-data-table th {
+                .btn-custom-save:hover {
+                    background-color: #000000;
+                    color: white;
+                }
+
+            .btn-action-primary {
+                background-color: #357383;
+                color: white;
                 font-weight: 600;
-                background: #ffffff;
+                padding: 8px 24px;
+                border-radius: 4px;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
             }
 
-        .search-field {
-            max-width: 250px;
-            background-color: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            padding-right: 30px;
-        }
+                .btn-action-primary:hover {
+                    background-color: #2b5e6b;
+                    color: white;
+                }
 
-            .search-field::placeholder {
-                color: rgba(255, 255, 255, 0.6);
+            .custom-data-table {
+                border-collapse: separate;
+                border-spacing: 0 8px;
+                width: 100%;
             }
+
+                .custom-data-table th,
+                .custom-data-table td {
+                    background: white;
+                    padding: 10px 15px;
+                    text-align: center;
+                    border: 1px solid #c8d6e5;
+                    color: #212529;
+                    font-weight: 500;
+                }
+
+                .custom-data-table th {
+                    font-weight: 600;
+                    background: #ffffff;
+                }
+
+            .search-field {
+                max-width: 250px;
+                background-color: rgba(255, 255, 255, 0.15);
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                color: white;
+                padding-right: 30px;
+            }
+
+                .search-field::placeholder {
+                    color: rgba(255, 255, 255, 0.6);
+                }
     </style>
 </head>
+
 <body>
 
-    <div class="d-md-none text-white" style="background-color: var(--sidebar-bg);">
+    @{
+        var isAdministrator = User.IsInRole("Administrator");
+        var isEmployee = User.IsInRole("Employee");
+        var isSalesRepresentative = User.IsInRole("SalesRepresentative");
+
+        var canUseOperations = isAdministrator || isEmployee;
+        var canUseSales = isAdministrator || isEmployee || isSalesRepresentative;
+    }
+
+
+    <!-- =====================================================
+         MOBILE NAVIGATION
+         ===================================================== -->
+
+    <div class="d-md-none text-white"
+         style="background-color: var(--sidebar-bg);">
+
         <div class="d-flex justify-content-between align-items-center px-3 py-2">
+
             <div class="d-flex align-items-center gap-2">
-                <img src="~/images/logo.png" alt="Logo" style="width: 32px; height: 32px; border-radius: 50%; object-fit: contain; background: white; padding: 2px;" />
+                <img src="~/images/logo.png"
+                     alt="Logo"
+                     style="width:32px;
+                height:32px;
+                border-radius:50%;
+                object-fit:contain;
+                background:white;
+                padding:2px;" />
+
                 <span class="fw-bold fs-5">Menu</span>
             </div>
 
-            <button class="btn text-white p-1 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu">
+            <button class="btn text-white p-1 border-0"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#mobileMenu">
+
                 <i class="bi bi-list fs-1"></i>
             </button>
+
         </div>
 
+
         <div class="collapse mobile-dropdown" id="mobileMenu">
+
             <ul class="nav flex-column text-center pb-3">
 
+                <!-- ALL AUTHENTICATED USERS -->
                 <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Home" asp-action="Dashboard">Dashboard</a>
+                    <a class="nav-link py-2"
+                       asp-controller="Home"
+                       asp-action="Dashboard">
+                        Dashboard
+                    </a>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Home" asp-action="CustomerList">Customers</a>
-                </li>
+
+                @if (canUseSales)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link py-2"
+                           asp-controller="Home"
+                           asp-action="CustomerList">
+                            Customers
+                        </a>
+                    </li>
+                }
+
+
+                @if (canUseOperations)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link py-2"
+                           asp-controller="Home"
+                           asp-action="SupplierList">
+                            Suppliers
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link py-2"
+                           asp-controller="Products"
+                           asp-action="Index">
+                            Products
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link py-2"
+                           asp-controller="Inventory"
+                           asp-action="Index">
+                            Inventory
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link py-2"
+                           asp-controller="Forecasting"
+                           asp-action="Index">
+                            Forecasting
+                        </a>
+                    </li>
+                }
+
+
+                @if (isAdministrator)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link py-2"
+                           asp-controller="Employees"
+                           asp-action="Index">
+                            Employees
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link py-2"
+                           asp-controller="SalesRepresentatives"
+                           asp-action="Index">
+                            Sales Representatives
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link py-2"
+                           asp-controller="UserAccounts"
+                           asp-action="Index">
+                            User Accounts
+                        </a>
+                    </li>
+                }
+
+
+                @if (canUseSales)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link py-2"
+                           asp-controller="Quotes"
+                           asp-action="Index">
+                            Quotes
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link py-2"
+                           asp-controller="Invoices"
+                           asp-action="Index">
+                            Invoices
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link py-2"
+                           asp-controller="Payments"
+                           asp-action="Index">
+                            Payments
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link py-2"
+                           asp-controller="Notifications"
+                           asp-action="Index">
+                            Notifications
+                        </a>
+                    </li>
+                }
+
+
+                @if (isAdministrator)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link py-2"
+                           asp-controller="Reports"
+                           asp-action="Index">
+                            Reports
+                        </a>
+                    </li>
+                }
+
 
                 <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Home" asp-action="SupplierList">Suppliers</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Employees" asp-action="Index">Employees</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Home" asp-action="InventoryList">Inventory</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Home" asp-action="InvoiceList">Invoices</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Payments" asp-action="Index">Payments</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Quotes" asp-action="Index">Quotes</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Reports"asp-action="Index">Reports</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Home" asp-action="Settings">Settings</a>
+                    <a class="nav-link py-2"
+                       asp-controller="Home"
+                       asp-action="Settings">
+                        Settings
+                    </a>
                 </li>
 
             </ul>
+
         </div>
+
     </div>
 
+
+    <!-- =====================================================
+         DESKTOP LAYOUT
+         ===================================================== -->
+
     <div class="container-fluid p-0">
+
         <div class="row g-0">
 
-            <div class="col-md-3 col-lg-2 sidebar d-none d-md-flex flex-column justify-content-between">
+
+            <!-- =================================================
+                 DESKTOP SIDEBAR
+                 ================================================= -->
+
+            <div class="col-md-3 col-lg-2 sidebar
+                d-none d-md-flex
+                flex-column justify-content-between">
 
                 <div>
 
                     <div class="px-3 mb-4">
-                        <h4 class="text-center font-weight-bold tracking-wide py-2 m-0">Exclusive</h4>
+                        <h4 class="text-center font-weight-bold tracking-wide py-2 m-0">
+                            Exclusive
+                        </h4>
                     </div>
+
 
                     <ul class="nav flex-column justify-content-start">
 
+                        <!-- ALL AUTHENTICATED USERS -->
                         <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="Dashboard">Dashboard</a>
+                            <a class="nav-link px-3 py-2"
+                               asp-controller="Home"
+                               asp-action="Dashboard">
+                                Dashboard
+                            </a>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="CustomerList">Customers</a>
-                        </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="SupplierList">Suppliers</a>
-                        </li>
+                        <!-- SALES FUNCTIONS -->
+                        @if (canUseSales)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link px-3 py-2"
+                                   asp-controller="Home"
+                                   asp-action="CustomerList">
+                                    Customers
+                                </a>
+                            </li>
+                        }
 
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Employees" asp-action="Index">Employees</a>
-                        </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="InventoryList">Inventory</a>
-                        </li>
+                        <!-- OPERATIONAL FUNCTIONS -->
+                        @if (canUseOperations)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link px-3 py-2"
+                                   asp-controller="Home"
+                                   asp-action="SupplierList">
+                                    Suppliers
+                                </a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="InvoiceList">Invoices</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link px-3 py-2"
+                                   asp-controller="Products"
+                                   asp-action="Index">
+                                    Products
+                                </a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Payments" asp-action="Index">Payments</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link px-3 py-2"
+                                   asp-controller="Inventory"
+                                   asp-action="Index">
+                                    Inventory
+                                </a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Quotes" asp-action="Index">Quotes</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link px-3 py-2"
+                                   asp-controller="Forecasting"
+                                   asp-action="Index">
+                                    Forecasting
+                                </a>
+                            </li>
+                        }
 
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Reports" asp-action="Index">Reports</a>
-                        </li>
 
+                        <!-- ADMINISTRATION -->
+                        @if (isAdministrator)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link px-3 py-2"
+                                   asp-controller="Employees"
+                                   asp-action="Index">
+                                    Employees
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link px-3 py-2"
+                                   asp-controller="SalesRepresentatives"
+                                   asp-action="Index">
+                                    Sales Representatives
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link px-3 py-2"
+                                   asp-controller="UserAccounts"
+                                   asp-action="Index">
+                                    User Accounts
+                                </a>
+                            </li>
+                        }
+
+
+                        <!-- SALES TRANSACTIONS -->
+                        @if (canUseSales)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link px-3 py-2"
+                                   asp-controller="Quotes"
+                                   asp-action="Index">
+                                    Quotes
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link px-3 py-2"
+                                   asp-controller="Invoices"
+                                   asp-action="Index">
+                                    Invoices
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link px-3 py-2"
+                                   asp-controller="Payments"
+                                   asp-action="Index">
+                                    Payments
+                                </a>
+                            </li>
+                        }
+
+
+                        <!-- ADMIN REPORTING -->
+                        @if (isAdministrator)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link px-3 py-2"
+                                   asp-controller="Reports"
+                                   asp-action="Index">
+                                    Reports
+                                </a>
+                            </li>
+                        }
+
+
+                        <!-- ALL AUTHENTICATED USERS -->
                         <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="Settings">Settings</a>
+                            <a class="nav-link px-3 py-2"
+                               asp-controller="Home"
+                               asp-action="Settings">
+                                Settings
+                            </a>
                         </li>
 
                     </ul>
+
                 </div>
 
+
                 <div class="text-center sidebar-logo-wrapper">
+
                     <div class="brand-logo-container">
-                        <img src="~/images/logo.png" alt="Exclusive Distributors Logo" />
+
+                        <img src="~/images/logo.png"
+                             alt="Exclusive Distributors Logo" />
+
                     </div>
+
                 </div>
 
             </div>
 
+
+            <!-- =================================================
+                 MAIN CONTENT
+                 ================================================= -->
+
             <div class="col-12 col-md-9 col-lg-10 d-flex flex-column">
 
                 <header>
-                    <nav class="navbar navbar-expand navbar-light top-navbar d-flex justify-content-between align-items-center">
 
-                        <span class="navbar-brand">Exclusive Distributors</span>
+                    <nav class="navbar navbar-expand navbar-light top-navbar
+                        d-flex justify-content-between align-items-center">
 
-                        <div class="d-flex align-items-center gap-3 gap-md-4 text-white">
+                        <span class="navbar-brand">
+                            Exclusive Distributors
+                        </span>
 
-                            <a asp-controller="Home"
-                               asp-action="Notifications"
-                               class="text-white text-decoration-none">
-                                <i class="bi bi-bell fs-4" style="cursor: pointer;"></i>
+
+                        <div class="d-flex align-items-center
+                            gap-3 gap-md-4 text-white">
+
+
+                            <!-- NOTIFICATIONS -->
+                            <a asp-controller="Notifications"
+                               asp-action="Index"
+                               class="text-white text-decoration-none"
+                               title="Notifications">
+
+                                <i class="bi bi-bell fs-4"
+                                   style="cursor:pointer;"></i>
+
                             </a>
 
+
+                            <!-- USER PROFILE -->
                             <a asp-controller="Home"
                                asp-action="UserProfile"
-                               class="text-white text-decoration-none">
-                                <i class="bi bi-person-circle fs-3" style="cursor: pointer;"></i>
+                               class="text-white text-decoration-none"
+                               title="Profile">
+
+                                <i class="bi bi-person-circle fs-3"
+                                   style="cursor:pointer;"></i>
+
                             </a>
 
+
+                            <!-- LOGOUT -->
                             <form asp-controller="Account"
                                   asp-action="Logout"
                                   method="post"
@@ -353,7 +647,9 @@
                                 <button type="submit"
                                         class="btn p-0 border-0 text-white"
                                         title="Logout">
+
                                     <i class="bi bi-box-arrow-right fs-4"></i>
+
                                 </button>
 
                             </form>
@@ -361,12 +657,16 @@
                         </div>
 
                     </nav>
+
                 </header>
+
 
                 <div class="container-fluid px-2 px-md-4">
 
                     <main role="main" class="pb-3">
+
                         @RenderBody()
+
                     </main>
 
                 </div>
@@ -374,7 +674,9 @@
             </div>
 
         </div>
+
     </div>
+
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

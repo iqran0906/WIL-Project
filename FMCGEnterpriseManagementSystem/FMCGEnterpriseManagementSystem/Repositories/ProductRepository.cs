@@ -1,7 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.Data;
+using Microsoft.EntityFrameworkCore;
+using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace FMCGEnterpriseManagementSystem.Repositories
 {
@@ -21,7 +21,14 @@ namespace FMCGEnterpriseManagementSystem.Repositories
 
         public async Task<Product?> GetByIdAsync(int id)
         {
-            return await _context.Products.FirstOrDefaultAsync(p => p.ProductId == id);
+            return await _context.Products
+                .FirstOrDefaultAsync(p => p.ProductId == id);
+        }
+
+        public async Task<Product?> GetByCodeAsync(string productCode)
+        {
+            return await _context.Products
+                .FirstOrDefaultAsync(p => p.ProductCode == productCode);
         }
 
         public async Task AddAsync(Product product)
@@ -39,6 +46,7 @@ namespace FMCGEnterpriseManagementSystem.Repositories
         public async Task DeleteAsync(int id)
         {
             var product = await GetByIdAsync(id);
+
             if (product != null)
             {
                 _context.Products.Remove(product);

@@ -38,6 +38,26 @@ namespace FMCGEnterpriseManagementSystem.Repositories
                 .FirstOrDefaultAsync(i => i.ProductId == productId);
         }
 
+        public async Task<bool> HasSufficientStockAsync(int productId, int quantity)
+        {
+            var inventory = await GetByProductIdAsync(productId);
+
+            return inventory != null &&
+                   inventory.QuantityOnHand >= quantity;
+        }
+
+        public async Task DeductStockAsync(int productId, int quantity)
+        {
+            var inventory = await GetByProductIdAsync(productId);
+
+            if (inventory != null)
+            {
+                inventory.QuantityOnHand -= quantity;
+                _context.Inventories.Update(inventory);
+                await _context.SaveChangesAsync();
+            }
+        }
+
         public async Task AddAsync(Inventory item)
         {
             await _context.Set<Inventory>().AddAsync(item);
@@ -53,6 +73,7 @@ namespace FMCGEnterpriseManagementSystem.Repositories
         public async Task DeleteAsync(int id)
         {
             var item = await GetByIdAsync(id);
+
             if (item != null)
             {
                 _context.Set<Inventory>().Remove(item);
