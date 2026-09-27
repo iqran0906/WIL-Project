@@ -24,24 +24,45 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [HttpGet]
         public IActionResult AddItem()
         {
-            return View();
+            return View(new InventoryViewModel());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddItem(ProductViewModel model)
+        public async Task<IActionResult> AddItem(InventoryViewModel model)
         {
+            // If validation fails, return the view with current inputs
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            // Uncomment and use your service method to persist the new item
-            // await _inventoryService.AddItemAsync(model);
-
+            await _inventoryService.CreateInventoryItemAsync(model);
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var item = await _inventoryService.GetByIdAsync(id);
+            if (item == null) return NotFound();
+
+            return View(item);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, InventoryViewModel model)
+        {
+            if (id != model.InventoryId) return NotFound();
+
+            if (!ModelState.IsValid) return View(model);
+
+            await _inventoryService.UpdateInventoryItemAsync(model);
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
         public async Task<IActionResult> AdjustStock(int id)
         {
             var item = await _inventoryService.GetByIdAsync(id);
@@ -64,6 +85,23 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             if (!ModelState.IsValid) return View(model);
 
             await _inventoryService.AdjustStockAsync(model);
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var item = await _inventoryService.GetByIdAsync(id);
+            if (item == null) return NotFound();
+
+            return View(item);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            await _inventoryService.DeleteInventoryItemAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }
