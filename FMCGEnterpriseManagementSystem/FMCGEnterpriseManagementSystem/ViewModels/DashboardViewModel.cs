@@ -17,6 +17,9 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
         public string[] CategoryNames { get; set; } = Array.Empty<string>();
         public int[] CategoryQuantities { get; set; } = Array.Empty<int>();
 
+        public string[] MonthlyIncomeLabels { get; set; } = Array.Empty<string>();
+        public decimal[] MonthlyIncomeValues { get; set; } = Array.Empty<decimal>();
+
         public List<CriticalStockAlert> CriticalStockAlerts { get; set; } = new();
     }
 

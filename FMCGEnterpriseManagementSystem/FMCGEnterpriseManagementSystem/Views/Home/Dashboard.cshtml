@@ -73,7 +73,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-        // 1. Sales Per Category Chart (Populated from your DashboardViewModel database calculations)
+        // 1. Sales Per Category Chart (Live Data from Database)
         const categoryCtx = document.getElementById('categoryChart').getContext('2d');
         const categoryNames = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.CategoryNames));
         const categoryQuantities = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.CategoryQuantities));
@@ -101,15 +101,18 @@
             }
         });
 
-        // 2. Income by Month Chart (Trend Line)
+        // 2. Income by Month Chart (Live Data from Database)
         const incomeCtx = document.getElementById('incomeChart').getContext('2d');
+        const incomeLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MonthlyIncomeLabels));
+        const incomeValues = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MonthlyIncomeValues));
+
         new Chart(incomeCtx, {
             type: 'line',
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                labels: incomeLabels.length > 0 ? incomeLabels : ['No Data'],
                 datasets: [{
                     label: 'Income',
-                    data: [12500, 18300, 22000, 19500, 27000, 31200],
+                    data: incomeValues.length > 0 ? incomeValues : [0],
                     borderColor: '#357383',
                     backgroundColor: 'rgba(53, 115, 131, 0.2)',
                     fill: true,
