@@ -209,6 +209,13 @@
 
 <body>
 
+    @{
+        // Defined permission context variables to prevent compilation errors
+        var isAdministrator = User.IsInRole("Admin") || User.IsInRole("Administrator");
+        var canUseOperations = User.IsInRole("Operations") || isAdministrator;
+        var canUseSales = User.IsInRole("Sales") || isAdministrator;
+    }
+
     <!-- MOBILE NAVIGATION (COLLAPSED) -->
     <div class="d-md-none text-white" style="background-color: var(--sidebar-bg);">
         <div class="d-flex justify-content-between align-items-center px-3 py-2">
@@ -246,14 +253,12 @@
                     <a class="nav-link py-2" asp-controller="SalesRepresentatives" asp-action="Index">Sales Representatives</a>
                 </li>
 
-                <!-- ADDED: Products Mobile Link -->
+                <!-- Products Mobile Link -->
                 <li class="nav-item">
                     <a class="nav-link py-2" asp-controller="Home" asp-action="Products">Products</a>
-                    <a class="nav-link py-2"
-                       asp-controller="Home"
-                       asp-action="Dashboard">
-                        Dashboard
-                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link py-2" asp-controller="Home" asp-action="Dashboard">Dashboard</a>
                 </li>
 
 
@@ -380,8 +385,6 @@
                     </li>
                 }
 
-
-                <!-- ADDED: Forecasting Mobile Link -->
                 <li class="nav-item">
                     <a class="nav-link py-2" asp-controller="Forecasting" asp-action="Index">Forecasting</a>
                 </li>
@@ -424,18 +427,13 @@
                             <a class="nav-link px-3 py-2" asp-controller="SalesRepresentatives" asp-action="Index">Sales Representatives</a>
                         </li>
 
-                        <!-- ADDED: Products Link -->
                         <li class="nav-item">
                             <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="Products">Products</a>
-                            <a class="nav-link px-3 py-2"
-                               asp-controller="Home"
-                               asp-action="Dashboard">
-                                Dashboard
-                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="Dashboard">Dashboard</a>
                         </li>
 
-
-                        <!-- ADDED: Forecasting Link -->
                         <li class="nav-item">
                             <a class="nav-link px-3 py-2" asp-controller="Forecasting" asp-action="Index">Forecasting</a>
                         </li>
@@ -443,6 +441,7 @@
                         <li class="nav-item">
                             <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="InvoiceList">Invoices</a>
                         </li>
+
                         <!-- SALES FUNCTIONS -->
                         @if (canUseSales)
                         {
@@ -612,17 +611,12 @@
                             gap-3 gap-md-4 text-white">
 
 
-                            <!-- NOTIFICATIONS -->
+                            <!-- NOTIFICATIONS (Fixed tag helper syntax) -->
                             <a asp-controller="Notifications"
                                asp-action="Index"
                                class="text-white text-decoration-none"
                                title="Notifications">
-
-                                <i class="bi bi-bell fs-4"
-                                   style="cursor:pointer;"></i>
-
-                            <a asp-controller="Home" asp-action="Notifications" class="text-white text-decoration-none">
-                                <i class="bi bi-bell fs-4" style="cursor: pointer;"></i>
+                                <i class="bi bi-bell fs-4" style="cursor:pointer;"></i>
                             </a>
 
                             <a asp-controller="Home" asp-action="UserProfile" class="text-white text-decoration-none">
@@ -633,7 +627,6 @@
                                 @Html.AntiForgeryToken()
                                 <button type="submit" class="btn p-0 border-0 text-white" title="Logout">
                                     <i class="bi bi-box-arrow-right fs-4"></i>
-
                                 </button>
                             </form>
 
@@ -667,3 +660,4 @@
 
 </body>
 </html>
+```[cite: 6]

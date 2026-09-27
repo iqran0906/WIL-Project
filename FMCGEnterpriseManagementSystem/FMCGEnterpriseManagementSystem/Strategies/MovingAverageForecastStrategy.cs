@@ -25,7 +25,7 @@ namespace FMCGEnterpriseManagementSystem.Strategies
             {
                 ProductID = p.ProductId,
                 ProductName = p.ProductName,
-                CurrentStock = p.Inventory?.QuantityInStock ?? 0,
+                CurrentStock = p.Inventory?.QuantityOnHand ?? 0,
                 // Predictive heuristic using the Inventory reorder level
                 PredictedDemand = ((p.Inventory?.ReorderLevel ?? 0) * 1.2m),
                 ForecastPeriod = "Next 30 Days"
