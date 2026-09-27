@@ -1,10 +1,12 @@
 ﻿using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
     // Handles API endpoints for Customer management operations.
+    [Authorize(Roles = "Administrator,Employee,SalesRepresentative")]
     [ApiController]
     [Route("api/[controller]")]
     public class CustomersController : ControllerBase

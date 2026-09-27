@@ -1,9 +1,14 @@
-﻿using FMCGEnterpriseManagementSystem.Models;
+﻿using FMCGEnterpriseManagementSystem.Data;
+using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
+    [Authorize(Roles = "Administrator,Employee,SalesRepresentative")]
     public class QuotesController : Controller
     {
         private readonly IQuoteService _quoteService;
@@ -29,6 +34,24 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             {
                 QuoteDate = DateTime.Today
             };
+
+            ViewBag.PaymentTermsList = new SelectList(new[] { "COD", "7 Days", "14 Days", "21 Days", "28 Days", "30 Days" });
+            ViewBag.ProductList = _context.Products.Where(p => p.IsActive).ToList();
+            ViewBag.SalesRepList = new SelectList(
+           _context.SalesRepresentatives
+               .Include(sr => sr.Employee)
+               .Where(sr => sr.IsActive)
+               .Select(sr => new
+               {
+                   sr.SalesRepresentativeId,
+                   FullName = sr.Employee.FirstName + " " + sr.Employee.LastName
+               })
+               .ToList(),
+           "SalesRepresentativeId",
+           "FullName"
+       );
+
+            ViewBag.CustomerList = _context.Customers.Where(c => c.IsActive).ToList();
             return View(quote);
         }
 
@@ -39,10 +62,49 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         {
             if (!ModelState.IsValid)
             {
+                ViewBag.PaymentTermsList = new SelectList(new[] { "COD", "7 Days", "14 Days", "21 Days", "28 Days", "30 Days" });
+                ViewBag.ProductList = _context.Products.Where(p => p.IsActive).ToList();
+
+                ViewBag.SalesRepList = new SelectList(
+               _context.SalesRepresentatives
+                   .Include(sr => sr.Employee)
+                   .Where(sr => sr.IsActive)
+                   .Select(sr => new
+                   {
+                       sr.SalesRepresentativeId,
+                       FullName = sr.Employee.FirstName + " " + sr.Employee.LastName
+                   })
+
+                   .ToList(),
+               "SalesRepresentativeId",
+               "FullName"
+           );
+
+                ViewBag.CustomerList = _context.Customers.Where(c => c.IsActive).ToList();
                 return View(quote);
             }
 
             await _quoteService.CreateQuoteAsync(quote);
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Quotes/Edit/5
+        public async Task<IActionResult> Edit(int id)
+        {
+            var quote = await _quoteService.GetQuoteByIdAsync(id);
+            if (quote == null)
+            {
+                return NotFound();
+            }
+            return View(quote);
+        }
+
+        // POST: Quotes/ConvertToInvoice/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConvertToInvoice(int id)
+        {
+            await _quoteService.ConvertToInvoiceAsync(id);
             return RedirectToAction(nameof(Index));
         }
 

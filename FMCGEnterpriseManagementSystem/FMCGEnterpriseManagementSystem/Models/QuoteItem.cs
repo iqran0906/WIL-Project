@@ -33,5 +33,8 @@ namespace FMCGEnterpriseManagementSystem.Models
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal LineTotal { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal LineTotalExclVat { get; set; }
     }
 }
