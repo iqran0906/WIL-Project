@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema; // Required for [ForeignKey]
 
 namespace FMCGEnterpriseManagementSystem.Models
 {
@@ -18,6 +19,7 @@ namespace FMCGEnterpriseManagementSystem.Models
 
         public DateTime? UpdatedAt { get; set; }
 
+        [ForeignKey("ProductId")] // <--- Explicitly links the foreign key to avoid ProductId1
         public Product Product { get; set; } = null!;
 
         public ICollection<StockBatch> StockBatches { get; set; } = new List<StockBatch>();
