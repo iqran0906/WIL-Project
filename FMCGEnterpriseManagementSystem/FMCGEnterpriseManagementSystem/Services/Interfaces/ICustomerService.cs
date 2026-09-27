@@ -5,9 +5,9 @@ namespace FMCGEnterpriseManagementSystem.Services.Interfaces
     public interface ICustomerService
     {
         Task<IEnumerable<CustomerViewModel>> GetAllCustomersAsync();
-        Task<CustomerViewModel?> GetCustomerByIdAsync(string id);
+        Task<CustomerViewModel?> GetCustomerByIdAsync(int id);
         Task CreateCustomerAsync(CustomerViewModel model);
         Task UpdateCustomerAsync(CustomerViewModel model);
-        Task DeleteCustomerAsync(string id);
+        Task DeleteCustomerAsync(int id);
     }
 }

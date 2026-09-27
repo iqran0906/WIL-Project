@@ -1,0 +1,201 @@
+﻿@model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.SalesRepresentativeViewModel>
+
+@{
+    ViewData["Title"] = "Sales Representatives";
+}
+
+<div class="px-2 py-3">
+
+    <h2 class="text-white fw-bold mb-3">
+        Sales Representatives
+    </h2>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show"
+             role="alert">
+
+            @TempData["SuccessMessage"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+            </button>
+        </div>
+    }
+
+    <div class="mb-4">
+        <a asp-controller="SalesRepresentatives"
+           asp-action="Create"
+           class="btn btn-action-primary text-decoration-none">
+            New Sales Representative
+        </a>
+    </div>
+
+    <div class="d-flex align-items-center gap-2 mb-4">
+
+        <span class="text-white fw-bold">
+            Keyword:
+        </span>
+
+        <form asp-controller="SalesRepresentatives"
+              asp-action="Index"
+              method="get"
+              class="d-flex gap-2">
+
+            <input type="text"
+                   name="keyword"
+                   value="@ViewBag.Keyword"
+                   class="form-control form-control-sm search-field"
+                   placeholder="Rep code, employee, email or area" />
+
+            <button type="submit"
+                    class="btn btn-sm btn-light">
+                Search
+            </button>
+
+            <a asp-controller="SalesRepresentatives"
+               asp-action="Index"
+               class="btn btn-sm btn-outline-light">
+                Clear
+            </a>
+
+        </form>
+
+    </div>
+
+    <div class="table-responsive">
+
+        <table class="custom-data-table">
+
+            <thead>
+                <tr>
+                    <th>Rep Code</th>
+                    <th>Employee Number</th>
+                    <th>Employee</th>
+                    <th>Email</th>
+                    <th>Area</th>
+                    <th>Salary</th>
+                    <th>Commission</th>
+                    <th>Sales Target</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var salesRep in Model)
+                    {
+                        <tr>
+
+                            <td>
+                                @salesRep.SalesRepCode
+                            </td>
+
+                            <td>
+                                @salesRep.EmployeeNumber
+                            </td>
+
+                            <td>
+                                @salesRep.EmployeeName
+                            </td>
+
+                            <td>
+                                @salesRep.Email
+                            </td>
+
+                            <td>
+                                @(string.IsNullOrWhiteSpace(salesRep.Area)
+                                    ? "-"
+                                    : salesRep.Area)
+                            </td>
+
+                            <td>
+                                @salesRep.Salary.ToString("C2")
+                            </td>
+
+                            <td>
+                                @salesRep.CommissionRate.ToString("0.##")%
+                            </td>
+
+                            <td>
+                                @salesRep.SalesTarget.ToString("C2")
+                            </td>
+
+                            <td>
+                                @if (salesRep.IsActive)
+                                {
+                                    <span class="badge bg-success">
+                                        Active
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">
+                                        Inactive
+                                    </span>
+                                }
+                            </td>
+
+                            <td>
+                                <div class="d-flex gap-2">
+
+                                    <a asp-controller="SalesRepresentatives"
+                                       asp-action="Edit"
+                                       asp-route-id="@salesRep.SalesRepresentativeId"
+                                       class="btn btn-sm btn-warning">
+
+                                        <i class="bi bi-pencil-square me-1"></i>
+                                        Edit
+
+                                    </a>
+
+                                    @if (salesRep.IsActive)
+                                    {
+                                        <form asp-controller="SalesRepresentatives"
+                                              asp-action="Deactivate"
+                                              asp-route-id="@salesRep.SalesRepresentativeId"
+                                              method="post"
+                                              class="d-inline">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-danger"
+                                                    onclick="return confirm('Are you sure you want to deactivate this sales representative?');">
+
+                                                <i class="bi bi-person-x me-1"></i>
+                                                Deactivate
+
+                                            </button>
+
+                                        </form>
+                                    }
+
+                                </div>
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="10"
+                            class="text-center">
+                            No sales representatives found.
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>

@@ -1,0 +1,130 @@
+﻿@model FMCGEnterpriseManagementSystem.ViewModels.ForecastFilterViewModel
+
+@{
+    ViewData["Title"] = "Demand & Stock Forecasting";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="fw-bold mb-1 text-dark">Demand & Stock Forecasting</h3>
+        <p class="text-muted mb-0">Automated stock requirement projections based on minimum inventory thresholds.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-action="ExportCsv"
+           asp-route-category="@Model.SelectedCategory"
+           asp-route-statusFilter="@Model.StatusFilter"
+           class="btn btn-outline-secondary">
+            <i class="bi bi-download me-1"></i> Export CSV
+        </a>
+    </div>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<form method="get" asp-action="Index" class="row g-3 mb-4 align-items-end">
+    <div class="col-md-4">
+        <label class="form-label">Filter by Category</label>
+        <select name="category" class="form-select" onchange="this.form.submit()">
+            <option value="">All Categories</option>
+            @foreach (var cat in Model.Categories)
+            {
+                <option value="@cat" selected="@(Model.SelectedCategory == cat)">@cat</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Filter by Status</label>
+        <select name="statusFilter" class="form-select" onchange="this.form.submit()">
+            <option value="">All Statuses</option>
+            <option value="Critical" selected="@(Model.StatusFilter == "Critical")">Critical</option>
+            <option value="Warning" selected="@(Model.StatusFilter == "Warning")">Warning</option>
+            <option value="Optimal" selected="@(Model.StatusFilter == "Optimal")">Optimal</option>
+        </select>
+    </div>
+    <div class="col-md-4 text-end">
+        <span class="text-muted d-block small">Total Projected Reorder Budget</span>
+        <span class="fw-bold fs-5 text-dark">@Model.TotalProjectedReorderCost.ToString("C")</span>
+    </div>
+</form>
+
+<div class="table-responsive">
+    <table class="table custom-data-table align-middle">
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Product Name</th>
+                <th>Category</th>
+                <th class="text-center">Current Stock</th>
+                <th class="text-center">Reorder Threshold</th>
+                <th class="text-center">Est. Demand</th>
+                <th class="text-center">Recommended Order</th>
+                <th class="text-center">Status</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Forecasts.Any())
+            {
+                <tr>
+                    <td colspan="9" class="text-center py-4 text-muted">No forecasting records matched your filters.</td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var item in Model.Forecasts)
+                {
+                    <tr>
+                        <td class="fw-bold">@item.ProductCode</td>
+                        <td>@item.ProductName</td>
+                        <td><span class="badge bg-light text-dark border">@item.Category</span></td>
+                        <td class="text-center fw-bold">@item.CurrentStock</td>
+                        <td class="text-center text-muted">@item.ReorderLevel</td>
+                        <td class="text-center fw-semibold">@item.EstimatedMonthlyDemand</td>
+                        <td class="text-center">
+                            @if (item.RecommendedReorderQuantity > 0)
+                            {
+                                <span class="badge bg-danger fs-6 px-3 py-2">+@item.RecommendedReorderQuantity Units</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-light text-dark border fs-6 px-3 py-2">0 Units</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            @if (item.ForecastStatus == "Critical")
+                            {
+                                <span class="badge bg-danger">Critical - Restock Immediately</span>
+                            }
+                            else if (item.ForecastStatus == "Warning")
+                            {
+                                <span class="badge bg-warning text-dark">Warning - Restock Recommended</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">Optimal Stock Level</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            @if (item.RecommendedReorderQuantity > 0)
+                            {
+                                <a asp-action="Reorder" asp-route-productId="@item.ProductId" class="btn btn-sm btn-action-primary">
+                                    Reorder
+                                </a>
+                            }
+                            else
+                            {
+                                <button class="btn btn-sm btn-outline-secondary" disabled>Stock Sufficient</button>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

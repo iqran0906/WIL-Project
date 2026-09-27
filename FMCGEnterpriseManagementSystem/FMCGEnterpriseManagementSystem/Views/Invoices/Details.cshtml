@@ -1,0 +1,96 @@
+@model FMCGEnterpriseManagementSystem.ViewModels.InvoiceViewModel
+
+@{
+    ViewData["Title"] = "Invoice Preview";
+}
+
+<div class="content-card">
+    <div class="row align-items-center mb-4">
+        <div class="col-sm-6">
+            <h5 class="fw-bold m-0" style="color: #1c323d;">Exclusive Distributors (pty) LTD</h5>
+            <small class="text-muted d-block">Durban</small>
+        </div>
+        <div class="col-sm-6 text-sm-end">
+            <div class="d-inline-block text-start">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <label class="small text-secondary fw-bold text-nowrap m-0">Date:</label>
+                    <span>@Model.InvoiceDate.ToString("yyyy-MM-dd")</span>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <label class="small text-secondary fw-bold text-nowrap m-0">Invoice Number:</label>
+                    <span class="fw-bold">@Model.InvoiceNumber</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="fw-bold mb-4" style="color: #1c323d;">Invoice Preview</h2>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-6">
+            <label class="fw-bold text-secondary">Customer</label>
+            <p>@Model.CustomerName</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+            <label class="fw-bold text-secondary">Payment Terms</label>
+            <p>@Model.PaymentTerms</p>
+        </div>
+    </div>
+
+    <div class="table-responsive border rounded bg-light p-2 mb-3">
+        <table class="table align-middle m-0 bg-white shadow-sm rounded">
+            <thead class="table-secondary text-secondary small">
+                <tr>
+                    <th>Qty</th>
+                    <th>Item Code</th>
+                    <th>Description</th>
+                    <th>Unit Price</th>
+                    <th>Disc %</th>
+                    <th>Total (excl. VAT)</th>
+                    <th>VAT</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    var lineExVat = item.VatCategory == "[NONE]" ? item.LineTotal : item.LineTotal / 1.15m;
+                    var lineVatAmount = item.LineTotal - lineExVat;
+                    <tr>
+                        <td>@item.Quantity</td>
+                        <td>@item.ItemCode</td>
+                        <td>@item.Description</td>
+                        <td>R@item.UnitPrice.ToString("0.00")</td>
+                        <td>@item.DiscountPercent.ToString("0.00")%</td>
+                        <td>R@lineExVat.ToString("0.00")</td>
+                        <td>R@lineVatAmount.ToString("0.00")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="border rounded p-3 bg-light">
+                <h6 class="fw-bold text-secondary mb-2">Banking Details</h6>
+                <p class="small mb-1"><strong>Bank:</strong> FNB</p>
+                <p class="small mb-1"><strong>Branch Code:</strong> 250655</p>
+                <p class="small mb-1"><strong>Account Name:</strong> Exclusive Distributors (Pty) Ltd</p>
+                <p class="small mb-1"><strong>Account Number:</strong> 63191446202</p>
+                <p class="small mb-1"><strong>Reference:</strong> Invoice @Model.InvoiceNumber</p>
+                <p class="small mb-1"><strong>Proof of Payment:</strong> exclusivedistributors2@gmail.com</p>
+                <p class="small fst-italic mt-2 mb-0">Thanking you for your business!</p>
+            </div>
+        </div>
+        <div class="col-md-6 text-end fw-bold text-secondary">
+            <div class="d-inline-block text-start" style="min-width: 250px;">
+                <div class="d-flex justify-content-between py-1"><span>Subtotal (excl. VAT)</span><span>R@Model.Subtotal.ToString("0.00")</span></div>
+                <div class="d-flex justify-content-between py-1"><span>VAT</span><span>R@Model.VatTotal.ToString("0.00")</span></div>
+                <div class="d-flex justify-content-between py-1 border-top border-dark mt-2 text-dark fs-5"><span>Grand Total</span><span>R@Model.Total.ToString("0.00")</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-end gap-3">
+        <a asp-action="Index" class="btn btn-outline-secondary px-4">Back to Invoices</a>
+    </div>

@@ -1,0 +1,81 @@
+﻿@model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.Reports.SalesVatReportViewModel>
+
+@{
+    ViewData["Title"] = "Sales VAT Report";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2>Sales VAT Report</h2>
+            <p class="text-muted">Invoice sales values and recorded VAT amounts.</p>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-secondary">Back to Reports</a>
+    </div>
+
+    <form method="get" class="row g-3 mb-4">
+        <div class="col-md-4">
+            <label class="form-label">Start Date</label>
+            <input type="date" name="startDate"
+                   value="@ViewBag.StartDate" class="form-control" />
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">End Date</label>
+            <input type="date" name="endDate"
+                   value="@ViewBag.EndDate" class="form-control" />
+        </div>
+
+        <div class="col-md-4 d-flex align-items-end gap-2">
+            <button class="btn btn-primary">Filter</button>
+            <a asp-action="SalesVatReport" class="btn btn-outline-secondary">Clear</a>
+        </div>
+    </form>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            @if (!Model.Any())
+            {
+                <p class="text-muted mb-0">No VAT sales data found.</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Invoice</th>
+                                <th>Date</th>
+                                <th>Customer</th>
+                                <th>Subtotal</th>
+                                <th>VAT</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.InvoiceNumber</td>
+                                    <td>@item.InvoiceDate.ToString("dd MMM yyyy")</td>
+                                    <td>@item.CustomerName</td>
+                                    <td>R @item.Subtotal.ToString("N2")</td>
+                                    <td>R @item.VatAmount.ToString("N2")</td>
+                                    <td>R @item.Total.ToString("N2")</td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr class="fw-bold">
+                                <td colspan="3">Totals</td>
+                                <td>R @Model.Sum(x => x.Subtotal).ToString("N2")</td>
+                                <td>R @Model.Sum(x => x.VatAmount).ToString("N2")</td>
+                                <td>R @Model.Sum(x => x.Total).ToString("N2")</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>

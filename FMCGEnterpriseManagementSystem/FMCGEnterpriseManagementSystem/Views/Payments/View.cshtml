@@ -1,0 +1,152 @@
+﻿@model FMCGEnterpriseManagementSystem.ViewModels.PaymentViewModel
+
+@{
+    ViewData["Title"] = "Payment Receipt";
+}
+
+<div class="content-card">
+
+    <div class="d-flex justify-content-between align-items-start mb-4">
+        <div>
+            <h4 class="fw-bold mb-1" style="color: #1c323d;">
+                Exclusive Distributors (pty) LTD
+            </h4>
+            <small class="text-muted">Durban</small>
+        </div>
+
+        <div class="text-end">
+            <h5 class="fw-bold mb-1">PAYMENT RECEIPT</h5>
+            <small class="text-muted">
+                @Model.PaymentDate.ToString("dd/MM/yyyy")
+            </small>
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="row g-4 mb-4">
+
+        <div class="col-md-6">
+            <h6 class="fw-bold text-secondary mb-3">
+                Payment Information
+            </h6>
+
+            <div class="mb-2">
+                <strong>Payment ID:</strong>
+                @Model.PaymentId
+            </div>
+
+            <div class="mb-2">
+                <strong>Payment Date:</strong>
+                @Model.PaymentDate.ToString("dd/MM/yyyy")
+            </div>
+
+            <div class="mb-2">
+                <strong>Payment Method:</strong>
+                @Model.PaymentMethod
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <h6 class="fw-bold text-secondary mb-3">
+                Invoice Information
+            </h6>
+
+            <div class="mb-2">
+                <strong>Invoice Number:</strong>
+                @Model.InvoiceNumber
+            </div>
+
+            <div class="mb-2">
+                <strong>Customer:</strong>
+                @(string.IsNullOrWhiteSpace(Model.CustomerName)
+                                ? "N/A"
+                                : Model.CustomerName)
+            </div>
+
+            <div class="mb-2">
+                <strong>Invoice Total:</strong>
+                R @Model.InvoiceTotal.ToString("N2")
+            </div>
+        </div>
+
+    </div>
+
+    <div class="border rounded p-4 mb-4">
+
+        <div class="row text-center g-3">
+
+            <div class="col-md-4">
+                <small class="text-muted d-block">
+                    Amount Paid
+                </small>
+
+                <h4 class="fw-bold">
+                    R @Model.AmountPaid.ToString("N2")
+                </h4>
+            </div>
+
+            <div class="col-md-4">
+                <small class="text-muted d-block">
+                    Total Paid
+                </small>
+
+                <h4 class="fw-bold">
+                    R @Model.AmountAlreadyPaid.ToString("N2")
+                </h4>
+            </div>
+
+            <div class="col-md-4">
+                <small class="text-muted d-block">
+                    Outstanding Balance
+                </small>
+
+                <h4 class="fw-bold">
+                    R @Model.OutstandingBalance.ToString("N2")
+                </h4>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="text-center mb-4">
+
+        @if (Model.Status == FMCGEnterpriseManagementSystem.Enums.PaymentStatus.Paid)
+        {
+            <span class="badge bg-success fs-6 px-4 py-2">
+                Invoice Settled
+            </span>
+        }
+        else if (Model.Status == FMCGEnterpriseManagementSystem.Enums.PaymentStatus.PartiallyPaid)
+        {
+            <span class="badge bg-warning text-dark fs-6 px-4 py-2">
+                Partially Paid
+            </span>
+        }
+        else
+        {
+            <span class="badge bg-secondary fs-6 px-4 py-2">
+                Unpaid
+            </span>
+        }
+
+    </div>
+
+    <div class="d-flex justify-content-end gap-2">
+
+        <a asp-controller="Payments"
+           asp-action="Index"
+           class="btn btn-link text-decoration-none text-secondary">
+            Back to Payments
+        </a>
+
+        <button type="button"
+                class="btn btn-custom-save"
+                onclick="window.print()">
+            Print Receipt
+        </button>
+
+    </div>
+
+</div>

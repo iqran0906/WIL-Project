@@ -19,10 +19,10 @@ namespace FMCGEnterpriseManagementSystem.Repositories
             return await _context.Customers.ToListAsync();
         }
 
-        public async Task<Customer?> GetByIdAsync(string id)
+        public async Task<Customer?> GetByIdAsync(int id)
         {
             return await _context.Customers
-                .FirstOrDefaultAsync(c => c.CustomerID == id);
+                .FirstOrDefaultAsync(c => c.CustomerId == id);
         }
 
         public async Task AddAsync(Customer customer)
@@ -37,7 +37,7 @@ namespace FMCGEnterpriseManagementSystem.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(string id)
+        public async Task DeleteAsync(int id)
         {
             var customer = await GetByIdAsync(id);
 

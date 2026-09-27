@@ -2,7 +2,7 @@
 {
     public class Customer
     {
-        public string CustomerID { get; set; }
+        public int CustomerId { get; set; }
 
         public string Name { get; set; }
 
@@ -28,8 +28,16 @@
 
         public string Notes { get; set; }
 
-        public string SalesRep { get; set; }
+        public int? SalesRepresentativeId { get; set; }
+
+        public SalesRepresentative? SalesRepresentative { get; set; }
 
         public string? VATNumber { get; set; }
+
+        public bool IsActive { get; set; } = true;
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public DateTime? UpdatedAt { get; set; }
     }
 }

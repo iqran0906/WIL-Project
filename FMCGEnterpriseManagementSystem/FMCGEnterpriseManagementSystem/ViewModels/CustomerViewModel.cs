@@ -4,7 +4,7 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
 {
     public class CustomerViewModel
     {
-        public string CustomerID { get; set; } = string.Empty;
+        public int CustomerId { get; set; }
 
         [Required(ErrorMessage = "Name is required.")]
         public string Name { get; set; } = string.Empty;
@@ -44,5 +44,6 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
         public string SalesRep { get; set; } = string.Empty;
 
         public string? VATNumber { get; set; }
+        public int? SalesRepresentativeId { get; set; }
     }
 }
