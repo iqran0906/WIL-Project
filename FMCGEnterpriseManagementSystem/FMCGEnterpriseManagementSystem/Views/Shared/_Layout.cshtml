@@ -248,17 +248,13 @@
 
             <ul class="nav flex-column text-center pb-3">
 
-                <!-- ALL AUTHENTICATED USERS -->
-                <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="SalesRepresentatives" asp-action="Index">Sales Representatives</a>
-                </li>
-
-                <!-- Products Mobile Link -->
-                <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Home" asp-action="Products">Products</a>
-                </li>
+                <!-- DASHBOARD FIRST -->
                 <li class="nav-item">
                     <a class="nav-link py-2" asp-controller="Home" asp-action="Dashboard">Dashboard</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link py-2" asp-controller="Forecasting" asp-action="Index">Forecasting</a>
                 </li>
 
 
@@ -297,14 +293,6 @@
                            asp-controller="Inventory"
                            asp-action="Index">
                             Inventory
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link py-2"
-                           asp-controller="Forecasting"
-                           asp-action="Index">
-                            Forecasting
                         </a>
                     </li>
                 }
@@ -386,10 +374,6 @@
                 }
 
                 <li class="nav-item">
-                    <a class="nav-link py-2" asp-controller="Forecasting" asp-action="Index">Forecasting</a>
-                </li>
-
-                <li class="nav-item">
                     <a class="nav-link py-2"
                        asp-controller="Home"
                        asp-action="Settings">
@@ -422,24 +406,13 @@
 
                     <ul class="nav flex-column justify-content-start">
 
-                        <!-- ALL AUTHENTICATED USERS -->
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="SalesRepresentatives" asp-action="Index">Sales Representatives</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="Products">Products</a>
-                        </li>
+                        <!-- DASHBOARD FIRST -->
                         <li class="nav-item">
                             <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="Dashboard">Dashboard</a>
                         </li>
 
                         <li class="nav-item">
                             <a class="nav-link px-3 py-2" asp-controller="Forecasting" asp-action="Index">Forecasting</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="InvoiceList">Invoices</a>
                         </li>
 
                         <!-- SALES FUNCTIONS -->
@@ -479,14 +452,6 @@
                                    asp-controller="Inventory"
                                    asp-action="Index">
                                     Inventory
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link px-3 py-2"
-                                   asp-controller="Forecasting"
-                                   asp-action="Index">
-                                    Forecasting
                                 </a>
                             </li>
                         }
@@ -563,7 +528,7 @@
                         }
 
 
-                        <!-- ALL AUTHENTICATED USERS -->
+                        <!-- SETTINGS -->
                         <li class="nav-item">
                             <a class="nav-link px-3 py-2"
                                asp-controller="Home"
@@ -611,7 +576,7 @@
                             gap-3 gap-md-4 text-white">
 
 
-                            <!-- NOTIFICATIONS (Fixed tag helper syntax) -->
+                            <!-- NOTIFICATIONS -->
                             <a asp-controller="Notifications"
                                asp-action="Index"
                                class="text-white text-decoration-none"
@@ -660,4 +625,3 @@
 
 </body>
 </html>
-```[cite: 6]
