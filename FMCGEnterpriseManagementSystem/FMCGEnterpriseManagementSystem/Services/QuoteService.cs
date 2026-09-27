@@ -75,6 +75,7 @@ namespace FMCGEnterpriseManagementSystem.Services
 
                 var vatAmount = item.VatCategory == "[NONE]" ? 0 : lineAfterDiscount * VatRate;
 
+                item.LineTotalExclVat = lineAfterDiscount;
                 item.LineTotal = lineAfterDiscount + vatAmount;
                 subtotal += lineAfterDiscount;
             }
