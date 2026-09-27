@@ -119,8 +119,8 @@
         </div>
 
         <div class="d-flex justify-content-end gap-3 mt-2">
-            <!-- Updated controller target to Customers -->
-            <a asp-controller="Customers" asp-action="CustomerList" class="btn btn-link text-decoration-none text-secondary align-self-center">Cancel</a>
+            <!-- Fixed Cancel Button using explicit JavaScript redirect -->
+            <button type="button" class="btn btn-link text-decoration-none text-secondary align-self-center" onclick="window.location.href='@Url.Action("CustomerList", "Customers")'">Cancel</button>
             <button type="submit" class="btn btn-custom-save">Save Customer</button>
         </div>
     </form>
