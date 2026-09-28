@@ -13,5 +13,7 @@ namespace FMCGEnterpriseManagementSystem.Services.Interfaces
         Task UpdateSupplierAsync(SupplierViewModel model);
 
         Task DeleteSupplierAsync(int id);
+        Task<bool> ActivateSupplierAsync(int id);
+        Task<bool> DeactivateSupplierAsync(int id);
     }
 }
