@@ -1,0 +1,43 @@
+﻿@model FMCGEnterpriseManagementSystem.ViewModels.AdjustStockViewModel
+
+@{
+    ViewData["Title"] = "Adjust Stock";
+}
+
+<div class="content-card col-md-6 offset-md-3 py-4">
+    <h2 class="fw-bold mb-4" style="color: #1c323d;">Adjust Stock</h2>
+
+    <form asp-action="AdjustStock" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="InventoryId" />
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">Product</label>
+            <input type="text" class="form-control" value="@Model.ProductName" readonly />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">Current Quantity</label>
+            <input type="text" class="form-control" value="@Model.CurrentQuantity" readonly />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="AdjustmentType" class="form-label fw-bold">Adjustment Type</label>
+            <select asp-for="AdjustmentType" class="form-select">
+                <option value="Add">Add Stock</option>
+                <option value="Deduct">Deduct Stock</option>
+            </select>
+        </div>
+
+        <div class="mb-4">
+            <label asp-for="AdjustmentAmount" class="form-label fw-bold">Quantity to Adjust</label>
+            <input asp-for="AdjustmentAmount" type="number" min="1" class="form-control" />
+            <span asp-validation-for="AdjustmentAmount" class="text-danger"></span>
+        </div>
+
+        <div class="d-flex justify-content-end gap-3">
+            <a asp-action="Index" class="btn btn-link text-decoration-none text-secondary align-self-center">Cancel</a>
+            <button type="submit" class="btn btn-custom-save">Save Adjustment</button>
+        </div>
+    </form>
+</div>

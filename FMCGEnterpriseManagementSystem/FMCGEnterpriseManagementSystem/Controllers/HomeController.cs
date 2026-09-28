@@ -33,7 +33,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         public IActionResult AddSupplier() => View();
         public IActionResult AddSalesRep() => View();
         public IActionResult AddEmployee() => View();
-        public IActionResult AddItem() => View();
+        public IActionResult AddItem() => View("~/Views/Inventory/AddItem.cshtml");
         public IActionResult CreateInvoice() => View();
         public IActionResult CreateQuote() => View();
 
