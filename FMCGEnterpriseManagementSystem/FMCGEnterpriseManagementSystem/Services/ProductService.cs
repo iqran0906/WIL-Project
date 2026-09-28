@@ -68,6 +68,7 @@ namespace FMCGEnterpriseManagementSystem.Services
             };
 
             await _repository.AddAsync(entity);
+            await _repository.SaveChangesAsync();
         }
 
         public async Task UpdateProductAsync(ProductViewModel model)
@@ -90,17 +91,42 @@ namespace FMCGEnterpriseManagementSystem.Services
             existingEntity.UpdatedAt = DateTime.UtcNow;
 
             await _repository.UpdateAsync(existingEntity);
+            await _repository.SaveChangesAsync();
         }
 
         public async Task DeleteProductAsync(int id)
         {
-            await _repository.DeleteAsync(id);
+            var product = await _repository.GetByIdAsync(id);
+
+            if (product == null)
+                return;
+
+            product.IsActive = false;
+            product.UpdatedAt = DateTime.UtcNow;
+
+            await _repository.UpdateAsync(product);
+            await _repository.SaveChangesAsync();
+        }
+
+        public async Task ActivateProductAsync(int id)
+        {
+            var product = await _repository.GetByIdAsync(id);
+
+            if (product == null)
+                return;
+
+            product.IsActive = true;
+            product.UpdatedAt = DateTime.UtcNow;
+
+            await _repository.UpdateAsync(product);
+            await _repository.SaveChangesAsync();
         }
 
         private static ProductViewModel MapToViewModel(Product p) => new()
         {
             ProductId = p.ProductId,
             SupplierId = p.SupplierId,
+            SupplierName = p.Supplier?.CompanyName ?? "Not Available",
             ProductCode = p.ProductCode,
             ProductName = p.ProductName,
             Description = p.Description,
