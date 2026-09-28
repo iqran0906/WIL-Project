@@ -1,73 +1,194 @@
 ﻿@model FMCGEnterpriseManagementSystem.ViewModels.InventoryViewModel
 
 @{
-    ViewData["Title"] = "Edit Inventory Item";
+ViewData["Title"] = "Edit Inventory Item";
 }
 
 <div class="content-card p-4" style="background-color: #ffffff; border-radius: 12px; color: #1c323d;">
     <h2 class="fw-bold mb-4" style="color: #1c323d;">Edit Inventory Item</h2>
 
-    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+```
+<div asp-validation-summary="All" class="text-danger mb-3"></div>
 
-    <form asp-action="Edit" method="post">
-        @Html.AntiForgeryToken()
-        <input type="hidden" asp-for="InventoryId" />
-        <input type="hidden" asp-for="ProductId" />
+<form asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
 
-        <div class="row g-4">
-            <div class="col-md-8 offset-md-2">
-                <!-- Item Code -->
-                <div class="mb-3">
-                    <label asp-for="ProductCode" class="form-label fw-bold" style="color: #1c323d;"></label>
-                    <input asp-for="ProductCode" class="form-control" required />
-                    <span asp-validation-for="ProductCode" class="text-danger"></span>
-                </div>
+    <input type="hidden" asp-for="InventoryId" />
+    <input type="hidden" asp-for="ProductId" />
 
-                <!-- Description / Product Name -->
-                <div class="mb-3">
-                    <label asp-for="ProductName" class="form-label fw-bold" style="color: #1c323d;">Description</label>
-                    <input asp-for="ProductName" class="form-control" required />
-                    <span asp-validation-for="ProductName" class="text-danger"></span>
-                </div>
+    <div class="row g-4">
+        <div class="col-md-8 offset-md-2">
 
-                <!-- Category -->
-                <div class="mb-3">
-                    <label asp-for="CategoryName" class="form-label fw-bold" style="color: #1c323d;"></label>
-                    <input asp-for="CategoryName" class="form-control" />
-                    <span asp-validation-for="CategoryName" class="text-danger"></span>
-                </div>
+            <!-- Product Code -->
+            <div class="mb-3">
+                <label asp-for="ProductCode"
+                       class="form-label fw-bold"
+                       style="color: #1c323d;">
+                    Product Code
+                </label>
 
-                <!-- Quantity On Hand -->
-                <div class="mb-3">
-                    <label asp-for="QuantityOnHand" class="form-label fw-bold" style="color: #1c323d;"></label>
-                    <input asp-for="QuantityOnHand" class="form-control" min="0" required />
-                    <span asp-validation-for="QuantityOnHand" class="text-danger"></span>
-                </div>
+                <input asp-for="ProductCode"
+                       class="form-control"
+                       readonly />
 
-                <!-- Selling Price -->
-                <div class="mb-3">
-                    <label asp-for="SellingPrice" class="form-label fw-bold" style="color: #1c323d;"></label>
-                    <input asp-for="SellingPrice" class="form-control" required />
-                    <span asp-validation-for="SellingPrice" class="text-danger"></span>
-                </div>
-
-                <!-- Reorder Level -->
-                <div class="mb-3">
-                    <label asp-for="ReorderLevel" class="form-label fw-bold" style="color: #1c323d;"></label>
-                    <input asp-for="ReorderLevel" class="form-control" min="0" required />
-                    <span asp-validation-for="ReorderLevel" class="text-danger"></span>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="d-flex justify-content-end gap-3 mt-4">
-                    <a asp-controller="Inventory" asp-action="Index" class="btn btn-link text-decoration-none text-secondary align-self-center">Cancel</a>
-                    <button type="submit" class="btn btn-custom-save px-4 py-2" style="background-color: #1c323d; color: #ffffff;">Update Item</button>
-                </div>
+                <span asp-validation-for="ProductCode"
+                      class="text-danger"></span>
             </div>
+
+            <!-- Product -->
+            <div class="mb-3">
+                <label asp-for="ProductName"
+                       class="form-label fw-bold"
+                       style="color: #1c323d;">
+                    Product
+                </label>
+
+                <input asp-for="ProductName"
+                       class="form-control"
+                       placeholder="E.g. Chocolate"
+                       required />
+
+                <span asp-validation-for="ProductName"
+                      class="text-danger"></span>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-3">
+                <label asp-for="Description"
+                       class="form-label fw-bold"
+                       style="color: #1c323d;">
+                    Description
+                </label>
+
+                <input asp-for="Description"
+                       class="form-control"
+                       placeholder="Enter product description" />
+
+                <span asp-validation-for="Description"
+                      class="text-danger"></span>
+            </div>
+
+            <!-- Category -->
+            <div class="mb-3">
+                <label asp-for="CategoryName"
+                       class="form-label fw-bold"
+                       style="color: #1c323d;">
+                    Category
+                </label>
+
+                <input asp-for="CategoryName"
+                       class="form-control" />
+
+                <span asp-validation-for="CategoryName"
+                      class="text-danger"></span>
+            </div>
+
+            <!-- Quantity On Hand -->
+            <div class="mb-3">
+                <label asp-for="QuantityOnHand"
+                       class="form-label fw-bold"
+                       style="color: #1c323d;">
+                    Quantity
+                </label>
+
+                <input asp-for="QuantityOnHand"
+                       class="form-control"
+                       min="0"
+                       required />
+
+                <span asp-validation-for="QuantityOnHand"
+                      class="text-danger"></span>
+            </div>
+
+            <!-- Selling Price -->
+            <div class="mb-3">
+                <label asp-for="SellingPrice"
+                       class="form-label fw-bold"
+                       style="color: #1c323d;">
+                    Unit Price Incl VAT
+                </label>
+
+                <input asp-for="SellingPrice"
+                       class="form-control"
+                       required />
+
+                <span asp-validation-for="SellingPrice"
+                      class="text-danger"></span>
+            </div>
+
+            <!-- Reorder Level -->
+            <div class="mb-3">
+                <label asp-for="ReorderLevel"
+                       class="form-label fw-bold"
+                       style="color: #1c323d;">
+                    Reorder Level
+                </label>
+
+                <input asp-for="ReorderLevel"
+                       class="form-control"
+                       min="0"
+                       required />
+
+                <span asp-validation-for="ReorderLevel"
+                      class="text-danger"></span>
+            </div>
+
+            <!-- Expiry Date -->
+            <div class="mb-3">
+                <label asp-for="ExpiryDate"
+                       class="form-label fw-bold"
+                       style="color: #1c323d;">
+                    Expiry Date
+                </label>
+
+                <input asp-for="ExpiryDate"
+                       type="date"
+                       class="form-control" />
+
+                <span asp-validation-for="ExpiryDate"
+                      class="text-danger"></span>
+            </div>
+
+            <!-- Notes -->
+            <div class="mb-3">
+                <label asp-for="Notes"
+                       class="form-label fw-bold"
+                       style="color: #1c323d;">
+                    Notes
+                </label>
+
+                <textarea asp-for="Notes"
+                          class="form-control"
+                          rows="3"></textarea>
+
+                <span asp-validation-for="Notes"
+                      class="text-danger"></span>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex justify-content-end gap-3 mt-4">
+                <a asp-controller="Inventory"
+                   asp-action="Index"
+                   class="btn btn-link text-decoration-none text-secondary align-self-center">
+                    Cancel
+                </a>
+
+                <button type="submit"
+                        class="btn btn-custom-save px-4 py-2"
+                        style="background-color: #1c323d; color: #ffffff;">
+                    Update Item
+                </button>
+            </div>
+
         </div>
-    </form>
+    </div>
+</form>
+```
+
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+@{
+await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
 }
