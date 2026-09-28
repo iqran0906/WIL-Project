@@ -67,8 +67,8 @@
                             <td>@invoice.InvoiceDate.ToString("yyyy-MM-dd")</td>
                             <td>@invoice.InvoiceNumber</td>
                             <td>@invoice.CustomerName</td>
-                            <td>R@invoice.AmountDue.ToString("0.00")</td>
-                            <td>R@invoice.Total.ToString("0.00")</td>
+                            <td>@($"R{invoice.AmountDue:0.00}")</td>
+                            <td>@($"R{invoice.Total:0.00}")</td>
                             <td>
                                 @if (invoice.Status == "Paid")
                                 {
@@ -90,7 +90,7 @@
                 else
                 {
                     <tr>
-                        <td colspan="6" class="text-center text-muted">No invoices found.</td>
+                        <td colspan="7" class="text-center text-muted">No invoices found.</td>
                     </tr>
                 }
             </tbody>
