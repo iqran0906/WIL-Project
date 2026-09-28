@@ -43,9 +43,9 @@ namespace FMCGEnterpriseManagementSystem.Models
         [ForeignKey("SupplierId")]
         public Supplier? Supplier { get; set; }
 
+        public Inventory? Inventory { get; set; }
+
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
-
-        public Inventory? Inventory { get; set; }
     }
 }

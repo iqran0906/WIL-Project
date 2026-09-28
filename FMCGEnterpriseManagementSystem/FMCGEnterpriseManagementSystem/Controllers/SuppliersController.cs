@@ -2,90 +2,100 @@
 using FMCGEnterpriseManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
     [Authorize(Roles = "Administrator,Employee")]
-    [ApiController]
-    [Route("api/[controller]")]
-    public class SuppliersController : ControllerBase
+    public class SupplierController : Controller
     {
         private readonly ISupplierService _supplierService;
 
-        public SuppliersController(ISupplierService supplierService)
+        public SupplierController(ISupplierService supplierService)
         {
             _supplierService = supplierService;
         }
 
+        // GET: Supplier/SupplierList
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> SupplierList()
         {
             var suppliers = await _supplierService.GetAllSuppliersAsync();
-            return Ok(suppliers);
+            return View("~/Views/Supplier/SupplierList.cshtml", suppliers);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        // GET: Supplier/AddSupplier
+        [HttpGet]
+        public IActionResult AddSupplier()
+        {
+            return View(new SupplierViewModel());
+        }
+
+        // POST: Supplier/AddSupplier
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddSupplier(SupplierViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            await _supplierService.CreateSupplierAsync(model);
+            return RedirectToAction(nameof(SupplierList));
+        }
+
+        // GET: Supplier/EditSupplier/5
+        [HttpGet]
+        public async Task<IActionResult> EditSupplier(int id)
         {
             var supplier = await _supplierService.GetSupplierByIdAsync(id);
-
             if (supplier == null)
             {
                 return NotFound();
             }
 
-            return Ok(supplier);
+            return View(supplier);
         }
 
+        // POST: Supplier/EditSupplier/5
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] SupplierViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            await _supplierService.CreateSupplierAsync(model);
-
-            return Ok(new
-            {
-                message = "Supplier created successfully"
-            });
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(
-            int id,
-            [FromBody] SupplierViewModel model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditSupplier(int id, SupplierViewModel model)
         {
             if (id != model.SupplierId)
             {
-                return BadRequest("Supplier ID mismatch.");
+                return NotFound();
             }
 
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return View(model);
             }
 
             await _supplierService.UpdateSupplierAsync(model);
-
-            return Ok(new
-            {
-                message = "Supplier updated successfully"
-            });
+            return RedirectToAction(nameof(SupplierList));
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        // GET: Supplier/DeleteSupplier/5
+        [HttpGet]
+        public async Task<IActionResult> DeleteSupplier(int id)
         {
-            await _supplierService.DeleteSupplierAsync(id);
-
-            return Ok(new
+            var supplier = await _supplierService.GetSupplierByIdAsync(id);
+            if (supplier == null)
             {
-                message = "Supplier deleted successfully"
-            });
+                return NotFound();
+            }
+
+            return View(supplier);
+        }
+
+        // POST: Supplier/DeleteSupplierConfirmed
+        [HttpPost, ActionName("DeleteSupplierConfirmed")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteSupplierConfirmed(int supplierId)
+        {
+            await _supplierService.DeleteSupplierAsync(supplierId);
+            return RedirectToAction(nameof(SupplierList));
         }
     }
 }
