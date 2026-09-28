@@ -70,14 +70,18 @@
                             <td>@($"R{invoice.AmountDue:0.00}")</td>
                             <td>@($"R{invoice.Total:0.00}")</td>
                             <td>
-                                @if (invoice.Status == "Paid")
-                                {
-                                    <span class="badge bg-success">Paid</span>
-                                }
-                                else
-                                {
-                                    <span class="badge bg-danger">Unpaid</span>
-                                }
+                             @if (invoice.Status == "Paid")
+{
+    <span class="badge bg-success">Paid</span>
+}
+else if (invoice.Status == "Cancelled")
+{
+    <span class="badge bg-danger">Cancelled</span>
+}
+else
+{
+    <span class="badge bg-warning text-dark">Pending</span>
+}
                             </td>
                                                        <td>
                                 <a asp-action="Details" asp-route-id="@invoice.InvoiceId" class="btn btn-sm btn-outline-secondary">View</a>
