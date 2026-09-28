@@ -27,27 +27,29 @@
 
     <div class="table-responsive">
         <table class="custom-data-table">
-            <thead>
-                <tr>
-                    <th>Item Code</th>
-                    <th>Description</th>
-                    <th>Quantity</th>
-                    <th>Category</th>
-                    <th>Unit Price Incl VAT</th>
-                    <th>Expiry Date</th>
-                    <th>Notes</th>
-                    <th class="text-end">Actions</th>
-                </tr>
-            </thead>
+           <thead>
+    <tr>
+        <th>Product Code</th>
+        <th>Product</th>
+        <th>Description</th>
+        <th>Quantity</th>
+        <th>Category</th>
+        <th>Unit Price Incl VAT</th>
+        <th>Expiry Date</th>
+        <th>Notes</th>
+        <th class="text-end">Actions</th>
+    </tr>
+</thead>
             <tbody id="inventoryTableBody">
                 @if (Model != null && Model.Any())
                 {
                     @foreach (var item in Model)
                     {
                         <tr class="inventory-row">
-                            <td class="item-code">@item.ProductCode</td>
-                            <td class="item-name">@item.ProductName</td>
-                            <td>@item.QuantityOnHand</td>
+                           <td class="item-code">@item.ProductCode</td>
+<td class="item-name">@item.ProductName</td>
+<td class="item-description">@item.Description</td>
+<td>@item.QuantityOnHand</td>
                             <td class="item-category">@item.CategoryName</td>
                             <td>R @decimal.Parse(item.SellingPrice, System.Globalization.CultureInfo.InvariantCulture).ToString("N2")</td>
                             <td>@(item.ExpiryDate.HasValue ? item.ExpiryDate.Value.ToString("yyyy-MM-dd") : "N/A")</td>
@@ -71,7 +73,7 @@
                 else
                 {
                     <tr>
-                        <td colspan="8" class="text-center text-white py-3">No inventory items found.</td>
+                        <td colspan="9" class="text-center text-white py-3">No inventory items found.</td>
                     </tr>
                 }
             </tbody>
@@ -142,12 +144,13 @@
                 searchInput.addEventListener("input", function() {
                     const query = this.value.toLowerCase().trim();
 
-                    inventoryRows.forEach(row => {
-                        const code = row.querySelector(".item-code").textContent.toLowerCase();
-                        const name = row.querySelector(".item-name").textContent.toLowerCase();
-                        const category = row.querySelector(".item-category").textContent.toLowerCase();
+   inventoryRows.forEach(row => {
+    const code = row.querySelector(".item-code").textContent.toLowerCase();
+    const name = row.querySelector(".item-name").textContent.toLowerCase();
+    const description = row.querySelector(".item-description").textContent.toLowerCase();
+    const category = row.querySelector(".item-category").textContent.toLowerCase();
 
-                        if (code.includes(query) || name.includes(query) || category.includes(query)) {
+    if (code.includes(query) || name.includes(query) || description.includes(query) || category.includes(query)) {
                             row.style.display = "";
                         } else {
                             row.style.display = "none";

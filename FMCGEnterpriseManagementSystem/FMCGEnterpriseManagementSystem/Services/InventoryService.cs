@@ -75,7 +75,7 @@ namespace FMCGEnterpriseManagementSystem.Services
                 }
             }
 
-            string generatedProductCode = $"ITM{nextNumber:D3}";
+            string generatedProductCode = $"ED{nextNumber:D3}";
 
             // Parse selling price
             decimal.TryParse(
@@ -89,7 +89,7 @@ namespace FMCGEnterpriseManagementSystem.Services
             {
                 ProductCode = generatedProductCode,
                 ProductName = model.ProductName,
-                Description = model.ProductName,
+                Description = model.Description,
                 SellingPrice = parsedSellingPrice,
                 Category = model.CategoryName,
                 SupplierId = supplierIdToUse,
@@ -158,7 +158,7 @@ namespace FMCGEnterpriseManagementSystem.Services
                     model.ProductName ?? entity.Product.ProductName;
 
                 entity.Product.Description =
-                    model.ProductName ?? entity.Product.Description;
+     model.Description ?? entity.Product.Description;
 
                 entity.Product.SellingPrice = parsedSellingPrice;
 
@@ -216,6 +216,7 @@ namespace FMCGEnterpriseManagementSystem.Services
             ProductId = item.ProductId,
             ProductCode = item.Product?.ProductCode ?? string.Empty,
             ProductName = item.Product?.ProductName ?? string.Empty,
+            Description = item.Product?.Description ?? string.Empty,
             CategoryName = item.Product?.Category ?? string.Empty,
             QuantityOnHand = item.QuantityOnHand,
             ReorderLevel = item.ReorderLevel,

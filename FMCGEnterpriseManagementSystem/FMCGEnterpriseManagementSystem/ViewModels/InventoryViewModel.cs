@@ -12,6 +12,8 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
         public string? ProductCode { get; set; }
         public string? ProductName { get; set; }
 
+        public string? Description { get; set; }
+
         [Required(ErrorMessage = "Quantity on hand is required.")]
         [Range(0, int.MaxValue, ErrorMessage = "Quantity cannot be negative.")]
         [Display(Name = "Quantity On Hand")]

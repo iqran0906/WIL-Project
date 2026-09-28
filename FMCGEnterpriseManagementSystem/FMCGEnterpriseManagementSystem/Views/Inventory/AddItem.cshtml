@@ -1,5 +1,4 @@
-﻿```cshtml
-@{
+﻿@{
     ViewData["Title"] = "New Item";
 }
 
@@ -13,24 +12,32 @@
 
         <div class="row g-4">
 
-            <!-- Item Code -->
-            <div class="col-md-6">
-                <label class="form-label">Item Code</label>
-                <input type="text"
-                       class="form-control"
-                       value="Automatically generated"
-                       readonly>
-            </div>
+         <!-- Product Code -->
+<div class="col-md-6">
+    <label class="form-label">Product Code</label>
+    <input type="text"
+           class="form-control"
+           value="Automatically generated"
+           readonly>
+</div>
+<!-- Product -->
+<div class="col-md-6">
+    <label class="form-label">Product</label>
+    <input type="text"
+           name="ProductName"
+           class="form-control"
+           placeholder="E.g. Chocolate"
+           required>
+</div>
 
-            <!-- Description -->
-            <div class="col-md-6">
-                <label class="form-label">Description</label>
-                <input type="text"
-                       name="ProductName"
-                       class="form-control"
-                       placeholder="E.g. Chocolate"
-                       required>
-            </div>
+<!-- Description -->
+<div class="col-md-6">
+    <label class="form-label">Description</label>
+    <input type="text"
+           name="Description"
+           class="form-control"
+           placeholder="Enter product description">
+</div>
 
             <!-- Quantity -->
             <div class="col-md-6">
@@ -228,4 +235,4 @@
         });
     </script>
 }
-```
+
