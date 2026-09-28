@@ -19,7 +19,8 @@
     <div class="d-flex align-items-center gap-2 mb-4">
         <span class="text-white fw-bold">Keyword:</span>
         <div class="position-relative">
-            <input type="text" class="form-control form-control-sm search-field" placeholder="Item Code, Category, etc">
+            <!-- Added id="searchKeyword" -->
+            <input type="text" id="searchKeyword" class="form-control form-control-sm search-field" placeholder="Item Code, Category, etc">
             <i class="bi bi-search position-absolute end-0 top-50 translate-middle-y me-2 text-white-50 small"></i>
         </div>
     </div>
@@ -33,20 +34,22 @@
                     <th>Quantity</th>
                     <th>Category</th>
                     <th>Unit Price Incl VAT</th>
+                    <th>Expiry Date</th>
                     <th class="text-end">Actions</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="inventoryTableBody">
                 @if (Model != null && Model.Any())
                 {
                     @foreach (var item in Model)
                     {
-                        <tr>
-                            <td>@item.ProductCode</td>
-                            <td>@item.ProductName</td>
+                        <tr class="inventory-row">
+                            <td class="item-code">@item.ProductCode</td>
+                            <td class="item-name">@item.ProductName</td>
                             <td>@item.QuantityOnHand</td>
-                            <td>@item.CategoryName</td>
+                            <td class="item-category">@item.CategoryName</td>
                             <td>R @decimal.Parse(item.SellingPrice, System.Globalization.CultureInfo.InvariantCulture).ToString("N2")</td>
+                            <td>@(item.ExpiryDate.HasValue ? item.ExpiryDate.Value.ToString("yyyy-MM-dd") : "N/A")</td>
                             <td class="text-end">
                                 <div class="btn-group" role="group">
                                     <a asp-action="AdjustStock" asp-route-id="@item.InventoryId" class="btn btn-sm btn-outline-info me-1" title="Adjust Stock">
@@ -66,7 +69,7 @@
                 else
                 {
                     <tr>
-                        <td colspan="6" class="text-center text-white py-3">No inventory items found.</td>
+                        <td colspan="7" class="text-center text-white py-3">No inventory items found.</td>
                     </tr>
                 }
             </tbody>
@@ -129,6 +132,29 @@
 @section Scripts {
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            // Live Search Filter Logic
+            const searchInput = document.getElementById("searchKeyword");
+            const inventoryRows = document.querySelectorAll(".inventory-row");
+
+            if (searchInput) {
+                searchInput.addEventListener("input", function() {
+                    const query = this.value.toLowerCase().trim();
+
+                    inventoryRows.forEach(row => {
+                        const code = row.querySelector(".item-code").textContent.toLowerCase();
+                        const name = row.querySelector(".item-name").textContent.toLowerCase();
+                        const category = row.querySelector(".item-category").textContent.toLowerCase();
+
+                        if (code.includes(query) || name.includes(query) || category.includes(query)) {
+                            row.style.display = "";
+                        } else {
+                            row.style.display = "none";
+                        }
+                    });
+                });
+            }
+
+            // Category Management Modal Logic
             const tableBody = document.getElementById("categoryListTableBody");
             if (tableBody) {
                 tableBody.addEventListener("click", function(e) {

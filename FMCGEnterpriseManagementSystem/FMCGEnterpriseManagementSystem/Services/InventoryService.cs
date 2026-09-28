@@ -49,7 +49,6 @@ namespace FMCGEnterpriseManagementSystem.Services
                 }
             }
 
-            // Fixed: Added NumberStyles.Any and CultureInfo.InvariantCulture to parse dot decimals correctly
             decimal.TryParse(model.SellingPrice, NumberStyles.Any, CultureInfo.InvariantCulture, out var parsedSellingPrice);
 
             var product = new Product
@@ -77,6 +76,19 @@ namespace FMCGEnterpriseManagementSystem.Services
             };
 
             await _repository.AddAsync(entity);
+
+            // If an expiry date was chosen on the form, create a linked StockBatch so it displays in the table
+            if (model.ExpiryDate.HasValue)
+            {
+                var stockBatch = new StockBatch
+                {
+                    InventoryId = entity.InventoryId,
+                    ExpiryDate = model.ExpiryDate.Value,
+                    CreatedAt = DateTime.UtcNow
+                };
+                _context.StockBatches.Add(stockBatch);
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task UpdateInventoryItemAsync(InventoryViewModel model)
@@ -88,7 +100,6 @@ namespace FMCGEnterpriseManagementSystem.Services
             entity.ReorderLevel = model.ReorderLevel;
             entity.UpdatedAt = DateTime.UtcNow;
 
-            // Fixed: Added NumberStyles.Any and CultureInfo.InvariantCulture here as well
             decimal.TryParse(model.SellingPrice, NumberStyles.Any, CultureInfo.InvariantCulture, out var parsedSellingPrice);
 
             if (entity.Product != null)
@@ -147,7 +158,8 @@ namespace FMCGEnterpriseManagementSystem.Services
             QuantityOnHand = item.QuantityOnHand,
             ReorderLevel = item.ReorderLevel,
             SellingPrice = item.Product?.SellingPrice.ToString(CultureInfo.InvariantCulture) ?? "0",
-            BatchCount = item.StockBatches?.Count ?? 0
+            BatchCount = item.StockBatches?.Count ?? 0,
+            ExpiryDate = item.StockBatches?.OrderBy(b => b.ExpiryDate).FirstOrDefault()?.ExpiryDate
         };
     }
 }
