@@ -1,4 +1,5 @@
-﻿using FMCGEnterpriseManagementSystem.Data;
+﻿using System.Globalization;
+using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
@@ -34,45 +35,29 @@ namespace FMCGEnterpriseManagementSystem.Services
         {
             int supplierIdToUse = model.SupplierId;
 
-            if (supplierIdToUse > 0)
+            // Dynamically fetch the first available supplier if none is specified or if it's invalid
+            if (supplierIdToUse <= 0)
             {
-                var existingSupplier = await _context.Suppliers.FindAsync(model.SupplierId);
-                if (existingSupplier == null)
+                var firstSupplier = await _context.Suppliers.FirstOrDefaultAsync();
+                if (firstSupplier != null)
                 {
-                    supplierIdToUse = 0;
+                    supplierIdToUse = firstSupplier.SupplierId;
+                }
+                else
+                {
+                    throw new Exception("No suppliers found in the database. Please add at least one supplier before creating inventory items.");
                 }
             }
 
-            if (supplierIdToUse == 0)
-            {
-                var defaultSupplier = await _context.Suppliers.FirstOrDefaultAsync();
-
-                if (defaultSupplier == null)
-                {
-                    defaultSupplier = new Supplier
-                    {
-                        CompanyName = "Default Supplier",
-                        ContactPerson = "Default Contact",
-                        ContactNumber = "0000000000",
-                        CreditTerms = "Net 30",
-                        Email = "default@supplier.com",
-                        Notes = "Auto-generated default supplier",
-                        PhysicalAddress = "Default Address",
-                        VATNumber = "VAT000000"
-                    };
-                    _context.Suppliers.Add(defaultSupplier);
-                    await _context.SaveChangesAsync();
-                }
-
-                supplierIdToUse = defaultSupplier.SupplierId;
-            }
+            // Fixed: Added NumberStyles.Any and CultureInfo.InvariantCulture to parse dot decimals correctly
+            decimal.TryParse(model.SellingPrice, NumberStyles.Any, CultureInfo.InvariantCulture, out var parsedSellingPrice);
 
             var product = new Product
             {
                 ProductCode = model.ProductCode,
                 ProductName = model.ProductName,
                 Description = model.ProductName,
-                SellingPrice = model.SellingPrice,
+                SellingPrice = parsedSellingPrice,
                 Category = model.CategoryName,
                 SupplierId = supplierIdToUse,
                 IsActive = true,
@@ -103,12 +88,15 @@ namespace FMCGEnterpriseManagementSystem.Services
             entity.ReorderLevel = model.ReorderLevel;
             entity.UpdatedAt = DateTime.UtcNow;
 
+            // Fixed: Added NumberStyles.Any and CultureInfo.InvariantCulture here as well
+            decimal.TryParse(model.SellingPrice, NumberStyles.Any, CultureInfo.InvariantCulture, out var parsedSellingPrice);
+
             if (entity.Product != null)
             {
                 entity.Product.ProductCode = model.ProductCode ?? entity.Product.ProductCode;
                 entity.Product.ProductName = model.ProductName ?? entity.Product.ProductName;
                 entity.Product.Description = model.ProductName ?? entity.Product.Description;
-                entity.Product.SellingPrice = model.SellingPrice;
+                entity.Product.SellingPrice = parsedSellingPrice;
                 entity.Product.Category = model.CategoryName ?? entity.Product.Category;
             }
 
@@ -121,7 +109,6 @@ namespace FMCGEnterpriseManagementSystem.Services
             var entity = await _repository.GetByIdAsync(id);
             if (entity != null)
             {
-                // Delete the inventory record first to handle foreign key constraints cleanly
                 await _repository.DeleteAsync(id);
 
                 if (entity.Product != null)
@@ -159,7 +146,7 @@ namespace FMCGEnterpriseManagementSystem.Services
             CategoryName = item.Product?.Category ?? string.Empty,
             QuantityOnHand = item.QuantityOnHand,
             ReorderLevel = item.ReorderLevel,
-            SellingPrice = item.Product?.SellingPrice ?? 0,
+            SellingPrice = item.Product?.SellingPrice.ToString(CultureInfo.InvariantCulture) ?? "0",
             BatchCount = item.StockBatches?.Count ?? 0
         };
     }

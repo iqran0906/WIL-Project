@@ -26,19 +26,26 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         {
             return View(new InventoryViewModel());
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddItem(InventoryViewModel model)
         {
-            // If validation fails, return the view with current inputs
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            await _inventoryService.CreateInventoryItemAsync(model);
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await _inventoryService.CreateInventoryItemAsync(model);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                // This catches the exact database/service error and displays it on your form
+                ModelState.AddModelError(string.Empty, $"Save failed: {ex.InnerException?.Message ?? ex.Message}");
+                return View(model);
+            }
         }
 
         [HttpGet]

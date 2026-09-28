@@ -5,12 +5,14 @@
 <div class="content-card">
     <h2 class="fw-bold mb-4" style="color: #1c323d;">New Item</h2>
 
+    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
     <form method="post">
         @Html.AntiForgeryToken()
 
         <div class="row g-4">
             <div class="col-md-8 offset-md-2">
-                <!-- Item Code (Manual Entry) -->
+                <!-- Item Code -->
                 <div class="mb-3">
                     <label class="form-label">Item Code</label>
                     <input type="text" name="ProductCode" class="form-control" placeholder="E.g ED001" required>
@@ -26,6 +28,12 @@
                 <div class="mb-3">
                     <label class="form-label">Quantity</label>
                     <input type="number" name="QuantityOnHand" min="0" class="form-control" placeholder="Enter Quantity" required>
+                </div>
+
+                <!-- Reorder Level / Low Stock Limit -->
+                <div class="mb-3">
+                    <label class="form-label">Reorder Level (Low Stock Limit)</label>
+                    <input type="number" name="ReorderLevel" min="0" class="form-control" placeholder="Enter low stock threshold (e.g. 20)" required>
                 </div>
 
                 <!-- Unit Value / Selling Price -->
@@ -45,7 +53,7 @@
                     </select>
                 </div>
 
-                <!-- Expiry Date (Dropdown + Dynamic Calendar Picker) -->
+                <!-- Expiry Date -->
                 <div class="mb-3">
                     <label class="form-label">Expiry Date</label>
                     <select id="expiryOptionSelect" class="form-select mb-2">
@@ -58,7 +66,7 @@
                     </div>
                 </div>
 
-                <!-- Category (Dropdown + Dynamic 'Other' Text Input) -->
+                <!-- Category -->
                 <div class="mb-3">
                     <label class="form-label">Category</label>
                     <select id="categorySelect" class="form-select mb-2">
@@ -71,10 +79,8 @@
                         <option value="OTHER_OPTION">+ Add New Category...</option>
                     </select>
 
-                    <!-- Hidden input submitted to C# -->
                     <input type="hidden" name="CategoryName" id="finalCategoryInput" />
 
-                    <!-- Text input shown when 'Other' is chosen -->
                     <div id="customCategoryContainer" style="display: none;">
                         <input type="text" id="customCategoryInput" class="form-control" placeholder="Enter new category name..." />
                     </div>
@@ -99,7 +105,6 @@
 @section Scripts {
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // 1. EXPIRY DATE TOGGLE
             const expiryOptionSelect = document.getElementById("expiryOptionSelect");
             const expiryDatePickerContainer = document.getElementById("expiryDatePickerContainer");
             const expiryDateInput = document.getElementById("expiryDateInput");
@@ -110,12 +115,11 @@
                         expiryDatePickerContainer.style.display = "block";
                     } else {
                         expiryDatePickerContainer.style.display = "none";
-                        expiryDateInput.value = ""; // Clears date when hidden
+                        expiryDateInput.value = ""; 
                     }
                 });
             }
 
-            // 2. CATEGORY TOGGLE
             const categorySelect = document.getElementById("categorySelect");
             const customCategoryContainer = document.getElementById("customCategoryContainer");
             const customCategoryInput = document.getElementById("customCategoryInput");

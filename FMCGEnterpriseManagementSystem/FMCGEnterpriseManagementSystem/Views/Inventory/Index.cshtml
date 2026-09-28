@@ -46,7 +46,7 @@
                             <td>@item.ProductName</td>
                             <td>@item.QuantityOnHand</td>
                             <td>@item.CategoryName</td>
-                            <td>R @item.SellingPrice.ToString("N2")</td>
+                            <td>R @decimal.Parse(item.SellingPrice, System.Globalization.CultureInfo.InvariantCulture).ToString("N2")</td>
                             <td class="text-end">
                                 <div class="btn-group" role="group">
                                     <a asp-action="AdjustStock" asp-route-id="@item.InventoryId" class="btn btn-sm btn-outline-info me-1" title="Adjust Stock">

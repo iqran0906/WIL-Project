@@ -27,10 +27,10 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
 
         // --- Form Inputs & Relationships ---
         [Display(Name = "Selling Price")]
-        public decimal SellingPrice { get; set; }
+        public string SellingPrice { get; set; } = string.Empty;
 
         [Display(Name = "Cost Ex VAT")]
-        public decimal CostExVat { get; set; } // Added to satisfy edit/delete view references
+        public decimal CostExVat { get; set; }
 
         [Display(Name = "Category")]
         public string? CategoryName { get; set; }
