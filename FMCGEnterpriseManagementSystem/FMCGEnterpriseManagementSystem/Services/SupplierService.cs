@@ -34,7 +34,24 @@ namespace FMCGEnterpriseManagementSystem.Services
 
         public async Task UpdateSupplierAsync(SupplierViewModel model)
         {
-            var supplier = MapToEntity(model);
+            var supplier = await _supplierRepository.GetByIdAsync(model.SupplierId);
+
+            if (supplier == null)
+            {
+                return;
+            }
+
+            supplier.CompanyName = model.CompanyName;
+            supplier.ContactPerson = model.ContactPerson;
+            supplier.ContactNumber = model.ContactNumber;
+            supplier.Email = model.Email;
+            supplier.PhysicalAddress = model.PhysicalAddress;
+            supplier.CreditLimit = model.CreditLimit;
+            supplier.CreditTerms = model.CreditTerms;
+            supplier.VATNumber = model.VATNumber;
+            supplier.Notes = model.Notes ?? string.Empty;
+            supplier.UpdatedAt = DateTime.UtcNow;
+
             await _supplierRepository.UpdateAsync(supplier);
         }
 
@@ -54,8 +71,43 @@ namespace FMCGEnterpriseManagementSystem.Services
             CreditLimit = s.CreditLimit,
             CreditTerms = s.CreditTerms,
             VATNumber = s.VATNumber,
-            Notes = s.Notes
+            Notes = s.Notes,
+            IsActive = s.IsActive
         };
+
+        public async Task<bool> ActivateSupplierAsync(int id)
+        {
+            var supplier = await _supplierRepository.GetByIdAsync(id);
+
+            if (supplier == null)
+            {
+                return false;
+            }
+
+            supplier.IsActive = true;
+            supplier.UpdatedAt = DateTime.UtcNow;
+
+            await _supplierRepository.UpdateAsync(supplier);
+
+            return true;
+        }
+
+        public async Task<bool> DeactivateSupplierAsync(int id)
+        {
+            var supplier = await _supplierRepository.GetByIdAsync(id);
+
+            if (supplier == null)
+            {
+                return false;
+            }
+
+            supplier.IsActive = false;
+            supplier.UpdatedAt = DateTime.UtcNow;
+
+            await _supplierRepository.UpdateAsync(supplier);
+
+            return true;
+        }
 
         private static Supplier MapToEntity(SupplierViewModel vm) => new()
         {
@@ -68,7 +120,8 @@ namespace FMCGEnterpriseManagementSystem.Services
             CreditLimit = vm.CreditLimit,
             CreditTerms = vm.CreditTerms,
             VATNumber = vm.VATNumber,
-            Notes = vm.Notes ?? string.Empty // <--- Prevents null from being sent to the database
+            Notes = vm.Notes ?? string.Empty,
+            IsActive = vm.IsActive,
         };
     }
 }

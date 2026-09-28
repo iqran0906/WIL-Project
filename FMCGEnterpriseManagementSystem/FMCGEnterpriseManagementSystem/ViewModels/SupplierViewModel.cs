@@ -31,5 +31,8 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
         public string VATNumber { get; set; } = string.Empty;
 
         public string? Notes { get; set; }
+
+        [Display(Name = "Status")]
+        public bool IsActive { get; set; } = true;
     }
 }
