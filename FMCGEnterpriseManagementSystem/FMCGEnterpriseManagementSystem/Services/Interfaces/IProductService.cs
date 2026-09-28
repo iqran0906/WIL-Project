@@ -9,5 +9,6 @@ namespace FMCGEnterpriseManagementSystem.Services.Interfaces
         Task CreateProductAsync(ProductViewModel model);
         Task UpdateProductAsync(ProductViewModel model);
         Task DeleteProductAsync(int id);
+        Task ActivateProductAsync(int id);
     }
 }
