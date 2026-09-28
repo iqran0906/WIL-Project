@@ -42,16 +42,9 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         // GET: Invoices/Create
         public async Task<IActionResult> Create()
         {
-            var customers = await _context.Customers
-     .Include(c => c.SalesRepresentative)
-         .ThenInclude(sr => sr.Employee)
-     .ToListAsync();
-
-            return View(new InvoiceViewModel
-            {
-                InvoiceDate = DateTime.Today,
-                AvailableCustomers = customers
-            });
+            var model = new InvoiceViewModel { InvoiceDate = DateTime.Today };
+            await LoadLookupsAsync(model);
+            return View(model);
         }
 
         // POST: Invoices/Create
@@ -61,6 +54,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         {
             if (!ModelState.IsValid)
             {
+                await LoadLookupsAsync(model);
                 return View(model);
             }
 
@@ -72,8 +66,21 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             catch (InvalidOperationException ex)
             {
                 ModelState.AddModelError(string.Empty, ex.Message);
+                await LoadLookupsAsync(model);
                 return View(model);
             }
+        }
+
+        private async Task LoadLookupsAsync(InvoiceViewModel model)
+        {
+            model.AvailableCustomers = await _context.Customers
+                .Include(c => c.SalesRepresentative)
+                    .ThenInclude(sr => sr.Employee)
+                .ToListAsync();
+
+            model.AvailableProducts = await _context.Products
+                .Where(p => p.IsActive)
+                .ToListAsync();
         }
 
         // POST: Invoices/UpdateStatus/5

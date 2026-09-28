@@ -20,7 +20,7 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
         public string? BusinessName { get; set; }
 
         public List<FMCGEnterpriseManagementSystem.Models.Customer> AvailableCustomers { get; set; } = new();
-
+        public List<FMCGEnterpriseManagementSystem.Models.Product> AvailableProducts { get; set; } = new();
         public string? BillingAddress { get; set; }
         public string? PaymentTerms { get; set; }
 
