@@ -68,7 +68,7 @@ namespace FMCGEnterpriseManagementSystem.Services
             CreditLimit = vm.CreditLimit,
             CreditTerms = vm.CreditTerms,
             VATNumber = vm.VATNumber,
-            Notes = vm.Notes
+            Notes = vm.Notes ?? string.Empty // <--- Prevents null from being sent to the database
         };
     }
 }
