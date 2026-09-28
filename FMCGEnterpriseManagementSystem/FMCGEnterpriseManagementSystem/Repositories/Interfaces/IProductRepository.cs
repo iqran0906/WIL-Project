@@ -1,3 +1,5 @@
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using FMCGEnterpriseManagementSystem.Models;
 
 namespace FMCGEnterpriseManagementSystem.Repositories.Interfaces
@@ -11,5 +13,6 @@ namespace FMCGEnterpriseManagementSystem.Repositories.Interfaces
         Task AddAsync(Product product);
         Task UpdateAsync(Product product);
         Task DeleteAsync(int id);
+        Task<bool> SaveChangesAsync();
     }
 }
