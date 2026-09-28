@@ -93,7 +93,7 @@ namespace FMCGEnterpriseManagementSystem.Data
             // Product -> Inventory
             modelBuilder.Entity<Inventory>()
                 .HasOne(i => i.Product)
-                .WithOne()
+                .WithOne(p => p.Inventory)
                 .HasForeignKey<Inventory>(i => i.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
 
