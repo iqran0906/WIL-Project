@@ -15,7 +15,7 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
         [Required(ErrorMessage = "ID Number is required.")]
         public string IdNumber { get; set; } = string.Empty;
 
-        public string TelephoneNumber { get; set; } = string.Empty;
+        public string? TelephoneNumber { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Cell number is required.")]
         public string CellNumber { get; set; } = string.Empty;
@@ -38,12 +38,13 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
         [Required(ErrorMessage = "Payment method is required.")]
         public string PaymentMethod { get; set; } = string.Empty;
 
-        public string Notes { get; set; } = string.Empty;
+        public string? Notes { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Sales representative is required.")]
-        public string SalesRep { get; set; } = string.Empty;
+        public string? SalesRep { get; set; } = string.Empty;
 
         public string? VATNumber { get; set; }
+
+        // Optional now so it can be left unassigned
         public int? SalesRepresentativeId { get; set; }
     }
 }

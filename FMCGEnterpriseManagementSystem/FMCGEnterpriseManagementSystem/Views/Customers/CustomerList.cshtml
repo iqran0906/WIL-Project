@@ -26,58 +26,52 @@
         </div>
     </form>
 
-    <!-- Table matching Supplier style -->
+    <!-- Table styled with a clean white background and dark text -->
     <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0" style="border: 1px solid #44596e; font-size: 0.95rem;">
+        <table class="table table-hover align-middle mb-0 bg-white text-dark shadow-sm" style="border: 1px solid #dee2e6; font-size: 0.9rem;">
             <thead>
-                <tr style="background-color: #ffffff; border-bottom: 1px solid #c0c0c0;">
-                    <th class="fw-semibold py-3 px-3" style="color: #000;">Customer Name</th>
-                    <th class="fw-semibold py-3 px-3" style="color: #000;">Contact Number</th>
-                    <th class="fw-semibold py-3 px-3" style="color: #000;">Address</th>
-                    <th class="fw-semibold py-3 px-3" style="color: #000;">Salesperson</th>
-                    <th class="fw-semibold py-3 px-3 text-center" style="color: #000; width: 60px;">Action</th>
+                <tr class="bg-light border-bottom">
+                    <th class="fw-semibold py-3 px-2 text-dark">Customer Name</th>
+                    <th class="fw-semibold py-3 px-2 text-dark">Contact Number</th>
+                    <th class="fw-semibold py-3 px-2 text-dark">Physical Address</th>
+                    <th class="fw-semibold py-3 px-2 text-dark">Delivery Address</th>
+                    <th class="fw-semibold py-3 px-2 text-dark">Email</th>
+                    <th class="fw-semibold py-3 px-2 text-dark">VAT Number</th>
+                    <th class="fw-semibold py-3 px-2 text-dark">Group</th>
+                    <th class="fw-semibold py-3 px-2 text-dark">Payment Terms</th>
+                    <th class="fw-semibold py-3 px-2 text-dark">Sales Rep</th>
+                    <th class="fw-semibold py-3 px-2 text-center text-dark" style="width: 140px;">Action</th>
                 </tr>
             </thead>
             <tbody>
                 @if (Model != null && Model.Any())
-                @*[cite: 2] *@
                 {
                     @foreach (var customer in Model)
-                    @*[cite: 2] *@
                     {
-                        <tr class="text-white" style="border-bottom: 1px solid #2d4052; background-color: #1a2a38;">
-                            <td class="py-3 px-3 text-white">@customer.Name @customer.Surname</td>
-                            <td class="py-3 px-3 text-white">@customer.CellNumber</td>
-                            <td class="py-3 px-3 text-white">@customer.PhysicalAddress</td>
-                            <td class="py-3 px-3 text-white">@customer.SalesRep</td>
-                            <td class="py-3 px-3 text-center">
-                                <div class="dropdown">
-                                    <button class="btn btn-sm p-0 border-0 text-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        ▼
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-end shadow rounded-0">
-                                        <li>
-                                            <a class="dropdown-item small" asp-controller="Customers" asp-action="Edit" asp-route-id="@customer.CustomerId">
-                                                <i class="bi bi-pencil me-2"></i>Edit
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item small" asp-controller="Customers" asp-action="DownloadCustomerPdf" asp-route-id="@customer.CustomerId">
-                                                <i class="bi bi-file-earmark-arrow-down me-2"></i>Download PDF
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item small" asp-controller="Customers" asp-action="ViewCustomerPdf" asp-route-id="@customer.CustomerId" target="_blank">
-                                                <i class="bi bi-file-earmark-pdf me-2"></i>View PDF
-                                            </a>
-                                        </li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li>
-                                            <a class="dropdown-item small text-danger" asp-controller="Customers" asp-action="Delete" asp-route-id="@customer.CustomerId">
-                                                <i class="bi bi-trash me-2"></i>Delete
-                                            </a>
-                                        </li>
-                                    </ul>
+                        <tr class="border-bottom bg-white text-dark">
+                            <td class="py-3 px-2 fw-medium">@customer.Name @customer.Surname</td>
+                            <td class="py-3 px-2">
+                                <div>C: @customer.CellNumber</div>
+                                @if (!string.IsNullOrWhiteSpace(customer.TelephoneNumber))
+                                {
+                                    <div class="small text-muted">T: @customer.TelephoneNumber</div>
+                                }
+                            </td>
+                            <td class="py-3 px-2">@customer.PhysicalAddress</td>
+                            <td class="py-3 px-2">@(string.IsNullOrWhiteSpace(customer.DeliveryAddress) ? customer.PhysicalAddress : customer.DeliveryAddress)</td>
+                            <td class="py-3 px-2">@customer.Email</td>
+                            <td class="py-3 px-2">@(string.IsNullOrWhiteSpace(customer.VATNumber) ? "-" : customer.VATNumber)</td>
+                            <td class="py-3 px-2">@customer.CustomerGroup</td>
+                            <td class="py-3 px-2">@customer.PaymentTerms</td>
+                            <td class="py-3 px-2">@customer.SalesRep</td>
+                            <td class="py-3 px-2 text-center">
+                                <div class="d-flex justify-content-center gap-1">
+                                    <a class="btn btn-sm btn-outline-secondary py-0 px-2" asp-controller="Customers" asp-action="Edit" asp-route-id="@customer.CustomerId" title="Edit">
+                                        <i class="bi bi-pencil"></i> Edit
+                                    </a>
+                                    <a class="btn btn-sm btn-outline-danger py-0 px-2" asp-controller="Customers" asp-action="Delete" asp-route-id="@customer.CustomerId" title="Delete">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
                                 </div>
                             </td>
                         </tr>
@@ -85,9 +79,9 @@
                 }
                 else
                 {
-                    <tr style="background-color: #ffffff;">
-                        <td colspan="5" class="text-center py-4 text-muted">
-                            <!-- Empty row matching the clean look -->
+                    <tr class="bg-white">
+                        <td colspan="10" class="text-center py-4 text-muted">
+                            No customers found.
                         </td>
                     </tr>
                 }
