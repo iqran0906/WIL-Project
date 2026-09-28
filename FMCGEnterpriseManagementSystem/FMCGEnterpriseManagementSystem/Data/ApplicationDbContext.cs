@@ -93,8 +93,8 @@ namespace FMCGEnterpriseManagementSystem.Data
             // Product -> Inventory
             modelBuilder.Entity<Inventory>()
                 .HasOne(i => i.Product)
-                .WithMany()
-                .HasForeignKey(i => i.ProductId)
+                .WithOne(p => p.Inventory)
+                .HasForeignKey<Inventory>(i => i.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Inventory -> StockBatches
