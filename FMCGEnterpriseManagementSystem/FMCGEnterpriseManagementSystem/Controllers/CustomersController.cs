@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.Services.Interfaces;
+﻿// Purpose: Customers API (JSON): list, view, add, update and delete customers.
+// Authors: iqran0906, Naseeha27, Maseeha17 (from git history)
+
+using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;

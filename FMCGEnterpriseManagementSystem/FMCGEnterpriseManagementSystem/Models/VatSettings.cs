@@ -1,4 +1,7 @@
-﻿namespace FMCGEnterpriseManagementSystem.Models
+﻿// Purpose: VAT rate record (standard South African VAT).
+// Authors: Sayali-St10458649 (from git history)
+
+namespace FMCGEnterpriseManagementSystem.Models
 {
     public class VatSettings
     {

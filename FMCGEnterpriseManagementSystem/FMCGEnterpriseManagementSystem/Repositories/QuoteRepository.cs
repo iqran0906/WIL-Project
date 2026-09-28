@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.Data;
+﻿// Purpose: Repository pattern: database queries for quote.
+// Authors: Sayali-St10458649 (from git history)
+
+using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -58,11 +61,11 @@ namespace FMCGEnterpriseManagementSystem.Repositories
             return true;
         }
 
-        public async Task<string> GenerateNextQuoteNumberAsync()
+        public async Task<string> GenerateNextQuoteNumberAsync(string prefix = "ED")
         {
             var count = await _context.Quotes.CountAsync();
             var nextNumber = count + 1;
-            return $"ED{nextNumber:D5}";
+            return $"{prefix}{nextNumber:D5}";
         }
     }
 }

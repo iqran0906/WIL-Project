@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.Models;
+﻿// Purpose: Notification details passed to the notification observers (email / in-app).
+// Authors: Sayali-St10458649 (from git history)
+
+using FMCGEnterpriseManagementSystem.Models;
 
 namespace FMCGEnterpriseManagementSystem.DTOs
 {

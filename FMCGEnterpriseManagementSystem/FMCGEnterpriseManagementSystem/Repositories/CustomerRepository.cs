@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.Data;
+﻿// Purpose: Repository pattern: database queries for customer.
+// Authors: Naseeha27, Maseeha17 (from git history)
+
+using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;

@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.Models;
+﻿// Purpose: Contract (interface) for notification data access.
+// Authors: Sayali-St10458649 (from git history)
+
+using FMCGEnterpriseManagementSystem.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

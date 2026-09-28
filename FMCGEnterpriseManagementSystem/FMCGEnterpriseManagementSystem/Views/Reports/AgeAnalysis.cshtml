@@ -1,4 +1,8 @@
-﻿@model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.Reports.AgeAnalysisReportViewModel>
+﻿@*
+    Purpose: Age Analysis report page.
+    Authors: iqran0906 (from git history)
+*@
+@model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.Reports.AgeAnalysisReportViewModel>
 
 @{
     ViewData["Title"] = "Age Analysis";
@@ -11,7 +15,7 @@
             <p class="text-muted">Outstanding customer balances grouped by invoice age.</p>
         </div>
 
-        <a asp-action="Index" class="btn btn-outline-secondary">Back to Reports</a>
+        <partial name="_ReportToolbar" model="@("AgeAnalysis")" />
     </div>
 
     <div class="card shadow-sm">

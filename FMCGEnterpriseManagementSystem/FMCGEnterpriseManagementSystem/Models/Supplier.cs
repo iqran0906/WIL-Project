@@ -1,4 +1,7 @@
-﻿namespace FMCGEnterpriseManagementSystem.Models
+﻿// Purpose: Database entity: supplier (maps to a table).
+// Authors: Naseeha27, Maseeha17 (from git history)
+
+namespace FMCGEnterpriseManagementSystem.Models
 {
     public class Supplier
     {

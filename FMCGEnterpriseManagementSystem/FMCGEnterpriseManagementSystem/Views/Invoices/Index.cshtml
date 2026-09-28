@@ -1,10 +1,22 @@
-﻿@model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.InvoiceViewModel>
+﻿@*
+    Purpose: Invoices list page (table with search / filters and actions).
+    Authors: Sayali-St10458649 (from git history)
+*@
+@model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.InvoiceViewModel>
 
 @{
     ViewData["Title"] = "Invoice";
 }
 
 <div class="px-2 py-3">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-1"></i>@TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
     <div class="row align-items-start mb-3">
         <div class="col-md-4">
             <h2 class="text-white fw-bold mb-3">Invoice</h2>
@@ -18,32 +30,44 @@
                 <div class="row g-2 justify-content-md-end text-white">
                     <div class="col-6 col-sm-3">
                         <label class="small fw-bold">Customer:</label>
-                        <input type="text" name="customerId" class="form-control form-control-sm" placeholder="Customer ID">
+                        <select name="customerId"
+                                asp-items="ViewBag.CustomerFilter"
+                                class="form-select form-select-sm">
+                            <option value="">All</option>
+                        </select>
                     </div>
                     <div class="col-6 col-sm-3">
                         <label class="small fw-bold">Start:</label>
-                        <input type="date" name="startDate" class="form-control form-control-sm">
+                        <input type="date" name="startDate" value="@ViewBag.StartDate" class="form-control form-control-sm">
                     </div>
                     <div class="col-6 col-sm-3">
                         <label class="small fw-bold">End:</label>
-                        <input type="date" name="endDate" class="form-control form-control-sm">
+                        <input type="date" name="endDate" value="@ViewBag.EndDate" class="form-control form-control-sm">
                     </div>
                     <div class="col-6 col-sm-3">
                         <label class="small fw-bold">&nbsp;</label>
-                        <button type="submit" class="btn btn-sm btn-light w-100">Filter</button>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-sm btn-light flex-fill">Filter</button>
+                            <a asp-action="Index" class="btn btn-sm btn-outline-light">Clear</a>
+                        </div>
                     </div>
                 </div>
 
                 <div class="d-flex justify-content-md-end align-items-center gap-2 mt-3">
                     <span class="text-white fw-bold small">Keyword:</span>
                     <div class="position-relative">
-                        <input type="text" name="keyword" class="form-control form-control-sm search-field" placeholder="Invoice Number">
+                        <input type="text" name="keyword" value="@ViewBag.Keyword" class="form-control form-control-sm search-field" placeholder="Invoice no. or customer">
                         <i class="bi bi-search position-absolute end-0 top-50 translate-middle-y me-2 text-white-50 small"></i>
                     </div>
                 </div>
             </form>
         </div>
     </div>
+
+    @if (ViewBag.DateError != null)
+    {
+        <div class="alert alert-danger"><i class="bi bi-exclamation-triangle me-1"></i>@ViewBag.DateError</div>
+    }
 
     <div class="table-responsive">
         <table class="custom-data-table">
@@ -90,7 +114,7 @@
                 else
                 {
                     <tr>
-                        <td colspan="6" class="text-center text-muted">No invoices found.</td>
+                        <td colspan="7" class="text-center text-muted">No invoices match your filters.</td>
                     </tr>
                 }
             </tbody>

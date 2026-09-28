@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.Services.Interfaces;
+﻿// Purpose: Demand and stock forecasting, reordering and CSV export.
+// Authors: iqran0906, Maseeha17 (from git history)
+
+using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;

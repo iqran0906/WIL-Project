@@ -1,3 +1,6 @@
+// Purpose: Contract (interface) for inventory data access.
+// Authors: Maseeha17, Sayali-St10458649 (from git history)
+
 using FMCGEnterpriseManagementSystem.Models;
 
 namespace FMCGEnterpriseManagementSystem.Repositories.Interfaces

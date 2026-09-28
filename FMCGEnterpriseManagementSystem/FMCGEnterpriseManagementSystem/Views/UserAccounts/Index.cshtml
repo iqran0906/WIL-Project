@@ -1,4 +1,8 @@
-﻿@model IEnumerable<FMCGEnterpriseManagementSystem.Models.Employee>
+﻿@*
+    Purpose: User Accounts list page (table with search / filters and actions).
+    Authors: iqran0906 (from git history)
+*@
+@model IEnumerable<FMCGEnterpriseManagementSystem.Models.Employee>
 
 @{
     ViewData["Title"] = "User Account Management";
@@ -27,12 +31,7 @@
         </div>
     }
 
-    @if (TempData["ErrorMessage"] != null)
-    {
-        <div class="alert alert-danger">
-            @TempData["ErrorMessage"]
-        </div>
-    }
+    @* Error messages are shown by the shared layout *@
 
     <div class="card mb-4">
         <div class="card-header">

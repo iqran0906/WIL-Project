@@ -1,4 +1,9 @@
-﻿@model FMCGEnterpriseManagementSystem.ViewModels.LoginViewModel
+﻿@*
+    Purpose: Login page.
+    Authors: iqran0906 (from git history)
+    Uses: jQuery Validation + Unobtrusive (MIT) https://jqueryvalidation.org
+*@
+@model FMCGEnterpriseManagementSystem.ViewModels.LoginViewModel
 
 @{
     Layout = null;
@@ -75,19 +80,25 @@
                 }
 
             .brand-icon {
-                width: 70px;
-                height: 70px;
-                background: #1c323d;
-                color: white;
+                width: 80px;
+                height: 80px;
+                background: white;
                 border-radius: 50%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 margin: 0 auto 20px auto;
-                font-weight: bold;
-                font-size: 1.5rem;
-                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                overflow: hidden;
+                padding: 5px;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.15);
             }
+
+                .brand-icon img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain;
+                    border-radius: 50%;
+                }
 
             .validation-summary-errors {
                 text-align: left;
@@ -100,7 +111,9 @@
 
     <div class="login-card text-center">
 
-        <div class="brand-icon">ED</div>
+        <div class="brand-icon">
+            <img src="~/images/logo.png" alt="Exclusive Distributors Logo" />
+        </div>
 
         <h3 class="fw-bold mb-1"
             style="color: #1c323d;">

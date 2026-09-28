@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿// Purpose: Data and validation rules for the customer pages and forms.
+// Authors: Naseeha27, Maseeha17 (from git history)
+
+using System.ComponentModel.DataAnnotations;
 
 namespace FMCGEnterpriseManagementSystem.ViewModels
 {

@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿// Purpose: Repository pattern: database queries for product.
+// Authors: Maseeha17, Sayali-St10458649 (from git history)
+
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;

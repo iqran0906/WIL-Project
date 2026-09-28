@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.ViewModels;
+﻿// Purpose: Contract (interface) for the forecasting service.
+// Authors: Maseeha17 (from git history)
+
+using FMCGEnterpriseManagementSystem.ViewModels;
 
 namespace FMCGEnterpriseManagementSystem.Services.Interfaces
 {

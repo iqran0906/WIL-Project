@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.Factories;
+﻿// Purpose: Controller for the payments pages and form submissions.
+// Authors: iqran0906, Sayali-St10458649, Naseeha27 (from git history)
+
+using FMCGEnterpriseManagementSystem.Factories;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;
 using FMCGEnterpriseManagementSystem.Helpers;

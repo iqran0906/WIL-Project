@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.ViewModels.Reports;
+﻿// Purpose: Contract (interface) for the report service.
+// Authors: iqran0906 (from git history)
+
+using FMCGEnterpriseManagementSystem.ViewModels.Reports;
 
 namespace FMCGEnterpriseManagementSystem.Services.Interfaces
 {

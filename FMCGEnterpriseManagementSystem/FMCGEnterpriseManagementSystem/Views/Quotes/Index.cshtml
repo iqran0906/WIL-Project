@@ -1,50 +1,102 @@
-﻿@{
+@*
+    Purpose: Quotes list page (table with search / filters and actions).
+    Authors: Naseeha27, Sayali-St10458649, ST10068525 (from git history)
+*@
+@model IEnumerable<FMCGEnterpriseManagementSystem.Models.Quote>
+
+@{
     ViewData["Title"] = "Quotes";
+
+    var periods = new Dictionary<string, string>
+    {
+        [""] = "All",
+        ["today"] = "Today",
+        ["week"] = "This Week",
+        ["month"] = "This Month",
+        ["lastmonth"] = "Last Month",
+        ["year"] = "This Year"
+    };
 }
 
 <div class="px-2 py-3">
-    <div class="row align-items-start mb-3">
-        <div class="col-md-4">
-            <h2 class="text-white fw-bold mb-3">Quotes</h2>
-            <a asp-controller="Quotes" asp-action="Create" class="btn btn-action-primary text-decoration-none">
-                New Quote
-            </a>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-1"></i>@TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
+    }
 
-        <div class="col-md-8">
-            <div class="row g-2 justify-content-md-end text-white">
-                <div class="col-6 col-sm-3">
-                    <label class="small fw-bold">Period:</label>
-                    <select class="form-select form-select-sm"><option>All</option></select>
-                </div>
-                <div class="col-6 col-sm-3">
-                    <label class="small fw-bold">Customer:</label>
-                    <select class="form-select form-select-sm"><option>All</option></select>
-                </div>
-                <div class="col-6 col-sm-3">
-                    <label class="small fw-bold">Start:</label>
-                    <input type="date" class="form-control form-control-sm">
-                </div>
-                <div class="col-6 col-sm-3">
-                    <label class="small fw-bold">End:</label>
-                    <input type="date" class="form-control form-control-sm">
-                </div>
+    <form asp-controller="Quotes" asp-action="Index" method="get">
+
+        <div class="row align-items-start mb-3">
+            <div class="col-md-4">
+                <h2 class="text-white fw-bold mb-3">Quotes</h2>
+                <a asp-controller="Quotes" asp-action="Create" class="btn btn-action-primary text-decoration-none">
+                    New Quote
+                </a>
             </div>
 
-            <div class="d-flex justify-content-md-end align-items-center gap-2 mt-3">
-                <span class="text-white fw-bold small">Keyword:</span>
-                <div class="position-relative">
-                    <input type="text" class="form-control form-control-sm search-field" placeholder="Quote No, Customer, etc">
-                    <i class="bi bi-search position-absolute end-0 top-50 translate-middle-y me-2 text-white-50 small"></i>
+            <div class="col-md-8">
+                <div class="row g-2 justify-content-md-end text-white">
+                    <div class="col-6 col-sm-3">
+                        <label class="small fw-bold">Period:</label>
+                        <select name="period" class="form-select form-select-sm">
+                            @foreach (var period in periods)
+                            {
+                                <option value="@period.Key"
+                                        selected="@(((string?)ViewBag.Period ?? "") == period.Key)">
+                                    @period.Value
+                                </option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-6 col-sm-3">
+                        <label class="small fw-bold">Customer:</label>
+                        <select name="customerId"
+                                asp-items="ViewBag.CustomerFilter"
+                                class="form-select form-select-sm">
+                            <option value="">All</option>
+                        </select>
+                    </div>
+                    <div class="col-6 col-sm-3">
+                        <label class="small fw-bold">Start:</label>
+                        <input type="date" name="startDate" value="@ViewBag.StartDate" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-6 col-sm-3">
+                        <label class="small fw-bold">End:</label>
+                        <input type="date" name="endDate" value="@ViewBag.EndDate" class="form-control form-control-sm">
+                    </div>
+                </div>
+
+                <div class="d-flex flex-wrap justify-content-md-end align-items-center gap-2 mt-3">
+                    <span class="text-white fw-bold small">Keyword:</span>
+                    <div class="position-relative">
+                        <input type="text" name="keyword" value="@ViewBag.Keyword" class="form-control form-control-sm search-field" placeholder="Quote No, Customer, etc">
+                        <i class="bi bi-search position-absolute end-0 top-50 translate-middle-y me-2 text-white-50 small"></i>
+                    </div>
+                    <button type="submit" class="btn btn-sm btn-light">Filter</button>
+                    <a asp-controller="Quotes" asp-action="Index" class="btn btn-sm btn-outline-light">Clear</a>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="d-flex align-items-center gap-2 mb-3 text-white">
-        <span class="fw-bold">View:</span>
-        <select class="form-select form-select-sm w-auto d-inline-block"><option>Quotes</option></select>
-    </div>
+        <div class="d-flex align-items-center gap-2 mb-3 text-white">
+            <span class="fw-bold">Status:</span>
+            <select name="status"
+                    asp-items="ViewBag.StatusFilter"
+                    class="form-select form-select-sm w-auto d-inline-block"
+                    onchange="this.form.submit()">
+                <option value="">All Quotes</option>
+            </select>
+        </div>
+
+    </form>
+
+    @if (ViewBag.DateError != null)
+    {
+        <div class="alert alert-danger"><i class="bi bi-exclamation-triangle me-1"></i>@ViewBag.DateError</div>
+    }
 
     <div class="table-responsive">
         <table class="custom-data-table">
@@ -53,22 +105,20 @@
                     <th>Date</th>
                     <th>Quote No.</th>
                     <th>Customer</th>
-                    <th>Expiry Date</th>
                     <th>Total</th>
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                @if (Model != null)
+                @if (Model != null && Model.Any())
                 {
-                    @foreach (var quote in (IEnumerable<FMCGEnterpriseManagementSystem.Models.Quote>)Model)
+                    @foreach (var quote in Model)
                     {
                         <tr>
                             <td>@quote.QuoteDate.ToShortDateString()</td>
                             <td>@quote.QuoteNumber</td>
-                            <td>@quote.Customer?.CustomerId</td>
-                            
+                            <td>@quote.Customer?.Name @quote.Customer?.Surname</td>
                             <td>R@quote.Total.ToString("N2")</td>
                             <td>@quote.Status</td>
                             <td>
@@ -76,6 +126,12 @@
                             </td>
                         </tr>
                     }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-muted">No quotes match your filters.</td>
+                    </tr>
                 }
             </tbody>
         </table>

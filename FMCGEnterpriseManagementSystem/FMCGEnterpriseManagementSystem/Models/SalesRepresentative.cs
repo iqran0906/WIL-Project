@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿// Purpose: Database entity: sales representative (maps to a table).
+// Authors: Naseeha27 (from git history)
+
+using System.ComponentModel.DataAnnotations;
 
 namespace FMCGEnterpriseManagementSystem.Models
 {

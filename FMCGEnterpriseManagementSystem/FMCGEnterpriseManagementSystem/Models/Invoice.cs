@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿// Purpose: Database entity: invoice (maps to a table).
+// Authors: iqran0906, Naseeha27, Sayali-St10458649 (from git history)
+
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using FMCGEnterpriseManagementSystem.Enums;
 
