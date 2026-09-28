@@ -9,17 +9,70 @@ namespace FMCGEnterpriseManagementSystem.Controllers
     public class SupplierController : Controller
     {
         private readonly ISupplierService _supplierService;
+        private readonly IProductService _productService;
 
-        public SupplierController(ISupplierService supplierService)
+        public SupplierController(
+            ISupplierService supplierService,
+            IProductService productService)
         {
             _supplierService = supplierService;
+            _productService = productService;
         }
 
         // GET: Supplier/SupplierList
         [HttpGet]
-        public async Task<IActionResult> SupplierList()
+        public async Task<IActionResult> SupplierList(string? search)
         {
-            var suppliers = await _supplierService.GetAllSuppliersAsync();
+            var suppliers = (await _supplierService.GetAllSuppliersAsync()).ToList();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                search = search.Trim();
+
+                suppliers = suppliers
+                    .Where(s =>
+                        s.CompanyName.Contains(
+                            search,
+                            StringComparison.OrdinalIgnoreCase) ||
+
+                        s.ContactPerson.Contains(
+                            search,
+                            StringComparison.OrdinalIgnoreCase) ||
+
+                        s.ContactNumber.Contains(
+                            search,
+                            StringComparison.OrdinalIgnoreCase) ||
+
+                        s.Email.Contains(
+                            search,
+                            StringComparison.OrdinalIgnoreCase) ||
+
+                        s.PhysicalAddress.Contains(
+                            search,
+                            StringComparison.OrdinalIgnoreCase) ||
+
+                        s.CreditTerms.Contains(
+                            search,
+                            StringComparison.OrdinalIgnoreCase) ||
+
+                        s.VATNumber.Contains(
+                            search,
+                            StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+
+            ViewBag.Search = search;
+
+            var allSuppliers =
+    (await _supplierService.GetAllSuppliersAsync()).ToList();
+
+            ViewBag.TotalSuppliers = allSuppliers.Count;
+            ViewBag.ActiveSuppliers = allSuppliers.Count(s => s.IsActive);
+            ViewBag.InactiveSuppliers = allSuppliers.Count(s => !s.IsActive);
+            ViewBag.TotalCreditLimit = allSuppliers.Sum(s => s.CreditLimit);
+
+            ViewBag.Search = search;
+
             return View("~/Views/Supplier/SupplierList.cshtml", suppliers);
         }
 
@@ -76,25 +129,47 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return RedirectToAction(nameof(SupplierList));
         }
 
-        // GET: Supplier/DeleteSupplier/5
         [HttpGet]
-        public async Task<IActionResult> DeleteSupplier(int id)
+        public async Task<IActionResult> Products(int id)
         {
+            if (id <= 0)
+            {
+                return NotFound();
+            }
+
             var supplier = await _supplierService.GetSupplierByIdAsync(id);
+
             if (supplier == null)
             {
                 return NotFound();
             }
 
-            return View(supplier);
+            var products = (await _productService.GetAllProductsAsync())
+                .Where(p => p.SupplierId == id)
+                .OrderBy(p => p.ProductName)
+                .ToList();
+
+            ViewBag.SupplierName = supplier.CompanyName;
+            ViewBag.SupplierId = supplier.SupplierId;
+
+            return View(products);
         }
 
-        // POST: Supplier/DeleteSupplierConfirmed
-        [HttpPost, ActionName("DeleteSupplierConfirmed")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteSupplierConfirmed(int supplierId)
+        public async Task<IActionResult> DeactivateSupplier(int id)
         {
-            await _supplierService.DeleteSupplierAsync(supplierId);
+            await _supplierService.DeactivateSupplierAsync(id);
+
+            return RedirectToAction(nameof(SupplierList));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ActivateSupplier(int id)
+        {
+            await _supplierService.ActivateSupplierAsync(id);
+
             return RedirectToAction(nameof(SupplierList));
         }
     }
