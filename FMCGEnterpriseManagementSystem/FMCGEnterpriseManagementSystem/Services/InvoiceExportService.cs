@@ -97,8 +97,7 @@ namespace FMCGEnterpriseManagementSystem.Services
                                 right.Item()
                                     .Text($"Payment Terms: {invoice.PaymentTerms ?? "N/A"}");
 
-                                right.Item()
-                                    .Text($"Status: {invoice.Status}");
+                             
                             });
                         });
 
