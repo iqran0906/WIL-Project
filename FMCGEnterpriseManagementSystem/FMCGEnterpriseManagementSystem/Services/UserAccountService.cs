@@ -58,6 +58,20 @@ namespace FMCGEnterpriseManagementSystem.Services
                 return false;
             }
 
+            if (role == "SalesRepresentative")
+            {
+                var salesRepresentative = await _context.SalesRepresentatives
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(sr =>
+                        sr.EmployeeID == employeeId &&
+                        sr.IsActive);
+
+                if (salesRepresentative == null)
+                {
+                    return false;
+                }
+            }
+
             var employee = await _context.Employees
                 .FirstOrDefaultAsync(e => e.EmployeeID == employeeId);
 
