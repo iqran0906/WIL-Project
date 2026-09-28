@@ -1,25 +1,28 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using FMCGEnterpriseManagementSystem.Models;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace FMCGEnterpriseManagementSystem.Models
+public class Inventory
 {
-    public class Inventory
-    {
-        [Key]
-        public int InventoryId { get; set; }
+    [Key]
+    public int InventoryId { get; set; }
 
-        [Required]
-        public int ProductId { get; set; }
+    [Required]
+    public int ProductId { get; set; }
 
-        public int QuantityOnHand { get; set; }
+    [ForeignKey("ProductId")]
+    public Product Product { get; set; } = null!;
 
-        public int ReorderLevel { get; set; }
+    // Use only QuantityOnHand everywhere
+    public int QuantityOnHand { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public int ReorderLevel { get; set; }
+    public string? Notes { get; set; }
 
-        public DateTime? UpdatedAt { get; set; }
 
-        public Product Product { get; set; } = null!;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public ICollection<StockBatch> StockBatches { get; set; } = new List<StockBatch>();
-    }
+    public DateTime? UpdatedAt { get; set; }
+
+    public ICollection<StockBatch> StockBatches { get; set; } = new List<StockBatch>();
 }
