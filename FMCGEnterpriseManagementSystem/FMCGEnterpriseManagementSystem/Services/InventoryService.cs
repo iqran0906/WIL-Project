@@ -13,7 +13,9 @@ namespace FMCGEnterpriseManagementSystem.Services
         private readonly IInventoryRepository _repository;
         private readonly ApplicationDbContext _context;
 
-        public InventoryService(IInventoryRepository repository, ApplicationDbContext context)
+        public InventoryService(
+            IInventoryRepository repository,
+            ApplicationDbContext context)
         {
             _repository = repository;
             _context = context;
@@ -35,25 +37,57 @@ namespace FMCGEnterpriseManagementSystem.Services
         {
             int supplierIdToUse = model.SupplierId;
 
-            // Dynamically fetch the first available supplier if none is specified or if it's invalid
+            // Dynamically fetch the first available supplier if none is specified
             if (supplierIdToUse <= 0)
             {
                 var firstSupplier = await _context.Suppliers.FirstOrDefaultAsync();
+
                 if (firstSupplier != null)
                 {
                     supplierIdToUse = firstSupplier.SupplierId;
                 }
                 else
                 {
-                    throw new Exception("No suppliers found in the database. Please add at least one supplier before creating inventory items.");
+                    throw new Exception(
+                        "No suppliers found in the database. Please add at least one supplier before creating inventory items."
+                    );
                 }
             }
 
-            decimal.TryParse(model.SellingPrice, NumberStyles.Any, CultureInfo.InvariantCulture, out var parsedSellingPrice);
+            // Automatically generate the next Product Code
+            var lastProduct = await _context.Products
+                .OrderByDescending(p => p.ProductId)
+                .FirstOrDefaultAsync();
+
+            int nextNumber = 1;
+
+            if (lastProduct != null && !string.IsNullOrEmpty(lastProduct.ProductCode))
+            {
+                var codeNumber = new string(
+                    lastProduct.ProductCode
+                        .Where(char.IsDigit)
+                        .ToArray()
+                );
+
+                if (int.TryParse(codeNumber, out int lastNumber))
+                {
+                    nextNumber = lastNumber + 1;
+                }
+            }
+
+            string generatedProductCode = $"ITM{nextNumber:D3}";
+
+            // Parse selling price
+            decimal.TryParse(
+                model.SellingPrice,
+                NumberStyles.Any,
+                CultureInfo.InvariantCulture,
+                out var parsedSellingPrice
+            );
 
             var product = new Product
             {
-                ProductCode = model.ProductCode,
+                ProductCode = generatedProductCode,
                 ProductName = model.ProductName,
                 Description = model.ProductName,
                 SellingPrice = parsedSellingPrice,
@@ -71,21 +105,26 @@ namespace FMCGEnterpriseManagementSystem.Services
                 ProductId = product.ProductId,
                 QuantityOnHand = model.QuantityOnHand,
                 ReorderLevel = model.ReorderLevel,
+                Notes = model.Notes,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };
 
             await _repository.AddAsync(entity);
 
-            // If an expiry date was chosen on the form, create a linked StockBatch so it displays in the table
+            // If an expiry date was chosen, create a linked StockBatch
             if (model.ExpiryDate.HasValue)
             {
                 var stockBatch = new StockBatch
                 {
                     InventoryId = entity.InventoryId,
+                    BatchNumber = $"BATCH-{DateTime.UtcNow:yyyyMMddHHmmss}",
+                    Quantity = model.QuantityOnHand,
+                    ReceivedDate = DateTime.UtcNow,
                     ExpiryDate = model.ExpiryDate.Value,
                     CreatedAt = DateTime.UtcNow
                 };
+
                 _context.StockBatches.Add(stockBatch);
                 await _context.SaveChangesAsync();
             }
@@ -94,21 +133,37 @@ namespace FMCGEnterpriseManagementSystem.Services
         public async Task UpdateInventoryItemAsync(InventoryViewModel model)
         {
             var entity = await _repository.GetByIdAsync(model.InventoryId);
-            if (entity == null) return;
+
+            if (entity == null)
+                return;
 
             entity.QuantityOnHand = model.QuantityOnHand;
             entity.ReorderLevel = model.ReorderLevel;
+            entity.Notes = model.Notes;
             entity.UpdatedAt = DateTime.UtcNow;
 
-            decimal.TryParse(model.SellingPrice, NumberStyles.Any, CultureInfo.InvariantCulture, out var parsedSellingPrice);
+            decimal.TryParse(
+                model.SellingPrice,
+                NumberStyles.Any,
+                CultureInfo.InvariantCulture,
+                out var parsedSellingPrice
+            );
 
             if (entity.Product != null)
             {
-                entity.Product.ProductCode = model.ProductCode ?? entity.Product.ProductCode;
-                entity.Product.ProductName = model.ProductName ?? entity.Product.ProductName;
-                entity.Product.Description = model.ProductName ?? entity.Product.Description;
+                entity.Product.ProductCode =
+                    model.ProductCode ?? entity.Product.ProductCode;
+
+                entity.Product.ProductName =
+                    model.ProductName ?? entity.Product.ProductName;
+
+                entity.Product.Description =
+                    model.ProductName ?? entity.Product.Description;
+
                 entity.Product.SellingPrice = parsedSellingPrice;
-                entity.Product.Category = model.CategoryName ?? entity.Product.Category;
+
+                entity.Product.Category =
+                    model.CategoryName ?? entity.Product.Category;
             }
 
             await _repository.UpdateAsync(entity);
@@ -118,6 +173,7 @@ namespace FMCGEnterpriseManagementSystem.Services
         public async Task DeleteInventoryItemAsync(int id)
         {
             var entity = await _repository.GetByIdAsync(id);
+
             if (entity != null)
             {
                 await _repository.DeleteAsync(id);
@@ -133,7 +189,9 @@ namespace FMCGEnterpriseManagementSystem.Services
         public async Task AdjustStockAsync(AdjustStockViewModel model)
         {
             var entity = await _repository.GetByIdAsync(model.InventoryId);
-            if (entity == null) return;
+
+            if (entity == null)
+                return;
 
             if (model.AdjustmentType == "Add")
             {
@@ -141,10 +199,14 @@ namespace FMCGEnterpriseManagementSystem.Services
             }
             else if (model.AdjustmentType == "Deduct")
             {
-                entity.QuantityOnHand = Math.Max(0, entity.QuantityOnHand - model.AdjustmentAmount);
+                entity.QuantityOnHand = Math.Max(
+                    0,
+                    entity.QuantityOnHand - model.AdjustmentAmount
+                );
             }
 
             entity.UpdatedAt = DateTime.UtcNow;
+
             await _repository.UpdateAsync(entity);
         }
 
@@ -157,9 +219,17 @@ namespace FMCGEnterpriseManagementSystem.Services
             CategoryName = item.Product?.Category ?? string.Empty,
             QuantityOnHand = item.QuantityOnHand,
             ReorderLevel = item.ReorderLevel,
-            SellingPrice = item.Product?.SellingPrice.ToString(CultureInfo.InvariantCulture) ?? "0",
+            SellingPrice = item.Product?.SellingPrice
+                .ToString(CultureInfo.InvariantCulture) ?? "0",
+
             BatchCount = item.StockBatches?.Count ?? 0,
-            ExpiryDate = item.StockBatches?.OrderBy(b => b.ExpiryDate).FirstOrDefault()?.ExpiryDate
+
+            ExpiryDate = item.StockBatches?
+                .OrderBy(b => b.ExpiryDate)
+                .FirstOrDefault()?
+                .ExpiryDate,
+
+            Notes = item.Notes
         };
     }
 }
