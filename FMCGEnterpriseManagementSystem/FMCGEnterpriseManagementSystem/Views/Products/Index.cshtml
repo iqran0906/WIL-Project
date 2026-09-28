@@ -1,0 +1,367 @@
+﻿@model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.ProductViewModel>
+
+@{
+    ViewData["Title"] = "Products Management";
+}
+
+<div class="content-card">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
+        <div>
+            <h2 class="fw-bold mb-1" style="color: #1c323d;">
+                Product Management
+            </h2>
+
+            <p class="text-muted mb-0">
+                Manage your product catalogue, suppliers and pricing.
+            </p>
+        </div>
+
+        <a asp-action="Create"
+           class="btn btn-action-primary px-4">
+            + New Product
+        </a>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="row g-3 mb-4">
+
+        <div class="col-lg-3 col-md-6">
+            <div class="border rounded-3 p-3 h-100 bg-white">
+                <div class="text-muted small mb-1">
+                    Total Products
+                </div>
+
+                <div class="fs-3 fw-bold" style="color:#1c323d;">
+                    @ViewBag.TotalProducts
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="border rounded-3 p-3 h-100 bg-white">
+                <div class="text-muted small mb-1">
+                    Active Products
+                </div>
+
+                <div class="fs-3 fw-bold" style="color:#1c323d;">
+                    @ViewBag.ActiveProducts
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="border rounded-3 p-3 h-100 bg-white">
+                <div class="text-muted small mb-1">
+                    Inactive Products
+                </div>
+
+                <div class="fs-3 fw-bold" style="color:#1c323d;">
+                    @ViewBag.InactiveProducts
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="border rounded-3 p-3 h-100 bg-white">
+                <div class="text-muted small mb-1">
+                    Suppliers
+                </div>
+
+                <div class="fs-3 fw-bold" style="color:#1c323d;">
+                    @ViewBag.TotalSuppliers
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Search and Filters -->
+    <form method="get"
+          asp-action="Index"
+          class="border rounded-3 p-3 mb-4 bg-white">
+
+        <div class="row g-3 align-items-end">
+
+            <!-- Search -->
+            <div class="col-lg-4 col-md-6">
+                <label class="form-label fw-semibold">
+                    Search
+                </label>
+
+                <input type="text"
+                       name="search"
+                       value="@ViewBag.Search"
+                       class="form-control"
+                       placeholder="Code, product, supplier..." />
+            </div>
+
+            <!-- Category -->
+            <div class="col-lg-2 col-md-6">
+                <label class="form-label fw-semibold">
+                    Category
+                </label>
+
+                <select name="category" class="form-select">
+
+                    <option value="">All Categories</option>
+
+                    @foreach (var category in ViewBag.Categories)
+                    {
+                        if (ViewBag.SelectedCategory == category)
+                        {
+                            <option value="@category" selected>
+                                @category
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="@category">
+                                @category
+                            </option>
+                        }
+                    }
+
+                </select>
+            </div>
+
+            <!-- Supplier -->
+            <div class="col-lg-2 col-md-6">
+                <label class="form-label fw-semibold">
+                    Supplier
+                </label>
+
+                <select name="supplierId"
+                        asp-items="ViewBag.SupplierFilter"
+                        class="form-select">
+
+                    <option value="">All Suppliers</option>
+
+                </select>
+            </div>
+
+            <!-- Status -->
+            <div class="col-lg-2 col-md-6">
+                <label class="form-label fw-semibold">
+                    Status
+                </label>
+
+                <select name="status" class="form-select">
+
+                    <option value="">
+                        All Statuses
+                    </option>
+
+                    @if (ViewBag.SelectedStatus == "active")
+                    {
+                        <option value="active" selected>
+                            Active
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="active">
+                            Active
+                        </option>
+                    }
+
+                    @if (ViewBag.SelectedStatus == "inactive")
+                    {
+                        <option value="inactive" selected>
+                            Inactive
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="inactive">
+                            Inactive
+                        </option>
+                    }
+
+                </select>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="col-lg-2 col-md-6">
+                <div class="d-flex gap-2">
+
+                    <button type="submit"
+                            class="btn btn-action-primary flex-fill">
+                        Filter
+                    </button>
+
+                    <a asp-action="Index"
+                       class="btn btn-outline-secondary">
+                        Clear
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+
+    </form>
+
+    <!-- Product Table -->
+    <div class="table-responsive">
+
+        <table class="custom-data-table align-middle">
+
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Supplier</th>
+                    <th>Cost Price</th>
+                    <th>Selling Price</th>
+                    <th>Status</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <!-- Product Code -->
+                            <td>
+                                <span class="fw-semibold">
+                                    @item.ProductCode
+                                </span>
+                            </td>
+
+                            <!-- Product Information -->
+                            <td>
+                                <div class="fw-semibold">
+                                    @item.ProductName
+                                </div>
+
+                                @if (!string.IsNullOrWhiteSpace(item.Description))
+                                {
+                                    <div class="small text-muted mt-1">
+                                        @item.Description
+                                    </div>
+                                }
+                            </td>
+
+                            <!-- Category -->
+                            <td>
+                                @item.Category
+                            </td>
+
+                            <!-- Supplier -->
+                            <td>
+                                @(string.IsNullOrWhiteSpace(item.SupplierName)
+                                    ? "Not Available"
+                                    : item.SupplierName)
+                            </td>
+
+                            <!-- Cost Price -->
+                            <td>
+                                <div class="fw-semibold">
+                                    R @item.CostExVat.ToString("N2")
+                                </div>
+
+                                <div class="small text-muted">
+                                    R @item.CostIncVat.ToString("N2") incl. VAT
+                                </div>
+                            </td>
+
+                            <!-- Selling Price -->
+                            <td>
+                                <span class="fw-semibold">
+                                    R @item.SellingPrice.ToString("N2")
+                                </span>
+                            </td>
+
+                            <!-- Status -->
+                            <td>
+                                @if (item.IsActive)
+                                {
+                                    <span class="badge bg-success px-3 py-2">
+                                        Active
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger px-3 py-2">
+                                        Inactive
+                                    </span>
+                                }
+                            </td>
+
+                            <!-- Actions -->
+                            <td>
+                                <div class="d-flex justify-content-center gap-2">
+
+                                    <!-- Edit -->
+                                    <a asp-action="Edit"
+                                       asp-route-id="@item.ProductId"
+                                       class="btn btn-warning btn-sm">
+                                        ✎ Edit
+                                    </a>
+
+                                    @if (item.IsActive)
+                                    {
+                                        <!-- Active Product: allow deactivation -->
+                                        <a asp-action="Delete"
+                                           asp-route-id="@item.ProductId"
+                                           class="btn btn-danger btn-sm">
+                                            Deactivate
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <!-- Inactive Product: allow activation -->
+                                        <form asp-action="Activate"
+                                              asp-route-id="@item.ProductId"
+                                              method="post"
+                                              class="d-inline">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <button type="submit"
+                                                    class="btn btn-success btn-sm">
+                                                Activate
+                                            </button>
+
+                                        </form>
+                                    }
+
+                                </div>
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8"
+                            class="text-center py-5">
+
+                            <div class="fw-semibold mb-1">
+                                No products found
+                            </div>
+
+                            <div class="text-muted small">
+                                Try changing your search or filters.
+                            </div>
+
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
