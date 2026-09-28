@@ -1,9 +1,11 @@
 ﻿using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
+    [Authorize(Roles = "Administrator,Employee,SalesRepresentative")]
     public class QuotesController : Controller
     {
         private readonly IQuoteService _quoteService;

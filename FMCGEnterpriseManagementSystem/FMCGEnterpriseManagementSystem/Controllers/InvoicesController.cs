@@ -4,9 +4,11 @@ using FMCGEnterpriseManagementSystem.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using FMCGEnterpriseManagementSystem.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
+    [Authorize(Roles = "Administrator,Employee,SalesRepresentative")]
     public class InvoicesController : Controller
     {
         private readonly IInvoiceService _invoiceService;

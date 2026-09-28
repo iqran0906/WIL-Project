@@ -4,6 +4,7 @@ using FMCGEnterpriseManagementSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FMCGEnterpriseManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260927165230_AddLineTotalExclVatToQuoteItem")]
+    partial class AddLineTotalExclVatToQuoteItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,17 +37,15 @@ namespace FMCGEnterpriseManagementSystem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ContactNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CustomerGroup")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DeliveryAddress")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -63,18 +64,19 @@ namespace FMCGEnterpriseManagementSystem.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Notes")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PaymentMethod")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PaymentTerms")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhysicalAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SalesRep")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("SalesRepresentativeId")
@@ -175,9 +177,6 @@ namespace FMCGEnterpriseManagementSystem.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProductId1")
-                        .HasColumnType("int");
-
                     b.Property<int>("QuantityOnHand")
                         .HasColumnType("int");
 
@@ -191,10 +190,6 @@ namespace FMCGEnterpriseManagementSystem.Migrations
 
                     b.HasIndex("ProductId")
                         .IsUnique();
-
-                    b.HasIndex("ProductId1")
-                        .IsUnique()
-                        .HasFilter("[ProductId1] IS NOT NULL");
 
                     b.ToTable("Inventories");
                 });
@@ -946,10 +941,6 @@ namespace FMCGEnterpriseManagementSystem.Migrations
                         .HasForeignKey("FMCGEnterpriseManagementSystem.Models.Inventory", "ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("FMCGEnterpriseManagementSystem.Models.Product", null)
-                        .WithOne("Inventory")
-                        .HasForeignKey("FMCGEnterpriseManagementSystem.Models.Inventory", "ProductId1");
 
                     b.Navigation("Product");
                 });
