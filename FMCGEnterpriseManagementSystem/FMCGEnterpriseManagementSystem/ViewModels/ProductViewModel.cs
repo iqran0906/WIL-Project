@@ -11,6 +11,9 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
         [Display(Name = "Supplier")]
         public int SupplierId { get; set; }
 
+        [Display(Name = "Supplier")]
+        public string SupplierName { get; set; } = string.Empty;
+
         [Display(Name = "Product Code")]
         public string? ProductCode { get; set; }
 
@@ -18,7 +21,7 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
         [Display(Name = "Product Name")]
         public string ProductName { get; set; } = string.Empty;
 
-        public string Description { get; set; } = string.Empty;
+        public string? Description { get; set; }
 
         [Required(ErrorMessage = "Category is required.")]
         public string Category { get; set; } = string.Empty;
