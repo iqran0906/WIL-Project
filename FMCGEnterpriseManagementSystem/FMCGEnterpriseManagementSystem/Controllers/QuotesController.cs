@@ -13,11 +13,13 @@ namespace FMCGEnterpriseManagementSystem.Controllers
     {
         private readonly IQuoteService _quoteService;
         private readonly IEmailApiClientService _emailApiClientService;
+        private readonly ApplicationDbContext _context;
 
-        public QuotesController(IQuoteService quoteService, IEmailApiClientService emailApiClientService)
+        public QuotesController(IQuoteService quoteService, IEmailApiClientService emailApiClientService, ApplicationDbContext context)
         {
             _quoteService = quoteService;
             _emailApiClientService = emailApiClientService;
+            _context = context;
         }
 
         // GET: Quotes
