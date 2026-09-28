@@ -10,65 +10,106 @@
     <form asp-action="Create" method="post">
         @Html.AntiForgeryToken()
 
-        <!-- Validation Summary to catch any hidden validation errors -->
         <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
         <div class="row g-4">
             <div class="col-md-8 offset-md-2">
-                
-                <!-- Supplier Selection (Required by ViewModel) -->
-                <div class="mb-3">
-                    <label asp-for="SupplierId" class="form-label">Supplier ID / Supplier</label>
-                    <input asp-for="SupplierId" class="form-control" type="number" placeholder="Enter Supplier ID" />
-                    <span asp-validation-for="SupplierId" class="text-danger"></span>
-                </div>
 
-                <!-- Product Code -->
+                <!-- Supplier Selection -->
                 <div class="mb-3">
-                    <label asp-for="ProductCode" class="form-label">Product Code</label>
-                    <input asp-for="ProductCode" class="form-control" placeholder="E.g. ED001" />
-                    <span asp-validation-for="ProductCode" class="text-danger"></span>
-                </div>
+    <label asp-for="SupplierId" class="form-label">Supplier</label>
+
+    <select asp-for="SupplierId"
+            asp-items="ViewBag.Suppliers"
+            class="form-select">
+        <option value="">-- Select Supplier --</option>
+    </select>
+
+    <span asp-validation-for="SupplierId" class="text-danger"></span>
+</div>
+
+                <!-- Product Code is automatically generated -->
 
                 <!-- Product Name -->
                 <div class="mb-3">
                     <label asp-for="ProductName" class="form-label">Product Name</label>
-                    <input asp-for="ProductName" class="form-control" placeholder="E.g. Chocolate Bar" />
+                    <input asp-for="ProductName"
+                           class="form-control"
+                           placeholder="E.g. Chocolate Bar" />
                     <span asp-validation-for="ProductName" class="text-danger"></span>
                 </div>
 
                 <!-- Description -->
                 <div class="mb-3">
                     <label asp-for="Description" class="form-label">Description</label>
-                    <textarea asp-for="Description" class="form-control" rows="2" placeholder="Optional product description"></textarea>
+                    <textarea asp-for="Description"
+                              class="form-control"
+                              rows="2"
+                              placeholder="Optional product description"></textarea>
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
 
                 <!-- Category -->
                 <div class="mb-3">
                     <label asp-for="Category" class="form-label">Category</label>
-                    <input asp-for="Category" class="form-control" placeholder="E.g. Sweets & Confectionery" />
+
+                    <select asp-for="Category" class="form-select">
+                        <option value="">-- Select Category --</option>
+                        <option value="Beverages">Beverages</option>
+                        <option value="Confectionery">Confectionery</option>
+                        <option value="Dairy">Dairy</option>
+                        <option value="Frozen Foods">Frozen Foods</option>
+                        <option value="Groceries">Groceries</option>
+                        <option value="Household">Household</option>
+                        <option value="Personal Care">Personal Care</option>
+                        <option value="Snacks">Snacks</option>
+                        <option value="Other">Other</option>
+                    </select>
+
                     <span asp-validation-for="Category" class="text-danger"></span>
                 </div>
 
-                <!-- Cost Excl. VAT (Required by ViewModel) -->
+                <!-- Cost Excluding VAT -->
                 <div class="mb-3">
-                    <label asp-for="CostExVat" class="form-label">Cost (Excl. VAT)</label>
-                    <input asp-for="CostExVat" class="form-control" type="number" step="0.01" />
+                    <label asp-for="CostExVat" class="form-label">
+                        Cost Excl. VAT (R)
+                    </label>
+
+                    <input asp-for="CostExVat"
+                           class="form-control"
+                           type="number"
+                           step="0.01"
+                           min="0" />
+
                     <span asp-validation-for="CostExVat" class="text-danger"></span>
                 </div>
 
                 <!-- Selling Price -->
                 <div class="mb-3">
-                    <label asp-for="SellingPrice" class="form-label">Selling Price</label>
-                    <input asp-for="SellingPrice" class="form-control" type="number" step="0.01" />
+                    <label asp-for="SellingPrice" class="form-label">
+                        Selling Price (R)
+                    </label>
+
+                    <input asp-for="SellingPrice"
+                           class="form-control"
+                           type="number"
+                           step="0.01"
+                           min="0" />
+
                     <span asp-validation-for="SellingPrice" class="text-danger"></span>
                 </div>
 
                 <!-- Action Buttons -->
                 <div class="d-flex justify-content-end gap-3 mt-4">
-                    <a asp-action="Index" class="btn btn-secondary align-self-center">Cancel</a>
-                    <button type="submit" class="btn btn-action-primary">Save Product</button>
+                    <a asp-action="Index"
+                       class="btn btn-secondary align-self-center">
+                        Cancel
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-action-primary">
+                        Save Product
+                    </button>
                 </div>
 
             </div>
@@ -77,5 +118,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

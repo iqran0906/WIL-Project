@@ -1,12 +1,12 @@
 ﻿@model FMCGEnterpriseManagementSystem.ViewModels.ProductViewModel
 
 @{
-    ViewData["Title"] = "Delete Product";
+    ViewData["Title"] = "Deactivate Product";
 }
 
 <div class="content-card">
-    <h2>Delete Product</h2>
-    <h3 class="text-danger">Are you sure you want to delete this?</h3>
+    <h2>Deactivate Product</h2>
+    <h3 class="text-danger">Are you sure you want to deactivate this product? </h3>
     <hr />
 
     <div>
@@ -23,7 +23,7 @@
 
         <form asp-action="Delete">
             <input type="hidden" asp-for="ProductId" />
-            <button type="submit" class="btn btn-danger">Delete</button>
+            <button type="submit" class="btn btn-danger">Deactivate</button>
             <a asp-action="Index" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
