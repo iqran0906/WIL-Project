@@ -12,13 +12,12 @@ namespace FMCGEnterpriseManagementSystem.Models
         public int QuoteId { get; set; }
 
         [ForeignKey("QuoteId")]
-        public Quote Quote { get; set; }
-
+        public Quote? Quote { get; set; }
         [Required]
         public int ProductId { get; set; }
 
         [ForeignKey("ProductId")]
-        public Product Product { get; set; }
+        public Product? Product { get; set; }
 
         [Required]
         public int Quantity { get; set; }
@@ -33,7 +32,6 @@ namespace FMCGEnterpriseManagementSystem.Models
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal LineTotal { get; set; }
-
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal LineTotalExclVat { get; set; }

@@ -6,8 +6,7 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
     {
         public int InvoiceId { get; set; }
 
-        [Required]
-        public string InvoiceNumber { get; set; }
+        public string? InvoiceNumber { get; set; }
 
         [Required]
         public DateTime InvoiceDate { get; set; }
@@ -16,18 +15,17 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
 
         [Required]
         public int CustomerId { get; set; }
-        public string CustomerName { get; set; }
-
+        public string? CustomerName { get; set; }
 
         public string? BusinessName { get; set; }
 
         public List<FMCGEnterpriseManagementSystem.Models.Customer> AvailableCustomers { get; set; } = new();
-
-        public string BillingAddress { get; set; }
-        public string PaymentTerms { get; set; }
+        public List<FMCGEnterpriseManagementSystem.Models.Product> AvailableProducts { get; set; } = new();
+        public string? BillingAddress { get; set; }
+        public string? PaymentTerms { get; set; }
 
         public int? SalesRepresentativeId { get; set; }
-        public string SalesRepresentativeName { get; set; }
+        public string? SalesRepresentativeName { get; set; }
 
         public List<InvoiceItemViewModel> Items { get; set; } = new();
 
@@ -36,7 +34,7 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
         public decimal Total { get; set; }
         public decimal AmountDue { get; set; }
 
-        public string Status { get; set; }
+        public string? Status { get; set; }
     }
 
     public class InvoiceItemViewModel
@@ -45,8 +43,8 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
 
         [Required]
         public int ProductId { get; set; }
-        public string ItemCode { get; set; }
-        public string Description { get; set; }
+        public string? ItemCode { get; set; }
+        public string? Description { get; set; }
 
         [Range(1, int.MaxValue)]
         public int Quantity { get; set; }

@@ -12,6 +12,8 @@ namespace FMCGEnterpriseManagementSystem.Models
         [Required]
         public string QuoteNumber { get; set; }
 
+
+
         [Required]
         public DateTime QuoteDate { get; set; }
 
@@ -21,7 +23,7 @@ namespace FMCGEnterpriseManagementSystem.Models
         public int CustomerId { get; set; }
 
         [ForeignKey("CustomerId")]
-        public Customer Customer { get; set; }
+        public Customer? Customer { get; set; }
 
         public string BillingAddress { get; set; }
 
@@ -32,7 +34,7 @@ namespace FMCGEnterpriseManagementSystem.Models
         public SalesRepresentative? SalesRepresentative { get; set; }
 
         [Required]
-        public QuoteStatus Status { get; set; } = QuoteStatus.Draft;
+        public QuoteStatus Status { get; set; } = QuoteStatus.Pending;
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal Subtotal { get; set; }

@@ -38,7 +38,7 @@ namespace FMCGEnterpriseManagementSystem.Services
                 BusinessName = model.BusinessName,
                 PaymentTerms = model.PaymentTerms,
                 SalesRepresentativeId = model.SalesRepresentativeId,
-                Status = "Draft",
+                Status = "Pending",
                 InvoiceNumber = await _invoiceRepository.GetNextInvoiceNumberAsync()
             };
 
