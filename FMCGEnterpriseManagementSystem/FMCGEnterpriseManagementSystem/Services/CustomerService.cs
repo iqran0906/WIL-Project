@@ -83,8 +83,10 @@ namespace FMCGEnterpriseManagementSystem.Services
             PaymentMethod = c.PaymentMethod,
             Notes = c.Notes,
             SalesRepresentativeId = c.SalesRepresentativeId,
-            // Use SalesRepCode from the SalesRepresentative model as the display string[cite: 9]
-            SalesRep = c.SalesRepresentative != null ? c.SalesRepresentative.SalesRepCode : "Unassigned",
+
+            SalesRep = c.SalesRepresentative?.Employee != null
+    ? $"{c.SalesRepresentative.Employee.FirstName} {c.SalesRepresentative.Employee.LastName} ({c.SalesRepresentative.SalesRepCode})"
+    : "Unassigned",
             VATNumber = c.VATNumber
         };
 
@@ -94,7 +96,7 @@ namespace FMCGEnterpriseManagementSystem.Services
             Name = vm.Name,
             Surname = vm.Surname,
             IdNumber = vm.IdNumber,
-            // Defaults to empty string instead of null if left blank
+           
             TelephoneNumber = vm.TelephoneNumber ?? string.Empty,
             CellNumber = vm.CellNumber,
             Email = vm.Email,

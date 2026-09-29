@@ -18,6 +18,7 @@ namespace FMCGEnterpriseManagementSystem.Repositories
         {
             return await _context.Customers
                 .Include(c => c.SalesRepresentative)
+                    .ThenInclude(sr => sr.Employee)
                 .ToListAsync();
         }
 
@@ -25,6 +26,7 @@ namespace FMCGEnterpriseManagementSystem.Repositories
         {
             return await _context.Customers
                 .Include(c => c.SalesRepresentative)
+                    .ThenInclude(sr => sr.Employee)
                 .FirstOrDefaultAsync(c => c.CustomerId == id);
         }
 

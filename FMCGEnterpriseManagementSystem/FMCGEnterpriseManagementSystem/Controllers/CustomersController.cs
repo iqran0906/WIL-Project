@@ -22,10 +22,22 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
         private async Task PopulateSalesRepsDropdownAsync()
         {
+            var salesReps = await _context.SalesRepresentatives
+                .Include(sr => sr.Employee)
+                .Where(sr => sr.IsActive)
+                .Select(sr => new
+                {
+                    sr.SalesRepresentativeId,
+                    DisplayName = sr.Employee.FirstName + " " +
+                                  sr.Employee.LastName + " (" +
+                                  sr.SalesRepCode + ")"
+                })
+                .ToListAsync();
+
             ViewBag.SalesRepresentatives = new SelectList(
-                await _context.SalesRepresentatives.ToListAsync(),
+                salesReps,
                 "SalesRepresentativeId",
-                "SalesRepCode"
+                "DisplayName"
             );
         }
 

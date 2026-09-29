@@ -27,7 +27,7 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
         [Required(ErrorMessage = "Physical address is required.")]
         public string PhysicalAddress { get; set; } = string.Empty;
 
-        public string DeliveryAddress { get; set; } = string.Empty;
+        public string? DeliveryAddress { get; set; } 
 
         [Required(ErrorMessage = "Customer group is required.")]
         public string CustomerGroup { get; set; } = string.Empty;
@@ -44,7 +44,7 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
 
         public string? VATNumber { get; set; }
 
-        // Optional now so it can be left unassigned
+        
         public int? SalesRepresentativeId { get; set; }
     }
 }
