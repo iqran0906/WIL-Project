@@ -36,7 +36,12 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             if (model == null) return NotFound();
 
             var suppliers = await _supplierService.GetAllSuppliersAsync();
-            ViewBag.Suppliers = new SelectList(suppliers, "SupplierId", "SupplierName");
+
+            ViewBag.Suppliers = new SelectList(
+                suppliers.Where(s => s.IsActive),
+                "SupplierId",
+                "CompanyName"
+            );
 
             return View(model);
         }
@@ -48,7 +53,12 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             if (!ModelState.IsValid)
             {
                 var suppliers = await _supplierService.GetAllSuppliersAsync();
-                ViewBag.Suppliers = new SelectList(suppliers, "SupplierId", "SupplierName");
+
+                ViewBag.Suppliers = new SelectList(
+                    suppliers.Where(s => s.IsActive),
+                    "SupplierId",
+                    "CompanyName"
+                );
                 return View(model);
             }
 
