@@ -12,6 +12,8 @@ namespace FMCGEnterpriseManagementSystem.Models
         [Required]
         public string QuoteNumber { get; set; }
 
+
+
         [Required]
         public DateTime QuoteDate { get; set; }
 

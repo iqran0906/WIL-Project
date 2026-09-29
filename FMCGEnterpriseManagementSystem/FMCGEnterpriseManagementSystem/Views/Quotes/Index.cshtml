@@ -68,8 +68,18 @@
                             <td>@quote.QuoteNumber</td>
                             <td>@quote.Customer?.CustomerId</td>
                             
-                            <td>R@quote.Total.ToString("N2")</td>
-                            <td>@quote.Status</td>
+<td>R@(quote.Total.ToString("N2"))</td>                            <td>
+    @{
+        var statusClass = quote.Status switch
+        {
+            FMCGEnterpriseManagementSystem.Enums.QuoteStatus.Pending => "bg-warning text-dark",
+            FMCGEnterpriseManagementSystem.Enums.QuoteStatus.Invoiced => "bg-success",
+            FMCGEnterpriseManagementSystem.Enums.QuoteStatus.Cancelled => "bg-danger",
+            _ => "bg-secondary"
+        };
+    }
+    <span class="badge @statusClass">@quote.Status</span>
+</td>
                             <td class="dropdown">
                                 <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
                                     Actions
