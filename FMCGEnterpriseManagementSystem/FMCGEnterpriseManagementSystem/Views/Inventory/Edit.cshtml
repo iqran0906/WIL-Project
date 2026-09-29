@@ -165,25 +165,21 @@ ViewData["Title"] = "Edit Inventory Item";
                       class="text-danger"></span>
             </div>
 
-            <!-- Action Buttons -->
-            <div class="d-flex justify-content-end gap-3 mt-4">
-                <a asp-controller="Inventory"
-                   asp-action="Index"
-                   class="btn btn-link text-decoration-none text-secondary align-self-center">
-                    Cancel
-                </a>
+<!-- Action Buttons -->
+<div class="d-flex justify-content-end gap-3 mt-4">
+    <a asp-action="Index" class="btn btn-secondary">
+        Cancel
+    </a>
 
-                <button type="submit"
-                        class="btn btn-custom-save px-4 py-2"
-                        style="background-color: #1c323d; color: #ffffff;">
-                    Update Item
-                </button>
-            </div>
-
+    <button type="submit"
+            class="btn btn-action-primary">
+        Save Changes
+    </button>
+</div>
         </div>
     </div>
 </form>
-```
+
 
 </div>
 
