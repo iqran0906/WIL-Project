@@ -1,4 +1,7 @@
-﻿namespace FMCGEnterpriseManagementSystem.ViewModels
+﻿// Purpose: Data and validation rules for the notification pages and forms.
+// Authors: Sayali-St10458649 (from git history)
+
+namespace FMCGEnterpriseManagementSystem.ViewModels
 {
     public class NotificationViewModel
     {

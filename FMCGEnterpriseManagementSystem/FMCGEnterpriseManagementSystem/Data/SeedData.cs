@@ -1,4 +1,8 @@
-﻿using FMCGEnterpriseManagementSystem.Models;
+﻿// Purpose: Creates the default roles and first user accounts when the application starts.
+// Authors: iqran0906, Naseeha27 (from git history)
+// Uses: ASP.NET Core Identity (Microsoft, MIT) https://learn.microsoft.com/aspnet/core/security/authentication/identity
+
+using FMCGEnterpriseManagementSystem.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace FMCGEnterpriseManagementSystem.Data

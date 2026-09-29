@@ -1,4 +1,8 @@
-﻿@model FMCGEnterpriseManagementSystem.ViewModels.SupplierViewModel
+﻿@*
+    Purpose: Form to update an existing supplier.
+    Authors: Maseeha17 (from git history)
+*@
+@model FMCGEnterpriseManagementSystem.ViewModels.SupplierViewModel
 
 @{
     ViewData["Title"] = "Edit Supplier";
@@ -9,6 +13,8 @@
 
     <form asp-controller="Supplier" asp-action="EditSupplier" method="post">
         @Html.AntiForgeryToken()
+
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
         <input type="hidden" asp-for="SupplierId" />
 
         <div class="row g-4">

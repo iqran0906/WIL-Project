@@ -1,4 +1,8 @@
-﻿@{
+﻿@*
+    Purpose: Reports page: cards linking to every report, with a search box.
+    Authors: iqran0906 (from git history)
+*@
+@{
     ViewData["Title"] = "Report Dashboard";
 }
 
@@ -132,6 +136,10 @@
 
 </div>
 
+<p id="noReportsMessage" class="text-white-50 text-center mt-4" style="display: none;">
+    No reports match your search.
+</p>
+
 @section Scripts {
     <script>
         document.getElementById("reportSearch")
@@ -139,6 +147,8 @@
 
                 const searchValue =
                     this.value.toLowerCase().trim();
+
+                let visibleCount = 0;
 
                 document.querySelectorAll(".report-card")
                     .forEach(function (card) {
@@ -151,6 +161,14 @@
                                 ? ""
                                 : "none";
                     });
+
+                document.querySelectorAll(".report-card")
+                    .forEach(function (card) {
+                        if (card.style.display !== "none") visibleCount++;
+                    });
+
+                document.getElementById("noReportsMessage").style.display =
+                    visibleCount === 0 ? "" : "none";
             });
     </script>
 }

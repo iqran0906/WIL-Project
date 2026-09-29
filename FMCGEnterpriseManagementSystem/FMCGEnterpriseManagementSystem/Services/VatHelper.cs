@@ -1,4 +1,7 @@
-﻿namespace FMCGEnterpriseManagementSystem.Services
+﻿// Purpose: Helper for VAT calculations.
+// Authors: Sayali-St10458649 (from git history)
+
+namespace FMCGEnterpriseManagementSystem.Services
 {
     public static class VatHelper
     {

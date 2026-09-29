@@ -1,4 +1,8 @@
-﻿using FMCGEnterpriseManagementSystem.Data;
+﻿// Purpose: Business logic for user account.
+// Authors: iqran0906 (from git history)
+// Uses: ASP.NET Core Identity (Microsoft, MIT) https://learn.microsoft.com/aspnet/core/security/authentication/identity
+
+using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;

@@ -1,12 +1,98 @@
-﻿@{
+@*
+    Purpose: User Profile: shows who is logged in, with links to edit details and change password.
+    Authors: ST10068525 (from git history)
+*@
+@model FMCGEnterpriseManagementSystem.ViewModels.UserProfileViewModel
+
+@{
     ViewData["Title"] = "User Profile";
+
+    // "SalesRepresentative" -> "Sales Representative"
+    string FormatRole(string role) =>
+        System.Text.RegularExpressions.Regex.Replace(role, "(?<=[a-z])(?=[A-Z])", " ");
+
+    string ValueOrDash(string? value) =>
+        string.IsNullOrWhiteSpace(value) ? "—" : value;
 }
 
+<style>
+    .profile-avatar {
+        width: 72px;
+        height: 72px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        background-color: #357383;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+        font-weight: 700;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+</style>
+
 <div class="content-card">
-    <div class="d-flex align-items-center gap-3 mb-4 border-bottom pb-3">
-        <i class="bi bi-person-badge fs-2" style="color: #357383;"></i>
-        <h2 class="fw-bold m-0" style="color: #1c323d;">User Profile</h2>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-1"></i>
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- WHO IS LOGGED IN -->
+    <div class="d-flex flex-column flex-sm-row align-items-sm-center gap-3 mb-4 border-bottom pb-3">
+
+        <div class="profile-avatar">
+            @if (string.IsNullOrEmpty(Model.Initials))
+            {
+                <i class="bi bi-person"></i>
+            }
+            else
+            {
+                @Model.Initials
+            }
+        </div>
+
+        <div class="flex-grow-1">
+            <h2 class="fw-bold m-0" style="color: #1c323d;">@Model.DisplayName</h2>
+            <div class="text-muted">@Model.Email</div>
+
+            <div class="d-flex flex-wrap gap-2 mt-2">
+                @foreach (var role in Model.Roles)
+                {
+                    <span class="badge" style="background-color: #357383;">
+                        @FormatRole(role)
+                    </span>
+                }
+
+                @if (Model.IsActive)
+                {
+                    <span class="badge bg-success">Active</span>
+                }
+                else
+                {
+                    <span class="badge bg-secondary">Inactive</span>
+                }
+            </div>
+        </div>
+
+        <span class="text-muted small">
+            <i class="bi bi-circle-fill text-success me-1" style="font-size: 0.6rem;"></i>
+            Currently logged in
+        </span>
+
     </div>
+
+    @if (!Model.HasEmployeeRecord)
+    {
+        <div class="alert alert-info">
+            This login is not linked to an employee record, so only account details are shown.
+        </div>
+    }
 
     <div class="row g-4">
         <div class="col-12">
@@ -14,14 +100,14 @@
             <div class="row g-3">
                 <div class="col-12 col-md-6">
                     <label class="form-label fw-bold">Name</label>
-                    <div class="form-control bg-light text-muted border shadow-sm py-2">
-                        [Name Placeholder]
+                    <div class="form-control bg-light border shadow-sm py-2">
+                        @ValueOrDash(Model.FirstName)
                     </div>
                 </div>
                 <div class="col-12 col-md-6">
                     <label class="form-label fw-bold">Surname</label>
-                    <div class="form-control bg-light text-muted border shadow-sm py-2">
-                        [Surname Placeholder]
+                    <div class="form-control bg-light border shadow-sm py-2">
+                        @ValueOrDash(Model.LastName)
                     </div>
                 </div>
             </div>
@@ -34,14 +120,14 @@
             <div class="row g-3">
                 <div class="col-12 col-md-6">
                     <label class="form-label fw-bold">Email Address</label>
-                    <div class="form-control bg-light text-muted border shadow-sm py-2">
-                        [Email Placeholder]
+                    <div class="form-control bg-light border shadow-sm py-2">
+                        @ValueOrDash(Model.Email)
                     </div>
                 </div>
                 <div class="col-12 col-md-6">
                     <label class="form-label fw-bold">Contact Number</label>
-                    <div class="form-control bg-light text-muted border shadow-sm py-2">
-                        [Contact Number Placeholder]
+                    <div class="form-control bg-light border shadow-sm py-2">
+                        @ValueOrDash(Model.ContactNumber)
                     </div>
                 </div>
             </div>
@@ -53,22 +139,63 @@
             <h5 class="fw-bold text-secondary mb-3">Business Profile</h5>
             <div class="row g-3">
                 <div class="col-12 col-md-6">
-                    <label class="form-label fw-bold">Business Position / Role</label>
-                    <div class="form-control bg-light text-muted border shadow-sm py-2">
-                        [Business Position Placeholder]
+                    <label class="form-label fw-bold">Business Position</label>
+                    <div class="form-control bg-light border shadow-sm py-2">
+                        @ValueOrDash(Model.JobTitle)
                     </div>
                 </div>
                 <div class="col-12 col-md-6">
-                    <label class="form-label fw-bold">Assigned Department</label>
-                    <div class="form-control bg-light text-muted border shadow-sm py-2">
-                        [Department Placeholder]
+                    <label class="form-label fw-bold">System Role</label>
+                    <div class="form-control bg-light border shadow-sm py-2">
+                        @ValueOrDash(string.Join(", ", Model.Roles.Select(FormatRole)))
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <label class="form-label fw-bold">Employee Number</label>
+                    <div class="form-control bg-light border shadow-sm py-2">
+                        @ValueOrDash(Model.EmployeeNumber)
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <label class="form-label fw-bold">Date of Employment</label>
+                    <div class="form-control bg-light border shadow-sm py-2">
+                        @ValueOrDash(Model.DateOfEmployment?.ToString("dd MMM yyyy"))
+                    </div>
+                </div>
+
+                @if (Model.SalesRepCode != null)
+                {
+                    <div class="col-12 col-md-6">
+                        <label class="form-label fw-bold">Sales Rep Code</label>
+                        <div class="form-control bg-light border shadow-sm py-2">
+                            @Model.SalesRepCode
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label fw-bold">Sales Area</label>
+                        <div class="form-control bg-light border shadow-sm py-2">
+                            @ValueOrDash(Model.SalesArea)
+                        </div>
+                    </div>
+                }
+
+                <div class="col-12 col-md-6">
+                    <label class="form-label fw-bold">Username</label>
+                    <div class="form-control bg-light border shadow-sm py-2">
+                        @ValueOrDash(Model.UserName)
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="d-flex justify-content-end gap-3 border-top pt-3">
-        <a asp-action="Dashboard" class="btn btn-outline-secondary px-4 w-100 w-sm-auto text-center">Back to Dashboard</a>
+    <div class="d-flex flex-column flex-sm-row justify-content-end gap-2 border-top pt-3">
+        <a asp-action="Dashboard" class="btn btn-outline-secondary px-4 text-center">Back to Dashboard</a>
+        <a asp-controller="Profile" asp-action="ChangePassword" class="btn btn-outline-secondary px-4 text-center">
+            <i class="bi bi-shield-lock me-1"></i> Change Password
+        </a>
+        <a asp-controller="Profile" asp-action="Edit" class="btn btn-custom-save px-4 text-center">
+            <i class="bi bi-pencil-square me-1"></i> Edit My Details
+        </a>
     </div>
 </div>

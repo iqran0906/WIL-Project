@@ -1,8 +1,14 @@
-﻿@model FMCGEnterpriseManagementSystem.Models.Quote
+@model FMCGEnterpriseManagementSystem.Models.Quote
+
 @using Microsoft.AspNetCore.Mvc.Rendering
 
 @{
+
     ViewData["Title"] = "New Quote";
+
+}
+    var company = await SettingsService.GetAsync();
+    var vatRate = (company.VatRatePercent / 100m).ToString(System.Globalization.CultureInfo.InvariantCulture);
 }
 
 <div class="content-card">
@@ -23,7 +29,6 @@
             <span class="text-muted small d-block">Quote Number</span>
             <span class="fw-semibold">Generated on save</span>
         </div>
-    </div>
 
     <form asp-controller="Quotes"
           asp-action="Create"

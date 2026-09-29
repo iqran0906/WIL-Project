@@ -9,69 +9,86 @@ namespace FMCGEnterpriseManagementSystem.Services
 {
     public class DashboardService : IDashboardService
     {
-        private readonly IProductRepository _productRepository;
+        private readonly IInvoiceRepository _invoiceRepository;
 
-        public DashboardService(IProductRepository productRepository)
+        public DashboardService(IInvoiceRepository invoiceRepository)
         {
-            _productRepository = productRepository;
+            _invoiceRepository = invoiceRepository;
         }
 
-        public async Task<DashboardViewModel> GetDashboardAnalyticsAsync()
+        public async Task<DashboardViewModel> GetDashboardAnalyticsAsync(int months = 12)
         {
-            var products = (await _productRepository.GetAllAsync()).ToList();
+            // Only allow the periods available on the dashboard.
+            if (months != 6 && months != 12 && months != 24)
+            {
+                months = 12;
+            }
 
-            int totalProducts = products.Count;
+            var invoices = (await _invoiceRepository.GetAllAsync()).ToList();
 
-            // Access stock quantities and reorder levels safely through the Inventory navigation property using QuantityOnHand
-            int lowStockItems = products.Count(p => p.Inventory != null && p.Inventory.QuantityOnHand > 0 && p.Inventory.QuantityOnHand <= p.Inventory.ReorderLevel);
-            int outOfStockItems = products.Count(p => p.Inventory == null || p.Inventory.QuantityOnHand <= 0);
+            var currentMonth = new DateTime(
+                DateTime.Today.Year,
+                DateTime.Today.Month,
+                1);
 
-            // Calculate total inventory value using SellingPrice and Inventory QuantityOnHand
-            decimal totalInventoryValue = products.Sum(p => (p.Inventory?.QuantityOnHand ?? 0) * p.SellingPrice);
+            var startMonth = currentMonth.AddMonths(-(months - 1));
 
-            // Calculate restock budget using CostIncVat
-            decimal projectedRestockBudget = products
-                .Where(p => p.Inventory != null && p.Inventory.QuantityOnHand <= p.Inventory.ReorderLevel)
-                .Sum(p => (Math.Max(p.Inventory.ReorderLevel * 2, 10) - p.Inventory.QuantityOnHand) * p.CostIncVat);
+            var endDate = currentMonth.AddMonths(1);
 
-            // Group by Category property on Product
-            var categoryGroupings = products
-                .GroupBy(p => string.IsNullOrEmpty(p.Category) ? "Unassigned" : p.Category)
-                .Select(g => new
+            // ---------------------------------------------------------
+            // INCOME BY MONTH
+            // ---------------------------------------------------------
+
+            var monthlyIncome = Enumerable
+                .Range(0, months)
+                .Select(offset =>
                 {
-                    CategoryName = g.Key,
-                    TotalQuantity = g.Sum(p => p.Inventory?.QuantityOnHand ?? 0)
+                    var monthDate = startMonth.AddMonths(offset);
+
+                    var income = invoices
+                        .Where(i =>
+                            i.InvoiceDate.Year == monthDate.Year &&
+                            i.InvoiceDate.Month == monthDate.Month)
+                        .Sum(i => i.Total);
+
+                    return new MonthlyIncome
+                    {
+                        Year = monthDate.Year,
+                        Month = monthDate.Month,
+                        Label = monthDate.ToString("MMM yyyy"),
+                        Income = income
+                    };
                 })
-                .OrderByDescending(g => g.TotalQuantity)
                 .ToList();
 
-            string[] categoryNames = categoryGroupings.Select(g => g.CategoryName).ToArray();
-            int[] categoryQuantities = categoryGroupings.Select(g => g.TotalQuantity).ToArray();
+            // ---------------------------------------------------------
+            // SALES BY PRODUCT CATEGORY
+            // ---------------------------------------------------------
 
-            var criticalAlerts = products
-                .Where(p => p.Inventory != null && p.Inventory.QuantityOnHand <= p.Inventory.ReorderLevel)
-                .OrderBy(p => p.Inventory.QuantityOnHand)
-                .Take(10)
-                .Select(p => new CriticalStockAlert
+            var salesByCategory = invoices
+                .Where(i =>
+                    i.InvoiceDate >= startMonth &&
+                    i.InvoiceDate < endDate)
+                .SelectMany(i => i.InvoiceItems)
+                .Where(item => item.Product != null)
+                .GroupBy(item =>
+                    string.IsNullOrWhiteSpace(item.Product.Category)
+                        ? "Unassigned"
+                        : item.Product.Category)
+                .Select(group => new CategorySales
                 {
-                    ProductCode = p.ProductCode ?? $"ED-{p.ProductId:D4}",
-                    ProductName = p.ProductName,
-                    CurrentStock = p.Inventory.QuantityOnHand,
-                    ReorderLevel = p.Inventory.ReorderLevel,
-                    HealthStatus = p.Inventory.QuantityOnHand == 0 ? "Critical" : "Low"
+                    Category = group.Key,
+
+                    Sales = group.Sum(item => item.LineTotal)
                 })
+                .OrderByDescending(category => category.Sales)
                 .ToList();
 
             return new DashboardViewModel
             {
-                TotalProducts = totalProducts,
-                LowStockItems = lowStockItems,
-                OutOfStockItems = outOfStockItems,
-                TotalInventoryValue = totalInventoryValue,
-                ProjectedRestockBudget = projectedRestockBudget,
-                CategoryNames = categoryNames,
-                CategoryQuantities = categoryQuantities,
-                CriticalStockAlerts = criticalAlerts
+                Months = months,
+                IncomeByMonth = monthlyIncome,
+                SalesByCategory = salesByCategory
             };
         }
     }

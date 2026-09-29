@@ -1,5 +1,8 @@
-﻿using FMCGEnterpriseManagementSystem.Models;
+﻿// Purpose: Database entity: inventory (maps to a table).
+// Authors: Naseeha27 (from git history)
+
 using System.ComponentModel.DataAnnotations;
+﻿using FMCGEnterpriseManagementSystem.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 
 public class Inventory

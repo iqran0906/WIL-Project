@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.Models;
+﻿// Purpose: Business logic for product.
+// Authors: iqran0906, Maseeha17 (from git history)
+
+using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;
@@ -9,11 +12,12 @@ namespace FMCGEnterpriseManagementSystem.Services
     public class ProductService : IProductService
     {
         private readonly IProductRepository _repository;
-        private const decimal VatRate = 0.15m;
+        private readonly ISettingsService _settingsService;
 
-        public ProductService(IProductRepository repository)
+        public ProductService(IProductRepository repository, ISettingsService settingsService)
         {
             _repository = repository;
+            _settingsService = settingsService;
         }
 
         public async Task<IEnumerable<ProductViewModel>> GetAllProductsAsync()
@@ -50,7 +54,7 @@ namespace FMCGEnterpriseManagementSystem.Services
 
             decimal costIncVat = model.CostIncVat > 0
                 ? model.CostIncVat
-                : Math.Round(model.CostExVat * (1 + VatRate), 2);
+                : Math.Round(model.CostExVat * (1 + await _settingsService.GetVatRateAsync()), 2);
 
             var entity = new Product
             {
@@ -78,7 +82,7 @@ namespace FMCGEnterpriseManagementSystem.Services
 
             decimal costIncVat = model.CostIncVat > 0
                 ? model.CostIncVat
-                : Math.Round(model.CostExVat * (1 + VatRate), 2);
+                : Math.Round(model.CostExVat * (1 + await _settingsService.GetVatRateAsync()), 2);
 
             existingEntity.SupplierId = model.SupplierId;
             existingEntity.ProductName = model.ProductName;

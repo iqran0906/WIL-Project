@@ -1,3 +1,6 @@
+﻿// Purpose: Business logic for inventory.
+// Authors: Maseeha17 (from git history)
+
 ﻿using System.Globalization;
 using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;

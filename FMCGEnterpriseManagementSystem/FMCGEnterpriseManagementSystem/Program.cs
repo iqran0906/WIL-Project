@@ -1,5 +1,11 @@
+// Purpose: Application start-up: registers services, database, login (Identity), filters, error pages and routes.
+// Authors: iqran0906, Maseeha17, Sayali-St10458649, Naseeha27, ST10068525 (from git history)
+// Uses: QuestPDF (QuestPDF Community License) https://www.questpdf.com
+// Uses: ASP.NET Core Identity (Microsoft, MIT) https://learn.microsoft.com/aspnet/core/security/authentication/identity
+
 using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Factories;
+using FMCGEnterpriseManagementSystem.Filters;
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Observers;
 using FMCGEnterpriseManagementSystem.Repositories;
@@ -19,7 +25,14 @@ var builder = WebApplication.CreateBuilder(args);
 QuestPDF.Settings.License = LicenseType.Community;
 
 // MVC
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    // Friendly message + logging when a form submission fails unexpectedly
+    options.Filters.Add<GlobalExceptionFilter>();
+
+    // Records successful actions for the Recent Activity page
+    options.Filters.Add<ActivityLogFilter>();
+});
 
 // Register existing repositories and services
 builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
@@ -174,6 +187,28 @@ builder.Services.AddScoped<IReportService, ReportService>();
 
 
 // ==========================================================
+// GLOBAL SEARCH
+// ==========================================================
+
+builder.Services.AddScoped<ISearchService, SearchService>();
+
+
+// ==========================================================
+// SYSTEM SETTINGS
+// ==========================================================
+
+builder.Services.AddMemoryCache();
+builder.Services.AddScoped<ISettingsService, SettingsService>();
+
+
+// ==========================================================
+// RECENT ACTIVITY
+// ==========================================================
+
+builder.Services.AddScoped<IActivityService, ActivityService>();
+
+
+// ==========================================================
 // EXPORTS
 // ==========================================================
 
@@ -213,9 +248,13 @@ var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {
+    // Friendly error page for unexpected errors (developers see full details locally)
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+
+// Friendly pages for "not found", "bad request", etc. instead of a blank screen
+app.UseStatusCodePagesWithReExecute("/Home/StatusCodePage", "?code={0}");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
