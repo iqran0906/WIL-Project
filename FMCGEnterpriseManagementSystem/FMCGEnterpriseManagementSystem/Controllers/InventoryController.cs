@@ -21,6 +21,55 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return View(inventory);
         }
 
+        [HttpGet]
+        public IActionResult AddItem()
+        {
+            return View(new InventoryViewModel());
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddItem(InventoryViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            try
+            {
+                await _inventoryService.CreateInventoryItemAsync(model);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                // This catches the exact database/service error and displays it on your form
+                ModelState.AddModelError(string.Empty, $"Save failed: {ex.InnerException?.Message ?? ex.Message}");
+                return View(model);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var item = await _inventoryService.GetByIdAsync(id);
+            if (item == null) return NotFound();
+
+            return View(item);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, InventoryViewModel model)
+        {
+            if (id != model.InventoryId) return NotFound();
+
+            if (!ModelState.IsValid) return View(model);
+
+            await _inventoryService.UpdateInventoryItemAsync(model);
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
         public async Task<IActionResult> AdjustStock(int id)
         {
             var item = await _inventoryService.GetByIdAsync(id);
@@ -43,6 +92,23 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             if (!ModelState.IsValid) return View(model);
 
             await _inventoryService.AdjustStockAsync(model);
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var item = await _inventoryService.GetByIdAsync(id);
+            if (item == null) return NotFound();
+
+            return View(item);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            await _inventoryService.DeleteInventoryItemAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }

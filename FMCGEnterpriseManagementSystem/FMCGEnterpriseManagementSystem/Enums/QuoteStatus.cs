@@ -2,11 +2,8 @@
 {
     public enum QuoteStatus
     {
-        Draft,
-        Sent,
-        Accepted,
-        Rejected,
-        Expired,
-        Converted
+        Pending,
+        Invoiced,
+        Cancelled
     }
 }
