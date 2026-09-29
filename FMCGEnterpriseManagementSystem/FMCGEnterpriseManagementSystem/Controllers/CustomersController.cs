@@ -1,96 +1,125 @@
-﻿using FMCGEnterpriseManagementSystem.Services.Interfaces;
+﻿using FMCGEnterpriseManagementSystem.Data;
+using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
-    // Handles API endpoints for Customer management operations.
     [Authorize(Roles = "Administrator,Employee,SalesRepresentative")]
-    [ApiController]
-    [Route("api/[controller]")]
-    public class CustomersController : ControllerBase
+    public class CustomersController : Controller
     {
         private readonly ICustomerService _customerService;
+        private readonly ApplicationDbContext _context;
 
-        public CustomersController(ICustomerService customerService)
+        public CustomersController(ICustomerService customerService, ApplicationDbContext context)
         {
             _customerService = customerService;
+            _context = context;
         }
 
-        // Retrieves all customer records.
+        private async Task PopulateSalesRepsDropdownAsync()
+        {
+            var salesReps = await _context.SalesRepresentatives
+                .Include(sr => sr.Employee)
+                .Where(sr => sr.IsActive)
+                .Select(sr => new
+                {
+                    sr.SalesRepresentativeId,
+                    DisplayName = sr.Employee.FirstName + " " +
+                                  sr.Employee.LastName + " (" +
+                                  sr.SalesRepCode + ")"
+                })
+                .ToListAsync();
+
+            ViewBag.SalesRepresentatives = new SelectList(
+                salesReps,
+                "SalesRepresentativeId",
+                "DisplayName"
+            );
+        }
+
+        // GET: /Customers/CustomerList
+        public async Task<IActionResult> CustomerList(string? searchKeyword)
+        {
+            var customers = await _customerService.GetAllCustomersAsync(searchKeyword);
+            return View(customers);
+        }
+
+        // GET: /Customers/AddCustomer
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> AddCustomer()
         {
-            var customers = await _customerService.GetAllCustomersAsync();
-            return Ok(customers);
+            await PopulateSalesRepsDropdownAsync();
+            return View(new CustomerViewModel());
         }
 
-        // Retrieves a single customer by their unique Customer ID.
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
-        {
-            var customer = await _customerService.GetCustomerByIdAsync(id);
-
-            if (customer == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(customer);
-        }
-
-        // Creates a new customer.
+        // POST: /Customers/AddCustomer
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CustomerViewModel model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddCustomer(CustomerViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                await PopulateSalesRepsDropdownAsync();
+                return View(model);
             }
 
             await _customerService.CreateCustomerAsync(model);
-
-            return Ok(new
-            {
-                message = "Customer created successfully"
-            });
+            return RedirectToAction(nameof(CustomerList));
         }
 
-        // Updates an existing customer by their unique Customer ID.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(
-            int id,
-            [FromBody] CustomerViewModel model)
+        // GET: /Customers/Edit/{id}
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id != model.CustomerId)
-            {
-                return BadRequest("Customer ID mismatch.");
-            }
+            if (id <= 0) return NotFound();
+
+            var customer = await _customerService.GetCustomerByIdAsync(id);
+            if (customer == null) return NotFound();
+
+            await PopulateSalesRepsDropdownAsync();
+            return View(customer);
+        }
+
+        // POST: /Customers/Edit/{id}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, CustomerViewModel model)
+        {
+            if (id != model.CustomerId) return BadRequest();
 
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                await PopulateSalesRepsDropdownAsync();
+                return View(model);
             }
 
             await _customerService.UpdateCustomerAsync(model);
-
-            return Ok(new
-            {
-                message = "Customer updated successfully"
-            });
+            return RedirectToAction(nameof(CustomerList));
         }
 
-        // Deletes a customer by their unique Customer ID.
-        [HttpDelete("{id}")]
+        // GET: /Customers/Delete/{id}
+        [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            await _customerService.DeleteCustomerAsync(id);
+            if (id <= 0) return NotFound();
 
-            return Ok(new
-            {
-                message = "Customer deleted successfully"
-            });
+            var customer = await _customerService.GetCustomerByIdAsync(id);
+            if (customer == null) return NotFound();
+
+            return View(customer);
+        }
+
+        // POST: /Customers/Delete/{id}
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            await _customerService.DeleteCustomerAsync(id);
+            return RedirectToAction(nameof(CustomerList));
         }
     }
 }
