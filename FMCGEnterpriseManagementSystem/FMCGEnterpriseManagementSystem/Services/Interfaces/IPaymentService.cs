@@ -10,5 +10,6 @@ namespace FMCGEnterpriseManagementSystem.Services.Interfaces
         Task<List<PaymentViewModel>> GetPaymentsForInvoiceAsync(int invoiceId);
         Task<decimal> GetOutstandingBalanceAsync(int invoiceId);
         Task<PaymentViewModel?> GetPaymentByIdAsync(int paymentId);
+        Task<List<InvoiceViewModel>> GetAvailableInvoicesAsync();
     }
 }
