@@ -4,6 +4,7 @@
     {
         LowStock,
         QuoteExpired,
+        NewQuote,
         NewInvoice,
         NewCustomer,
         NewItem,
