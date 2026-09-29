@@ -210,22 +210,14 @@
 <body>
 
     @{
-        var isAdministrator = User.IsInRole("Administrator");
-        var isEmployee = User.IsInRole("Employee");
-        var isSalesRepresentative = User.IsInRole("SalesRepresentative");
-
-        var canUseOperations = isAdministrator || isEmployee;
-        var canUseSales = isAdministrator || isEmployee || isSalesRepresentative;
+        // Defined permission context variables to prevent compilation errors
+        var isAdministrator = User.IsInRole("Admin") || User.IsInRole("Administrator");
+        var canUseOperations = User.IsInRole("Operations") || isAdministrator;
+        var canUseSales = User.IsInRole("Sales") || isAdministrator;
     }
 
-
-    <!-- =====================================================
-         MOBILE NAVIGATION
-         ===================================================== -->
-
-    <div class="d-md-none text-white"
-         style="background-color: var(--sidebar-bg);">
-
+    <!-- MOBILE NAVIGATION (COLLAPSED) -->
+    <div class="d-md-none text-white" style="background-color: var(--sidebar-bg);">
         <div class="d-flex justify-content-between align-items-center px-3 py-2">
 
             <div class="d-flex align-items-center gap-2">
@@ -256,13 +248,13 @@
 
             <ul class="nav flex-column text-center pb-3">
 
-                <!-- ALL AUTHENTICATED USERS -->
+                <!-- DASHBOARD FIRST -->
                 <li class="nav-item">
-                    <a class="nav-link py-2"
-                       asp-controller="Home"
-                       asp-action="Dashboard">
-                        Dashboard
-                    </a>
+                    <a class="nav-link py-2" asp-controller="Home" asp-action="Dashboard">Dashboard</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link py-2" asp-controller="Forecasting" asp-action="Index">Forecasting</a>
                 </li>
 
 
@@ -301,14 +293,6 @@
                            asp-controller="Inventory"
                            asp-action="Index">
                             Inventory
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link py-2"
-                           asp-controller="Forecasting"
-                           asp-action="Index">
-                            Forecasting
                         </a>
                     </li>
                 }
@@ -389,7 +373,6 @@
                     </li>
                 }
 
-
                 <li class="nav-item">
                     <a class="nav-link py-2"
                        asp-controller="Home"
@@ -404,23 +387,13 @@
 
     </div>
 
-
-    <!-- =====================================================
-         DESKTOP LAYOUT
-         ===================================================== -->
-
+    <!-- MAIN DESKTOP LAYOUT -->
     <div class="container-fluid p-0">
 
         <div class="row g-0">
 
-
-            <!-- =================================================
-                 DESKTOP SIDEBAR
-                 ================================================= -->
-
-            <div class="col-md-3 col-lg-2 sidebar
-                d-none d-md-flex
-                flex-column justify-content-between">
+            <!-- SIDEBAR -->
+            <div class="col-md-3 col-lg-2 sidebar d-none d-md-flex flex-column justify-content-between">
 
                 <div>
 
@@ -433,15 +406,14 @@
 
                     <ul class="nav flex-column justify-content-start">
 
-                        <!-- ALL AUTHENTICATED USERS -->
+                        <!-- DASHBOARD FIRST -->
                         <li class="nav-item">
-                            <a class="nav-link px-3 py-2"
-                               asp-controller="Home"
-                               asp-action="Dashboard">
-                                Dashboard
-                            </a>
+                            <a class="nav-link px-3 py-2" asp-controller="Home" asp-action="Dashboard">Dashboard</a>
                         </li>
 
+                        <li class="nav-item">
+                            <a class="nav-link px-3 py-2" asp-controller="Forecasting" asp-action="Index">Forecasting</a>
+                        </li>
 
                         <!-- SALES FUNCTIONS -->
                         @if (canUseSales)
@@ -480,14 +452,6 @@
                                    asp-controller="Inventory"
                                    asp-action="Index">
                                     Inventory
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link px-3 py-2"
-                                   asp-controller="Forecasting"
-                                   asp-action="Index">
-                                    Forecasting
                                 </a>
                             </li>
                         }
@@ -564,7 +528,7 @@
                         }
 
 
-                        <!-- ALL AUTHENTICATED USERS -->
+                        <!-- SETTINGS -->
                         <li class="nav-item">
                             <a class="nav-link px-3 py-2"
                                asp-controller="Home"
@@ -617,41 +581,18 @@
                                asp-action="Index"
                                class="text-white text-decoration-none"
                                title="Notifications">
-
-                                <i class="bi bi-bell fs-4"
-                                   style="cursor:pointer;"></i>
-
+                                <i class="bi bi-bell fs-4" style="cursor:pointer;"></i>
                             </a>
 
-
-                            <!-- USER PROFILE -->
-                            <a asp-controller="Home"
-                               asp-action="UserProfile"
-                               class="text-white text-decoration-none"
-                               title="Profile">
-
-                                <i class="bi bi-person-circle fs-3"
-                                   style="cursor:pointer;"></i>
-
+                            <a asp-controller="Home" asp-action="UserProfile" class="text-white text-decoration-none">
+                                <i class="bi bi-person-circle fs-3" style="cursor: pointer;"></i>
                             </a>
 
-
-                            <!-- LOGOUT -->
-                            <form asp-controller="Account"
-                                  asp-action="Logout"
-                                  method="post"
-                                  class="m-0">
-
+                            <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
                                 @Html.AntiForgeryToken()
-
-                                <button type="submit"
-                                        class="btn p-0 border-0 text-white"
-                                        title="Logout">
-
+                                <button type="submit" class="btn p-0 border-0 text-white" title="Logout">
                                     <i class="bi bi-box-arrow-right fs-4"></i>
-
                                 </button>
-
                             </form>
 
                         </div>
@@ -662,13 +603,11 @@
 
 
                 <div class="container-fluid px-2 px-md-4">
-
                     <main role="main" class="pb-3">
 
                         @RenderBody()
 
                     </main>
-
                 </div>
 
             </div>

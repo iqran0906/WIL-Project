@@ -20,6 +20,8 @@ public class Inventory
     public string? Notes { get; set; }
 
 
+        [ForeignKey("ProductId")] // <--- Explicitly links the foreign key to avoid ProductId1
+        public Product Product { get; set; } = null!;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public DateTime? UpdatedAt { get; set; }
