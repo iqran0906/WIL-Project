@@ -60,6 +60,10 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Quote quote)
         {
+            ModelState.Remove(nameof(Quote.QuoteNumber));
+            ModelState.Remove("Customer");
+            ModelState.Remove("SalesRepresentative");
+
             if (!ModelState.IsValid)
             {
                 ViewBag.PaymentTermsList = new SelectList(new[] { "COD", "7 Days", "14 Days", "21 Days", "28 Days", "30 Days" });

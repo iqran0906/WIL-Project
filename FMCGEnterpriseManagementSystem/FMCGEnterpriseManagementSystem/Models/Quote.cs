@@ -21,7 +21,7 @@ namespace FMCGEnterpriseManagementSystem.Models
         public int CustomerId { get; set; }
 
         [ForeignKey("CustomerId")]
-        public Customer Customer { get; set; }
+        public Customer? Customer { get; set; }
 
         public string BillingAddress { get; set; }
 

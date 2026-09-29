@@ -74,34 +74,40 @@
             </div>
         </div>
 
-        <div class="table-responsive border rounded bg-light p-2 mb-3">
+        <div class="table-responsive border rounded bg-light p-2 mb-3" style="max-height: 350px; overflow-y: auto;">
+
             <table class="table align-middle m-0 bg-white shadow-sm rounded" style="min-width: 700px;">
-                <thead class="table-secondary text-secondary small">
+                <thead class="table-secondary text-secondary small" style="position: sticky; top: 0; z-index: 1;">
                     <tr>
-                        <th style="width: 8%;">Qty</th>
-                        <th style="width: 15%;">Item Code</th>
-                        <th style="width: 35%;">Description</th>
-                        <th style="width: 12%;">Unit Price</th>
-                        <th style="width: 10%;">Disc</th>
-                        <th style="width: 10%;">VAT</th>
-                        <th style="width: 10%;">Total Excl. VAT</th>
-                        <th style="width: 10%;">Total</th>
+                        <th style="width: 7%;">Qty</th>
+                        <th style="width: 12%;">Product Code</th>
+                        <th style="width: 16%;">Product</th>
+                        <th style="width: 20%;">Description</th>
+                        <th style="width: 10%;">Unit Price</th>
+                        <th style="width: 8%;">Disc</th>
+                        <th style="width: 9%;">VAT</th>
+                        <th style="width: 9%;">Total Excl. VAT</th>
+                        <th style="width: 9%;">Total</th>
                     </tr>
                 </thead>
                 <tbody id="quoteItemsBody">
                     <tr class="quote-item-row">
                         <td><input type="number" name="QuoteItems[0].Quantity" class="form-control form-control-sm text-center" value="1"></td>
+                        <td><input type="text" class="form-control form-control-sm product-code-field" readonly value=""></td>
                         <td>
                             <select name="QuoteItems[0].ProductId" class="form-select form-select-sm product-select">
                                 <option value="">Select Product</option>
                                 @foreach (var product in (List<FMCGEnterpriseManagementSystem.Models.Product>)ViewBag.ProductList)
                                 {
-                                    <option value="@product.ProductId" data-price="@product.SellingPrice" data-description="@product.Description">@product.ProductCode</option>
+                                    <option value="@product.ProductId" data-code="@product.ProductCode" data-price="@product.SellingPrice" data-description="@product.Description">@product.ProductName</option>
                                 }
                             </select>
                         </td>
                         <td><input type="text" class="form-control form-control-sm description-field" readonly value=""></td>
-                        <td><input type="text" name="QuoteItems[0].UnitPrice" class="form-control form-control-sm text-end price-field" readonly value="R0.00"></td>
+                        <td>
+                            <input type="text" class="form-control form-control-sm text-end price-field" readonly value="R0.00">
+                            <input type="hidden" name="QuoteItems[0].UnitPrice" class="price-hidden" value="0.00">
+                        </td>
                         <td><input type="number" name="QuoteItems[0].DiscountPercent" class="form-control form-control-sm text-center" value="0" min="0" max="100" step="1"></td>
                         <td>
                             <select name="QuoteItems[0].VatCategory" class="form-select form-select-sm">
@@ -170,16 +176,19 @@
             quoteItemIndex++;
         });
 
-        document.getElementById('quoteItemsBody').addEventListener('change', function(e) {
+                document.getElementById('quoteItemsBody').addEventListener('change', function(e) {
             if (e.target.classList.contains('product-select')) {
                 const row = e.target.closest('tr');
                 const selectedOption = e.target.options[e.target.selectedIndex];
 
+                const code = selectedOption.getAttribute('data-code') || '';
                 const price = selectedOption.getAttribute('data-price') || '0.00';
                 const description = selectedOption.getAttribute('data-description') || '';
 
+                row.querySelector('.product-code-field').value = code;
                 row.querySelector('.description-field').value = description;
                 row.querySelector('.price-field').value = 'R' + parseFloat(price).toFixed(2);
+                row.querySelector('.price-hidden').value = parseFloat(price).toFixed(2);
             }
         });
 
