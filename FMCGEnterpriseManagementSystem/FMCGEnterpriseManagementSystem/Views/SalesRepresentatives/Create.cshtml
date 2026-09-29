@@ -54,19 +54,20 @@
 
                 <div class="mb-3">
 
-                    <label asp-for="SalesRepCode"
-                           class="form-label">
-                    </label>
+    <label class="form-label">
+        Sales Rep Code
+    </label>
 
-                    <input asp-for="SalesRepCode"
-                           class="form-control"
-                           placeholder="e.g. SR-001" />
+    <input class="form-control"
+           value="Generated automatically when saved"
+           readonly />
 
-                    <span asp-validation-for="SalesRepCode"
-                          class="text-danger">
-                    </span>
+    <div class="form-text">
+        The next available code will be assigned automatically,
+        for example SR-001, SR-002 or SR-003.
+    </div>
 
-                </div>
+</div>
 
                 <div class="mb-3">
 

@@ -18,7 +18,6 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
 
         public string? Email { get; set; }
 
-        [Required(ErrorMessage = "Sales representative code is required.")]
         [StringLength(20)]
         [Display(Name = "Sales Rep Code")]
         public string SalesRepCode { get; set; } = string.Empty;
