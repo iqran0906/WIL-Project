@@ -5,6 +5,6 @@ namespace FMCGEnterpriseManagementSystem.Services.Interfaces
 {
     public interface IDashboardService
     {
-        Task<DashboardViewModel> GetDashboardAnalyticsAsync();
+        Task<DashboardViewModel> GetDashboardAnalyticsAsync(int months = 12);
     }
 }
