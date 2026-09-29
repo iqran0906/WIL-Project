@@ -13,15 +13,14 @@ public class Inventory
     [ForeignKey("ProductId")]
     public Product Product { get; set; } = null!;
 
-    // Use only QuantityOnHand everywhere
+   
     public int QuantityOnHand { get; set; }
 
     public int ReorderLevel { get; set; }
     public string? Notes { get; set; }
 
 
-        [ForeignKey("ProductId")] // <--- Explicitly links the foreign key to avoid ProductId1
-        public Product Product { get; set; } = null!;
+      
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public DateTime? UpdatedAt { get; set; }
