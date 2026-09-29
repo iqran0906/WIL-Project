@@ -13,8 +13,7 @@
             <div class="d-inline-block text-start w-100" style="max-width: 280px;">
                 <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
                     <span class="small text-secondary fw-bold">Date:</span>
-                    <span>@Model.QuoteDate.ToShortDateString()</span>
-                </div>
+<span>@(Model.QuoteDate.ToShortDateString())</span>                </div>
                 <div class="d-flex align-items-center justify-content-between gap-2">
                     <span class="small text-secondary fw-bold">Quote Number:</span>
                     <span class="fw-bold">@Model.QuoteNumber</span>
@@ -58,36 +57,35 @@
                         <td>@item.Product?.ProductCode</td>
                         <td>@item.Product?.ProductName</td>
                         <td>@item.Product?.Description</td>
-                        <td>R@item.UnitPrice.ToString("N2")</td>
-                        <td>@item.DiscountPercent%</td>
+<td>R@(item.UnitPrice.ToString("N2"))</td>
+<td>@item.DiscountPercent%</td>
                         <td>@item.VatCategory</td>
-                        <td>R@item.LineTotalExclVat.ToString("N2")</td>
-                        <td>R@item.LineTotal.ToString("N2")</td>
-                    </tr>
+<td>R@(item.LineTotalExclVat.ToString("N2"))</td>
+<td>R@(item.LineTotal.ToString("N2"))</td>                    </tr>
                 }
             </tbody>
         </table>
     </div>
 
-    <div class="row justify-content-end text-end g-0 mb-4 fw-bold text-secondary">
-        <div class="col-12 col-md-4 border-top pt-2">
-            <div class="d-flex justify-content-between py-1"><span>Subtotal</span><span>R@Model.Subtotal.ToString("N2")</span></div>
-            <div class="d-flex justify-content-between py-1"><span>VAT</span><span>R@((Model.Total - Model.Subtotal).ToString("N2"))</span></div>
-            <div class="d-flex justify-content-between py-1 border-top border-dark mt-2 text-dark fs-5"><span>Total</span><span>R@Model.Total.ToString("N2")</span></div>
-        </div>
+ <div class="row justify-content-between g-0 mb-4">
+    <div class="col-12 col-md-6 text-start">
+        <h6 class="fw-bold text-secondary">Banking Details</h6>
+        <p class="small mb-0">
+            Bank: FNB<br />
+            Branch Code: 250655<br />
+            Account Name: Exclusive Distributors (Pty) Ltd<br />
+            Account Number: 63191446202<br />
+            Reference: @Model.QuoteNumber<br />
+            Proof of Payment: exclusivedistributors2@@gmail.com
+        </p>
+        <p class="small mb-0 mt-2">Thanking you for your business!</p>
     </div>
-
-    <div class="row mt-4 pt-3 border-top">
-        <div class="col-12">
-            <h6 class="fw-bold text-secondary">Banking Details</h6>
-            <p class="small mb-0">
-                Bank: [Bank Name]<br />
-                Account Name: Exclusive Distributors (pty) LTD<br />
-                Account Number: [Account Number]<br />
-                Branch Code: [Branch Code]
-            </p>
-        </div>
+    <div class="col-12 col-md-4 border-top pt-2 text-end fw-bold text-secondary">
+        <div class="d-flex justify-content-between py-1"><span>Subtotal</span><span>R@(Model.Subtotal.ToString("N2"))</span></div>
+        <div class="d-flex justify-content-between py-1"><span>VAT</span><span>R@((Model.Total - Model.Subtotal).ToString("N2"))</span></div>
+        <div class="d-flex justify-content-between py-1 border-top border-dark mt-2 text-dark fs-5"><span>Total</span><span>R@(Model.Total.ToString("N2"))</span></div>
     </div>
+</div>
 
     <div class="d-flex justify-content-end gap-2 gap-sm-3 mt-4">
         <a asp-controller="Quotes" asp-action="Index" class="btn btn-link text-decoration-none text-secondary">Back to Quotes</a>
