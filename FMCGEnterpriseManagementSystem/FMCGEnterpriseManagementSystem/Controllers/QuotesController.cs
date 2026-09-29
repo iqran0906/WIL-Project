@@ -1,15 +1,11 @@
-﻿// Purpose: Controller for the quotes pages and form submissions.
-// Authors: iqran0906, Naseeha27, Sayali-St10458649 (from git history)
-
+﻿using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;
-using FMCGEnterpriseManagementSystem.Enums;
-using FMCGEnterpriseManagementSystem.Data;
+using FMCGEnterpriseManagementSystem.Services;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
-using FMCGEnterpriseManagementSystem.ViewModels;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
@@ -17,17 +13,64 @@ namespace FMCGEnterpriseManagementSystem.Controllers
     public class QuotesController : Controller
     {
         private readonly IQuoteService _quoteService;
-        private readonly ICustomerService _customerService;
         private readonly ApplicationDbContext _context;
 
         public QuotesController(
             IQuoteService quoteService,
-            ICustomerService customerService,
             ApplicationDbContext context)
         {
             _quoteService = quoteService;
-            _customerService = customerService;
             _context = context;
+        }
+
+        private async Task PopulateQuoteDropdownsAsync(
+            int? selectedSalesRepId = null,
+            string? selectedPaymentTerms = null)
+        {
+            ViewBag.PaymentTermsList = new SelectList(
+                new[]
+                {
+                    "COD",
+                    "7 Days",
+                    "14 Days",
+                    "21 Days",
+                    "28 Days",
+                    "30 Days"
+                },
+                selectedPaymentTerms);
+
+            ViewBag.ProductList = await _context.Products
+                .Where(p => p.IsActive)
+                .OrderBy(p => p.ProductName)
+                .ToListAsync();
+
+            ViewBag.CustomerList = await _context.Customers
+                .Where(c => c.IsActive)
+                .OrderBy(c => c.Name)
+                .ThenBy(c => c.Surname)
+                .ToListAsync();
+
+            var salesReps = await _context.SalesRepresentatives
+                .Include(sr => sr.Employee)
+                .Where(sr => sr.IsActive)
+                .OrderBy(sr => sr.Employee.FirstName)
+                .ThenBy(sr => sr.Employee.LastName)
+                .Select(sr => new
+                {
+                    sr.SalesRepresentativeId,
+
+                    DisplayName =
+                        sr.Employee.FirstName + " " +
+                        sr.Employee.LastName + " (" +
+                        sr.SalesRepCode + ")"
+                })
+                .ToListAsync();
+
+            ViewBag.SalesRepList = new SelectList(
+                salesReps,
+                "SalesRepresentativeId",
+                "DisplayName",
+                selectedSalesRepId);
         }
 
         // GET: Quotes
@@ -77,7 +120,9 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return View(quotes);
         }
 
-        private static (DateTime? Start, DateTime? End) GetPeriodRange(string? period)
+        // GET: Quotes/Create
+        [HttpGet]
+        public async Task<IActionResult> Create()
         {
             var today = DateTime.Today;
             var monthStart = new DateTime(today.Year, today.Month, 1);
@@ -101,9 +146,9 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 QuoteDate = DateTime.Today
             };
 
-            await LoadLookupsAsync(model);
+            await PopulateQuoteDropdownsAsync();
 
-            return View(model);
+            return View(quote);
         }
 
         // POST: Quotes/Create
@@ -111,11 +156,17 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(QuoteViewModel model)
         {
-            // Rules that need the database
-            if (model.CustomerId > 0 &&
-                !await _context.Customers.AnyAsync(c => c.CustomerId == model.CustomerId && c.IsActive))
+            ModelState.Remove(nameof(Quote.QuoteNumber));
+            ModelState.Remove("Customer");
+            ModelState.Remove("SalesRepresentative");
+
+            if (!ModelState.IsValid)
             {
-                ModelState.AddModelError(nameof(model.CustomerId), "The selected customer does not exist or is inactive.");
+                await PopulateQuoteDropdownsAsync(
+                    quote.SalesRepresentativeId,
+                    quote.PaymentTerms);
+
+                return View(quote);
             }
 
             var productIds = model.Items.Select(i => i.ProductId).Where(id => id > 0).Distinct().ToList();
@@ -161,43 +212,157 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
             await _quoteService.CreateQuoteAsync(quote);
 
-            TempData["SuccessMessage"] = $"Quote {quote.QuoteNumber} created successfully.";
             return RedirectToAction(nameof(Index));
         }
 
-        private async Task LoadLookupsAsync(QuoteViewModel model)
-        {
-            model.AvailableCustomers = await _context.Customers
-                .AsNoTracking()
-                .Where(c => c.IsActive)
-                .Include(c => c.SalesRepresentative)
-                    .ThenInclude(sr => sr!.Employee)
-                .OrderBy(c => c.Name)
-                .ThenBy(c => c.Surname)
-                .ToListAsync();
-
-            model.AvailableProducts = await _context.Products
-                .AsNoTracking()
-                .Where(p => p.IsActive)
-                .OrderBy(p => p.ProductName)
-                .Select(p => new ProductViewModel
-                {
-                    ProductId = p.ProductId,
-                    ProductCode = p.ProductCode,
-                    ProductName = p.ProductName,
-                    SellingPrice = p.SellingPrice
-                })
-                .ToListAsync();
-        }
-
-        // GET: Quotes/Details/5
-        public async Task<IActionResult> Details(int id)
+        // GET: Quotes/Edit/5
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
         {
             var quote = await _quoteService.GetQuoteByIdAsync(id);
+
             if (quote == null)
             {
                 return NotFound();
             }
+
+            await PopulateQuoteDropdownsAsync(
+                quote.SalesRepresentativeId,
+                quote.PaymentTerms);
+
+            return View(quote);
+        }
+
+        // POST: Quotes/Edit/5
+        // POST: Quotes/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Quote quote)
+        {
+            if (id != quote.QuoteId)
+            {
+                return BadRequest();
+            }
+
+            // These values are generated/loaded by the application,
+            // not entered directly by the user.
+            ModelState.Remove(nameof(Quote.QuoteNumber));
+            ModelState.Remove(nameof(Quote.Customer));
+            ModelState.Remove(nameof(Quote.SalesRepresentative));
+
+            // QuoteItem navigation properties are not posted by the form.
+            // Only ProductId is posted.
+            for (int i = 0; i < quote.QuoteItems.Count; i++)
+            {
+                ModelState.Remove($"QuoteItems[{i}].Quote");
+                ModelState.Remove($"QuoteItems[{i}].Product");
+            }
+
+            // A quote must contain at least one valid item.
+            if (quote.QuoteItems == null || !quote.QuoteItems.Any())
+            {
+                ModelState.AddModelError(
+                    string.Empty,
+                    "Please add at least one product to the quote.");
+            }
+
+            if (quote.QuoteItems != null &&
+                quote.QuoteItems.Any(item => item.ProductId <= 0))
+            {
+                ModelState.AddModelError(
+                    string.Empty,
+                    "Please select a product for every quote item.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.PaymentTermsList = new SelectList(
+                    new[]
+                    {
+                "COD",
+                "7 Days",
+                "14 Days",
+                "21 Days",
+                "28 Days",
+                "30 Days"
+                    },
+                    quote.PaymentTerms);
+
+                ViewBag.ProductList = await _context.Products
+                    .Where(p => p.IsActive)
+                    .ToListAsync();
+
+                ViewBag.CustomerList = await _context.Customers
+                    .Where(c => c.IsActive)
+                    .ToListAsync();
+
+                ViewBag.SalesRepList = new SelectList(
+    await _context.SalesRepresentatives
+        .Include(sr => sr.Employee)
+        .Where(sr => sr.IsActive)
+        .Select(sr => new
+        {
+            sr.SalesRepresentativeId,
+            DisplayName = sr.Employee.FirstName + " " +
+                          sr.Employee.LastName + " (" +
+                          sr.SalesRepCode + ")"
+        })
+        .ToListAsync(),
+    "SalesRepresentativeId",
+    "DisplayName",
+    quote.SalesRepresentativeId
+);
+
+                return View(quote);
+            }
+
+            quote.QuoteId = id;
+
+            await _quoteService.UpdateQuoteAsync(quote);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // POST: Quotes/ConvertToInvoice/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConvertToInvoice(int id)
+        {
+            await _quoteService.ConvertToInvoiceAsync(id);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Quotes/DownloadPdf/5
+        [HttpGet]
+        public async Task<IActionResult> DownloadPdf(int id)
+        {
+            var quote = await _quoteService.GetQuoteByIdAsync(id);
+
+            if (quote == null)
+            {
+                return NotFound();
+            }
+
+            var pdfBytes = QuotePdfGenerator.Generate(quote);
+
+            return File(
+                pdfBytes,
+                "application/pdf",
+                $"Quote-{quote.QuoteNumber}.pdf");
+        }
+
+        // GET: Quotes/Details/5
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var quote = await _quoteService.GetQuoteByIdAsync(id);
+
+            if (quote == null)
+            {
+                return NotFound();
+            }
+
             return View(quote);
         }
 
@@ -207,6 +372,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             await _quoteService.DeleteQuoteAsync(id);
+
             return RedirectToAction(nameof(Index));
         }
     }

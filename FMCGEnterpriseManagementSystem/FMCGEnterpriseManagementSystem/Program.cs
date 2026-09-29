@@ -34,6 +34,24 @@ builder.Services.AddControllersWithViews(options =>
     options.Filters.Add<ActivityLogFilter>();
 });
 
+// Register existing repositories and services
+builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
+builder.Services.AddScoped<ISupplierService, SupplierService>();
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<IQuoteRepository, QuoteRepository>();
+builder.Services.AddScoped<IQuoteService, QuoteService>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+
+// Dashboard & Analytics Services
+builder.Services.AddScoped<IDashboardService, DashboardService>();
+builder.Services.AddScoped<IAnalyticsService, AnalyticsService>(); // <-- Added here
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 // ==========================================================
 // DATABASE
@@ -43,6 +61,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddScoped<IForecastingRepository, ForecastingRepository>();
+builder.Services.AddScoped<IForecastingService, ForecastingService>();
+
+builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IInvoiceService, InvoiceService>();
 
 // ==========================================================
 // IDENTITY / AUTHENTICATION
@@ -190,6 +215,7 @@ builder.Services.AddScoped<IActivityService, ActivityService>();
 builder.Services.AddScoped<IExportStrategy, PdfExportStrategy>();
 builder.Services.AddScoped<IExportStrategy, ExcelExportStrategy>();
 builder.Services.AddScoped<ExportFactory>();
+builder.Services.AddScoped<IInvoiceExportService, InvoiceExportService>();
 
 
 // ==========================================================
@@ -232,7 +258,6 @@ app.UseStatusCodePagesWithReExecute("/Home/StatusCodePage", "?code={0}");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 
 

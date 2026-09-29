@@ -45,8 +45,8 @@
         <table class="table align-middle m-0 bg-white shadow-sm rounded">
             <thead class="table-secondary text-secondary small">
                 <tr>
-                    <th>Qty</th>
-                    <th>Item Code</th>
+                    <th>Quantity</th>
+                    <th>Product Code</th>
                     <th>Description</th>
                     <th>Unit Price</th>
                     <th>Disc %</th>
@@ -63,10 +63,10 @@
                         <td>@item.Quantity</td>
                         <td>@item.ItemCode</td>
                         <td>@item.Description</td>
-                        <td>R@item.UnitPrice.ToString("0.00")</td>
-                        <td>@item.DiscountPercent.ToString("0.00")%</td>
-                        <td>R@lineExVat.ToString("0.00")</td>
-                        <td>R@lineVatAmount.ToString("0.00")</td>
+                        <td>@($"R{item.UnitPrice:0.00}")</td>
+                        <td>@($"{item.DiscountPercent:0.00}%")</td>
+                        <td>@($"R{lineExVat:0.00}")</td>
+                        <td>@($"R{lineVatAmount:0.00}")</td>
                     </tr>
                 }
             </tbody>
@@ -88,9 +88,9 @@
         </div>
         <div class="col-md-6 text-end fw-bold text-secondary">
             <div class="d-inline-block text-start" style="min-width: 250px;">
-                <div class="d-flex justify-content-between py-1"><span>Subtotal (excl. VAT)</span><span>R@Model.Subtotal.ToString("0.00")</span></div>
-                <div class="d-flex justify-content-between py-1"><span>VAT</span><span>R@Model.VatTotal.ToString("0.00")</span></div>
-                <div class="d-flex justify-content-between py-1 border-top border-dark mt-2 text-dark fs-5"><span>Grand Total</span><span>R@Model.Total.ToString("0.00")</span></div>
+                <div class="d-flex justify-content-between py-1"><span>Subtotal (excl. VAT)</span><span>@($"R{Model.Subtotal:0.00}")</span></div>
+                <div class="d-flex justify-content-between py-1"><span>VAT</span><span>@($"R{Model.VatTotal:0.00}")</span></div>
+                <div class="d-flex justify-content-between py-1 border-top border-dark mt-2 text-dark fs-5"><span>Grand Total</span><span>@($"R{Model.Total:0.00}")</span></div>
             </div>
         </div>
     </div>

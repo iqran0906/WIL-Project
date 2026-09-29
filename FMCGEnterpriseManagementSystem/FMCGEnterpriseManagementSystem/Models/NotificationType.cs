@@ -7,6 +7,7 @@ namespace FMCGEnterpriseManagementSystem.Models
     {
         LowStock,
         QuoteExpired,
+        NewQuote,
         NewInvoice,
         NewCustomer,
         NewItem,

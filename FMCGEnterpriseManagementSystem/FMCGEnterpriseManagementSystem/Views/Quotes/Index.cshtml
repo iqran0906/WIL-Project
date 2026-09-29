@@ -7,133 +7,445 @@
 @{
     ViewData["Title"] = "Quotes";
 
-    var periods = new Dictionary<string, string>
-    {
-        [""] = "All",
-        ["today"] = "Today",
-        ["week"] = "This Week",
-        ["month"] = "This Month",
-        ["lastmonth"] = "Last Month",
-        ["year"] = "This Year"
-    };
+    var quotes = Model?.ToList()
+        ?? new List<FMCGEnterpriseManagementSystem.Models.Quote>();
+
+    var totalQuotes = quotes.Count;
+
+    var pendingQuotes = quotes.Count(q =>
+        q.Status == FMCGEnterpriseManagementSystem.Enums.QuoteStatus.Pending);
+
+    var invoicedQuotes = quotes.Count(q =>
+        q.Status == FMCGEnterpriseManagementSystem.Enums.QuoteStatus.Invoiced);
+
+    var totalValue = quotes.Sum(q => q.Total);
 }
 
-<div class="px-2 py-3">
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="bi bi-check-circle me-1"></i>@TempData["SuccessMessage"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<div class="content-card">
+
+    <!-- HEADER -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+
+        <div>
+            <h2 class="fw-bold mb-1" style="color:#1c323d;">
+                Quotes
+            </h2>
+
+            <p class="text-muted mb-0">
+                Create, manage and convert customer quotations.
+            </p>
         </div>
     }
 
-    <form asp-controller="Quotes" asp-action="Index" method="get">
+        <a asp-controller="Quotes"
+           asp-action="Create"
+           class="btn btn-action-primary text-decoration-none">
 
-        <div class="row align-items-start mb-3">
-            <div class="col-md-4">
-                <h2 class="text-white fw-bold mb-3">Quotes</h2>
-                <a asp-controller="Quotes" asp-action="Create" class="btn btn-action-primary text-decoration-none">
-                    New Quote
-                </a>
-            </div>
+            <i class="bi bi-plus-lg me-1"></i>
+            New Quote
 
-            <div class="col-md-8">
-                <div class="row g-2 justify-content-md-end text-white">
-                    <div class="col-6 col-sm-3">
-                        <label class="small fw-bold">Period:</label>
-                        <select name="period" class="form-select form-select-sm">
-                            @foreach (var period in periods)
-                            {
-                                <option value="@period.Key"
-                                        selected="@(((string?)ViewBag.Period ?? "") == period.Key)">
-                                    @period.Value
-                                </option>
-                            }
-                        </select>
-                    </div>
-                    <div class="col-6 col-sm-3">
-                        <label class="small fw-bold">Customer:</label>
-                        <select name="customerId"
-                                asp-items="ViewBag.CustomerFilter"
-                                class="form-select form-select-sm">
-                            <option value="">All</option>
-                        </select>
-                    </div>
-                    <div class="col-6 col-sm-3">
-                        <label class="small fw-bold">Start:</label>
-                        <input type="date" name="startDate" value="@ViewBag.StartDate" class="form-control form-control-sm">
-                    </div>
-                    <div class="col-6 col-sm-3">
-                        <label class="small fw-bold">End:</label>
-                        <input type="date" name="endDate" value="@ViewBag.EndDate" class="form-control form-control-sm">
-                    </div>
-                </div>
+        </a>
 
-                <div class="d-flex flex-wrap justify-content-md-end align-items-center gap-2 mt-3">
-                    <span class="text-white fw-bold small">Keyword:</span>
-                    <div class="position-relative">
-                        <input type="text" name="keyword" value="@ViewBag.Keyword" class="form-control form-control-sm search-field" placeholder="Quote No, Customer, etc">
-                        <i class="bi bi-search position-absolute end-0 top-50 translate-middle-y me-2 text-white-50 small"></i>
-                    </div>
-                    <button type="submit" class="btn btn-sm btn-light">Filter</button>
-                    <a asp-controller="Quotes" asp-action="Index" class="btn btn-sm btn-outline-light">Clear</a>
+    </div>
+
+
+    <!-- SUMMARY CARDS -->
+    <div class="row g-3 mb-4">
+
+        <div class="col-md-3">
+            <div class="border rounded p-3 h-100">
+                <small class="text-muted d-block mb-1">
+                    Total Quotes
+                </small>
+
+                <div class="fs-4 fw-bold" style="color:#1c323d;">
+                    @totalQuotes
                 </div>
             </div>
         </div>
 
-        <div class="d-flex align-items-center gap-2 mb-3 text-white">
-            <span class="fw-bold">Status:</span>
-            <select name="status"
-                    asp-items="ViewBag.StatusFilter"
-                    class="form-select form-select-sm w-auto d-inline-block"
-                    onchange="this.form.submit()">
-                <option value="">All Quotes</option>
-            </select>
+        <div class="col-md-3">
+            <div class="border rounded p-3 h-100">
+                <small class="text-muted d-block mb-1">
+                    Pending
+                </small>
+
+                <div class="fs-4 fw-bold" style="color:#1c323d;">
+                    @pendingQuotes
+                </div>
+            </div>
         </div>
 
-    </form>
+        <div class="col-md-3">
+            <div class="border rounded p-3 h-100">
+                <small class="text-muted d-block mb-1">
+                    Converted to Invoice
+                </small>
 
-    @if (ViewBag.DateError != null)
-    {
-        <div class="alert alert-danger"><i class="bi bi-exclamation-triangle me-1"></i>@ViewBag.DateError</div>
-    }
+                <div class="fs-4 fw-bold" style="color:#1c323d;">
+                    @invoicedQuotes
+                </div>
+            </div>
+        </div>
 
+        <div class="col-md-3">
+            <div class="border rounded p-3 h-100">
+                <small class="text-muted d-block mb-1">
+                    Quote Value
+                </small>
+
+                <div class="fs-4 fw-bold" style="color:#1c323d;">
+                    R @totalValue.ToString("N2")
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- SEARCH / FILTERS -->
+    <div class="border rounded p-3 mb-4 bg-light">
+
+        <div class="row g-3 align-items-end">
+
+            <div class="col-lg-4">
+                <label class="form-label small fw-semibold">
+                    Search Quotes
+                </label>
+
+                <input type="text"
+                       id="quoteSearch"
+                       class="form-control"
+                       placeholder="Quote number or customer..." />
+            </div>
+
+            <div class="col-md-4 col-lg-2">
+                <label class="form-label small fw-semibold">
+                    Status
+                </label>
+
+                <select id="statusFilter"
+                        class="form-select">
+
+                    <option value="">All Statuses</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Invoiced">Invoiced</option>
+                    <option value="Cancelled">Cancelled</option>
+
+                </select>
+            </div>
+
+            <div class="col-md-4 col-lg-2">
+                <label class="form-label small fw-semibold">
+                    Start Date
+                </label>
+
+                <input type="date"
+                       id="startDate"
+                       class="form-control" />
+            </div>
+
+            <div class="col-md-4 col-lg-2">
+                <label class="form-label small fw-semibold">
+                    End Date
+                </label>
+
+                <input type="date"
+                       id="endDate"
+                       class="form-control" />
+            </div>
+
+            <div class="col-lg-2">
+                <button type="button"
+                        id="clearFilters"
+                        class="btn btn-outline-secondary w-100">
+                    Clear
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TABLE -->
     <div class="table-responsive">
-        <table class="custom-data-table">
-            <thead>
+
+        <table class="table align-middle mb-0"
+               id="quotesTable">
+
+            <thead class="table-light">
                 <tr>
                     <th>Date</th>
                     <th>Quote No.</th>
                     <th>Customer</th>
-                    <th>Total</th>
+                    <th>Sales Rep</th>
+                    <th class="text-end">Total</th>
                     <th>Status</th>
-                    <th>Actions</th>
+                    <th class="text-end">Actions</th>
                 </tr>
             </thead>
+
             <tbody>
-                @if (Model != null && Model.Any())
+
+                @if (quotes.Any())
                 {
-                    @foreach (var quote in Model)
+                    foreach (var quote in quotes)
                     {
-                        <tr>
-                            <td>@quote.QuoteDate.ToShortDateString()</td>
-                            <td>@quote.QuoteNumber</td>
-                            <td>@quote.Customer?.Name @quote.Customer?.Surname</td>
-                            <td>R@quote.Total.ToString("N2")</td>
-                            <td>@quote.Status</td>
+                        var statusClass = quote.Status switch
+                        {
+                            FMCGEnterpriseManagementSystem.Enums.QuoteStatus.Pending
+                                => "bg-warning text-dark",
+
+                            FMCGEnterpriseManagementSystem.Enums.QuoteStatus.Invoiced
+                                => "bg-success",
+
+                            FMCGEnterpriseManagementSystem.Enums.QuoteStatus.Cancelled
+                                => "bg-danger",
+
+                            _ => "bg-secondary"
+                        };
+
+                        var customerName =
+                            quote.Customer != null
+                                ? $"{quote.Customer.Name} {quote.Customer.Surname}"
+                                : "Unknown Customer";
+
+                        var salesRepName =
+                            quote.SalesRepresentative?.Employee != null
+                                ? $"{quote.SalesRepresentative.Employee.FirstName} {quote.SalesRepresentative.Employee.LastName}"
+                                : "Unassigned";
+
+                        <tr class="quote-row"
+                            data-status="@quote.Status"
+                            data-date="@quote.QuoteDate.ToString("yyyy-MM-dd")">
+
                             <td>
-                                <a asp-controller="Quotes" asp-action="Details" asp-route-id="@quote.QuoteId">View</a>
+                                @quote.QuoteDate.ToString("dd MMM yyyy")
                             </td>
+
+                            <td>
+                                <span class="fw-semibold">
+                                    @quote.QuoteNumber
+                                </span>
+                            </td>
+
+                            <td>
+                                <div class="fw-semibold">
+                                    @customerName
+                                </div>
+                            </td>
+
+                            <td>
+                                @salesRepName
+                            </td>
+
+                            <td class="text-end fw-semibold">
+                                R @quote.Total.ToString("N2")
+                            </td>
+
+                            <td>
+                                <span class="badge @statusClass">
+                                    @quote.Status
+                                </span>
+                            </td>
+
+                            <td class="text-end text-nowrap">
+
+                                <a asp-controller="Quotes"
+                                   asp-action="Details"
+                                   asp-route-id="@quote.QuoteId"
+                                   class="btn btn-sm btn-outline-secondary">
+                                    View
+                                </a>
+
+                                <a asp-controller="Quotes"
+                                   asp-action="Edit"
+                                   asp-route-id="@quote.QuoteId"
+                                   class="btn btn-sm btn-outline-warning">
+                                    Edit
+                                </a>
+
+                                <div class="dropdown d-inline-block">
+
+                                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle"
+                                            type="button"
+                                            data-bs-toggle="dropdown"
+                                            data-bs-boundary="viewport">
+                                        More
+                                    </button>
+
+                                    <ul class="dropdown-menu dropdown-menu-end">
+
+                                        @if (quote.Status != FMCGEnterpriseManagementSystem.Enums.QuoteStatus.Invoiced)
+                                        {
+                                            <li>
+                                                <form asp-controller="Quotes"
+                                                      asp-action="ConvertToInvoice"
+                                                      asp-route-id="@quote.QuoteId"
+                                                      method="post">
+
+                                                    @Html.AntiForgeryToken()
+
+                                                    <button type="submit"
+                                                            class="dropdown-item">
+                                                        Convert to Invoice
+                                                    </button>
+
+                                                </form>
+                                            </li>
+                                        }
+
+                                        <li>
+                                            <a class="dropdown-item"
+                                               asp-controller="Quotes"
+                                               asp-action="DownloadPdf"
+                                               asp-route-id="@quote.QuoteId">
+                                                Download PDF
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a class="dropdown-item"
+                                               href="#"
+                                               onclick="alert('Email quote coming soon'); return false;">
+                                                Email Quote
+                                            </a>
+                                        </li>
+
+                                    </ul>
+
+                                </div>
+
+                            </td>
+
                         </tr>
                     }
                 }
                 else
                 {
                     <tr>
-                        <td colspan="6" class="text-center text-muted">No quotes match your filters.</td>
+                        <td colspan="7"
+                            class="text-center text-muted py-5">
+
+                            No quotes have been created yet.
+
+                        </td>
                     </tr>
                 }
+
             </tbody>
+
         </table>
+
     </div>
+
 </div>
+
+
+@section Scripts {
+
+    <script>
+
+        const searchInput =
+            document.getElementById('quoteSearch');
+
+        const statusFilter =
+            document.getElementById('statusFilter');
+
+        const startDate =
+            document.getElementById('startDate');
+
+        const endDate =
+            document.getElementById('endDate');
+
+        const clearButton =
+            document.getElementById('clearFilters');
+
+
+        function filterQuotes() {
+
+            const search =
+                searchInput.value.toLowerCase().trim();
+
+            const status =
+                statusFilter.value;
+
+            const start =
+                startDate.value;
+
+            const end =
+                endDate.value;
+
+            document.querySelectorAll('.quote-row')
+                .forEach(function(row) {
+
+                    const text =
+                        row.innerText.toLowerCase();
+
+                    const rowStatus =
+                        row.dataset.status;
+
+                    const rowDate =
+                        row.dataset.date;
+
+                    const matchesSearch =
+                        !search || text.includes(search);
+
+                    const matchesStatus =
+                        !status || rowStatus === status;
+
+                    const matchesStart =
+                        !start || rowDate >= start;
+
+                    const matchesEnd =
+                        !end || rowDate <= end;
+
+                    row.style.display =
+                        matchesSearch &&
+                            matchesStatus &&
+                            matchesStart &&
+                            matchesEnd
+                            ? ''
+                            : 'none';
+                });
+        }
+
+
+        searchInput.addEventListener(
+            'input',
+            filterQuotes
+        );
+
+        statusFilter.addEventListener(
+            'change',
+            filterQuotes
+        );
+
+        startDate.addEventListener(
+            'change',
+            filterQuotes
+        );
+
+        endDate.addEventListener(
+            'change',
+            filterQuotes
+        );
+
+
+        clearButton.addEventListener(
+            'click',
+            function() {
+
+                searchInput.value = '';
+                statusFilter.value = '';
+                startDate.value = '';
+                endDate.value = '';
+
+                filterQuotes();
+            }
+        );
+
+    </script>
+
+}

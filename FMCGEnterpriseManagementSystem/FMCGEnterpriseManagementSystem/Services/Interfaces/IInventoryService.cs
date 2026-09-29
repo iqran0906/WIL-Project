@@ -11,6 +11,7 @@ namespace FMCGEnterpriseManagementSystem.Services.Interfaces
         Task<InventoryViewModel?> GetByIdAsync(int id);
         Task CreateInventoryItemAsync(InventoryViewModel model);
         Task UpdateInventoryItemAsync(InventoryViewModel model);
+        Task DeleteInventoryItemAsync(int id); // Add this line here!
         Task AdjustStockAsync(AdjustStockViewModel model);
     }
 }

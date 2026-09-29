@@ -17,11 +17,19 @@ namespace FMCGEnterpriseManagementSystem.Controllers
     {
         private readonly IInvoiceService _invoiceService;
         private readonly ICustomerRepository _customerRepository;
+
+        private readonly IInvoiceExportService _invoiceExportService;
+
         private readonly ApplicationDbContext _context;
 
-        public InvoicesController(IInvoiceService invoiceService, ICustomerRepository customerRepository, ApplicationDbContext context)
+        public InvoicesController(
+     IInvoiceService invoiceService,
+     IInvoiceExportService invoiceExportService,
+     ICustomerRepository customerRepository,
+     ApplicationDbContext context)
         {
             _invoiceService = invoiceService;
+            _invoiceExportService = invoiceExportService;
             _customerRepository = customerRepository;
             _context = context;
         }
@@ -115,7 +123,6 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             {
                 // Business rule failures from the service, e.g. insufficient stock
                 ModelState.AddModelError(string.Empty, ex.Message);
-
                 await LoadLookupsAsync(model);
                 return View(model);
             }
@@ -188,9 +195,17 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         // GET: Invoices/Download/5
         public async Task<IActionResult> Download(int id)
         {
-            // TODO: Replace with real PDF generation once the Exports module is built
-            TempData["InfoMessage"] = "Invoice download (PDF export) is coming soon.";
-            return RedirectToAction(nameof(Details), new { id });
+            var invoice = await _invoiceService.GetByIdAsync(id);
+
+            if (invoice == null)
+                return NotFound();
+
+            var pdf = _invoiceExportService.GenerateInvoicePdf(invoice);
+
+            return File(
+                pdf,
+                "application/pdf",
+                $"Invoice-{invoice.InvoiceNumber}.pdf");
         }
 
         // GET: Invoices/Delete/5

@@ -1,0 +1,938 @@
+﻿@model FMCGEnterpriseManagementSystem.Models.Quote
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+@{
+    ViewData["Title"] = "Edit Quote";
+}
+
+<div class="content-card">
+
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+        <div>
+            <h2 class="fw-bold mb-1" style="color:#1c323d;">
+                Edit Quote
+            </h2>
+            <p class="text-muted mb-0">
+                Update quote details, products and pricing.
+            </p>
+        </div>
+
+        <div class="text-md-end">
+            <span class="text-muted small d-block">Quote Number</span>
+            <span class="fw-bold fs-5">@Model.QuoteNumber</span>
+        </div>
+    </div>
+
+    <form asp-controller="Quotes"
+          asp-action="Edit"
+          asp-route-id="@Model.QuoteId"
+          method="post"
+          id="editQuoteForm">
+
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" asp-for="QuoteId" />
+        <input type="hidden" asp-for="QuoteNumber" />
+
+        <div asp-validation-summary="ModelOnly"
+             class="text-danger mb-3"></div>
+
+        <!-- QUOTE INFORMATION -->
+        <div class="row g-4 mb-4">
+
+            <div class="col-md-4">
+                <label asp-for="QuoteDate"
+                       class="form-label fw-semibold">
+                    Quote Date
+                </label>
+
+                <input asp-for="QuoteDate"
+                       type="date"
+                       class="form-control" />
+            </div>
+
+            <div class="col-md-8">
+                <label asp-for="CustomerId"
+                       class="form-label fw-semibold">
+                    Customer
+                </label>
+
+                <select asp-for="CustomerId"
+                        class="form-select"
+                        id="customerSelect">
+
+                    <option value="">Select Customer</option>
+
+                    @foreach (var customer in
+                        (List<FMCGEnterpriseManagementSystem.Models.Customer>)ViewBag.CustomerList)
+                    {
+                        <option value="@customer.CustomerId"
+                                data-payment-terms="@customer.PaymentTerms"
+                                data-sales-rep-id="@customer.SalesRepresentativeId"
+                                data-billing-address="@customer.PhysicalAddress">
+                            @customer.Name @customer.Surname
+                        </option>
+                    }
+
+                </select>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="BillingAddress"
+                       class="form-label fw-semibold">
+                    Billing Address
+                </label>
+
+                <textarea asp-for="BillingAddress"
+                          class="form-control"
+                          rows="3"
+                          readonly></textarea>
+            </div>
+
+            <div class="col-md-3">
+                <label asp-for="PaymentTerms"
+                       class="form-label fw-semibold">
+                    Payment Terms
+                </label>
+
+                <select asp-for="PaymentTerms"
+                        asp-items="ViewBag.PaymentTermsList"
+                        class="form-select"
+                        id="paymentTermsSelect">
+
+                    <option value="">Select Terms</option>
+
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <label asp-for="SalesRepresentativeId"
+                       class="form-label fw-semibold">
+                    Sales Person
+                </label>
+
+                <select asp-for="SalesRepresentativeId"
+                        asp-items="ViewBag.SalesRepList"
+                        class="form-select"
+                        id="salesRepSelect">
+
+                    <option value="">Unassigned</option>
+
+                </select>
+            </div>
+
+        </div>
+
+        <!-- ITEMS HEADER -->
+        <div class="mb-2">
+            <h5 class="fw-bold mb-0" style="color:#1c323d;">
+                Quote Items
+            </h5>
+
+            <small class="text-muted">
+                Products, quantities, discounts and VAT.
+            </small>
+        </div>
+
+        <!-- ITEMS TABLE -->
+        <div class="table-responsive border rounded mb-3">
+
+            <table class="table align-middle mb-0"
+                   style="min-width:1180px;">
+
+                <thead class="table-light">
+                    <tr>
+                        <th>Qty</th>
+                        <th>Product Code</th>
+                        <th>Product</th>
+                        <th>Description</th>
+                        <th class="text-end">Unit Price</th>
+                        <th>Disc %</th>
+                        <th>VAT</th>
+                        <th class="text-end">Excl. VAT</th>
+                        <th class="text-end">Total</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+
+                <tbody id="quoteItemsBody">
+
+                    @{
+                        int i = 0;
+                    }
+
+                    @foreach (var item in Model.QuoteItems)
+                    {
+                        <tr class="quote-item-row">
+
+                            <!-- QUANTITY -->
+                            <td style="width:75px;">
+                                <input type="number"
+                                       name="QuoteItems[@i].Quantity"
+                                       class="form-control form-control-sm text-center quantity-field"
+                                       value="@item.Quantity"
+                                       min="1" />
+                            </td>
+
+                            <!-- PRODUCT CODE -->
+                            <td style="width:110px;">
+                                <input type="text"
+                                       class="form-control form-control-sm product-code-field"
+                                       value="@item.Product?.ProductCode"
+                                       readonly />
+                            </td>
+
+                            <!-- PRODUCT -->
+                            <td style="min-width:160px;">
+
+                                <select name="QuoteItems[@i].ProductId"
+                                        class="form-select form-select-sm product-select">
+
+                                    <option value="">Select Product</option>
+
+                                    @foreach (var product in
+                                        (List<FMCGEnterpriseManagementSystem.Models.Product>)ViewBag.ProductList)
+                                    {
+                                        <option value="@product.ProductId"
+                                                data-code="@product.ProductCode"
+                                                data-price="@product.SellingPrice"
+                                                data-description="@product.Description"
+                                                selected="@(product.ProductId == item.ProductId)">
+                                            @product.ProductName
+                                        </option>
+                                    }
+
+                                </select>
+
+                            </td>
+
+                            <!-- DESCRIPTION -->
+                            <td style="min-width:150px;">
+                                <input type="text"
+                                       class="form-control form-control-sm description-field"
+                                       value="@item.Product?.Description"
+                                       readonly />
+                            </td>
+
+                            <!-- UNIT PRICE -->
+                            <td style="width:110px;">
+
+                                <input type="text"
+                                       class="form-control form-control-sm text-end price-field"
+                                       value="R@(item.UnitPrice.ToString("N2"))"
+                                       readonly />
+
+                                <input type="hidden"
+                                       name="QuoteItems[@i].UnitPrice"
+                                       class="price-hidden"
+                                       value="@item.UnitPrice" />
+
+                            </td>
+
+                            <!-- DISCOUNT -->
+                            <td style="width:95px;">
+                                <div class="input-group input-group-sm">
+                                    <input type="number"
+                                           name="QuoteItems[@i].DiscountPercent"
+                                           class="form-control text-center discount-field"
+                                           value="@item.DiscountPercent.ToString("0.##")"
+                                           min="0"
+                                           max="100"
+                                           step="1" />
+                                    <span class="input-group-text">%</span>
+                                </div>
+                            </td>
+
+                            <!-- VAT -->
+                            <td style="width:115px;">
+
+                                <select name="QuoteItems[@i].VatCategory"
+                                        class="form-select form-select-sm vat-field">
+
+                                    <option value="[NONE]"
+                                            selected="@(item.VatCategory == "[NONE]")">
+                                        None
+                                    </option>
+
+                                    <option value="STANDARD"
+                                            selected="@(item.VatCategory == "STANDARD")">
+                                        Standard
+                                    </option>
+
+                                </select>
+
+                            </td>
+
+                            <!-- EX VAT -->
+                            <td style="width:110px;">
+                                <input type="text"
+                                       class="form-control form-control-sm text-end line-total-excl-vat-field"
+                                       value="R@(item.LineTotalExclVat.ToString("N2"))"
+                                       readonly />
+                            </td>
+
+                            <!-- TOTAL -->
+                            <td style="width:110px;">
+                                <input type="text"
+                                       class="form-control form-control-sm text-end line-total-field"
+                                       value="R@(item.LineTotal.ToString("N2"))"
+                                       readonly />
+                            </td>
+
+                            <!-- REMOVE -->
+                            <td style="width:90px;" class="text-center">
+
+                                <button type="button"
+                                        class="btn btn-outline-danger btn-sm remove-item-btn">
+                                    Remove
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+                        i++;
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <!-- ADD ITEM -->
+        <button type="button"
+                id="addItemBtn"
+                class="btn btn-outline-secondary btn-sm mb-4">
+
+            <i class="bi bi-plus-lg me-1"></i>
+            Add Item
+
+        </button>
+
+        <!-- TOTALS -->
+        <div class="row justify-content-end mb-4">
+
+            <div class="col-md-5 col-lg-4">
+
+                <div class="border rounded p-3 bg-light">
+
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Subtotal</span>
+
+                        <strong id="subtotalAmount">
+                            R@(Model.Subtotal.ToString("N2"))
+                        </strong>
+                    </div>
+
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">VAT</span>
+
+                        <strong id="vatAmount">
+                            R@((Model.Total - Model.Subtotal).ToString("N2"))
+                        </strong>
+                    </div>
+
+                    <hr />
+
+                    <div class="d-flex justify-content-between fs-5">
+                        <strong>Total</strong>
+
+                        <strong id="totalAmount">
+                            R@(Model.Total.ToString("N2"))
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- BUTTONS -->
+        <div class="d-flex justify-content-end gap-3">
+
+            <a asp-controller="Quotes"
+               asp-action="Index"
+               class="btn btn-link text-decoration-none text-secondary">
+                Cancel
+            </a>
+
+            <button type="submit"
+                    class="btn btn-custom-save">
+                Save Changes
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        const VAT_RATE = 0.15;
+
+        const quoteItemsBody =
+            document.getElementById('quoteItemsBody');
+
+        const customerSelect =
+            document.getElementById('customerSelect');
+
+        const paymentTermsSelect =
+            document.getElementById('paymentTermsSelect');
+
+        const salesRepSelect =
+            document.getElementById('salesRepSelect');
+
+        const editQuoteForm =
+            document.getElementById('editQuoteForm');
+
+
+        // ----------------------------------------------------
+        // CUSTOMER CHANGE
+        // ----------------------------------------------------
+
+        customerSelect.addEventListener(
+            'change',
+            function() {
+
+                const selectedOption =
+                    this.options[this.selectedIndex];
+
+                const paymentTerms =
+                    selectedOption.getAttribute(
+                        'data-payment-terms'
+                    ) || '';
+
+                const salesRepId =
+                    selectedOption.getAttribute(
+                        'data-sales-rep-id'
+                    ) || '';
+
+                const billingAddress =
+                    selectedOption.getAttribute(
+                        'data-billing-address'
+                    ) || '';
+
+                paymentTermsSelect.value =
+                    paymentTerms;
+
+                salesRepSelect.value =
+                    salesRepId;
+
+                document.getElementById(
+                    'BillingAddress'
+                ).value =
+                    billingAddress;
+            }
+        );
+
+
+        // ----------------------------------------------------
+        // CREATE A COMPLETELY BLANK ROW
+        // ----------------------------------------------------
+
+        function createBlankItemRow() {
+
+            const row =
+                document.createElement('tr');
+
+            row.className =
+                'quote-item-row';
+
+            row.innerHTML = `
+
+                        <td style="width:75px;">
+                            <input type="number"
+                                   class="form-control form-control-sm text-center quantity-field"
+                                   value="1"
+                                   min="1" />
+                        </td>
+
+                        <td style="width:110px;">
+                            <input type="text"
+                                   class="form-control form-control-sm product-code-field"
+                                   value=""
+                                   readonly />
+                        </td>
+
+                        <td style="min-width:160px;">
+                            <select class="form-select form-select-sm product-select">
+
+                                <option value="">Select Product</option>
+
+                                @foreach (var product in
+                                        (List<FMCGEnterpriseManagementSystem.Models.Product>)ViewBag.ProductList)
+                                {
+                                        <option value="@product.ProductId"
+                    data-code="@product.ProductCode"
+                    data-price="@product.SellingPrice"
+                    data-description="@product.Description">
+                                                @product.ProductName
+                                        </option>
+                                }
+
+                            </select>
+                        </td>
+
+                        <td style="min-width:150px;">
+                            <input type="text"
+                                   class="form-control form-control-sm description-field"
+                                   value=""
+                                   readonly />
+                        </td>
+
+                        <td style="width:110px;">
+
+                            <input type="text"
+                                   class="form-control form-control-sm text-end price-field"
+                                   value="R0.00"
+                                   readonly />
+
+                            <input type="hidden"
+                                   class="price-hidden"
+                                   value="0.00" />
+
+                        </td>
+
+                        <td style="width:85px;">
+                            <input type="number"
+                                   class="form-control form-control-sm text-center discount-field"
+                                   value="0"
+                                   min="0"
+                                   max="100"
+                                   step="1" />
+                        </td>
+
+                        <td style="width:115px;">
+
+                            <select class="form-select form-select-sm vat-field">
+
+                                <option value="[NONE]">
+                                    None
+                                </option>
+
+                                <option value="STANDARD">
+                                    Standard
+                                </option>
+
+                            </select>
+
+                        </td>
+
+                        <td style="width:110px;">
+                            <input type="text"
+                                   class="form-control form-control-sm text-end line-total-excl-vat-field"
+                                   value="R0.00"
+                                   readonly />
+                        </td>
+
+                        <td style="width:110px;">
+                            <input type="text"
+                                   class="form-control form-control-sm text-end line-total-field"
+                                   value="R0.00"
+                                   readonly />
+                        </td>
+
+                        <td style="width:90px;"
+                            class="text-center">
+
+                            <button type="button"
+                                    class="btn btn-outline-danger btn-sm remove-item-btn">
+                                Remove
+                            </button>
+
+                        </td>
+                    `;
+
+            return row;
+        }
+
+
+        // ----------------------------------------------------
+        // REBUILD ITEM INDEXES
+        // ----------------------------------------------------
+
+        function reindexRows() {
+
+            const rows =
+                quoteItemsBody.querySelectorAll(
+                    '.quote-item-row'
+                );
+
+            rows.forEach(
+                function(row, index) {
+
+                    row.querySelector(
+                        '.quantity-field'
+                    ).name =
+                        `QuoteItems[${index}].Quantity`;
+
+                    row.querySelector(
+                        '.product-select'
+                    ).name =
+                        `QuoteItems[${index}].ProductId`;
+
+                    row.querySelector(
+                        '.price-hidden'
+                    ).name =
+                        `QuoteItems[${index}].UnitPrice`;
+
+                    row.querySelector(
+                        '.discount-field'
+                    ).name =
+                        `QuoteItems[${index}].DiscountPercent`;
+
+                    row.querySelector(
+                        '.vat-field'
+                    ).name =
+                        `QuoteItems[${index}].VatCategory`;
+                }
+            );
+        }
+
+
+        // ----------------------------------------------------
+        // ADD ITEM
+        // ----------------------------------------------------
+
+        document.getElementById(
+            'addItemBtn'
+        ).addEventListener(
+            'click',
+            function() {
+
+                const newRow =
+                    createBlankItemRow();
+
+                quoteItemsBody.appendChild(
+                    newRow
+                );
+
+                reindexRows();
+            }
+        );
+
+
+        // ----------------------------------------------------
+        // REMOVE ITEM
+        // ----------------------------------------------------
+
+        quoteItemsBody.addEventListener(
+            'click',
+            function(e) {
+
+                const removeButton =
+                    e.target.closest(
+                        '.remove-item-btn'
+                    );
+
+                if (!removeButton) {
+                    return;
+                }
+
+                const rows =
+                    quoteItemsBody.querySelectorAll(
+                        '.quote-item-row'
+                    );
+
+                if (rows.length <= 1) {
+
+                    alert(
+                        'A quote must contain at least one item.'
+                    );
+
+                    return;
+                }
+
+                const row =
+                    removeButton.closest(
+                        '.quote-item-row'
+                    );
+
+                row.remove();
+
+                reindexRows();
+
+                calculateGrandTotals();
+            }
+        );
+
+
+        // ----------------------------------------------------
+        // PRODUCT CHANGE
+        // ----------------------------------------------------
+
+        quoteItemsBody.addEventListener(
+            'change',
+            function(e) {
+
+                if (
+                    !e.target.classList.contains(
+                        'product-select'
+                    )
+                ) {
+                    return;
+                }
+
+                const row =
+                    e.target.closest(
+                        '.quote-item-row'
+                    );
+
+                const selectedOption =
+                    e.target.options[
+                    e.target.selectedIndex
+                    ];
+
+                const code =
+                    selectedOption.getAttribute(
+                        'data-code'
+                    ) || '';
+
+                const price =
+                    selectedOption.getAttribute(
+                        'data-price'
+                    ) || '0';
+
+                const description =
+                    selectedOption.getAttribute(
+                        'data-description'
+                    ) || '';
+
+                const numericPrice =
+                    parseFloat(price) || 0;
+
+                row.querySelector(
+                    '.product-code-field'
+                ).value =
+                    code;
+
+                row.querySelector(
+                    '.description-field'
+                ).value =
+                    description;
+
+                row.querySelector(
+                    '.price-field'
+                ).value =
+                    'R' +
+                    numericPrice.toFixed(2);
+
+                row.querySelector(
+                    '.price-hidden'
+                ).value =
+                    numericPrice.toFixed(2);
+
+                calculateRow(row);
+            }
+        );
+
+
+        // ----------------------------------------------------
+        // CALCULATE ONE ROW
+        // ----------------------------------------------------
+
+        function calculateRow(row) {
+
+            const quantity =
+                parseFloat(
+                    row.querySelector(
+                        '.quantity-field'
+                    ).value
+                ) || 0;
+
+            const unitPrice =
+                parseFloat(
+                    row.querySelector(
+                        '.price-hidden'
+                    ).value
+                ) || 0;
+
+            const discountPercent =
+                parseFloat(
+                    row.querySelector(
+                        '.discount-field'
+                    ).value
+                ) || 0;
+
+            const vatCategory =
+                row.querySelector(
+                    '.vat-field'
+                ).value;
+
+            const beforeDiscount =
+                quantity * unitPrice;
+
+            const discountAmount =
+                beforeDiscount *
+                (discountPercent / 100);
+
+            const exclVat =
+                beforeDiscount -
+                discountAmount;
+
+            const vat =
+                vatCategory === 'STANDARD'
+                    ? exclVat * VAT_RATE
+                    : 0;
+
+            const total =
+                exclVat + vat;
+
+            row.querySelector(
+                '.line-total-excl-vat-field'
+            ).value =
+                'R' +
+                exclVat.toFixed(2);
+
+            row.querySelector(
+                '.line-total-field'
+            ).value =
+                'R' +
+                total.toFixed(2);
+
+            calculateGrandTotals();
+        }
+
+
+        // ----------------------------------------------------
+        // GRAND TOTALS
+        // ----------------------------------------------------
+
+        function calculateGrandTotals() {
+
+            let subtotal = 0;
+            let total = 0;
+
+            document.querySelectorAll(
+                '.quote-item-row'
+            ).forEach(
+                function(row) {
+
+                    const excl =
+                        parseFloat(
+                            row.querySelector(
+                                '.line-total-excl-vat-field'
+                            )
+                                .value
+                                .replace('R', '')
+                                .replace(/,/g, '')
+                        ) || 0;
+
+                    const lineTotal =
+                        parseFloat(
+                            row.querySelector(
+                                '.line-total-field'
+                            )
+                                .value
+                                .replace('R', '')
+                                .replace(/,/g, '')
+                        ) || 0;
+
+                    subtotal += excl;
+
+                    total += lineTotal;
+                }
+            );
+
+            const vat =
+                total - subtotal;
+
+            document.getElementById(
+                'subtotalAmount'
+            ).textContent =
+                'R' +
+                subtotal.toFixed(2);
+
+            document.getElementById(
+                'vatAmount'
+            ).textContent =
+                'R' +
+                vat.toFixed(2);
+
+            document.getElementById(
+                'totalAmount'
+            ).textContent =
+                'R' +
+                total.toFixed(2);
+        }
+
+
+        // ----------------------------------------------------
+        // QUANTITY / DISCOUNT CHANGE
+        // ----------------------------------------------------
+
+        quoteItemsBody.addEventListener(
+            'input',
+            function(e) {
+
+                if (
+                    e.target.classList.contains(
+                        'quantity-field'
+                    ) ||
+                    e.target.classList.contains(
+                        'discount-field'
+                    )
+                ) {
+
+                    const row =
+                        e.target.closest(
+                            '.quote-item-row'
+                        );
+
+                    calculateRow(row);
+                }
+            }
+        );
+
+
+        // ----------------------------------------------------
+        // VAT CHANGE
+        // ----------------------------------------------------
+
+        quoteItemsBody.addEventListener(
+            'change',
+            function(e) {
+
+                if (
+                    e.target.classList.contains(
+                        'vat-field'
+                    )
+                ) {
+
+                    const row =
+                        e.target.closest(
+                            '.quote-item-row'
+                        );
+
+                    calculateRow(row);
+                }
+            }
+        );
+
+
+        // ----------------------------------------------------
+        // BEFORE SUBMIT
+        // ----------------------------------------------------
+
+        editQuoteForm.addEventListener(
+            'submit',
+            function() {
+
+                reindexRows();
+            }
+        );
+
+
+        // Make sure existing rows have correct indexes
+        reindexRows();
+
+    </script>
+}
