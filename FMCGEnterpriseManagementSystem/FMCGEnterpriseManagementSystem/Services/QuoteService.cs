@@ -98,7 +98,9 @@ namespace FMCGEnterpriseManagementSystem.Services
                 var discountAmount = lineBeforeDiscount * (item.DiscountPercent / 100);
                 var lineAfterDiscount = lineBeforeDiscount - discountAmount;
 
-                var vatAmount = item.VatCategory == "[NONE]" ? 0 : lineAfterDiscount * VatRate;
+                var vatAmount = item.VatCategory == "STANDARD"
+    ? lineAfterDiscount * VatRate
+    : 0;
 
                 item.LineTotalExclVat = lineAfterDiscount;
                 item.LineTotal = lineAfterDiscount + vatAmount;
