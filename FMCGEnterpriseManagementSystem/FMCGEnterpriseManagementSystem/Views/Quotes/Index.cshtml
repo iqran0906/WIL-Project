@@ -92,8 +92,7 @@
                                             <button type="submit" class="dropdown-item">Convert to Invoice</button>
                                         </form>
                                     </li>
-                                    <li><a class="dropdown-item" href="#" onclick="alert('PDF export coming soon'); return false;">Download as PDF</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="alert('Email quote coming soon'); return false;">Email Quote</a></li>
+<li><a class="dropdown-item" asp-controller="Quotes" asp-action="DownloadPdf" asp-route-id="@quote.QuoteId">Download as PDF</a></li>                                    <li><a class="dropdown-item" href="#" onclick="alert('Email quote coming soon'); return false;">Email Quote</a></li>
                                 </ul>
                             </td>
                         </tr>

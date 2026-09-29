@@ -1,0 +1,284 @@
+﻿@model FMCGEnterpriseManagementSystem.Models.Quote
+@{
+    ViewData["Title"] = "Edit Quote";
+}
+
+<div class="content-card">
+    <div class="row align-items-center mb-4 g-3">
+        <div class="col-12 col-sm-6 text-center text-sm-start">
+            <h5 class="fw-bold m-0" style="color: #1c323d;">Exclusive Distributors (pty) LTD</h5>
+            <small class="text-muted d-block">Durban</small>
+        </div>
+        <div class="col-12 col-sm-6 text-center text-sm-end">
+            <div class="d-inline-block text-start w-100" style="max-width: 280px;">
+                <div class="d-flex align-items-center justify-content-between gap-2">
+                    <label class="small text-secondary fw-bold text-nowrap m-0">Quote Number:</label>
+                    <span class="fw-bold">@Model.QuoteNumber</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="fw-bold mb-4 text-center text-sm-start" style="color: #1c323d;">Edit Quote #@Model.QuoteNumber</h2>
+
+    <form asp-controller="Quotes" asp-action="Edit" asp-route-id="@Model.QuoteId" method="post">
+        <input type="hidden" asp-for="QuoteNumber" />
+
+        <div class="d-flex align-items-center justify-content-between gap-2 mb-3" style="max-width: 280px;">
+            <label class="small text-secondary fw-bold text-nowrap m-0">Date:</label>
+            <input asp-for="QuoteDate" type="date" class="form-control form-control-sm" style="width:160px;">
+        </div>
+
+        <div class="row g-3 mb-4">
+            <div class="col-md-6">
+                <div class="row align-items-center mb-3 g-2">
+                    <label class="col-12 col-sm-3 fw-bold text-secondary">Customer</label>
+                    <div class="col-12 col-sm-9">
+                        <select asp-for="CustomerId" class="form-select" id="customerSelect">
+                            <option value="">Select Customer</option>
+                            @foreach (var customer in (List<FMCGEnterpriseManagementSystem.Models.Customer>)ViewBag.CustomerList)
+                            {
+                                <option value="@customer.CustomerId"
+                                        data-payment-terms="@customer.PaymentTerms"
+                                        data-sales-rep-id="@customer.SalesRepresentativeId"
+                                        data-billing-address="@customer.PhysicalAddress"
+                                        selected="@(customer.CustomerId == Model.CustomerId)">
+                                    @customer.Name @customer.Surname
+                                </option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row align-items-start g-2">
+                    <label class="col-12 col-sm-3 fw-bold text-secondary">Billing Address:</label>
+                    <div class="col-12 col-sm-9">
+                        <textarea asp-for="BillingAddress" class="form-control bg-white shadow-sm" rows="3" readonly></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row align-items-center mb-3 g-2">
+                    <label class="col-12 col-sm-4 fw-bold text-secondary text-sm-end">Payment Terms:</label>
+                    <div class="col-12 col-sm-8">
+                        <select id="paymentTermsDisplay" class="form-select" disabled>
+                            <option>@Model.PaymentTerms</option>
+                        </select>
+                        <input type="hidden" asp-for="PaymentTerms" id="paymentTermsHidden">
+                    </div>
+                </div>
+                <div class="row align-items-center g-2">
+                    <label class="col-12 col-sm-4 fw-bold text-secondary text-sm-end">Sales Person:</label>
+                    <div class="col-12 col-sm-8">
+                        <select id="salesRepDisplay" class="form-select" disabled>
+                            <option>@Model.SalesRepresentative?.Employee?.FirstName @Model.SalesRepresentative?.Employee?.LastName</option>
+                        </select>
+                        <input type="hidden" asp-for="SalesRepresentativeId" id="salesRepHidden">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive border rounded bg-light p-2 mb-3" style="max-height: 350px; overflow-y: auto;">
+            <table class="table align-middle m-0 bg-white shadow-sm rounded" style="min-width: 700px;">
+                <thead class="table-secondary text-secondary small" style="position: sticky; top: 0; z-index: 1;">
+                    <tr>
+                        <th style="width: 7%;">Qty</th>
+                        <th style="width: 12%;">Product Code</th>
+                        <th style="width: 16%;">Product</th>
+                        <th style="width: 20%;">Description</th>
+                        <th style="width: 10%;">Unit Price</th>
+                        <th style="width: 8%;">Disc</th>
+                        <th style="width: 9%;">VAT</th>
+                        <th style="width: 9%;">Total Excl. VAT</th>
+                        <th style="width: 9%;">Total</th>
+                    </tr>
+                </thead>
+                <tbody id="quoteItemsBody">
+                    @{ int i = 0; }
+                    @foreach (var item in Model.QuoteItems)
+                    {
+                        <tr class="quote-item-row">
+                            <td><input type="number" name="QuoteItems[@i].Quantity" class="form-control form-control-sm text-center" value="@item.Quantity"></td>
+                            <td><input type="text" class="form-control form-control-sm product-code-field" readonly value="@item.Product?.ProductCode"></td>
+                            <td>
+                                <select name="QuoteItems[@i].ProductId" class="form-select form-select-sm product-select">
+                                    <option value="">Select Product</option>
+                                    @foreach (var product in (List<FMCGEnterpriseManagementSystem.Models.Product>)ViewBag.ProductList)
+                                    {
+                                        <option value="@product.ProductId" data-code="@product.ProductCode" data-price="@product.SellingPrice" data-description="@product.Description" selected="@(product.ProductId == item.ProductId)">@product.ProductName</option>
+                                    }
+                                </select>
+                            </td>
+                            <td><input type="text" class="form-control form-control-sm description-field" readonly value="@item.Product?.Description"></td>
+                            <td>
+                                <input type="text" class="form-control form-control-sm text-end price-field" readonly value="R@(item.UnitPrice.ToString("N2"))">
+                                <input type="hidden" name="QuoteItems[@i].UnitPrice" class="price-hidden" value="@item.UnitPrice">
+                            </td>
+                            <td><input type="number" name="QuoteItems[@i].DiscountPercent" class="form-control form-control-sm text-center" value="@item.DiscountPercent" min="0" max="100" step="1"></td>
+                            <td>
+                                <select name="QuoteItems[@i].VatCategory" class="form-select form-select-sm">
+                                    <option selected="@(item.VatCategory == "[NONE]")">[NONE]</option>
+                                    <option selected="@(item.VatCategory == "STANDARD")">STANDARD</option>
+                                </select>
+                            </td>
+                            <td><input type="text" class="form-control form-control-sm text-end line-total-excl-vat-field" readonly value="R@(item.LineTotalExclVat.ToString("N2"))"></td>
+                            <td><input type="text" class="form-control form-control-sm text-end line-total-field" readonly value="R@(item.LineTotal.ToString("N2"))"></td>
+                        </tr>
+                        i++;
+                    }
+                </tbody>
+            </table>
+            <div class="p-2">
+                <button type="button" id="addItemBtn" class="btn btn-sm btn-link text-decoration-none text-dark fw-bold p-0"><i class="bi bi-plus-lg me-1"></i>Add Item</button>
+            </div>
+        </div>
+
+        <div class="row justify-content-end text-end g-0 mb-4 fw-bold text-secondary">
+            <div class="col-12 col-md-4 border-top pt-2">
+                <div class="d-flex justify-content-between py-1"><span>Subtotal</span><span id="subtotalAmount">R@(Model.Subtotal.ToString("N2"))</span></div>
+                <div class="d-flex justify-content-between py-1"><span>VAT</span><span id="vatAmount">R@((Model.Total - Model.Subtotal).ToString("N2"))</span></div>
+                <div class="d-flex justify-content-between py-1 border-top border-dark mt-2 text-dark fs-5"><span>Total</span><span id="totalAmount">R@(Model.Total.ToString("N2"))</span></div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-end gap-2 gap-sm-3">
+            <a asp-controller="Quotes" asp-action="Index" class="btn btn-link text-decoration-none text-secondary align-self-center">Cancel</a>
+            <button type="submit" class="btn btn-custom-save">Save Changes</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        let quoteItemIndex = @Model.QuoteItems.Count;
+
+        const salesRepLookup = {
+        @foreach (var rep in ((SelectList)ViewBag.SalesRepList))
+            {
+                @:@rep.Value: "@rep.Text",
+            }
+        };
+
+        document.getElementById('addItemBtn').addEventListener('click', function() {
+            const tbody = document.getElementById('quoteItemsBody');
+            const newRow = tbody.querySelector('.quote-item-row').cloneNode(true);
+
+            newRow.querySelectorAll('input, select').forEach(function(field) {
+                if (field.name) {
+                    field.name = field.name.replace(/QuoteItems\[\d+\]/, `QuoteItems[${quoteItemIndex}]`);
+                }
+                if (field.tagName === 'INPUT') {
+                    if (field.type === 'number') {
+                        field.value = '1';
+                    } else if (field.readOnly) {
+                        field.value = field.classList.contains('text-end') ? 'R0.00' : '';
+                    } else if (field.type === 'hidden') {
+                        field.value = '0.00';
+                    } else {
+                        field.value = '0.00';
+                    }
+                }
+                if (field.tagName === 'SELECT') {
+                    field.selectedIndex = 0;
+                }
+            });
+
+            tbody.appendChild(newRow);
+            quoteItemIndex++;
+        });
+
+        document.getElementById('quoteItemsBody').addEventListener('change', function(e) {
+            if (e.target.classList.contains('product-select')) {
+                const row = e.target.closest('tr');
+                const selectedOption = e.target.options[e.target.selectedIndex];
+
+                const code = selectedOption.getAttribute('data-code') || '';
+                const price = selectedOption.getAttribute('data-price') || '0.00';
+                const description = selectedOption.getAttribute('data-description') || '';
+
+                row.querySelector('.product-code-field').value = code;
+                row.querySelector('.description-field').value = description;
+                row.querySelector('.price-field').value = 'R' + parseFloat(price).toFixed(2);
+                row.querySelector('.price-hidden').value = parseFloat(price).toFixed(2);
+            }
+        });
+
+        const VAT_RATE = 0.15;
+
+        function calculateRow(row) {
+            const quantity = parseFloat(row.querySelector('input[name$=".Quantity"]').value) || 0;
+            const priceText = row.querySelector('.price-field').value.replace('R', '');
+            const unitPrice = parseFloat(priceText) || 0;
+            const discountPercent = parseFloat(row.querySelector('input[name$=".DiscountPercent"]').value) || 0;
+            const vatCategory = row.querySelector('select[name$=".VatCategory"]').value;
+
+            const lineBeforeDiscount = quantity * unitPrice;
+            const discountAmount = lineBeforeDiscount * (discountPercent / 100);
+            const lineAfterDiscount = lineBeforeDiscount - discountAmount;
+            const vatAmount = vatCategory === '[NONE]' ? 0 : lineAfterDiscount * VAT_RATE;
+            const lineTotal = lineAfterDiscount + vatAmount;
+
+            row.querySelector('.line-total-excl-vat-field').value = 'R' + lineAfterDiscount.toFixed(2);
+            row.querySelector('.line-total-field').value = 'R' + lineTotal.toFixed(2);
+
+            calculateGrandTotals();
+        }
+
+        function calculateGrandTotals() {
+            let subtotal = 0;
+            let total = 0;
+
+            document.querySelectorAll('.quote-item-row').forEach(function(row) {
+                const quantity = parseFloat(row.querySelector('input[name$=".Quantity"]').value) || 0;
+                const priceText = row.querySelector('.price-field').value.replace('R', '');
+                const unitPrice = parseFloat(priceText) || 0;
+                const discountPercent = parseFloat(row.querySelector('input[name$=".DiscountPercent"]').value) || 0;
+
+                const lineBeforeDiscount = quantity * unitPrice;
+                const discountAmount = lineBeforeDiscount * (discountPercent / 100);
+                const lineAfterDiscount = lineBeforeDiscount - discountAmount;
+
+                subtotal += lineAfterDiscount;
+
+                const lineTotalText = row.querySelector('.line-total-field').value.replace('R', '');
+                total += parseFloat(lineTotalText) || 0;
+            });
+
+            const vat = total - subtotal;
+
+            document.getElementById('subtotalAmount').textContent = 'R' + subtotal.toFixed(2);
+            document.getElementById('vatAmount').textContent = 'R' + vat.toFixed(2);
+            document.getElementById('totalAmount').textContent = 'R' + total.toFixed(2);
+        }
+
+        document.getElementById('quoteItemsBody').addEventListener('input', function(e) {
+            if (e.target.matches('input[name$=".Quantity"], input[name$=".DiscountPercent"]')) {
+                calculateRow(e.target.closest('tr'));
+            }
+        });
+
+        document.getElementById('quoteItemsBody').addEventListener('change', function(e) {
+            if (e.target.matches('select[name$=".VatCategory"]') || e.target.classList.contains('product-select')) {
+                calculateRow(e.target.closest('tr'));
+            }
+        });
+
+        document.getElementById('customerSelect').addEventListener('change', function(e) {
+            const selectedOption = e.target.options[e.target.selectedIndex];
+
+            const paymentTerms = selectedOption.getAttribute('data-payment-terms') || '';
+            const salesRepId = selectedOption.getAttribute('data-sales-rep-id') || '';
+            const billingAddress = selectedOption.getAttribute('data-billing-address') || '';
+
+            document.getElementById('paymentTermsHidden').value = paymentTerms;
+            const paymentTermsDisplay = document.getElementById('paymentTermsDisplay');
+            paymentTermsDisplay.innerHTML = paymentTerms ? `<option>${paymentTerms}</option>` : '<option value="">--</option>';
+
+            document.getElementById('salesRepHidden').value = salesRepId;
+            const salesRepDisplay = document.getElementById('salesRepDisplay');
+            const salesRepName = salesRepId ? salesRepLookup[salesRepId] || 'Unknown' : '--';
+            salesRepDisplay.innerHTML = `<option>${salesRepName}</option>`;
+
+            document.getElementById('BillingAddress').value = billingAddress;
+        });
+    </script>
+}

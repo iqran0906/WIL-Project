@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using FMCGEnterpriseManagementSystem.Services;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
@@ -91,7 +92,6 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             await _quoteService.CreateQuoteAsync(quote);
             return RedirectToAction(nameof(Index));
         }
-
         // GET: Quotes/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
@@ -100,7 +100,60 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             {
                 return NotFound();
             }
+
+            ViewBag.PaymentTermsList = new SelectList(new[] { "COD", "7 Days", "14 Days", "21 Days", "28 Days", "30 Days" });
+            ViewBag.ProductList = _context.Products.Where(p => p.IsActive).ToList();
+            ViewBag.SalesRepList = new SelectList(
+                _context.SalesRepresentatives
+                    .Include(sr => sr.Employee)
+                    .Where(sr => sr.IsActive)
+                    .Select(sr => new
+                    {
+                        sr.SalesRepresentativeId,
+                        FullName = sr.Employee.FirstName + " " + sr.Employee.LastName
+                    })
+                    .ToList(),
+                "SalesRepresentativeId",
+                "FullName"
+            );
+            ViewBag.CustomerList = _context.Customers.Where(c => c.IsActive).ToList();
+
             return View(quote);
+        }
+
+        // POST: Quotes/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Quote quote)
+        {
+            ModelState.Remove(nameof(Quote.QuoteNumber));
+            ModelState.Remove("Customer");
+            ModelState.Remove("SalesRepresentative");
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.PaymentTermsList = new SelectList(new[] { "COD", "7 Days", "14 Days", "21 Days", "28 Days", "30 Days" });
+                ViewBag.ProductList = _context.Products.Where(p => p.IsActive).ToList();
+                ViewBag.SalesRepList = new SelectList(
+                    _context.SalesRepresentatives
+                        .Include(sr => sr.Employee)
+                        .Where(sr => sr.IsActive)
+                        .Select(sr => new
+                        {
+                            sr.SalesRepresentativeId,
+                            FullName = sr.Employee.FirstName + " " + sr.Employee.LastName
+                        })
+                        .ToList(),
+                    "SalesRepresentativeId",
+                    "FullName"
+                );
+                ViewBag.CustomerList = _context.Customers.Where(c => c.IsActive).ToList();
+                return View(quote);
+            }
+
+            quote.QuoteId = id;
+            await _quoteService.UpdateQuoteAsync(quote);
+            return RedirectToAction(nameof(Index));
         }
 
         // POST: Quotes/ConvertToInvoice/5
@@ -110,6 +163,19 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         {
             await _quoteService.ConvertToInvoiceAsync(id);
             return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Quotes/DownloadPdf/5
+        public async Task<IActionResult> DownloadPdf(int id)
+        {
+            var quote = await _quoteService.GetQuoteByIdAsync(id);
+            if (quote == null)
+            {
+                return NotFound();
+            }
+
+            var pdfBytes = QuotePdfGenerator.Generate(quote);
+            return File(pdfBytes, "application/pdf", $"Quote-{quote.QuoteNumber}.pdf");
         }
 
         // GET: Quotes/Details/5
