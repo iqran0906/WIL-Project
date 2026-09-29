@@ -22,18 +22,18 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         public IActionResult Dashboard() => View();
         public IActionResult Reports() => View();
 
-        public IActionResult CustomerList() => View();
+        public IActionResult CustomerList() => View("~/Views/Customers/CustomerList.cshtml");
         public IActionResult SupplierList() => View();
         public IActionResult EmployeeList() => View();
         public IActionResult InventoryList() => View();
         public IActionResult InvoiceList() => View();
         public IActionResult QuoteList() => View();
 
-        public IActionResult AddCustomer() => View();
+        public IActionResult AddCustomer() => View("~/Views/Customers/AddCustomer.cshtml");
         public IActionResult AddSupplier() => View();
         public IActionResult AddSalesRep() => View();
         public IActionResult AddEmployee() => View();
-        public IActionResult AddItem() => View();
+        public IActionResult AddItem() => View("~/Views/Inventory/AddItem.cshtml");
         public IActionResult CreateInvoice() => View();
         public IActionResult CreateQuote() => View();
 

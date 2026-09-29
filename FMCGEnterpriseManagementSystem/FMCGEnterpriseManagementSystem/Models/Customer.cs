@@ -18,7 +18,7 @@
 
         public string PhysicalAddress { get; set; }
 
-        public string DeliveryAddress { get; set; }
+        public string? DeliveryAddress { get; set; }
 
         public string CustomerGroup { get; set; }
 
