@@ -157,49 +157,11 @@ namespace FMCGEnterpriseManagementSystem.Services
                         });
 
                         // =========================
-                        // TOTALS
+                        // BANKING DETAILS + TOTALS
                         // =========================
-                        column.Item()
-                            .AlignRight()
-                            .Width(250)
-                            .Table(table =>
-                            {
-                                table.ColumnsDefinition(columns =>
-                                {
-                                    columns.RelativeColumn();
-                                    columns.ConstantColumn(100);
-                                });
-
-                                table.Cell().Element(TotalLabelStyle)
-                                    .Text("Subtotal");
-
-                                table.Cell().Element(TotalValueStyle)
-                                    .Text($"R{quote.Subtotal:0.00}");
-
-                                table.Cell().Element(TotalLabelStyle)
-                                    .Text("VAT");
-
-                                table.Cell().Element(TotalValueStyle)
-                                    .Text($"R{(quote.Total - quote.Subtotal):0.00}");
-
-                                table.Cell().Element(TotalLabelStyle)
-                                    .Text("TOTAL")
-                                    .Bold();
-
-                                table.Cell().Element(TotalValueStyle)
-                                    .Text($"R{quote.Total:0.00}")
-                                    .Bold()
-                                    .FontSize(11);
-                            });
-
-                        // =========================
-                        // BANKING DETAILS
-                        // =========================
-                        column.Item()
-                            .PaddingTop(20)
-                            .BorderTop(1)
-                            .PaddingTop(10)
-                            .Column(banking =>
+                        column.Item().PaddingTop(20).BorderTop(1).PaddingTop(10).Row(row =>
+                        {
+                            row.RelativeItem().Column(banking =>
                             {
                                 banking.Item()
                                     .Text("BANKING DETAILS")
@@ -226,6 +188,29 @@ namespace FMCGEnterpriseManagementSystem.Services
                                     .Text("Proof of Payment: exclusivedistributors2@gmail.com");
                             });
 
+                            row.ConstantItem(15);
+
+                            row.ConstantItem(220).Column(totals =>
+                            {
+                                totals.Item().Row(r =>
+                                {
+                                    r.RelativeItem().Text("Subtotal").FontSize(9);
+                                    r.ConstantItem(80).AlignRight().Text($"R{quote.Subtotal:0.00}").FontSize(9);
+                                });
+
+                                totals.Item().PaddingTop(3).Row(r =>
+                                {
+                                    r.RelativeItem().Text("VAT").FontSize(9);
+                                    r.ConstantItem(80).AlignRight().Text($"R{(quote.Total - quote.Subtotal):0.00}").FontSize(9);
+                                });
+
+                                totals.Item().PaddingTop(6).BorderTop(1).PaddingTop(6).Row(r =>
+                                {
+                                    r.RelativeItem().Text("TOTAL").Bold().FontSize(13);
+                                    r.ConstantItem(80).AlignRight().Text($"R{quote.Total:0.00}").Bold().FontSize(13);
+                                });
+                            });
+                        });
                         // Thank you message
                         column.Item()
                             .PaddingTop(15)
@@ -284,7 +269,9 @@ namespace FMCGEnterpriseManagementSystem.Services
         private static IContainer TotalLabelStyle(IContainer container)
         {
             return container
+               .PaddingVertical(5)
                 .BorderBottom(1)
+                     .Width(70)
                 .Padding(5)
                 .AlignRight();
         }
@@ -292,8 +279,10 @@ namespace FMCGEnterpriseManagementSystem.Services
         private static IContainer TotalValueStyle(IContainer container)
         {
             return container
+                .PaddingVertical(5)
                 .BorderBottom(1)
-                .Padding(5)
+                .Width(70)
+                .PaddingBottom(3)
                 .AlignRight();
         }
     }

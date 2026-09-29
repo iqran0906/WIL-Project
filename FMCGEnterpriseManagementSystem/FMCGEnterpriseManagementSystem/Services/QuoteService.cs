@@ -1,5 +1,6 @@
 ﻿using FMCGEnterpriseManagementSystem.Enums;
 using FMCGEnterpriseManagementSystem.Models;
+using FMCGEnterpriseManagementSystem.Repositories;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 
@@ -8,13 +9,14 @@ namespace FMCGEnterpriseManagementSystem.Services
     public class QuoteService : IQuoteService
     {
         private readonly IQuoteRepository _quoteRepository;
+        private readonly IInvoiceRepository _invoiceRepository;
 
-        // Temporary flat VAT rate until VatHelper/VatSettings is merged from Invoices branch
         private const decimal VatRate = 0.15m;
 
-        public QuoteService(IQuoteRepository quoteRepository)
+        public QuoteService(IQuoteRepository quoteRepository, IInvoiceRepository invoiceRepository)
         {
             _quoteRepository = quoteRepository;
+            _invoiceRepository = invoiceRepository;
         }
 
         public async Task<IEnumerable<Quote>> GetAllQuotesAsync()
@@ -47,7 +49,6 @@ namespace FMCGEnterpriseManagementSystem.Services
         {
             return await _quoteRepository.DeleteAsync(quoteId);
         }
-
         public async Task<bool> ConvertToInvoiceAsync(int quoteId)
         {
             var quote = await _quoteRepository.GetByIdAsync(quoteId);
@@ -56,7 +57,31 @@ namespace FMCGEnterpriseManagementSystem.Services
                 return false;
             }
 
-            // TODO: implement once Invoice module is merged into this branch
+            var invoice = new Invoice
+            {
+                InvoiceNumber = await _invoiceRepository.GetNextInvoiceNumberAsync(),
+                InvoiceDate = DateTime.Today,
+                QuoteId = quote.QuoteId,
+                CustomerId = quote.CustomerId,
+                BillingAddress = quote.BillingAddress,
+                PaymentTerms = quote.PaymentTerms,
+                SalesRepresentativeId = quote.SalesRepresentativeId,
+                Status = "Draft",
+                Subtotal = quote.Subtotal,
+                Total = quote.Total,
+                InvoiceItems = quote.QuoteItems.Select(qi => new InvoiceItem
+                {
+                    ProductId = qi.ProductId,
+                    Quantity = qi.Quantity,
+                    UnitPrice = qi.UnitPrice,
+                    DiscountPercent = qi.DiscountPercent,
+                    VatCategory = qi.VatCategory,
+                    LineTotal = qi.LineTotal
+                }).ToList()
+            };
+
+            await _invoiceRepository.AddAsync(invoice);
+
             quote.Status = QuoteStatus.Invoiced;
             await _quoteRepository.UpdateAsync(quote);
 
