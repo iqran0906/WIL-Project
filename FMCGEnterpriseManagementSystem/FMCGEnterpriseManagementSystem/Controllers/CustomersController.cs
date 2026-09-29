@@ -5,11 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
-    // Handles API endpoints for Customer management operations.
     [Authorize(Roles = "Administrator,Employee,SalesRepresentative")]
-    [ApiController]
-    [Route("api/[controller]")]
-    public class CustomersController : ControllerBase
+    public class CustomersController : Controller
     {
         private readonly ICustomerService _customerService;
 
@@ -18,79 +15,81 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             _customerService = customerService;
         }
 
-        // Retrieves all customer records.
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+        // GET: /Customers/CustomerList
+        public async Task<IActionResult> CustomerList()
         {
             var customers = await _customerService.GetAllCustomersAsync();
-            return Ok(customers);
+            return View(customers);
         }
 
-        // Retrieves a single customer by their unique Customer ID.
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        // GET: /Customers/AddCustomer
+        [HttpGet]
+        public IActionResult AddCustomer()
         {
-            var customer = await _customerService.GetCustomerByIdAsync(id);
-
-            if (customer == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(customer);
+            return View(new CustomerViewModel());
         }
 
-        // Creates a new customer.
+        // POST: /Customers/AddCustomer
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CustomerViewModel model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddCustomer(CustomerViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return View(model);
             }
 
             await _customerService.CreateCustomerAsync(model);
-
-            return Ok(new
-            {
-                message = "Customer created successfully"
-            });
+            return RedirectToAction(nameof(CustomerList));
         }
 
-        // Updates an existing customer by their unique Customer ID.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(
-            int id,
-            [FromBody] CustomerViewModel model)
+        // GET: /Customers/Edit/{id}
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id != model.CustomerId)
-            {
-                return BadRequest("Customer ID mismatch.");
-            }
+            if (id <= 0) return NotFound();
+
+            var customer = await _customerService.GetCustomerByIdAsync(id);
+            if (customer == null) return NotFound();
+
+            return View(customer);
+        }
+
+        // POST: /Customers/Edit/{id}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, CustomerViewModel model)
+        {
+            if (id != model.CustomerId) return BadRequest();
 
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return View(model);
             }
 
             await _customerService.UpdateCustomerAsync(model);
-
-            return Ok(new
-            {
-                message = "Customer updated successfully"
-            });
+            return RedirectToAction(nameof(CustomerList));
         }
 
-        // Deletes a customer by their unique Customer ID.
-        [HttpDelete("{id}")]
+        // GET: /Customers/Delete/{id}
+        [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            await _customerService.DeleteCustomerAsync(id);
+            if (id <= 0) return NotFound();
 
-            return Ok(new
-            {
-                message = "Customer deleted successfully"
-            });
+            var customer = await _customerService.GetCustomerByIdAsync(id);
+            if (customer == null) return NotFound();
+
+            return View(customer);
+        }
+
+        // POST: /Customers/Delete/{id}
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            await _customerService.DeleteCustomerAsync(id);
+            return RedirectToAction(nameof(CustomerList));
         }
     }
 }

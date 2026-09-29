@@ -155,6 +155,7 @@ builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IExportStrategy, PdfExportStrategy>();
 builder.Services.AddScoped<IExportStrategy, ExcelExportStrategy>();
 builder.Services.AddScoped<ExportFactory>();
+builder.Services.AddScoped<IInvoiceExportService, InvoiceExportService>();
 
 
 // ==========================================================

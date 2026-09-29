@@ -1,0 +1,109 @@
+﻿@model FMCGEnterpriseManagementSystem.ViewModels.CustomerViewModel
+
+@{
+    ViewData["Title"] = "Edit Customer";
+}
+
+<div class="content-card">
+    <h2 class="fw-bold mb-4" style="color: #1c323d;">Edit Customer</h2>
+
+    <form asp-action="Edit" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="CustomerId" />
+
+        <div class="row g-4">
+            <!-- Left Column -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label">Name</label>
+                    <input asp-for="Name" class="form-control">
+                    <span asp-validation-for="Name" class="text-danger small"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Surname" class="form-label">Surname</label>
+                    <input asp-for="Surname" class="form-control">
+                    <span asp-validation-for="Surname" class="text-danger small"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="IdNumber" class="form-label">ID Number</label>
+                    <input asp-for="IdNumber" class="form-control">
+                    <span asp-validation-for="IdNumber" class="text-danger small"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="CellNumber" class="form-label">Cell Number</label>
+                    <input asp-for="CellNumber" class="form-control">
+                    <span asp-validation-for="CellNumber" class="text-danger small"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="TelephoneNumber" class="form-label">Telephone Number (Optional)</label>
+                    <input asp-for="TelephoneNumber" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label">Email</label>
+                    <input asp-for="Email" type="email" class="form-control">
+                    <span asp-validation-for="Email" class="text-danger small"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="VATNumber" class="form-label">VAT Number (Optional)</label>
+                    <input asp-for="VATNumber" class="form-control">
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="PhysicalAddress" class="form-label">Physical Address</label>
+                    <textarea asp-for="PhysicalAddress" class="form-control" rows="2"></textarea>
+                    <span asp-validation-for="PhysicalAddress" class="text-danger small"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="DeliveryAddress" class="form-label">Delivery Address (Optional)</label>
+                    <textarea asp-for="DeliveryAddress" class="form-control" rows="2"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="CustomerGroup" class="form-label">Group</label>
+                    <input asp-for="CustomerGroup" class="form-control">
+                    <span asp-validation-for="CustomerGroup" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="PaymentTerms" class="form-label">Payment Terms</label>
+                    <input asp-for="PaymentTerms" class="form-control">
+                    <span asp-validation-for="PaymentTerms" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="PaymentMethod" class="form-label">Payment Method</label>
+                    <input asp-for="PaymentMethod" class="form-control">
+                    <span asp-validation-for="PaymentMethod" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="SalesRep" class="form-label">Sales Rep</label>
+                    <input asp-for="SalesRep" class="form-control">
+                    <span asp-validation-for="SalesRep" class="text-danger small"></span>
+                </div>
+            </div>
+
+            <!-- Full Width Notes -->
+            <div class="col-12">
+                <div class="mb-4">
+                    <label asp-for="Notes" class="form-label">Notes</label>
+                    <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-3 mt-2">
+            <a asp-controller="Customers" asp-action="CustomerList" class="btn btn-link text-decoration-none text-secondary align-self-center">Cancel</a>
+            <button type="submit" class="btn btn-custom-save">Update Customer</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
