@@ -54,19 +54,25 @@
                             <td>R @decimal.Parse(item.SellingPrice, System.Globalization.CultureInfo.InvariantCulture).ToString("N2")</td>
                             <td>@(item.ExpiryDate.HasValue ? item.ExpiryDate.Value.ToString("yyyy-MM-dd") : "N/A")</td>
                            <td>@item.Notes</td>
-                            <td class="text-end">
-                                <div class="btn-group" role="group">
-                                    <a asp-action="AdjustStock" asp-route-id="@item.InventoryId" class="btn btn-sm btn-outline-info me-1" title="Adjust Stock">
-                                        <i class="bi bi-plus-minus"></i> Stock
-                                    </a>
-                                    <a asp-action="Edit" asp-route-id="@item.InventoryId" class="btn btn-sm btn-outline-primary me-1" title="Edit">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                    <a asp-action="Delete" asp-route-id="@item.InventoryId" class="btn btn-sm btn-outline-danger" title="Delete">
-                                        <i class="bi bi-trash"></i>
-                                    </a>
-                                </div>
-                            </td>
+                           <td>
+    <div class="d-flex justify-content-center gap-2">
+
+        <!-- Edit -->
+        <a asp-action="Edit"
+           asp-route-id="@item.InventoryId"
+           class="btn btn-warning btn-sm">
+            ✎ Edit
+        </a>
+
+        <!-- Delete -->
+        <a asp-action="Delete"
+           asp-route-id="@item.InventoryId"
+           class="btn btn-danger btn-sm">
+            Delete
+        </a>
+
+    </div>
+</td>
                         </tr>
                     }
                 }
