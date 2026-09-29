@@ -1,7 +1,10 @@
-﻿using FMCGEnterpriseManagementSystem.Services.Interfaces;
+﻿using FMCGEnterpriseManagementSystem.Data;
+using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
@@ -9,23 +12,47 @@ namespace FMCGEnterpriseManagementSystem.Controllers
     public class CustomersController : Controller
     {
         private readonly ICustomerService _customerService;
+        private readonly ApplicationDbContext _context;
 
-        public CustomersController(ICustomerService customerService)
+        public CustomersController(ICustomerService customerService, ApplicationDbContext context)
         {
             _customerService = customerService;
+            _context = context;
+        }
+
+        private async Task PopulateSalesRepsDropdownAsync()
+        {
+            var salesReps = await _context.SalesRepresentatives
+                .Include(sr => sr.Employee)
+                .Where(sr => sr.IsActive)
+                .Select(sr => new
+                {
+                    sr.SalesRepresentativeId,
+                    DisplayName = sr.Employee.FirstName + " " +
+                                  sr.Employee.LastName + " (" +
+                                  sr.SalesRepCode + ")"
+                })
+                .ToListAsync();
+
+            ViewBag.SalesRepresentatives = new SelectList(
+                salesReps,
+                "SalesRepresentativeId",
+                "DisplayName"
+            );
         }
 
         // GET: /Customers/CustomerList
-        public async Task<IActionResult> CustomerList()
+        public async Task<IActionResult> CustomerList(string? searchKeyword)
         {
-            var customers = await _customerService.GetAllCustomersAsync();
+            var customers = await _customerService.GetAllCustomersAsync(searchKeyword);
             return View(customers);
         }
 
         // GET: /Customers/AddCustomer
         [HttpGet]
-        public IActionResult AddCustomer()
+        public async Task<IActionResult> AddCustomer()
         {
+            await PopulateSalesRepsDropdownAsync();
             return View(new CustomerViewModel());
         }
 
@@ -36,6 +63,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         {
             if (!ModelState.IsValid)
             {
+                await PopulateSalesRepsDropdownAsync();
                 return View(model);
             }
 
@@ -52,6 +80,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             var customer = await _customerService.GetCustomerByIdAsync(id);
             if (customer == null) return NotFound();
 
+            await PopulateSalesRepsDropdownAsync();
             return View(customer);
         }
 
@@ -64,6 +93,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
             if (!ModelState.IsValid)
             {
+                await PopulateSalesRepsDropdownAsync();
                 return View(model);
             }
 
