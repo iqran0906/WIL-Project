@@ -39,6 +39,10 @@ namespace FMCGEnterpriseManagementSystem.Services
             _paymentSubject.Attach(_emailObserver);
         }
 
+        public async Task NotifyNewQuoteAsync(string quoteNumber, int quoteId, string customerName)
+        {
+            await _paymentSubject.NotifyNewQuoteAsync(quoteNumber, quoteId, customerName);
+        }
         public async Task<List<NotificationViewModel>> GetAllAsync()
         {
             var notifications = await _notificationRepository.GetAllAsync();

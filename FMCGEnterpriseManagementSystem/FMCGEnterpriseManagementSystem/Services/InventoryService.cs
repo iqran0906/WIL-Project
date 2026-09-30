@@ -13,12 +13,16 @@ namespace FMCGEnterpriseManagementSystem.Services
         private readonly IInventoryRepository _repository;
         private readonly ApplicationDbContext _context;
 
+        private readonly INotificationService _notificationService;
+
         public InventoryService(
-            IInventoryRepository repository,
-            ApplicationDbContext context)
+       IInventoryRepository repository,
+       ApplicationDbContext context,
+       INotificationService notificationService)
         {
             _repository = repository;
             _context = context;
+            _notificationService = notificationService;
         }
 
         public async Task<IEnumerable<InventoryViewModel>> GetAllInventoryAsync()
@@ -208,6 +212,14 @@ namespace FMCGEnterpriseManagementSystem.Services
             entity.UpdatedAt = DateTime.UtcNow;
 
             await _repository.UpdateAsync(entity);
+
+            if (entity.QuantityOnHand <= entity.ReorderLevel)
+            {
+                await _notificationService.NotifyLowStockAsync(
+                    entity.Product.ProductName,
+                    entity.QuantityOnHand,
+                    entity.ReorderLevel);
+            }
         }
 
         private static InventoryViewModel MapToViewModel(Inventory item) => new()

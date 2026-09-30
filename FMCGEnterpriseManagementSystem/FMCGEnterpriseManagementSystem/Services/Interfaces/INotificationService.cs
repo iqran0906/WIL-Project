@@ -17,5 +17,7 @@ namespace FMCGEnterpriseManagementSystem.Services.Interfaces
         Task NotifyNewInvoiceAsync(string invoiceNumber, int invoiceId, string customerName);
         Task NotifyQuoteExpiredAsync(string quoteNumber, int quoteId, string customerName);
         Task NotifyOverduePaymentAsync(string invoiceNumber, int invoiceId, string customerName, decimal amountDue);
+
+        Task NotifyNewQuoteAsync(string quoteNumber, int quoteId, string customerName);
     }
 }
