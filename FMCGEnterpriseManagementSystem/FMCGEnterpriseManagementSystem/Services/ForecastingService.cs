@@ -1,4 +1,7 @@
-﻿using System.Text;
+﻿// Purpose: Business logic for forecasting.
+// Authors: iqran0906, Maseeha17 (from git history)
+
+using System.Text;
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;

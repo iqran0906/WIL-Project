@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿// Purpose: Repository pattern: database queries for invoice.
+// Authors: Sayali-St10458649 (from git history)
+
+using Microsoft.EntityFrameworkCore;
 using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
@@ -55,10 +58,10 @@ namespace FMCGEnterpriseManagementSystem.Repositories
             }
         }
 
-        public async Task<string> GetNextInvoiceNumberAsync()
+        public async Task<string> GetNextInvoiceNumberAsync(string prefix = "ED")
         {
             var count = await _context.Invoices.CountAsync();
-            return $"ED{(count + 1).ToString("D5")}";
+            return $"{prefix}{(count + 1).ToString("D5")}";
         }
     }
 }

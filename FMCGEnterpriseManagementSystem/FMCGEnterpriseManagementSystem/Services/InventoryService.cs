@@ -1,3 +1,6 @@
+﻿// Purpose: Business logic for inventory.
+// Authors: Maseeha17 (from git history)
+
 ﻿using System.Globalization;
 using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;
@@ -39,70 +42,14 @@ namespace FMCGEnterpriseManagementSystem.Services
 
         public async Task CreateInventoryItemAsync(InventoryViewModel model)
         {
-            int supplierIdToUse = model.SupplierId;
+            // Get the existing product selected from the dropdown
+            var product = await _context.Products
+                .FirstOrDefaultAsync(p => p.ProductId == model.ProductId);
 
-            // Dynamically fetch the first available supplier if none is specified
-            if (supplierIdToUse <= 0)
+            if (product == null)
             {
-                var firstSupplier = await _context.Suppliers.FirstOrDefaultAsync();
-
-                if (firstSupplier != null)
-                {
-                    supplierIdToUse = firstSupplier.SupplierId;
-                }
-                else
-                {
-                    throw new Exception(
-                        "No suppliers found in the database. Please add at least one supplier before creating inventory items."
-                    );
-                }
+                throw new Exception("Selected product was not found.");
             }
-
-            // Automatically generate the next Product Code
-            var lastProduct = await _context.Products
-                .OrderByDescending(p => p.ProductId)
-                .FirstOrDefaultAsync();
-
-            int nextNumber = 1;
-
-            if (lastProduct != null && !string.IsNullOrEmpty(lastProduct.ProductCode))
-            {
-                var codeNumber = new string(
-                    lastProduct.ProductCode
-                        .Where(char.IsDigit)
-                        .ToArray()
-                );
-
-                if (int.TryParse(codeNumber, out int lastNumber))
-                {
-                    nextNumber = lastNumber + 1;
-                }
-            }
-
-            string generatedProductCode = $"ED{nextNumber:D3}";
-
-            // Parse selling price
-            decimal.TryParse(
-                model.SellingPrice,
-                NumberStyles.Any,
-                CultureInfo.InvariantCulture,
-                out var parsedSellingPrice
-            );
-
-            var product = new Product
-            {
-                ProductCode = generatedProductCode,
-                ProductName = model.ProductName,
-                Description = model.Description,
-                SellingPrice = parsedSellingPrice,
-                Category = model.CategoryName,
-                SupplierId = supplierIdToUse,
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow
-            };
-
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
 
             var entity = new Inventory
             {
@@ -133,7 +80,6 @@ namespace FMCGEnterpriseManagementSystem.Services
                 await _context.SaveChangesAsync();
             }
         }
-
         public async Task UpdateInventoryItemAsync(InventoryViewModel model)
         {
             var entity = await _repository.GetByIdAsync(model.InventoryId);

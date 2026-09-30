@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.DTOs;
+﻿// Purpose: Observer pattern: raises stock-related notifications (low stock, new items, new customers).
+// Authors: Sayali-St10458649 (from git history)
+
+using FMCGEnterpriseManagementSystem.DTOs;
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Observers.Interfaces;
 using System.Collections.Generic;

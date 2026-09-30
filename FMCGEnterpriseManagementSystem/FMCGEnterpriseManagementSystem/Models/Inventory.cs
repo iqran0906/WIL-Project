@@ -1,5 +1,8 @@
-﻿using FMCGEnterpriseManagementSystem.Models;
+﻿// Purpose: Database entity: inventory (maps to a table).
+// Authors: Naseeha27 (from git history)
+
 using System.ComponentModel.DataAnnotations;
+﻿using FMCGEnterpriseManagementSystem.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 
 public class Inventory
@@ -13,13 +16,14 @@ public class Inventory
     [ForeignKey("ProductId")]
     public Product Product { get; set; } = null!;
 
-    // Use only QuantityOnHand everywhere
+   
     public int QuantityOnHand { get; set; }
 
     public int ReorderLevel { get; set; }
     public string? Notes { get; set; }
 
 
+      
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public DateTime? UpdatedAt { get; set; }

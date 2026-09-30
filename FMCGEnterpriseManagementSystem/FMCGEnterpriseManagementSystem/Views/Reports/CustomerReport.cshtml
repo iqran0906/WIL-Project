@@ -1,4 +1,8 @@
-﻿@model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.Reports.CustomerReportViewModel>
+﻿@*
+    Purpose: Customer report page.
+    Authors: iqran0906 (from git history)
+*@
+@model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.Reports.CustomerReportViewModel>
 
 @{
     ViewData["Title"] = "Customer Report";
@@ -11,7 +15,7 @@
             <p class="text-muted">Customer account and payment information.</p>
         </div>
 
-        <a asp-action="Index" class="btn btn-outline-secondary">Back to Reports</a>
+        <partial name="_ReportToolbar" model="@("CustomerReport")" />
     </div>
 
     <div class="card shadow-sm">

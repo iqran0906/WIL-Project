@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.DTOs;
+﻿// Purpose: Observer pattern: raises sales notifications (new invoice, expired quote, overdue payment).
+// Authors: Sayali-St10458649 (from git history)
+
+using FMCGEnterpriseManagementSystem.DTOs;
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Observers.Interfaces;
 using System.Collections.Generic;

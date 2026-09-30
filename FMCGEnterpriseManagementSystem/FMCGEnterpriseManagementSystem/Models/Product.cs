@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿// Purpose: Database entity: product (maps to a table).
+// Authors: iqran0906, Maseeha17, Naseeha27 (from git history)
+
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FMCGEnterpriseManagementSystem.Models

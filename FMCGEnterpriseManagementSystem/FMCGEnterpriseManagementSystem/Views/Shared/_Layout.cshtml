@@ -1,401 +1,630 @@
-﻿<!DOCTYPE html>
+﻿@*
+    Purpose: Shared page layout: side bar, top bar, phone menu, page tips pop-up, print styles and scripts.
+    Authors: Maseeha17, iqran0906, Sayali-St10458649, Naseeha27, ST10068525 (from git history)
+*@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>@ViewData["Title"] - Exclusive Distributors</title>
 
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 
     <style>
-            :root {
-                --sidebar-bg: #357383;
-                --main-bg: #1c323d;
-                --card-bg: rgba(255, 255, 255, 0.95);
-                --text-dark: #212529;
-            }
+        :root {
+            --sidebar-bg: #357383;
+            --main-bg: #1c323d;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-dark: #212529;
+        }
 
-            body {
-                background-color: var(--main-bg);
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                overflow-x: hidden;
-            }
+        body {
+            background-color: var(--main-bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
 
+        .sidebar {
+            background-color: var(--sidebar-bg);
+            min-height: auto;
+            color: white;
+            padding-top: 20px;
+        }
+
+        @@media (min-width: 768px) {
             .sidebar {
-                background-color: var(--sidebar-bg);
-                min-height: auto;
-                color: white;
-                padding-top: 20px;
+                min-height: 100vh;
             }
+        }
 
             @@media (min-width: 768px) {
+                /* Pin the side bar to the screen so Log Out and the logo stay at the
+                   bottom of the window on long pages, instead of the bottom of the page */
                 .sidebar {
                     min-height: 100vh;
+                    height: 100vh;
+                    position: sticky;
+                    top: 0;
+                    align-self: flex-start;
+                    overflow-y: auto;
                 }
             }
+        .sidebar .nav-link,
+        .mobile-dropdown .nav-link {
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 12px 20px;
+            border-left: 4px solid transparent;
+            transition: all 0.2s ease;
+        }
 
-            .sidebar .nav-link,
-            .mobile-dropdown .nav-link {
-                color: rgba(255, 255, 255, 0.85);
-                font-weight: 600;
-                font-size: 1.1rem;
-                padding: 12px 20px;
-                border-left: 4px solid transparent;
-                transition: all 0.2s ease;
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active,
+        .mobile-dropdown .nav-link:hover,
+        .mobile-dropdown .nav-link.active {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid #ffffff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .brand-logo-container {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            padding: 5px;
+        }
+
+        .brand-logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+
+        .sidebar-logo-wrapper {
+            padding-bottom: 30px;
+            padding-top: 30px;
+            margin-top: auto;
+        }
+
+            /* SIDEBAR COLLAPSE */
+            .sidebar {
+                transition: width 0.2s ease, flex-basis 0.2s ease;
             }
 
-                .sidebar .nav-link:hover,
-                .sidebar .nav-link.active,
-                .mobile-dropdown .nav-link:hover,
-                .mobile-dropdown .nav-link.active {
-                    color: #ffffff;
-                    background-color: rgba(255, 255, 255, 0.1);
-                    border-left: 4px solid #ffffff;
-                    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-                }
+            .sidebar-header {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
 
-            .brand-logo-container {
-                width: 80px;
-                height: 80px;
-                background: white;
-                border-radius: 50%;
+            .sidebar-toggle {
+                flex-shrink: 0;
+                width: 32px;
+                height: 32px;
+                padding: 0;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                margin: 0 auto;
-                overflow: hidden;
-                box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-                padding: 5px;
+                color: #ffffff;
+                border: 1px solid rgba(255, 255, 255, 0.5);
+                border-radius: 6px;
+                background-color: transparent;
             }
 
-                .brand-logo-container img {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: contain;
-                    border-radius: 50%;
+                .sidebar-toggle:hover,
+                .sidebar-toggle:focus {
+                    color: #357383;
+                    background-color: #ffffff;
+                    border-color: #ffffff;
                 }
+
+            @@media (min-width: 768px) {
+                body.sidebar-collapsed #desktopSidebar {
+                    flex: 0 0 56px;
+                    width: 56px;
+                    max-width: 56px;
+                }
+
+                    body.sidebar-collapsed #desktopSidebar .sidebar-collapsible {
+                        display: none;
+                    }
+
+                    body.sidebar-collapsed #desktopSidebar .sidebar-header {
+                        justify-content: center;
+                        padding: 0 !important;
+                    }
+
+                body.sidebar-collapsed #mainColumn {
+                    flex: 1 1 0;
+                    width: auto;
+                    max-width: none;
+                }
+            }
+
+            .sidebar-logout {
+                color: #ffffff;
+                font-weight: 600;
+                font-size: 1.05rem;
+                padding: 10px 16px;
+                border: 1px solid rgba(255, 255, 255, 0.6);
+                border-radius: 6px;
+                background-color: transparent;
+                transition: all 0.2s ease;
+            }
+
+                .sidebar-logout:hover,
+                .sidebar-logout:focus {
+                    color: #357383;
+                    background-color: #ffffff;
+                    border-color: #ffffff;
+                }
+
+            /* PRINTING (e.g. reports): print only the page content */
+            @@media print {
+                #desktopSidebar,
+                header,
+                .mobile-dropdown,
+                .toast-container,
+                .no-print,
+                .alert-dismissible {
+                    display: none !important;
+                }
+
+                body {
+                    background: #ffffff !important;
+                }
+
+                #mainColumn {
+                    flex: 0 0 100% !important;
+                    width: 100% !important;
+                    max-width: 100% !important;
+                }
+
+                h2, .text-white {
+                    color: #000000 !important;
+                }
+
+                .card {
+                    box-shadow: none !important;
+                    border: none !important;
+                }
+            }
+
+            .page-toast {
+                background-color: var(--sidebar-bg);
+                color: #ffffff;
+                font-weight: 600;
+                box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+            }
 
             .sidebar-logo-wrapper {
                 padding-bottom: 30px;
                 padding-top: 30px;
                 margin-top: auto;
             }
+        .top-navbar {
+            background-color: transparent !important;
+            padding: 15px 15px;
+        }
 
+        @@media (min-width: 768px) {
             .top-navbar {
-                background-color: transparent !important;
-                padding: 15px 15px;
+                padding: 15px 30px;
             }
+        }
 
-            @@media (min-width: 768px) {
-                .top-navbar {
-                    padding: 15px 30px;
-                }
-            }
+        .top-navbar .navbar-brand {
+            color: white !important;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
 
+        @@media (min-width: 768px) {
             .top-navbar .navbar-brand {
-                color: white !important;
-                font-weight: bold;
-                font-size: 1.2rem;
+                font-size: 1.5rem;
             }
+        }
 
-            @@media (min-width: 768px) {
-                .top-navbar .navbar-brand {
-                    font-size: 1.5rem;
-                }
-            }
+        .content-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            min-height: 80vh;
+            margin-bottom: 30px;
+        }
 
+        @@media (min-width: 768px) {
             .content-card {
-                background: var(--card-bg);
-                border-radius: 12px;
-                padding: 20px;
-                box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-                min-height: 80vh;
-                margin-bottom: 30px;
+                padding: 30px;
             }
+        }
 
-            @@media (min-width: 768px) {
-                .content-card {
-                    padding: 30px;
-                }
-            }
+        .form-label {
+            font-weight: 500;
+            color: #495057;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
 
-            .form-label {
-                font-weight: 500;
-                color: #495057;
-                font-size: 0.9rem;
-                margin-bottom: 4px;
-            }
+        .form-control,
+        .form-select {
+            border-radius: 6px;
+            border: 1px solid #ced4da;
+            padding: 8px 12px;
+            background-color: #f8f9fa;
+        }
 
-            .form-control,
-            .form-select {
-                border-radius: 6px;
-                border: 1px solid #ced4da;
-                padding: 8px 12px;
-                background-color: #f8f9fa;
-            }
+        .form-control:focus,
+        .form-select:focus {
+            background-color: #fff;
+            border-color: #357383;
+            box-shadow: 0 0 0 0.25rem rgba(53, 115, 131, 0.25);
+        }
 
-                .form-control:focus,
-                .form-select:focus {
-                    background-color: #fff;
-                    border-color: #357383;
-                    box-shadow: 0 0 0 0.25rem rgba(53, 115, 131, 0.25);
-                }
+        .btn-custom-save {
+            background-color: #212529;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
 
-            .btn-custom-save {
-                background-color: #212529;
-                color: white;
-                border: none;
-                padding: 10px 24px;
-                border-radius: 6px;
-                font-weight: 500;
-            }
+        .btn-custom-save:hover {
+            background-color: #000000;
+            color: white;
+        }
 
-                .btn-custom-save:hover {
-                    background-color: #000000;
-                    color: white;
-                }
+        .btn-action-primary {
+            background-color: #357383;
+            color: white;
+            font-weight: 600;
+            padding: 8px 24px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+        }
 
-            .btn-action-primary {
-                background-color: #357383;
-                color: white;
-                font-weight: 600;
-                padding: 8px 24px;
-                border-radius: 4px;
-                border: 1px solid rgba(255, 255, 255, 0.2);
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
-            }
+        .btn-action-primary:hover {
+            background-color: #2b5e6b;
+            color: white;
+        }
 
-                .btn-action-primary:hover {
-                    background-color: #2b5e6b;
-                    color: white;
-                }
+        .custom-data-table {
+            border-collapse: separate;
+            border-spacing: 0 8px;
+            width: 100%;
+        }
 
-            .custom-data-table {
-                border-collapse: separate;
-                border-spacing: 0 8px;
-                width: 100%;
-            }
+        .custom-data-table th,
+        .custom-data-table td {
+            background: white;
+            padding: 10px 15px;
+            text-align: center;
+            border: 1px solid #c8d6e5;
+            color: #212529;
+            font-weight: 500;
+        }
 
-                .custom-data-table th,
-                .custom-data-table td {
-                    background: white;
-                    padding: 10px 15px;
-                    text-align: center;
-                    border: 1px solid #c8d6e5;
-                    color: #212529;
-                    font-weight: 500;
-                }
+        .custom-data-table th {
+            font-weight: 600;
+            background: #ffffff;
+        }
 
-                .custom-data-table th {
-                    font-weight: 600;
-                    background: #ffffff;
-                }
+        .search-field {
+            max-width: 250px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding-right: 30px;
+        }
 
-            .search-field {
-                max-width: 250px;
-                background-color: rgba(255, 255, 255, 0.15);
-                border: 1px solid rgba(255, 255, 255, 0.3);
-                color: white;
-                padding-right: 30px;
-            }
-
-                .search-field::placeholder {
-                    color: rgba(255, 255, 255, 0.6);
-                }
+        .search-field::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
     </style>
 </head>
 
 <body>
 
+    <!-- Restore sidebar state before the page draws, so it does not flicker -->
+    <script>
+        try {
+            if (localStorage.getItem("sidebarCollapsed") === "true") {
+                document.body.classList.add("sidebar-collapsed");
+            }
+        } catch (e) { }
+    </script>
+
     @{
+        // Actual application roles
         var isAdministrator = User.IsInRole("Administrator");
         var isEmployee = User.IsInRole("Employee");
         var isSalesRepresentative = User.IsInRole("SalesRepresentative");
 
+        // Permission groups
         var canUseOperations = isAdministrator || isEmployee;
-        var canUseSales = isAdministrator || isEmployee || isSalesRepresentative;
+        var canUseSales =
+            isAdministrator ||
+            isEmployee ||
+            isSalesRepresentative;
     }
 
 
-    <!-- =====================================================
+    <!-- =========================================================
          MOBILE NAVIGATION
-         ===================================================== -->
+         ========================================================= -->
 
-    <div class="d-md-none text-white"
+    <div class="d-md-none text-white no-print"
          style="background-color: var(--sidebar-bg);">
 
         <div class="d-flex justify-content-between align-items-center px-3 py-2">
 
             <div class="d-flex align-items-center gap-2">
+
                 <img src="~/images/logo.png"
                      alt="Logo"
                      style="width:32px;
-                height:32px;
-                border-radius:50%;
-                object-fit:contain;
-                background:white;
-                padding:2px;" />
+                            height:32px;
+                            border-radius:50%;
+                            object-fit:contain;
+                            background:white;
+                            padding:2px;" />
 
-                <span class="fw-bold fs-5">Menu</span>
+                <span class="fw-bold fs-5">
+                    Menu
+                </span>
+
             </div>
 
             <button class="btn text-white p-1 border-0"
                     type="button"
                     data-bs-toggle="collapse"
-                    data-bs-target="#mobileMenu">
+                    data-bs-target="#mobileMenu"
+                    aria-controls="mobileMenu"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
 
                 <i class="bi bi-list fs-1"></i>
+
             </button>
 
         </div>
 
 
-        <div class="collapse mobile-dropdown" id="mobileMenu">
+        <div class="collapse mobile-dropdown"
+             id="mobileMenu">
 
             <ul class="nav flex-column text-center pb-3">
 
-                <!-- ALL AUTHENTICATED USERS -->
+
+                <!-- DASHBOARD -->
                 <li class="nav-item">
+
                     <a class="nav-link py-2"
                        asp-controller="Home"
                        asp-action="Dashboard">
+
                         Dashboard
+
                     </a>
+
                 </li>
 
 
+                <!-- SALES -->
                 @if (canUseSales)
                 {
                     <li class="nav-item">
+
                         <a class="nav-link py-2"
                            asp-controller="Customers"
                            asp-action="CustomerList">
+
                             Customers
+
                         </a>
+
                     </li>
                 }
 
 
+                <!-- OPERATIONS -->
                 @if (canUseOperations)
                 {
                     <li class="nav-item">
+
                         <a class="nav-link py-2"
                            asp-controller="Supplier"
                            asp-action="SupplierList">
+
                             Suppliers
+
                         </a>
+
                     </li>
 
                     <li class="nav-item">
+
                         <a class="nav-link py-2"
                            asp-controller="Products"
                            asp-action="Index">
+
                             Products
+
                         </a>
+
                     </li>
 
                     <li class="nav-item">
+
                         <a class="nav-link py-2"
                            asp-controller="Inventory"
                            asp-action="Index">
+
                             Inventory
+
                         </a>
+
                     </li>
 
                     <li class="nav-item">
+
                         <a class="nav-link py-2"
                            asp-controller="Forecasting"
                            asp-action="Index">
+
                             Forecasting
+
                         </a>
+
                     </li>
                 }
 
 
+                <!-- ADMINISTRATION -->
                 @if (isAdministrator)
                 {
                     <li class="nav-item">
+
                         <a class="nav-link py-2"
                            asp-controller="Employees"
                            asp-action="Index">
+
                             Employees
+
                         </a>
+
                     </li>
 
                     <li class="nav-item">
+
                         <a class="nav-link py-2"
                            asp-controller="SalesRepresentatives"
                            asp-action="Index">
+
                             Sales Representatives
+
                         </a>
+
                     </li>
 
                     <li class="nav-item">
+
                         <a class="nav-link py-2"
                            asp-controller="UserAccounts"
                            asp-action="Index">
+
                             User Accounts
+
                         </a>
+
                     </li>
                 }
 
 
+                <!-- SALES TRANSACTIONS -->
                 @if (canUseSales)
                 {
                     <li class="nav-item">
+
                         <a class="nav-link py-2"
                            asp-controller="Quotes"
                            asp-action="Index">
+
                             Quotes
+
                         </a>
+
                     </li>
 
                     <li class="nav-item">
+
                         <a class="nav-link py-2"
                            asp-controller="Invoices"
                            asp-action="Index">
+
                             Invoices
+
                         </a>
+
                     </li>
 
                     <li class="nav-item">
+
                         <a class="nav-link py-2"
                            asp-controller="Payments"
                            asp-action="Index">
-                            Payments
-                        </a>
-                    </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link py-2"
-                           asp-controller="Notifications"
-                           asp-action="Index">
-                            Notifications
+                            Payments
+
                         </a>
+
                     </li>
                 }
 
 
+                <!-- ADMIN REPORTING -->
                 @if (isAdministrator)
                 {
                     <li class="nav-item">
+
                         <a class="nav-link py-2"
                            asp-controller="Reports"
                            asp-action="Index">
+
                             Reports
+
                         </a>
+
                     </li>
                 }
 
 
+                <!-- SETTINGS -->
                 <li class="nav-item">
+
                     <a class="nav-link py-2"
-                       asp-controller="Home"
-                       asp-action="Settings">
+                       asp-controller="Settings"
+                       asp-action="Index">
                         Settings
+
                     </a>
+
+                </li>
+
+                <!-- MOBILE LOGOUT (the side bar is hidden on small screens) -->
+                <li class="nav-item px-3 py-2">
+                    <form asp-controller="Account"
+                          asp-action="Logout"
+                          method="post"
+                          class="m-0">
+
+                        @Html.AntiForgeryToken()
+
+                        <button type="submit" class="btn sidebar-logout w-100">
+                            <i class="bi bi-box-arrow-left me-2"></i>
+                            Log Out
+                        </button>
+
+                    </form>
                 </li>
 
             </ul>
@@ -405,9 +634,9 @@
     </div>
 
 
-    <!-- =====================================================
-         DESKTOP LAYOUT
-         ===================================================== -->
+    <!-- =========================================================
+         MAIN DESKTOP LAYOUT
+         ========================================================= -->
 
     <div class="container-fluid p-0">
 
@@ -418,77 +647,115 @@
                  DESKTOP SIDEBAR
                  ================================================= -->
 
-            <div class="col-md-3 col-lg-2 sidebar
+            <div id="desktopSidebar"
+                 class="col-md-3 col-lg-2 sidebar
                 d-none d-md-flex
                 flex-column justify-content-between">
 
                 <div>
 
-                    <div class="px-3 mb-4">
-                        <h4 class="text-center font-weight-bold tracking-wide py-2 m-0">
+                    <div class="sidebar-header ps-3 pe-2 mb-4">
+                        <h4 class="sidebar-collapsible flex-grow-1 text-center font-weight-bold tracking-wide py-2 m-0">
                             Exclusive
+
                         </h4>
+
+                        <!-- SIDEBAR COLLAPSE TOGGLE -->
+                        <button type="button"
+                                id="sidebarToggle"
+                                class="btn sidebar-toggle"
+                                title="Collapse menu"
+                                aria-label="Collapse menu"
+                                aria-controls="desktopSidebar"
+                                aria-expanded="true">
+                            <i class="bi bi-chevron-double-left"></i>
+                        </button>
                     </div>
 
 
-                    <ul class="nav flex-column justify-content-start">
+                    <ul class="sidebar-collapsible nav flex-column justify-content-start">
 
-                        <!-- ALL AUTHENTICATED USERS -->
+
+                        <!-- DASHBOARD -->
                         <li class="nav-item">
+
                             <a class="nav-link px-3 py-2"
                                asp-controller="Home"
                                asp-action="Dashboard">
+
                                 Dashboard
+
                             </a>
+
                         </li>
 
 
-                        <!-- SALES FUNCTIONS -->
+                        <!-- SALES -->
                         @if (canUseSales)
                         {
                             <li class="nav-item">
+
                                 <a class="nav-link px-3 py-2"
                                    asp-controller="Customers"
                                    asp-action="CustomerList">
+
                                     Customers
+
                                 </a>
+
                             </li>
                         }
 
 
-                        <!-- OPERATIONAL FUNCTIONS -->
+                        <!-- OPERATIONS -->
                         @if (canUseOperations)
                         {
                             <li class="nav-item">
+
                                 <a class="nav-link px-3 py-2"
                                    asp-controller="Supplier"
                                    asp-action="SupplierList">
+
                                     Suppliers
+
                                 </a>
+
                             </li>
 
                             <li class="nav-item">
+
                                 <a class="nav-link px-3 py-2"
                                    asp-controller="Products"
                                    asp-action="Index">
+
                                     Products
+
                                 </a>
+
                             </li>
 
                             <li class="nav-item">
+
                                 <a class="nav-link px-3 py-2"
                                    asp-controller="Inventory"
                                    asp-action="Index">
+
                                     Inventory
+
                                 </a>
+
                             </li>
 
                             <li class="nav-item">
+
                                 <a class="nav-link px-3 py-2"
                                    asp-controller="Forecasting"
                                    asp-action="Index">
+
                                     Forecasting
+
                                 </a>
+
                             </li>
                         }
 
@@ -497,27 +764,39 @@
                         @if (isAdministrator)
                         {
                             <li class="nav-item">
+
                                 <a class="nav-link px-3 py-2"
                                    asp-controller="Employees"
                                    asp-action="Index">
+
                                     Employees
+
                                 </a>
+
                             </li>
 
                             <li class="nav-item">
+
                                 <a class="nav-link px-3 py-2"
                                    asp-controller="SalesRepresentatives"
                                    asp-action="Index">
+
                                     Sales Representatives
+
                                 </a>
+
                             </li>
 
                             <li class="nav-item">
+
                                 <a class="nav-link px-3 py-2"
                                    asp-controller="UserAccounts"
                                    asp-action="Index">
+
                                     User Accounts
+
                                 </a>
+
                             </li>
                         }
 
@@ -526,27 +805,39 @@
                         @if (canUseSales)
                         {
                             <li class="nav-item">
+
                                 <a class="nav-link px-3 py-2"
                                    asp-controller="Quotes"
                                    asp-action="Index">
+
                                     Quotes
+
                                 </a>
+
                             </li>
 
                             <li class="nav-item">
+
                                 <a class="nav-link px-3 py-2"
                                    asp-controller="Invoices"
                                    asp-action="Index">
+
                                     Invoices
+
                                 </a>
+
                             </li>
 
                             <li class="nav-item">
+
                                 <a class="nav-link px-3 py-2"
                                    asp-controller="Payments"
                                    asp-action="Index">
+
                                     Payments
+
                                 </a>
+
                             </li>
                         }
 
@@ -555,22 +846,29 @@
                         @if (isAdministrator)
                         {
                             <li class="nav-item">
+
                                 <a class="nav-link px-3 py-2"
                                    asp-controller="Reports"
                                    asp-action="Index">
+
                                     Reports
+
                                 </a>
+
                             </li>
                         }
 
 
-                        <!-- ALL AUTHENTICATED USERS -->
+                        <!-- SETTINGS -->
                         <li class="nav-item">
+
                             <a class="nav-link px-3 py-2"
-                               asp-controller="Home"
-                               asp-action="Settings">
+                               asp-controller="Settings"
+                               asp-action="Index">
                                 Settings
+
                             </a>
+
                         </li>
 
                     </ul>
@@ -578,7 +876,23 @@
                 </div>
 
 
-                <div class="text-center sidebar-logo-wrapper">
+                <div class="sidebar-collapsible text-center sidebar-logo-wrapper">
+
+                    <!-- SIDEBAR LOGOUT -->
+                    <form asp-controller="Account"
+                          asp-action="Logout"
+                          method="post"
+                          class="px-3 mb-4">
+
+                        @Html.AntiForgeryToken()
+
+                        <button type="submit"
+                                class="btn sidebar-logout w-100">
+                            <i class="bi bi-box-arrow-left me-2"></i>
+                            Log Out
+                        </button>
+
+                    </form>
 
                     <div class="brand-logo-container">
 
@@ -596,20 +910,45 @@
                  MAIN CONTENT
                  ================================================= -->
 
-            <div class="col-12 col-md-9 col-lg-10 d-flex flex-column">
+            <div id="mainColumn"
+                 class="col-12 col-md-9 col-lg-10 d-flex flex-column">
 
+
+                <!-- TOP NAVBAR -->
                 <header>
 
-                    <nav class="navbar navbar-expand navbar-light top-navbar
-                        d-flex justify-content-between align-items-center">
+                    <nav class="navbar
+                                navbar-expand
+                                navbar-light
+                                top-navbar
+                                d-flex
+                                justify-content-between
+                                align-items-center">
 
                         <span class="navbar-brand">
+
                             Exclusive Distributors
+
                         </span>
 
 
-                        <div class="d-flex align-items-center
-                            gap-3 gap-md-4 text-white">
+                        <div class="d-flex
+                                    align-items-center
+                                    gap-3 gap-md-4
+                                    text-white">
+
+
+                            <!-- RECENT ACTIVITY -->
+                            <a asp-controller="Activity"
+                               asp-action="Index"
+                               class="text-white text-decoration-none"
+                               title="Recent Activity"
+                               aria-label="Recent Activity">
+
+                                <i class="bi bi-clock-history fs-4"
+                                   style="cursor:pointer;"></i>
+
+                            </a>
 
 
                             <!-- NOTIFICATIONS -->
@@ -636,24 +975,6 @@
                             </a>
 
 
-                            <!-- LOGOUT -->
-                            <form asp-controller="Account"
-                                  asp-action="Logout"
-                                  method="post"
-                                  class="m-0">
-
-                                @Html.AntiForgeryToken()
-
-                                <button type="submit"
-                                        class="btn p-0 border-0 text-white"
-                                        title="Logout">
-
-                                    <i class="bi bi-box-arrow-right fs-4"></i>
-
-                                </button>
-
-                            </form>
-
                         </div>
 
                     </nav>
@@ -661,9 +982,21 @@
                 </header>
 
 
+                <!-- PAGE CONTENT -->
                 <div class="container-fluid px-2 px-md-4">
 
-                    <main role="main" class="pb-3">
+                    <main role="main"
+                          class="pb-3">
+
+                        <!-- Error message from a failed action (see GlobalExceptionFilter) -->
+                        @if (TempData["ErrorMessage"] != null)
+                        {
+                            <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                                <i class="bi bi-exclamation-triangle me-1"></i>
+                                @TempData["ErrorMessage"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        }
 
                         @RenderBody()
 
@@ -678,9 +1011,97 @@
     </div>
 
 
+    <!-- PAGE OPEN MESSAGE
+         Uses ViewData["PageMessage"] if a view sets one,
+         otherwise looks up the page's message in PageMessageHelper. -->
+    @{
+        var pageMessage = ViewData["PageMessage"]?.ToString()
+            ?? FMCGEnterpriseManagementSystem.Helpers.PageMessageHelper.GetMessage(
+                ViewContext.View.Path,
+                ViewData["Title"]?.ToString());
+    }
+
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+
+        <div id="pageToast"
+             class="toast page-toast align-items-center border-0"
+             role="status"
+             aria-live="polite"
+             aria-atomic="true"
+             data-bs-delay="5000">
+
+            <div class="d-flex">
+
+                <div class="toast-body">
+                    <i class="bi bi-info-circle me-2"></i>
+                    @pageMessage
+                </div>
+
+                <button type="button"
+                        class="btn-close btn-close-white me-2 m-auto"
+                        data-bs-dismiss="toast"
+                        aria-label="Close"></button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script src="~/js/site.js"
+            asp-append-version="true"></script>
+
+    <script>
+        (function () {
+            const toggle = document.getElementById("sidebarToggle");
+
+if (!toggle) {
+    return;
+}
+
+const icon = toggle.querySelector("i");
+
+            function applySidebarState(collapsed) {
+                document.body.classList.toggle("sidebar-collapsed", collapsed);
+
+                icon.classList.toggle("bi-chevron-double-left", !collapsed);
+                icon.classList.toggle("bi-chevron-double-right", collapsed);
+
+                const label = collapsed ? "Expand menu" : "Collapse menu";
+                toggle.title = label;
+                toggle.setAttribute("aria-label", label);
+                toggle.setAttribute("aria-expanded", String(!collapsed));
+            }
+
+            applySidebarState(document.body.classList.contains("sidebar-collapsed"));
+
+            toggle.addEventListener("click", function () {
+                const collapsed = !document.body.classList.contains("sidebar-collapsed");
+                applySidebarState(collapsed);
+
+                try {
+                    localStorage.setItem("sidebarCollapsed", String(collapsed));
+                } catch (e) { }
+            });
+        })();
+    </script>
+
+    <script>
+        // Page tips can be switched off under Settings > My Preferences
+        let showPageTips = true;
+        try { showPageTips = localStorage.getItem("pageTipsEnabled") !== "false"; } catch (e) { }
+
+        if (showPageTips) {
+            bootstrap.Toast
+                .getOrCreateInstance(document.getElementById("pageToast"))
+                .show();
+        }
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 

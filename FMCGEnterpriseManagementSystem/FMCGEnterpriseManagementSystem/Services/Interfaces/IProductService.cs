@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.ViewModels;
+﻿// Purpose: Contract (interface) for the product service.
+// Authors: iqran0906, Maseeha17 (from git history)
+
+using FMCGEnterpriseManagementSystem.ViewModels;
 
 namespace FMCGEnterpriseManagementSystem.Services.Interfaces
 {

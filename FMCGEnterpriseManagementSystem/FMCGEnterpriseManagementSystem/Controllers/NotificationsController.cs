@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.Services.Interfaces;
+﻿// Purpose: Controller for the notifications pages and form submissions.
+// Authors: iqran0906, Sayali-St10458649 (from git history)
+
+using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;

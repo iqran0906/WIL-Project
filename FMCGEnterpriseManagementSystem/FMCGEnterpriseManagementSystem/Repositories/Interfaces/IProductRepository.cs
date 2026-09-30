@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿// Purpose: Contract (interface) for product data access.
+// Authors: iqran0906, Maseeha17, Sayali-St10458649 (from git history)
+
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using FMCGEnterpriseManagementSystem.Models;
 

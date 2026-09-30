@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.Enums;
+﻿// Purpose: Business logic for payment.
+// Authors: Naseeha27, Sayali-St10458649 (from git history)
+
+using FMCGEnterpriseManagementSystem.Enums;
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
