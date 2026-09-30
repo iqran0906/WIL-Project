@@ -18,13 +18,10 @@ namespace FMCGEnterpriseManagementSystem.Services
         private readonly INotificationService _notificationService;
 
         public InvoiceService(
-      IInvoiceRepository invoiceRepository,
-      IProductRepository productRepository,
-      IInventoryRepository inventoryRepository,
-      INotificationService notificationService)
             IInvoiceRepository invoiceRepository,
             IProductRepository productRepository,
             IInventoryRepository inventoryRepository,
+            INotificationService notificationService,
             ISettingsService settingsService)
         {
             _invoiceRepository = invoiceRepository;
