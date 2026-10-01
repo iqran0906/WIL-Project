@@ -1,14 +1,35 @@
-﻿@model FMCGEnterpriseManagementSystem.ViewModels.DashboardViewModel
+﻿@*
+    Purpose: Dashboard: global search, Create New shortcuts and the income / category charts.
+    Authors: Maseeha17, ST10068525 (from git history)
+    Uses: Chart.js (MIT) https://www.chartjs.org
+*@
+@model FMCGEnterpriseManagementSystem.ViewModels.DashboardViewModel
 
 @{
     ViewData["Title"] = "Dashboard";
+
+    // Same money format as the rest of the app, e.g. R 4,475.00
+    var moneyCulture = System.Globalization.CultureInfo.InvariantCulture;
+    string Money(decimal value) => "R " + value.ToString("N2", moneyCulture);
 }
 
 <div class="mb-4 d-flex justify-content-center justify-content-md-start">
-    <div class="input-group w-100" style="max-width: 400px;">
-        <span class="input-group-text bg-light border-end-0"><i class="bi bi-search"></i></span>
-        <input type="text" class="form-control bg-light border-start-0" placeholder="Search Bar">
-    </div>
+    <form asp-controller="Search"
+          asp-action="Index"
+          method="get"
+          class="w-100"
+          style="max-width: 400px;"
+          role="search">
+        <div class="input-group w-100">
+            <span class="input-group-text bg-light border-end-0"><i class="bi bi-search"></i></span>
+            <input type="search"
+                   name="q"
+                   class="form-control bg-light border-start-0"
+                   placeholder="Customer no., item code, invoice no., name..."
+                   aria-label="Search"
+                   required>
+        </div>
+    </form>
 </div>
 
 <h3 class="text-white text-center mb-4">Create New</h3>
@@ -46,88 +67,271 @@
     </div>
 </div>
 
-<div class="row g-4 mt-4">
-    <!-- Income by Month Chart Card -->
-    <div class="col-12 col-md-7">
-        <div class="p-4 rounded shadow-sm" style="background-color: rgba(255,255,255,0.05); min-height: 350px; border: 1px solid rgba(255,255,255,0.1);">
-            <h5 class="text-white mb-3">Income by Month</h5>
-            <div style="position: relative; height: 260px; width: 100%;">
-                <canvas id="incomeChart"></canvas>
-            </div>
-        </div>
-    </div>
+<style>
+    /* Chart colours - validated for colour-blind safety against the widget surface (#273c47) */
+    .viz-root {
+        --viz-surface: #273c47;
+        --viz-text-primary: #ffffff;
+        --viz-text-secondary: #c3c2b7;
+        --viz-grid: rgba(255, 255, 255, 0.08);
+        --viz-axis: rgba(255, 255, 255, 0.22);
+        --series-1: #3987e5; /* blue */
+        --series-2: #d95926; /* orange */
+        --series-3: #199e70; /* aqua */
+        --series-4: #c98500; /* yellow */
+        --series-5: #d55181; /* magenta */
+        --series-other: #c3c2b7; /* neutral "Other" */
+    }
 
-    <!-- Sales Per Category Chart Card -->
-    <div class="col-12 col-md-5">
-        <div class="p-4 rounded shadow-sm" style="background-color: rgba(255,255,255,0.05); min-height: 350px; border: 1px solid rgba(255,255,255,0.1);">
-            <h5 class="text-white mb-3">Sales Per Category</h5>
-            <div style="position: relative; height: 260px; width: 100%;">
-                <canvas id="categoryChart"></canvas>
+    .viz-card {
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 20px;
+        height: 100%;
+        color: var(--viz-text-primary);
+        font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+
+    .viz-subtitle {
+        color: var(--viz-text-secondary);
+        font-size: 0.85rem;
+    }
+
+    .viz-hero {
+        font-size: 1.6rem;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+    .viz-empty {
+        color: var(--viz-text-secondary);
+        text-align: center;
+        padding: 60px 10px;
+    }
+
+    .viz-legend {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        font-size: 0.9rem;
+    }
+
+        .viz-legend li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 0;
+        }
+
+        .viz-legend .swatch {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+
+        .viz-legend .name {
+            flex-grow: 1;
+            color: var(--viz-text-primary);
+        }
+
+        .viz-legend .value {
+            color: var(--viz-text-secondary);
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+        }
+
+    .viz-table-toggle summary {
+        color: var(--viz-text-secondary);
+        font-size: 0.85rem;
+        cursor: pointer;
+    }
+
+    .viz-table {
+        width: 100%;
+        font-size: 0.85rem;
+        color: var(--viz-text-primary);
+        margin-top: 8px;
+    }
+
+        .viz-table th, .viz-table td {
+            padding: 4px 6px;
+            border-bottom: 1px solid var(--viz-grid);
+        }
+
+        .viz-table td.num, .viz-table th.num {
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+
+    .doughnut-wrap {
+        position: relative;
+        max-width: 230px;
+        margin: 0 auto;
+    }
+
+    .doughnut-center {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+        text-align: center;
+    }
+</style>
+
+<div class="viz-root mt-4">
+
+    <!-- PERIOD FILTER (applies to both charts) -->
+    <form method="get" asp-controller="Home" asp-action="Dashboard"
+          class="d-flex justify-content-end align-items-center gap-2 mb-3">
+        <label for="dashboardMonths" class="text-white small fw-bold mb-0">Period:</label>
+        <select id="dashboardMonths" name="months" class="form-select form-select-sm w-auto" style="min-width: 170px;"
+                onchange="this.form.submit()">
+            @foreach (var option in new[] { 6, 12, 24 })
+            {
+                <option value="@option" selected="@(Model.Months == option)">Last @option months</option>
+            }
+        </select>
+        <noscript><button type="submit" class="btn btn-sm btn-light">Apply</button></noscript>
+    </form>
+
+    <div class="row g-4">
+
+        <!-- INCOME BY MONTH (line) -->
+        <div class="col-12 col-lg-7">
+            <div class="viz-card">
+                <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-3">
+                    <div>
+                        <h5 class="mb-0">Income by Month</h5>
+                        <div class="viz-subtitle">Value invoiced per month (incl. VAT), last @Model.Months months</div>
+                    </div>
+                    <div class="text-end">
+                        <div class="viz-hero">@Money(Model.ThisMonthIncome)</div>
+                        <div class="viz-subtitle">
+                            This month
+                            @if (Model.MonthOnMonthChange is decimal change)
+                            {
+                                <span class="ms-1">
+                                    <i class="bi @(change >= 0 ? "bi-arrow-up-right" : "bi-arrow-down-right")" aria-hidden="true"></i>
+                                    @(change >= 0 ? "+" : "")@change.ToString("0.0")% vs last month
+                                </span>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                @if (Model.TotalIncome == 0)
+                {
+                    <div class="viz-empty">
+                        <i class="bi bi-graph-up fs-2 d-block mb-2"></i>
+                        No invoices in the last @Model.Months months yet.
+                    </div>
+                }
+                else
+                {
+                    <div style="position: relative; height: 260px;">
+                        <canvas id="incomeChart" role="img"
+                                aria-label="Line chart of income per month for the last @Model.Months months. Total @Money(Model.TotalIncome)."></canvas>
+                    </div>
+
+                    <details class="viz-table-toggle mt-2">
+                        <summary>View as table</summary>
+                        <table class="viz-table">
+                            <thead>
+                                <tr><th>Month</th><th class="num">Income</th><th class="num">Change</th></tr>
+                            </thead>
+                            <tbody>
+                                @for (var i = 0; i < Model.IncomeByMonth.Count; i++)
+                                {
+                                    var month = Model.IncomeByMonth[i];
+                                    var previous = i > 0 ? Model.IncomeByMonth[i - 1].Income : 0;
+                                    <tr>
+                                        <td>@month.Label</td>
+                                        <td class="num">@Money(month.Income)</td>
+                                        <td class="num">
+                                            @(i == 0 || previous == 0 ? "—" : ((month.Income - previous) / previous * 100m).ToString("+0.0;-0.0;0.0") + "%")
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr class="fw-bold"><td>Total</td><td class="num">@Money(Model.TotalIncome)</td><td></td></tr>
+                            </tfoot>
+                        </table>
+                    </details>
+                }
             </div>
         </div>
+
+        <!-- SALES PER CATEGORY (doughnut) -->
+        <div class="col-12 col-lg-5">
+            <div class="viz-card">
+                <h5 class="mb-0">Sales per Category</h5>
+                <div class="viz-subtitle mb-3">Share of sales by product category, last @Model.Months months</div>
+
+                @if (!Model.SalesByCategory.Any())
+                {
+                    <div class="viz-empty">
+                        <i class="bi bi-pie-chart fs-2 d-block mb-2"></i>
+                        No product sales in the last @Model.Months months yet.
+                    </div>
+                }
+                else
+                {
+                    <div class="row g-3 align-items-center">
+                        <div class="col-12 col-sm-6 col-lg-12 col-xl-6">
+                            <div class="doughnut-wrap">
+                                <canvas id="categoryChart" role="img"
+                                        aria-label="Doughnut chart of sales per product category. Total @Money(Model.TotalCategorySales)."></canvas>
+                                <div class="doughnut-center">
+                                    <div class="viz-subtitle">Total</div>
+                                    <div class="fw-bold">@Money(Model.TotalCategorySales)</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-lg-12 col-xl-6">
+                            <ul id="categoryLegend" class="viz-legend" aria-label="Legend"></ul>
+                        </div>
+                    </div>
+
+                    <details class="viz-table-toggle mt-2">
+                        <summary>View as table</summary>
+                        <table class="viz-table">
+                            <thead>
+                                <tr><th>Category</th><th class="num">Sales</th><th class="num">Share</th></tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var category in Model.SalesByCategory)
+                                {
+                                    <tr>
+                                        <td>@category.Category</td>
+                                        <td class="num">@Money(category.Sales)</td>
+                                        <td class="num">@((category.Sales / Model.TotalCategorySales * 100m).ToString("0.0"))%</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </details>
+                }
+            </div>
+        </div>
+
     </div>
 </div>
 
 @section Scripts {
-    <!-- Chart.js Library CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
-    <script>
-        // 1. Sales Per Category Chart (Live Data from Database)
-        const categoryCtx = document.getElementById('categoryChart').getContext('2d');
-        const categoryNames = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.CategoryNames));
-        const categoryQuantities = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.CategoryQuantities));
-
-        new Chart(categoryCtx, {
-            type: 'bar',
-            data: {
-                labels: categoryNames.length > 0 ? categoryNames : ['No Data'],
-                datasets: [{
-                    label: 'Stock Quantity',
-                    data: categoryQuantities.length > 0 ? categoryQuantities : [0],
-                    backgroundColor: '#357383',
-                    borderColor: '#ffffff',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    x: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
-                    y: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } }
-                }
-            }
-        });
-
-        // 2. Income by Month Chart (Live Data from Database)
-        const incomeCtx = document.getElementById('incomeChart').getContext('2d');
-        const incomeLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MonthlyIncomeLabels));
-        const incomeValues = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MonthlyIncomeValues));
-
-        new Chart(incomeCtx, {
-            type: 'line',
-            data: {
-                labels: incomeLabels.length > 0 ? incomeLabels : ['No Data'],
-                datasets: [{
-                    label: 'Income',
-                    data: incomeValues.length > 0 ? incomeValues : [0],
-                    borderColor: '#357383',
-                    backgroundColor: 'rgba(53, 115, 131, 0.2)',
-                    fill: true,
-                    tension: 0.3
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    x: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
-                    y: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } }
-                }
-            }
-        });
+    <script type="application/json" id="incomeData">
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.IncomeByMonth.Select(m => new { label = m.Label, value = m.Income })))
     </script>
+    <script type="application/json" id="categoryData">
+        @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.SalesByCategory.Select(c => new { label = c.Category, value = c.Sales })))
+    </script>
+
+    <script src="~/js/dashboard-charts.js" asp-append-version="true"></script>
 }

@@ -1,7 +1,11 @@
-﻿using FMCGEnterpriseManagementSystem.Services.Interfaces;
+﻿// Purpose: Controller for the inventory pages and form submissions.
+// Authors: iqran0906, Maseeha17 (from git history)
+
+using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
@@ -9,10 +13,14 @@ namespace FMCGEnterpriseManagementSystem.Controllers
     public class InventoryController : Controller
     {
         private readonly IInventoryService _inventoryService;
+        private readonly IProductRepository _productRepository;
 
-        public InventoryController(IInventoryService inventoryService)
+        public InventoryController(
+            IInventoryService inventoryService,
+            IProductRepository productRepository)
         {
             _inventoryService = inventoryService;
+            _productRepository = productRepository;
         }
 
         public async Task<IActionResult> Index()
@@ -21,17 +29,24 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return View(inventory);
         }
 
+
         [HttpGet]
-        public IActionResult AddItem()
+        public async Task<IActionResult> AddItem()
         {
+            var products = await _productRepository.GetAllAsync();
+
+            ViewBag.Products = products;
+
             return View(new InventoryViewModel());
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddItem(InventoryViewModel model)
         {
             if (!ModelState.IsValid)
             {
+                ViewBag.Products = await _productRepository.GetAllAsync();
                 return View(model);
             }
 
@@ -42,8 +57,12 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             }
             catch (Exception ex)
             {
-                // This catches the exact database/service error and displays it on your form
-                ModelState.AddModelError(string.Empty, $"Save failed: {ex.InnerException?.Message ?? ex.Message}");
+                ModelState.AddModelError(
+                    string.Empty,
+                    $"Save failed: {ex.InnerException?.Message ?? ex.Message}"
+                );
+
+                ViewBag.Products = await _productRepository.GetAllAsync();
                 return View(model);
             }
         }

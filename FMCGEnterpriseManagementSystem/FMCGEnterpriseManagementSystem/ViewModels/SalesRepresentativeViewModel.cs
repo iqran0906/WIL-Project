@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿// Purpose: Data and validation rules for the sales representative pages and forms.
+// Authors: iqran0906 (from git history)
+
+using System.ComponentModel.DataAnnotations;
 
 namespace FMCGEnterpriseManagementSystem.ViewModels
 {
@@ -18,7 +21,6 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
 
         public string? Email { get; set; }
 
-        [Required(ErrorMessage = "Sales representative code is required.")]
         [StringLength(20)]
         [Display(Name = "Sales Rep Code")]
         public string SalesRepCode { get; set; } = string.Empty;

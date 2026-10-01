@@ -1,4 +1,8 @@
-﻿@model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.SalesRepresentativeViewModel>
+﻿@*
+    Purpose: Sales Representatives list page (table with search / filters and actions).
+    Authors: iqran0906 (from git history)
+*@
+@model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.SalesRepresentativeViewModel>
 
 @{
     ViewData["Title"] = "Sales Representatives";
@@ -115,7 +119,7 @@
                             </td>
 
                             <td>
-                                @salesRep.Salary.ToString("C2")
+                                @salesRep.Salary.ToString("N2")
                             </td>
 
                             <td>
@@ -123,7 +127,7 @@
                             </td>
 
                             <td>
-                                @salesRep.SalesTarget.ToString("C2")
+                                @salesRep.SalesTarget.ToString("N2")
                             </td>
 
                             <td>

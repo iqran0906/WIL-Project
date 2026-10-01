@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.Models;
+﻿// Purpose: Contract (interface) for supplier data access.
+// Authors: Naseeha27, Maseeha17 (from git history)
+
+using FMCGEnterpriseManagementSystem.Models;
 
 namespace FMCGEnterpriseManagementSystem.Repositories.Interfaces
 {

@@ -1,4 +1,5 @@
 ﻿using FMCGEnterpriseManagementSystem.Data;
+using FMCGEnterpriseManagementSystem.Enums;
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Services;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
@@ -58,7 +59,6 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 .Select(sr => new
                 {
                     sr.SalesRepresentativeId,
-
                     DisplayName =
                         sr.Employee.FirstName + " " +
                         sr.Employee.LastName + " (" +
@@ -77,6 +77,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         public async Task<IActionResult> Index()
         {
             var quotes = await _quoteService.GetAllQuotesAsync();
+
             return View(quotes);
         }
 
@@ -84,12 +85,12 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
+            await PopulateQuoteDropdownsAsync();
+
             var quote = new Quote
             {
                 QuoteDate = DateTime.Today
             };
-
-            await PopulateQuoteDropdownsAsync();
 
             return View(quote);
         }
@@ -100,8 +101,32 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         public async Task<IActionResult> Create(Quote quote)
         {
             ModelState.Remove(nameof(Quote.QuoteNumber));
-            ModelState.Remove("Customer");
-            ModelState.Remove("SalesRepresentative");
+            ModelState.Remove(nameof(Quote.Customer));
+            ModelState.Remove(nameof(Quote.SalesRepresentative));
+
+            if (quote.QuoteItems != null)
+            {
+                for (int i = 0; i < quote.QuoteItems.Count; i++)
+                {
+                    ModelState.Remove($"QuoteItems[{i}].Quote");
+                    ModelState.Remove($"QuoteItems[{i}].Product");
+                }
+            }
+
+            if (quote.QuoteItems == null || !quote.QuoteItems.Any())
+            {
+                ModelState.AddModelError(
+                    string.Empty,
+                    "Please add at least one product to the quote.");
+            }
+
+            if (quote.QuoteItems != null &&
+                quote.QuoteItems.Any(item => item.ProductId <= 0))
+            {
+                ModelState.AddModelError(
+                    string.Empty,
+                    "Please select a product for every quote item.");
+            }
 
             if (!ModelState.IsValid)
             {
@@ -136,7 +161,6 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         }
 
         // POST: Quotes/Edit/5
-        // POST: Quotes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Quote quote)
@@ -146,21 +170,19 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 return BadRequest();
             }
 
-            // These values are generated/loaded by the application,
-            // not entered directly by the user.
             ModelState.Remove(nameof(Quote.QuoteNumber));
             ModelState.Remove(nameof(Quote.Customer));
             ModelState.Remove(nameof(Quote.SalesRepresentative));
 
-            // QuoteItem navigation properties are not posted by the form.
-            // Only ProductId is posted.
-            for (int i = 0; i < quote.QuoteItems.Count; i++)
+            if (quote.QuoteItems != null)
             {
-                ModelState.Remove($"QuoteItems[{i}].Quote");
-                ModelState.Remove($"QuoteItems[{i}].Product");
+                for (int i = 0; i < quote.QuoteItems.Count; i++)
+                {
+                    ModelState.Remove($"QuoteItems[{i}].Quote");
+                    ModelState.Remove($"QuoteItems[{i}].Product");
+                }
             }
 
-            // A quote must contain at least one valid item.
             if (quote.QuoteItems == null || !quote.QuoteItems.Any())
             {
                 ModelState.AddModelError(
@@ -178,42 +200,9 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
             if (!ModelState.IsValid)
             {
-                ViewBag.PaymentTermsList = new SelectList(
-                    new[]
-                    {
-                "COD",
-                "7 Days",
-                "14 Days",
-                "21 Days",
-                "28 Days",
-                "30 Days"
-                    },
+                await PopulateQuoteDropdownsAsync(
+                    quote.SalesRepresentativeId,
                     quote.PaymentTerms);
-
-                ViewBag.ProductList = await _context.Products
-                    .Where(p => p.IsActive)
-                    .ToListAsync();
-
-                ViewBag.CustomerList = await _context.Customers
-                    .Where(c => c.IsActive)
-                    .ToListAsync();
-
-                ViewBag.SalesRepList = new SelectList(
-    await _context.SalesRepresentatives
-        .Include(sr => sr.Employee)
-        .Where(sr => sr.IsActive)
-        .Select(sr => new
-        {
-            sr.SalesRepresentativeId,
-            DisplayName = sr.Employee.FirstName + " " +
-                          sr.Employee.LastName + " (" +
-                          sr.SalesRepCode + ")"
-        })
-        .ToListAsync(),
-    "SalesRepresentativeId",
-    "DisplayName",
-    quote.SalesRepresentativeId
-);
 
                 return View(quote);
             }

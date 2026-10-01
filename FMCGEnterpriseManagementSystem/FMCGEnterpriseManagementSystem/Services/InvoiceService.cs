@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.Models;
+﻿// Purpose: Business logic for invoice.
+// Authors: Sayali-St10458649 (from git history)
+
+using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;
@@ -7,20 +10,21 @@ namespace FMCGEnterpriseManagementSystem.Services
 {
     public class InvoiceService : IInvoiceService
     {
-        private const decimal VatRate = 0.15m;
-
         private readonly IInvoiceRepository _invoiceRepository;
         private readonly IProductRepository _productRepository;
         private readonly IInventoryRepository _inventoryRepository;
+        private readonly ISettingsService _settingsService;
 
         public InvoiceService(
             IInvoiceRepository invoiceRepository,
             IProductRepository productRepository,
-            IInventoryRepository inventoryRepository)
+            IInventoryRepository inventoryRepository,
+            ISettingsService settingsService)
         {
             _invoiceRepository = invoiceRepository;
             _productRepository = productRepository;
             _inventoryRepository = inventoryRepository;
+            _settingsService = settingsService;
         }
 
         public async Task<InvoiceViewModel> CreateAsync(InvoiceViewModel model)
@@ -30,9 +34,13 @@ namespace FMCGEnterpriseManagementSystem.Services
                 throw new InvalidOperationException("Cannot create an invoice with no items.");
             }
 
+            // VAT rate and number prefix come from Settings
+            var settings = await _settingsService.GetAsync();
+            var vatRate = settings.VatRatePercent / 100m;
+
             var invoice = new Invoice
             {
-                CustomerId = model.CustomerId,
+                CustomerId = model.CustomerId ?? throw new InvalidOperationException("Please select a customer."),
                 InvoiceDate = model.InvoiceDate,
                 BillingAddress = model.BillingAddress,
                 BusinessName = model.BusinessName,
@@ -62,7 +70,7 @@ namespace FMCGEnterpriseManagementSystem.Services
                 decimal lineBeforeDiscount = itemVm.Quantity * itemVm.UnitPrice;
                 decimal discountAmount = lineBeforeDiscount * (itemVm.DiscountPercent / 100m);
                 decimal lineAfterDiscount = lineBeforeDiscount - discountAmount;
-                decimal lineVat = itemVm.VatCategory == "[NONE]" ? 0 : lineAfterDiscount * VatRate;
+                decimal lineVat = itemVm.VatCategory == "[NONE]" ? 0 : lineAfterDiscount * vatRate;
                 decimal lineTotal = lineAfterDiscount + lineVat;
 
                 invoice.InvoiceItems.Add(new InvoiceItem
@@ -101,7 +109,7 @@ namespace FMCGEnterpriseManagementSystem.Services
             return invoices.Select(MapToViewModel);
         }
 
-        public async Task<IEnumerable<InvoiceViewModel>> SearchAsync(int? customerId, DateTime? startDate, DateTime? endDate, string keyword)
+        public async Task<IEnumerable<InvoiceViewModel>> SearchAsync(int? customerId, DateTime? startDate, DateTime? endDate, string? keyword)
         {
             var invoices = await _invoiceRepository.GetAllAsync();
 
@@ -111,15 +119,26 @@ namespace FMCGEnterpriseManagementSystem.Services
                 filtered = filtered.Where(i => i.CustomerId == customerId.Value);
 
             if (startDate.HasValue)
-                filtered = filtered.Where(i => i.InvoiceDate >= startDate.Value);
+                filtered = filtered.Where(i => i.InvoiceDate >= startDate.Value.Date);
 
+            // Include the whole end day, not just up to midnight
             if (endDate.HasValue)
-                filtered = filtered.Where(i => i.InvoiceDate <= endDate.Value);
+                filtered = filtered.Where(i => i.InvoiceDate < endDate.Value.Date.AddDays(1));
 
-            if (!string.IsNullOrEmpty(keyword))
-                filtered = filtered.Where(i => i.InvoiceNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                keyword = keyword.Trim();
 
-            return filtered.Select(MapToViewModel);
+                filtered = filtered.Where(i =>
+                    i.InvoiceNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                    (i.BusinessName?.Contains(keyword, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                    (i.Customer != null &&
+                     $"{i.Customer.Name} {i.Customer.Surname}".Contains(keyword, StringComparison.OrdinalIgnoreCase)));
+            }
+
+            return filtered
+                .OrderByDescending(i => i.InvoiceDate)
+                .Select(MapToViewModel);
         }
 
         public async Task UpdateStatusAsync(int invoiceId, string newStatus)

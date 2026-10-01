@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.Models;
+﻿// Purpose: Business logic for notification.
+// Authors: Sayali-St10458649 (from git history)
+
+using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Observers;
 using FMCGEnterpriseManagementSystem.Observers.Interfaces;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;

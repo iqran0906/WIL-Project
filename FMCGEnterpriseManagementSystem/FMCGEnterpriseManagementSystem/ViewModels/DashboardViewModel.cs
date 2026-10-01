@@ -1,34 +1,58 @@
-﻿using System;
+// Purpose: Data for the dashboard charts (income per month, sales per category).
+// Authors: ST10068525 (new file, not yet committed)
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FMCGEnterpriseManagementSystem.ViewModels
 {
     public class DashboardViewModel
     {
-        public int TotalProducts { get; set; }
-        public int LowStockItems { get; set; }
-        public int OutOfStockItems { get; set; }
-        public int TotalCustomers { get; set; }
-        public decimal TotalSales { get; set; }
-        public decimal OutstandingPayments { get; set; }
-        public decimal TotalInventoryValue { get; set; }
-        public decimal ProjectedRestockBudget { get; set; }
+        // Number of months displayed on the dashboard
+        public int Months { get; set; } = 12;
 
-        public string[] CategoryNames { get; set; } = Array.Empty<string>();
-        public int[] CategoryQuantities { get; set; } = Array.Empty<int>();
+        // Income chart
+        public List<MonthlyIncome> IncomeByMonth { get; set; } = new();
 
-        public string[] MonthlyIncomeLabels { get; set; } = Array.Empty<string>();
-        public decimal[] MonthlyIncomeValues { get; set; } = Array.Empty<decimal>();
+        // Sales by product category chart
+        public List<CategorySales> SalesByCategory { get; set; } = new();
 
-        public List<CriticalStockAlert> CriticalStockAlerts { get; set; } = new();
+        public decimal TotalIncome =>
+            IncomeByMonth.Sum(m => m.Income);
+
+        public decimal TotalCategorySales =>
+            SalesByCategory.Sum(c => c.Sales);
+
+        public decimal ThisMonthIncome =>
+            IncomeByMonth.LastOrDefault()?.Income ?? 0;
+
+        public decimal LastMonthIncome =>
+            IncomeByMonth.Count > 1
+                ? IncomeByMonth[^2].Income
+                : 0;
+
+        public decimal? MonthOnMonthChange =>
+            LastMonthIncome == 0
+                ? null
+                : (ThisMonthIncome - LastMonthIncome)
+                  / LastMonthIncome * 100m;
     }
 
-    public class CriticalStockAlert
+    public class MonthlyIncome
     {
-        public string ProductCode { get; set; } = string.Empty;
-        public string ProductName { get; set; } = string.Empty;
-        public int CurrentStock { get; set; }
-        public int ReorderLevel { get; set; }
-        public string HealthStatus { get; set; } = string.Empty;
+        public int Year { get; set; }
+
+        public int Month { get; set; }
+
+        public string Label { get; set; } = string.Empty;
+
+        public decimal Income { get; set; }
+    }
+
+    public class CategorySales
+    {
+        public string Category { get; set; } = string.Empty;
+
+        public decimal Sales { get; set; }
     }
 }

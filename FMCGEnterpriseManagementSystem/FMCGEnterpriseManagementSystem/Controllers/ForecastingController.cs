@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.Services.Interfaces;
+﻿// Purpose: Demand and stock forecasting, reordering and CSV export.
+// Authors: iqran0906, Maseeha17 (from git history)
+
+using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -36,7 +39,12 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             if (model == null) return NotFound();
 
             var suppliers = await _supplierService.GetAllSuppliersAsync();
-            ViewBag.Suppliers = new SelectList(suppliers, "SupplierId", "SupplierName");
+
+            ViewBag.Suppliers = new SelectList(
+                suppliers.Where(s => s.IsActive),
+                "SupplierId",
+                "CompanyName"
+            );
 
             return View(model);
         }
@@ -48,7 +56,12 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             if (!ModelState.IsValid)
             {
                 var suppliers = await _supplierService.GetAllSuppliersAsync();
-                ViewBag.Suppliers = new SelectList(suppliers, "SupplierId", "SupplierName");
+
+                ViewBag.Suppliers = new SelectList(
+                    suppliers.Where(s => s.IsActive),
+                    "SupplierId",
+                    "CompanyName"
+                );
                 return View(model);
             }
 

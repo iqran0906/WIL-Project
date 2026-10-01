@@ -1,0 +1,146 @@
+@*
+    Purpose: Recent Activity page: the user's actions grouped by day, newest first.
+    Authors: ST10068525 (new file, not yet committed)
+*@
+@model IReadOnlyList<FMCGEnterpriseManagementSystem.Models.ActivityLog>
+
+@{
+    ViewData["Title"] = "Recent Activity";
+
+    var showEveryone = ViewBag.ShowEveryone == true;
+    var canViewEveryone = ViewBag.CanViewEveryone == true;
+
+    // Icon per area of the system
+    string IconFor(string category) => category switch
+    {
+        "Account" => "bi-person-check",
+        "Settings" => "bi-gear",
+        "Customers" => "bi-people",
+        "Suppliers" => "bi-truck",
+        "Products" => "bi-box-seam",
+        "Inventory" => "bi-boxes",
+        "Employees" => "bi-person-badge",
+        "Sales Reps" => "bi-briefcase",
+        "User Accounts" => "bi-person-gear",
+        "Quotes" => "bi-file-earmark-text",
+        "Invoices" => "bi-receipt",
+        "Payments" => "bi-cash-coin",
+        "Notifications" => "bi-bell",
+        "Reports" => "bi-bar-chart",
+        _ => "bi-clock-history"
+    };
+
+    string DayHeading(DateTime localDate) =>
+        localDate.Date == DateTime.Today ? "Today"
+        : localDate.Date == DateTime.Today.AddDays(-1) ? "Yesterday"
+        : localDate.ToString("dddd, dd MMMM yyyy");
+}
+
+<style>
+    .activity-day {
+        color: #c3c2b7;
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin: 1.5rem 0 0.5rem;
+    }
+
+    .activity-item {
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+        padding: 12px 0;
+    }
+
+        .activity-item + .activity-item {
+            border-top: 1px solid #e9ecef;
+        }
+
+    .activity-icon {
+        width: 38px;
+        height: 38px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        background-color: #357383;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .activity-time {
+        color: #6c757d;
+        font-size: 0.8rem;
+        white-space: nowrap;
+    }
+</style>
+
+<div class="px-2 py-3">
+
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
+        <div>
+            <h2 class="text-white fw-bold mb-0">Recent Activity</h2>
+            <p class="text-white-50 mb-0 small">
+                @(showEveryone ? "Everything users have done in the system" : "Everything you have done in the system"),
+                newest first (last @ViewBag.MaxItems).
+            </p>
+        </div>
+
+        @if (canViewEveryone)
+        {
+            <div class="btn-group" role="group" aria-label="Whose activity">
+                <a asp-action="Index" class="btn btn-sm @(showEveryone ? "btn-outline-light" : "btn-light")">My activity</a>
+                <a asp-action="Index" asp-route-scope="all" class="btn btn-sm @(showEveryone ? "btn-light" : "btn-outline-light")">All users</a>
+            </div>
+        }
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="content-card text-center py-5" style="min-height: 0;">
+            <i class="bi bi-clock-history fs-1 text-muted d-block mb-2"></i>
+            <h5 class="fw-bold" style="color: #1c323d;">No activity yet</h5>
+            <p class="text-muted mb-0">Things you do, such as creating invoices, recording payments or exporting reports, will appear here.</p>
+        </div>
+    }
+    else
+    {
+        @foreach (var day in Model.GroupBy(a => a.Timestamp.ToLocalTime().Date))
+        {
+            <div class="activity-day">@DayHeading(day.Key)</div>
+
+            <div class="content-card py-2" style="min-height: 0; margin-bottom: 0;">
+                @foreach (var activity in day)
+                {
+                    <div class="activity-item">
+                        <div class="activity-icon" aria-hidden="true">
+                            <i class="bi @IconFor(activity.Category)"></i>
+                        </div>
+
+                        <div class="flex-grow-1">
+                            <div class="fw-semibold" style="color: #1c323d;">
+                                @activity.Description
+                                <span class="badge bg-light text-secondary border ms-1">@activity.Category</span>
+                            </div>
+
+                            @if (!string.IsNullOrWhiteSpace(activity.Details))
+                            {
+                                <div class="text-muted small">@activity.Details</div>
+                            }
+
+                            @if (showEveryone)
+                            {
+                                <div class="text-muted small"><i class="bi bi-person me-1"></i>@activity.UserName</div>
+                            }
+                        </div>
+
+                        <div class="activity-time" title="@activity.Timestamp.ToLocalTime().ToString("dd MMM yyyy HH:mm:ss")">
+                            @activity.Timestamp.ToLocalTime().ToString("HH:mm")
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    }
+</div>

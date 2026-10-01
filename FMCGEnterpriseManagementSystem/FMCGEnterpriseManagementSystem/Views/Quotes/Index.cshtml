@@ -1,4 +1,8 @@
-﻿@model IEnumerable<FMCGEnterpriseManagementSystem.Models.Quote>
+@*
+    Purpose: Quotes list page (table with search / filters and actions).
+    Authors: Naseeha27, Sayali-St10458649, ST10068525 (from git history)
+*@
+@model IEnumerable<FMCGEnterpriseManagementSystem.Models.Quote>
 
 @{
     ViewData["Title"] = "Quotes";
@@ -31,6 +35,7 @@
                 Create, manage and convert customer quotations.
             </p>
         </div>
+    }
 
         <a asp-controller="Quotes"
            asp-action="Create"

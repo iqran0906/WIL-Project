@@ -1,4 +1,8 @@
-﻿@model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.Reports.InventoryReportViewModel>
+﻿@*
+    Purpose: Inventory report page.
+    Authors: iqran0906 (from git history)
+*@
+@model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.Reports.InventoryReportViewModel>
 
 @{
     ViewData["Title"] = "Inventory Report";
@@ -10,7 +14,7 @@
             <h2>Inventory Report</h2>
             <p class="text-muted">Current stock levels, values and expiry information.</p>
         </div>
-        <a asp-action="Index" class="btn btn-outline-secondary">Back to Reports</a>
+        <partial name="_ReportToolbar" model="@("InventoryReport")" />
     </div>
 
     <div class="card shadow-sm">

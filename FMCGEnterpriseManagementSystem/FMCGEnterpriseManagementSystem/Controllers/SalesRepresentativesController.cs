@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.Services.Interfaces;
+﻿// Purpose: Controller for the sales representatives pages and form submissions.
+// Authors: iqran0906 (from git history)
+
+using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -45,27 +48,10 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            SalesRepresentativeViewModel model)
+     SalesRepresentativeViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                await LoadEligibleEmployeesAsync(
-                    model.EmployeeID);
-
-                return View(model);
-            }
-
-            var codeExists =
-                await _salesRepresentativeService
-                    .SalesRepCodeExistsAsync(
-                        model.SalesRepCode);
-
-            if (codeExists)
-            {
-                ModelState.AddModelError(
-                    nameof(model.SalesRepCode),
-                    "This sales representative code is already in use.");
-
                 await LoadEligibleEmployeesAsync(
                     model.EmployeeID);
 

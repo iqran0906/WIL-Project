@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿// Purpose: Data and validation rules for the employee pages and forms.
+// Authors: iqran0906 (from git history)
+
+using System.ComponentModel.DataAnnotations;
 
 namespace FMCGEnterpriseManagementSystem.ViewModels
 {

@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.DTOs;
+﻿// Purpose: Observer pattern: saves notifications as in-app alerts.
+// Authors: Sayali-St10458649 (from git history)
+
+using FMCGEnterpriseManagementSystem.DTOs;
 using FMCGEnterpriseManagementSystem.Factories;
 using FMCGEnterpriseManagementSystem.Observers.Interfaces;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;

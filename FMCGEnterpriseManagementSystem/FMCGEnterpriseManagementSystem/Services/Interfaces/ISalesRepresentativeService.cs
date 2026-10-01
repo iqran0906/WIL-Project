@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.Models;
+﻿// Purpose: Contract (interface) for the sales representative service.
+// Authors: iqran0906 (from git history)
+
+using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.ViewModels;
 
 namespace FMCGEnterpriseManagementSystem.Services.Interfaces

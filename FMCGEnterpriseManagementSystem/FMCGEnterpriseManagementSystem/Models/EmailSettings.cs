@@ -1,4 +1,7 @@
-﻿namespace FMCGEnterpriseManagementSystem.Models
+﻿// Purpose: SMTP email settings read from configuration (appsettings / user secrets).
+// Authors: Sayali-St10458649 (from git history)
+
+namespace FMCGEnterpriseManagementSystem.Models
 {
     public class EmailSettings
     {

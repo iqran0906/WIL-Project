@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.Enums;
+﻿// Purpose: Factory pattern: returns the PDF or Excel export strategy for a requested format.
+// Authors: Sayali-St10458649 (from git history)
+
+using FMCGEnterpriseManagementSystem.Enums;
 using FMCGEnterpriseManagementSystem.Strategies;
 using FMCGEnterpriseManagementSystem.Strategies.Interfaces;
 

@@ -1,4 +1,8 @@
-﻿@model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.Reports.SalesVatReportViewModel>
+﻿@*
+    Purpose: Sales Vat report page.
+    Authors: iqran0906 (from git history)
+*@
+@model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.Reports.SalesVatReportViewModel>
 
 @{
     ViewData["Title"] = "Sales VAT Report";
@@ -10,10 +14,10 @@
             <h2>Sales VAT Report</h2>
             <p class="text-muted">Invoice sales values and recorded VAT amounts.</p>
         </div>
-        <a asp-action="Index" class="btn btn-outline-secondary">Back to Reports</a>
+        <partial name="_ReportToolbar" model="@("SalesVatReport")" />
     </div>
 
-    <form method="get" class="row g-3 mb-4">
+    <form method="get" class="row g-3 mb-4 no-print">
         <div class="col-md-4">
             <label class="form-label">Start Date</label>
             <input type="date" name="startDate"
@@ -31,6 +35,11 @@
             <a asp-action="SalesVatReport" class="btn btn-outline-secondary">Clear</a>
         </div>
     </form>
+
+    @if (ViewBag.DateError != null)
+    {
+        <div class="alert alert-danger"><i class="bi bi-exclamation-triangle me-1"></i>@ViewBag.DateError</div>
+    }
 
     <div class="card shadow-sm">
         <div class="card-body">

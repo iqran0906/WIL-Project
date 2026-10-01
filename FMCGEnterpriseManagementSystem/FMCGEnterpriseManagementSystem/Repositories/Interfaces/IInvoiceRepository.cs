@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.Models;
+﻿// Purpose: Contract (interface) for invoice data access.
+// Authors: Sayali-St10458649 (from git history)
+
+using FMCGEnterpriseManagementSystem.Models;
 
 namespace FMCGEnterpriseManagementSystem.Repositories.Interfaces
 {
@@ -9,6 +12,6 @@ namespace FMCGEnterpriseManagementSystem.Repositories.Interfaces
         Task<Invoice> AddAsync(Invoice invoice);
         Task UpdateAsync(Invoice invoice);
         Task DeleteAsync(int id);
-        Task<string> GetNextInvoiceNumberAsync();
+        Task<string> GetNextInvoiceNumberAsync(string prefix = "ED");
     }
 }
