@@ -13,6 +13,8 @@ namespace FMCGEnterpriseManagementSystem.Repositories.Interfaces
         Task<Notification> GetByIdAsync(int id);
         Task<List<Notification>> GetAllAsync();
         Task<List<Notification>> GetUnreadAsync();
+
+        Task<int> GetUnreadCountAsync();
         Task<List<Notification>> GetByTypeAsync(NotificationType type);
         Task MarkAsReadAsync(int id);
         Task MarkEmailSentAsync(int id);

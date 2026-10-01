@@ -63,6 +63,10 @@ namespace FMCGEnterpriseManagementSystem.Services
             await _notificationRepository.MarkAsReadAsync(id);
         }
 
+        public async Task<int> GetUnreadCountAsync()
+        {
+            return await _notificationRepository.GetUnreadCountAsync();
+        }
         public async Task NotifyLowStockAsync(string productName, int currentQuantity, int threshold)
         {
             await _inventorySubject.NotifyLowStockAsync(productName, currentQuantity, threshold);

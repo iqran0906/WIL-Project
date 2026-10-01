@@ -14,6 +14,8 @@ namespace FMCGEnterpriseManagementSystem.Services.Interfaces
         Task<List<NotificationViewModel>> GetUnreadAsync();
         Task MarkAsReadAsync(int id);
 
+        Task<int> GetUnreadCountAsync();
+
         Task NotifyLowStockAsync(string productName, int currentQuantity, int threshold);
         Task NotifyNewItemAddedAsync(string productName, int productId);
         Task NotifyNewCustomerAsync(string customerName, int customerId);
