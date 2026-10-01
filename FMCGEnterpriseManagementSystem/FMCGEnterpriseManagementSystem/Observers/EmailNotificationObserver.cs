@@ -25,36 +25,42 @@ namespace FMCGEnterpriseManagementSystem.Observers
             _settingsService = settingsService;
         }
 
-        public async Task HandleAsync(NotificationDto notificationDto)
+            public async Task HandleAsync(NotificationDto notificationDto)
         {
-            var settings = await _settingsService.GetAsync();
-
-            // Administrators can switch email alerts off on the Settings page
-            if (!settings.EmailNotificationsEnabled)
+            try
             {
-                return;
-            }
+                var settings = await _settingsService.GetAsync();
 
-            // Send to the address chosen in Settings, otherwise the default sender/admin inbox
-            var recipientEmail = string.IsNullOrWhiteSpace(settings.NotificationEmail)
-                ? _emailSettings.SenderEmail
-                : settings.NotificationEmail;
-
-            using (var message = new MailMessage())
-            {
-                message.From = new MailAddress(_emailSettings.SenderEmail, _emailSettings.SenderName);
-                message.To.Add(recipientEmail);
-                message.Subject = notificationDto.Title;
-                message.Body = notificationDto.Message;
-                message.IsBodyHtml = false;
-
-                using (var client = new SmtpClient(_emailSettings.SmtpServer, _emailSettings.SmtpPort))
+                // Administrators can switch email alerts off on the Settings page
+                if (!settings.EmailNotificationsEnabled)
                 {
-                    client.Credentials = new NetworkCredential(_emailSettings.Username, _emailSettings.Password);
-                    client.EnableSsl = _emailSettings.EnableSsl;
-
-                    await client.SendMailAsync(message);
+                    return;
                 }
+
+                // Send to the address chosen in Settings, otherwise the default sender/admin inbox
+                var recipientEmail = string.IsNullOrWhiteSpace(settings.NotificationEmail)
+                    ? _emailSettings.SenderEmail
+                    : settings.NotificationEmail;
+
+                using (var message = new MailMessage())
+                {
+                    message.From = new MailAddress(_emailSettings.SenderEmail, _emailSettings.SenderName);
+                    message.To.Add(recipientEmail);
+                    message.Subject = notificationDto.Title;
+                    message.Body = notificationDto.Message;
+                    message.IsBodyHtml = false;
+
+                    using (var client = new SmtpClient(_emailSettings.SmtpServer, _emailSettings.SmtpPort))
+                    {
+                        client.Credentials = new NetworkCredential(_emailSettings.Username, _emailSettings.Password);
+                        client.EnableSsl = _emailSettings.EnableSsl;
+
+                        await client.SendMailAsync(message);
+                    }
+                }
+            }
+            catch (Exception)
+            {
             }
         }
     }

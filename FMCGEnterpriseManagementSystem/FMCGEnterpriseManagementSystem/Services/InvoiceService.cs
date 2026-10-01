@@ -15,15 +15,19 @@ namespace FMCGEnterpriseManagementSystem.Services
         private readonly IInventoryRepository _inventoryRepository;
         private readonly ISettingsService _settingsService;
 
+        private readonly INotificationService _notificationService;
+
         public InvoiceService(
             IInvoiceRepository invoiceRepository,
             IProductRepository productRepository,
             IInventoryRepository inventoryRepository,
+            INotificationService notificationService,
             ISettingsService settingsService)
         {
             _invoiceRepository = invoiceRepository;
             _productRepository = productRepository;
             _inventoryRepository = inventoryRepository;
+            _notificationService = notificationService;
             _settingsService = settingsService;
         }
 
@@ -92,7 +96,11 @@ namespace FMCGEnterpriseManagementSystem.Services
 
             var saved = await _invoiceRepository.AddAsync(invoice);
 
-            return await GetByIdAsync(saved.InvoiceId);
+            var result = await GetByIdAsync(saved.InvoiceId);
+
+            await _notificationService.NotifyNewInvoiceAsync(result.InvoiceNumber, result.InvoiceId, result.CustomerName);
+
+            return result;
         }
 
         public async Task<InvoiceViewModel> GetByIdAsync(int id)

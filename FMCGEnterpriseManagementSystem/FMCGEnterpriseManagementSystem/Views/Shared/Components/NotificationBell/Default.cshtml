@@ -1,0 +1,11 @@
+﻿@model int
+
+<a asp-controller="Notifications" asp-action="Index" class="text-white text-decoration-none position-relative">
+    <i class="bi bi-bell fs-4" style="cursor: pointer;"></i>
+    @if (Model > 0)
+    {
+        <span class="position-absolute badge rounded-pill bg-danger" style="top: -5px; right: -8px; font-size: 0.65rem;">
+            @Model
+        </span>
+    }
+</a>

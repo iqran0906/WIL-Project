@@ -14,11 +14,15 @@ namespace FMCGEnterpriseManagementSystem.Services.Interfaces
         Task<List<NotificationViewModel>> GetUnreadAsync();
         Task MarkAsReadAsync(int id);
 
+        Task<int> GetUnreadCountAsync();
+
         Task NotifyLowStockAsync(string productName, int currentQuantity, int threshold);
         Task NotifyNewItemAddedAsync(string productName, int productId);
         Task NotifyNewCustomerAsync(string customerName, int customerId);
         Task NotifyNewInvoiceAsync(string invoiceNumber, int invoiceId, string customerName);
         Task NotifyQuoteExpiredAsync(string quoteNumber, int quoteId, string customerName);
         Task NotifyOverduePaymentAsync(string invoiceNumber, int invoiceId, string customerName, decimal amountDue);
+
+        Task NotifyNewQuoteAsync(string quoteNumber, int quoteId, string customerName);
     }
 }

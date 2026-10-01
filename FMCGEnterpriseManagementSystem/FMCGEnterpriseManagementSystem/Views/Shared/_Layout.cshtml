@@ -952,15 +952,8 @@
 
 
                             <!-- NOTIFICATIONS -->
-                            <a asp-controller="Notifications"
-                               asp-action="Index"
-                               class="text-white text-decoration-none"
-                               title="Notifications">
-
-                                <i class="bi bi-bell fs-4"
-                                   style="cursor:pointer;"></i>
-
-                            </a>
+                            @await Component.InvokeAsync("NotificationBell")
+                           
 
 
                             <!-- USER PROFILE -->
