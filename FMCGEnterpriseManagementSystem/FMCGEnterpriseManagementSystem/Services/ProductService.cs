@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.Models;
+﻿// Purpose: Business logic for product.
+// Authors: iqran0906, Maseeha17 (from git history)
+
+using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;
@@ -9,11 +12,12 @@ namespace FMCGEnterpriseManagementSystem.Services
     public class ProductService : IProductService
     {
         private readonly IProductRepository _repository;
-        private const decimal VatRate = 0.15m;
+        private readonly ISettingsService _settingsService;
 
-        public ProductService(IProductRepository repository)
+        public ProductService(IProductRepository repository, ISettingsService settingsService)
         {
             _repository = repository;
+            _settingsService = settingsService;
         }
 
         public async Task<IEnumerable<ProductViewModel>> GetAllProductsAsync()
@@ -50,7 +54,7 @@ namespace FMCGEnterpriseManagementSystem.Services
 
             decimal costIncVat = model.CostIncVat > 0
                 ? model.CostIncVat
-                : Math.Round(model.CostExVat * (1 + VatRate), 2);
+                : Math.Round(model.CostExVat * (1 + await _settingsService.GetVatRateAsync()), 2);
 
             var entity = new Product
             {
@@ -68,6 +72,7 @@ namespace FMCGEnterpriseManagementSystem.Services
             };
 
             await _repository.AddAsync(entity);
+            await _repository.SaveChangesAsync();
         }
 
         public async Task UpdateProductAsync(ProductViewModel model)
@@ -77,7 +82,7 @@ namespace FMCGEnterpriseManagementSystem.Services
 
             decimal costIncVat = model.CostIncVat > 0
                 ? model.CostIncVat
-                : Math.Round(model.CostExVat * (1 + VatRate), 2);
+                : Math.Round(model.CostExVat * (1 + await _settingsService.GetVatRateAsync()), 2);
 
             existingEntity.SupplierId = model.SupplierId;
             existingEntity.ProductName = model.ProductName;
@@ -90,17 +95,42 @@ namespace FMCGEnterpriseManagementSystem.Services
             existingEntity.UpdatedAt = DateTime.UtcNow;
 
             await _repository.UpdateAsync(existingEntity);
+            await _repository.SaveChangesAsync();
         }
 
         public async Task DeleteProductAsync(int id)
         {
-            await _repository.DeleteAsync(id);
+            var product = await _repository.GetByIdAsync(id);
+
+            if (product == null)
+                return;
+
+            product.IsActive = false;
+            product.UpdatedAt = DateTime.UtcNow;
+
+            await _repository.UpdateAsync(product);
+            await _repository.SaveChangesAsync();
+        }
+
+        public async Task ActivateProductAsync(int id)
+        {
+            var product = await _repository.GetByIdAsync(id);
+
+            if (product == null)
+                return;
+
+            product.IsActive = true;
+            product.UpdatedAt = DateTime.UtcNow;
+
+            await _repository.UpdateAsync(product);
+            await _repository.SaveChangesAsync();
         }
 
         private static ProductViewModel MapToViewModel(Product p) => new()
         {
             ProductId = p.ProductId,
             SupplierId = p.SupplierId,
+            SupplierName = p.Supplier?.CompanyName ?? "Not Available",
             ProductCode = p.ProductCode,
             ProductName = p.ProductName,
             Description = p.Description,

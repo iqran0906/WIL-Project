@@ -1,0 +1,93 @@
+@*
+    Purpose: Shared product-lines table used on New Quote and New Invoice.
+    Authors: ST10068525 (new file, not yet committed)
+*@
+@* Product lines table for New Quote / New Invoice. Behaviour lives in wwwroot/js/line-items.js *@
+@model FMCGEnterpriseManagementSystem.ViewModels.LineItemsEditorViewModel
+
+@{
+    var productsJson = System.Text.Json.JsonSerializer.Serialize(
+        Model.Products.Select(p => new
+        {
+            id = p.ProductId,
+            code = p.ProductCode,
+            name = p.ProductName,
+            price = p.SellingPrice
+        }));
+
+    var itemsJson = System.Text.Json.JsonSerializer.Serialize(
+        Model.Items.Select(i => new
+        {
+            productId = i.ProductId,
+            quantity = i.Quantity,
+            unitPrice = i.UnitPrice,
+            discountPercent = i.DiscountPercent,
+            vatCategory = i.VatCategory
+        }));
+}
+
+<script type="application/json" id="productsData">@Html.Raw(productsJson)</script>
+<script type="application/json" id="initialItems">@Html.Raw(itemsJson)</script>
+
+<div class="table-responsive border rounded bg-light p-2 mb-2">
+    <table class="table align-middle m-0 bg-white shadow-sm rounded" style="min-width: 760px;">
+        <thead class="table-secondary text-secondary small">
+            <tr>
+                <th style="width: 10%;">Qty</th>
+                <th style="width: 32%;">Product</th>
+                <th style="width: 14%;">Unit Price (R)</th>
+                <th style="width: 11%;">Disc %</th>
+                <th style="width: 15%;">VAT</th>
+                <th style="width: 12%;" class="text-end">Total</th>
+                <th style="width: 6%;"></th>
+            </tr>
+        </thead>
+        <tbody id="lineItemsBody">
+            @* rows are added by line-items.js *@
+        </tbody>
+    </table>
+    <div class="p-2">
+        <button type="button" id="addItemBtn" class="btn btn-sm btn-link text-decoration-none text-dark fw-bold p-0">
+            <i class="bi bi-plus-lg me-1"></i>Add Item
+        </button>
+    </div>
+</div>
+
+<div id="itemsError" class="text-danger small mb-3 d-none" role="alert"></div>
+<span asp-validation-for="Items" class="text-danger small d-block mb-2"></span>
+
+@* Server-side errors for individual rows (rows are built by script, so they have no inline spans) *@
+@{
+    var itemErrors = ViewContext.ViewData.ModelState
+        .Where(entry => entry.Key.StartsWith("Items[") && entry.Value!.Errors.Count > 0)
+        .SelectMany(entry =>
+        {
+            var match = System.Text.RegularExpressions.Regex.Match(entry.Key, @"^Items\[(\d+)\]");
+            var itemNumber = match.Success ? int.Parse(match.Groups[1].Value) + 1 : 0;
+
+            return entry.Value!.Errors.Select(error => new
+            {
+                Item = itemNumber,
+                Message = error.ErrorMessage.StartsWith("Item ") ? error.ErrorMessage : $"Item {itemNumber}: {error.ErrorMessage}"
+            });
+        })
+        .OrderBy(e => e.Item)
+        .ToList();
+}
+
+@if (itemErrors.Any())
+{
+    <ul class="text-danger small mb-3 ps-3" role="alert">
+        @foreach (var error in itemErrors)
+        {
+            <li>@error.Message</li>
+        }
+    </ul>
+}
+
+@if (!Model.Products.Any())
+{
+    <div class="alert alert-warning small">
+        There are no active products yet. Add products before creating this document.
+    </div>
+}

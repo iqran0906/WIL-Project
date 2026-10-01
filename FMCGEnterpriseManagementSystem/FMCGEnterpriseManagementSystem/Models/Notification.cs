@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Purpose: Database entity: notification (maps to a table).
+// Authors: Sayali-St10458649, Naseeha27 (from git history)
+
+using System;
 
 namespace FMCGEnterpriseManagementSystem.Models
 {

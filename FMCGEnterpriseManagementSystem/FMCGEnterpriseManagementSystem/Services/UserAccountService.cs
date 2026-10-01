@@ -1,4 +1,8 @@
-﻿using FMCGEnterpriseManagementSystem.Data;
+﻿// Purpose: Business logic for user account.
+// Authors: iqran0906 (from git history)
+// Uses: ASP.NET Core Identity (Microsoft, MIT) https://learn.microsoft.com/aspnet/core/security/authentication/identity
+
+using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -56,6 +60,20 @@ namespace FMCGEnterpriseManagementSystem.Services
                 role != "SalesRepresentative")
             {
                 return false;
+            }
+
+            if (role == "SalesRepresentative")
+            {
+                var salesRepresentative = await _context.SalesRepresentatives
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(sr =>
+                        sr.EmployeeID == employeeId &&
+                        sr.IsActive);
+
+                if (salesRepresentative == null)
+                {
+                    return false;
+                }
             }
 
             var employee = await _context.Employees

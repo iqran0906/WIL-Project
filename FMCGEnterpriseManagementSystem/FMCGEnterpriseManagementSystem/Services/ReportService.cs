@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
+﻿// Purpose: Business logic for report.
+// Authors: iqran0906 (from git history)
+
+using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels.Reports;
 

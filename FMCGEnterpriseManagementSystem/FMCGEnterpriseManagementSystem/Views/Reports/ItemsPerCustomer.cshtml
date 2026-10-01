@@ -1,4 +1,8 @@
-﻿@model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.Reports.ItemsPerCustomerReportViewModel>
+﻿@*
+    Purpose: Items Per Customer report page.
+    Authors: iqran0906 (from git history)
+*@
+@model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.Reports.ItemsPerCustomerReportViewModel>
 
 @{
     ViewData["Title"] = "Items Per Customer";
@@ -10,10 +14,10 @@
             <h2>Items Per Customer</h2>
             <p class="text-muted">Product quantities purchased by each customer.</p>
         </div>
-        <a asp-action="Index" class="btn btn-outline-secondary">Back to Reports</a>
+        <partial name="_ReportToolbar" model="@("ItemsPerCustomer")" />
     </div>
 
-    <form method="get" class="row g-3 mb-4">
+    <form method="get" class="row g-3 mb-4 no-print">
         <div class="col-md-4">
             <label class="form-label">Start Date</label>
             <input type="date" name="startDate"
@@ -31,6 +35,11 @@
             <a asp-action="ItemsPerCustomer" class="btn btn-outline-secondary">Clear</a>
         </div>
     </form>
+
+    @if (ViewBag.DateError != null)
+    {
+        <div class="alert alert-danger"><i class="bi bi-exclamation-triangle me-1"></i>@ViewBag.DateError</div>
+    }
 
     <div class="card shadow-sm">
         <div class="card-body">

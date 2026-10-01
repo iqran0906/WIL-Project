@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.Models;
+﻿// Purpose: Business logic for sales representative.
+// Authors: iqran0906 (from git history)
+
+using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;
@@ -85,7 +88,7 @@ namespace FMCGEnterpriseManagementSystem.Services
         }
 
         public async Task<bool> CreateAsync(
-            SalesRepresentativeViewModel model)
+     SalesRepresentativeViewModel model)
         {
             var existingEmployeeSalesRep =
                 await _salesRepresentativeRepository
@@ -96,28 +99,77 @@ namespace FMCGEnterpriseManagementSystem.Services
                 return false;
             }
 
-            var codeExists =
-                await _salesRepresentativeRepository
-                    .SalesRepCodeExistsAsync(
-                        model.SalesRepCode.Trim());
+            // Generate the next Sales Representative code automatically.
+            // Example: SR-001, SR-002, SR-003...
+            var allSalesRepresentatives =
+                await _salesRepresentativeRepository.GetAllAsync();
 
-            if (codeExists)
+            var highestNumber = 0;
+
+            foreach (var salesRep in allSalesRepresentatives)
             {
-                return false;
+                if (string.IsNullOrWhiteSpace(salesRep.SalesRepCode))
+                {
+                    continue;
+                }
+
+                if (!salesRep.SalesRepCode.StartsWith(
+                        "SR-",
+                        StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                var numberPart =
+                    salesRep.SalesRepCode.Substring(3);
+
+                if (int.TryParse(numberPart, out var number) &&
+                    number > highestNumber)
+                {
+                    highestNumber = number;
+                }
             }
+
+            var nextNumber = highestNumber + 1;
+
+            string generatedCode;
+
+            do
+            {
+                generatedCode = $"SR-{nextNumber:D3}";
+
+                var codeExists =
+                    await _salesRepresentativeRepository
+                        .SalesRepCodeExistsAsync(generatedCode);
+
+                if (!codeExists)
+                {
+                    break;
+                }
+
+                nextNumber++;
+
+            } while (true);
 
             var salesRepresentative =
                 new SalesRepresentative
                 {
                     EmployeeID = model.EmployeeID,
-                    SalesRepCode = model.SalesRepCode.Trim(),
+
+                    SalesRepCode = generatedCode,
+
                     Area = string.IsNullOrWhiteSpace(model.Area)
                         ? null
                         : model.Area.Trim(),
+
                     Salary = model.Salary,
+
                     CommissionRate = model.CommissionRate,
+
                     SalesTarget = model.SalesTarget,
+
                     IsActive = true,
+
                     CreatedAt = DateTime.UtcNow
                 };
 

@@ -1,4 +1,7 @@
-﻿namespace FMCGEnterpriseManagementSystem.ViewModels.Reports
+﻿// Purpose: One row of the age analysis report.
+// Authors: iqran0906 (from git history)
+
+namespace FMCGEnterpriseManagementSystem.ViewModels.Reports
 {
     public class AgeAnalysisReportViewModel
     {

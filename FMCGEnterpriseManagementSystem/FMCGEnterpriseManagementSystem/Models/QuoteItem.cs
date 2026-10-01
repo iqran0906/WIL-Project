@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿// Purpose: Database entity: quote item (maps to a table).
+// Authors: Naseeha27, Sayali-St10458649 (from git history)
+
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FMCGEnterpriseManagementSystem.Models
@@ -12,13 +15,12 @@ namespace FMCGEnterpriseManagementSystem.Models
         public int QuoteId { get; set; }
 
         [ForeignKey("QuoteId")]
-        public Quote Quote { get; set; }
-
+        public Quote? Quote { get; set; }
         [Required]
         public int ProductId { get; set; }
 
         [ForeignKey("ProductId")]
-        public Product Product { get; set; }
+        public Product? Product { get; set; }
 
         [Required]
         public int Quantity { get; set; }

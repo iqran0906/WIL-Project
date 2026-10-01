@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.DTOs;
+﻿// Purpose: Turns an export result into a downloadable file response.
+// Authors: Sayali-St10458649 (from git history)
+
+using FMCGEnterpriseManagementSystem.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FMCGEnterpriseManagementSystem.Helpers

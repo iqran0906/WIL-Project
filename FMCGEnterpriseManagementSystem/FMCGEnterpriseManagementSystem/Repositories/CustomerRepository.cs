@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.Data;
+﻿// Purpose: Repository pattern: database queries for customer.
+// Authors: Naseeha27, Maseeha17 (from git history)
+
+using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -16,12 +19,17 @@ namespace FMCGEnterpriseManagementSystem.Repositories
 
         public async Task<IEnumerable<Customer>> GetAllAsync()
         {
-            return await _context.Customers.ToListAsync();
+            return await _context.Customers
+                .Include(c => c.SalesRepresentative)
+                    .ThenInclude(sr => sr.Employee)
+                .ToListAsync();
         }
 
         public async Task<Customer?> GetByIdAsync(int id)
         {
             return await _context.Customers
+                .Include(c => c.SalesRepresentative)
+                    .ThenInclude(sr => sr.Employee)
                 .FirstOrDefaultAsync(c => c.CustomerId == id);
         }
 

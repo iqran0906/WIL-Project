@@ -1,0 +1,81 @@
+@*
+    Purpose: Edit My Details form.
+    Authors: ST10068525 (new file, not yet committed)
+*@
+@model FMCGEnterpriseManagementSystem.ViewModels.EditProfileViewModel
+
+@{
+    ViewData["Title"] = "Edit My Details";
+}
+
+<div class="content-card">
+    <div class="d-flex align-items-center gap-3 mb-4 border-bottom pb-3">
+        <i class="bi bi-pencil-square fs-2" style="color: #357383;"></i>
+        <h2 class="fw-bold m-0" style="color: #1c323d;">Edit My Details</h2>
+    </div>
+
+    <form asp-controller="Profile" asp-action="Edit" method="post">
+
+        @Html.AntiForgeryToken()
+
+        <input asp-for="HasEmployeeRecord" type="hidden" />
+
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        @if (Model.HasEmployeeRecord)
+        {
+            <h5 class="fw-bold text-secondary mb-3">Personal Information</h5>
+
+            <div class="row g-3 mb-4">
+                <div class="col-12 col-md-6">
+                    <label asp-for="FirstName" class="form-label fw-bold"></label>
+                    <input asp-for="FirstName" class="form-control" placeholder="Enter your name" />
+                    <span asp-validation-for="FirstName" class="text-danger small"></span>
+                </div>
+                <div class="col-12 col-md-6">
+                    <label asp-for="LastName" class="form-label fw-bold"></label>
+                    <input asp-for="LastName" class="form-control" placeholder="Enter your surname" />
+                    <span asp-validation-for="LastName" class="text-danger small"></span>
+                </div>
+            </div>
+        }
+
+        <h5 class="fw-bold text-secondary mb-3">Contact Details</h5>
+
+        <div class="row g-3 mb-2">
+            <div class="col-12 col-md-6">
+                <label asp-for="Email" class="form-label fw-bold"></label>
+                <input asp-for="Email" class="form-control" placeholder="Enter your email address" autocomplete="email" />
+                <span asp-validation-for="Email" class="text-danger small"></span>
+                <div class="form-text">You use this email address to log in.</div>
+            </div>
+            <div class="col-12 col-md-6">
+                <label asp-for="ContactNumber" class="form-label fw-bold"></label>
+                <input asp-for="ContactNumber" class="form-control" placeholder="Enter your contact number" autocomplete="tel" />
+                <span asp-validation-for="ContactNumber" class="text-danger small"></span>
+            </div>
+        </div>
+
+        <p class="text-muted small mt-3 mb-4">
+            <i class="bi bi-info-circle me-1"></i>
+            Your role, employee number, job title and employment date can only be changed by an administrator.
+        </p>
+
+        <div class="d-flex flex-column flex-sm-row justify-content-end gap-2 border-top pt-3">
+            <a asp-controller="Home"
+               asp-action="UserProfile"
+               class="btn btn-link text-decoration-none text-secondary">
+                Cancel
+            </a>
+
+            <button type="submit" class="btn btn-custom-save">
+                Save Changes
+            </button>
+        </div>
+
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

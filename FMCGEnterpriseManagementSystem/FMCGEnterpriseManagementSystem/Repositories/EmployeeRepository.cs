@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.Data;
+﻿// Purpose: Repository pattern: database queries for employee.
+// Authors: iqran0906 (from git history)
+
+using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -44,6 +47,7 @@ namespace FMCGEnterpriseManagementSystem.Repositories
                     e.EmployeeNumber.Contains(keyword) ||
                     e.FirstName.Contains(keyword) ||
                     e.LastName.Contains(keyword) ||
+                    (e.FirstName + " " + e.LastName).Contains(keyword) ||
                     e.Email.Contains(keyword) ||
                     e.JobTitle.Contains(keyword))
                 .ToListAsync();

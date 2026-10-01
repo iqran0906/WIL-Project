@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.ViewModels;
+﻿// Purpose: Contract (interface) for the product service.
+// Authors: iqran0906, Maseeha17 (from git history)
+
+using FMCGEnterpriseManagementSystem.ViewModels;
 
 namespace FMCGEnterpriseManagementSystem.Services.Interfaces
 {
@@ -9,5 +12,6 @@ namespace FMCGEnterpriseManagementSystem.Services.Interfaces
         Task CreateProductAsync(ProductViewModel model);
         Task UpdateProductAsync(ProductViewModel model);
         Task DeleteProductAsync(int id);
+        Task ActivateProductAsync(int id);
     }
 }

@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿// Purpose: Database entity: product (maps to a table).
+// Authors: iqran0906, Maseeha17, Naseeha27 (from git history)
+
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FMCGEnterpriseManagementSystem.Models
@@ -33,6 +36,7 @@ namespace FMCGEnterpriseManagementSystem.Models
 
         [Required]
         [StringLength(50)]
+
         public string Category { get; set; } = string.Empty;
 
         public bool IsActive { get; set; } = true;
@@ -43,9 +47,9 @@ namespace FMCGEnterpriseManagementSystem.Models
         [ForeignKey("SupplierId")]
         public Supplier? Supplier { get; set; }
 
+        public Inventory? Inventory { get; set; }
+
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
-
-        public Inventory? Inventory { get; set; }
     }
 }

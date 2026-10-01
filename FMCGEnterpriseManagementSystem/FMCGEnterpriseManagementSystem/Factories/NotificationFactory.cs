@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.DTOs;
+﻿// Purpose: Factory pattern: builds notification messages for each notification type.
+// Authors: Sayali-St10458649 (from git history)
+
+using FMCGEnterpriseManagementSystem.DTOs;
 using FMCGEnterpriseManagementSystem.Models;
 
 namespace FMCGEnterpriseManagementSystem.Factories

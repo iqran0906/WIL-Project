@@ -1,4 +1,8 @@
-﻿using FMCGEnterpriseManagementSystem.Models;
+﻿// Purpose: Entity Framework database context: the tables (DbSets) and their relationships.
+// Authors: Naseeha27, Sayali-St10458649, iqran0906 (from git history)
+// Uses: ASP.NET Core Identity (Microsoft, MIT) https://learn.microsoft.com/aspnet/core/security/authentication/identity
+
+using FMCGEnterpriseManagementSystem.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,10 +29,16 @@ namespace FMCGEnterpriseManagementSystem.Data
         public DbSet<SalesRepresentative> SalesRepresentatives { get; set; }
         public DbSet<StockBatch> StockBatches { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<SystemSetting> SystemSettings { get; set; }
+        public DbSet<ActivityLog> ActivityLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            // Recent Activity is always read per user, newest first
+            modelBuilder.Entity<ActivityLog>()
+                .HasIndex(a => new { a.UserId, a.Timestamp });
 
             // Product decimal precision
             modelBuilder.Entity<Product>()
@@ -93,7 +103,7 @@ namespace FMCGEnterpriseManagementSystem.Data
             // Product -> Inventory
             modelBuilder.Entity<Inventory>()
                 .HasOne(i => i.Product)
-                .WithOne()
+                .WithOne(p => p.Inventory)
                 .HasForeignKey<Inventory>(i => i.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
 

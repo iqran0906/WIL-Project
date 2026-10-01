@@ -1,0 +1,44 @@
+@*
+    Purpose: PDF / Excel export, print and back buttons shown on every report.
+    Authors: ST10068525 (new file, not yet committed)
+*@
+@* Export / print buttons shown on every report.
+   Model = the report's action name, e.g. "SalesReport". *@
+@model string
+
+@{
+    var startDate = ViewBag.StartDate as string;
+    var endDate = ViewBag.EndDate as string;
+}
+
+<div class="d-flex flex-wrap gap-2 no-print">
+    <a asp-action="Export"
+       asp-route-report="@Model"
+       asp-route-format="pdf"
+       asp-route-startDate="@startDate"
+       asp-route-endDate="@endDate"
+       class="btn btn-outline-danger"
+       title="Download this report as a PDF">
+        <i class="bi bi-file-earmark-pdf me-1"></i> PDF
+    </a>
+
+    <a asp-action="Export"
+       asp-route-report="@Model"
+       asp-route-format="excel"
+       asp-route-startDate="@startDate"
+       asp-route-endDate="@endDate"
+       class="btn btn-outline-success"
+       title="Download this report as an Excel spreadsheet">
+        <i class="bi bi-file-earmark-excel me-1"></i> Excel
+    </a>
+
+    <button type="button"
+            class="btn btn-outline-dark"
+            onclick="window.print()"
+            title="Print this report">
+        <i class="bi bi-printer me-1"></i> Print
+    </button>
+
+    <a asp-action="Index" class="btn btn-outline-secondary">Back to Reports</a>
+</div>
+

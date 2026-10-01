@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.ViewModels;
+﻿// Purpose: Contract (interface) for the payment service.
+// Authors: Naseeha27, Sayali-St10458649 (from git history)
+
+using FMCGEnterpriseManagementSystem.ViewModels;
 
 namespace FMCGEnterpriseManagementSystem.Services.Interfaces
 {

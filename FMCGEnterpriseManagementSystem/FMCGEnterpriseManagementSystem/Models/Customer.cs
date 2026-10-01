@@ -1,4 +1,7 @@
-﻿namespace FMCGEnterpriseManagementSystem.Models
+﻿// Purpose: Database entity: customer (maps to a table).
+// Authors: Naseeha27, Maseeha17 (from git history)
+
+namespace FMCGEnterpriseManagementSystem.Models
 {
     public class Customer
     {
@@ -18,7 +21,7 @@
 
         public string PhysicalAddress { get; set; }
 
-        public string DeliveryAddress { get; set; }
+        public string? DeliveryAddress { get; set; }
 
         public string CustomerGroup { get; set; }
 
