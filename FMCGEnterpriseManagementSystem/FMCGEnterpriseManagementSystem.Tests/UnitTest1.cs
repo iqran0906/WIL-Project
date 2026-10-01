@@ -1,11 +1,20 @@
+using FMCGEnterpriseManagementSystem.Models;
+
 namespace FMCGEnterpriseManagementSystem.Tests
 {
-    public class UnitTest1
+    public class InvoiceTests
     {
         [Fact]
-        public void Test1()
+        public void NewInvoice_ShouldHaveDraftStatus()
         {
+            // Arrange
+            var invoice = new Invoice();
 
+            // Act
+            var status = invoice.Status;
+
+            // Assert
+            Assert.Equal("Draft", status);
         }
     }
 }
