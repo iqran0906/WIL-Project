@@ -11,10 +11,13 @@ namespace FMCGEnterpriseManagementSystem.Services
     public class CustomerService : ICustomerService
     {
         private readonly ICustomerRepository _customerRepository;
+        private readonly INotificationService _notificationService;
 
-        public CustomerService(ICustomerRepository customerRepository)
+        public CustomerService(ICustomerRepository customerRepository, INotificationService notificationService)
         {
             _customerRepository = customerRepository;
+            _notificationService = notificationService;
+
         }
 
         public async Task<IEnumerable<CustomerViewModel>> GetAllCustomersAsync(string? searchKeyword = null)
@@ -51,6 +54,7 @@ namespace FMCGEnterpriseManagementSystem.Services
             }
 
             await _customerRepository.AddAsync(customer);
+            await _notificationService.NotifyNewCustomerAsync($"{customer.Name} {customer.Surname}", customer.CustomerId);
         }
 
         public async Task UpdateCustomerAsync(CustomerViewModel model)
