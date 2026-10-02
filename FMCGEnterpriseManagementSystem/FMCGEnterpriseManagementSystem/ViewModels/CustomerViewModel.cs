@@ -23,9 +23,8 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
         [Required(ErrorMessage = "Cell number is required.")]
         public string CellNumber { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Email address is required.")]
         [EmailAddress(ErrorMessage = "Invalid email format.")]
-        public string Email { get; set; } = string.Empty;
+        public string? Email { get; set; }
 
         [Required(ErrorMessage = "Physical address is required.")]
         public string PhysicalAddress { get; set; } = string.Empty;
