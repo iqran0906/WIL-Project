@@ -24,10 +24,9 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
         [Display(Name = "Contact Number")]
         public string ContactNumber { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Email address is required.")]
         [EmailAddress(ErrorMessage = "Invalid email address format.")]
         [StringLength(150)]
-        public string Email { get; set; } = string.Empty;
+        public string? Email { get; set; }
 
         [Required(ErrorMessage = "Physical address is required.")]
         [StringLength(300, ErrorMessage = "Physical address cannot be longer than 300 characters.")]
