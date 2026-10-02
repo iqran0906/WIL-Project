@@ -1,4 +1,8 @@
-﻿using FMCGEnterpriseManagementSystem.Models;
+﻿// Purpose: Logs users in and out (only active accounts can log in).
+// Authors: iqran0906 (from git history)
+// Uses: ASP.NET Core Identity (Microsoft, MIT) https://learn.microsoft.com/aspnet/core/security/authentication/identity
+
+using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 
@@ -18,31 +22,24 @@ namespace FMCGEnterpriseManagementSystem.Services
         }
 
         public async Task<bool> LoginAsync(
-            string usernameOrEmail,
+            string email,
             string password,
             bool rememberMe)
         {
-            User? user;
-
-            if (usernameOrEmail.Contains("@"))
-            {
-                user = await _userManager.FindByEmailAsync(usernameOrEmail);
-            }
-            else
-            {
-                user = await _userManager.FindByNameAsync(usernameOrEmail);
-            }
+            var user =
+                await _userManager.FindByEmailAsync(email);
 
             if (user == null || !user.IsActive)
             {
                 return false;
             }
 
-            var result = await _signInManager.PasswordSignInAsync(
-                user,
-                password,
-                rememberMe,
-                lockoutOnFailure: true);
+            var result =
+                await _signInManager.PasswordSignInAsync(
+                    user,
+                    password,
+                    rememberMe,
+                    lockoutOnFailure: true);
 
             return result.Succeeded;
         }
@@ -52,18 +49,10 @@ namespace FMCGEnterpriseManagementSystem.Services
             await _signInManager.SignOutAsync();
         }
 
-        public async Task<bool> IsUserActiveAsync(string usernameOrEmail)
+        public async Task<bool> IsUserActiveAsync(string email)
         {
-            User? user;
-
-            if (usernameOrEmail.Contains("@"))
-            {
-                user = await _userManager.FindByEmailAsync(usernameOrEmail);
-            }
-            else
-            {
-                user = await _userManager.FindByNameAsync(usernameOrEmail);
-            }
+            var user =
+                await _userManager.FindByEmailAsync(email);
 
             return user != null && user.IsActive;
         }

@@ -1,4 +1,7 @@
-﻿namespace FMCGEnterpriseManagementSystem.Models
+﻿// Purpose: Database entity: supplier (maps to a table).
+// Authors: Naseeha27, Maseeha17 (from git history)
+
+namespace FMCGEnterpriseManagementSystem.Models
 {
     public class Supplier
     {
@@ -10,7 +13,7 @@
 
         public string ContactNumber { get; set; }
 
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         public string PhysicalAddress { get; set; }
 

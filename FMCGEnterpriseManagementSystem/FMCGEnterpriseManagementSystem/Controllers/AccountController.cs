@@ -1,6 +1,12 @@
-﻿using FMCGEnterpriseManagementSystem.Services.Interfaces;
+﻿// Purpose: Login, logout and access-denied pages.
+// Authors: iqran0906 (from git history)
+// Uses: ASP.NET Core Identity (Microsoft, MIT) https://learn.microsoft.com/aspnet/core/security/authentication/identity
+
+using FMCGEnterpriseManagementSystem.Services.Interfaces;
+using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
@@ -8,10 +14,17 @@ namespace FMCGEnterpriseManagementSystem.Controllers
     public class AccountController : Controller
     {
         private readonly IAuthService _authService;
+        private readonly IActivityService _activityService;
+        private readonly UserManager<User> _userManager;
 
-        public AccountController(IAuthService authService)
+        public AccountController(
+            IAuthService authService,
+            IActivityService activityService,
+            UserManager<User> userManager)
         {
             _authService = authService;
+            _activityService = activityService;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -37,19 +50,19 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             }
 
             var isActive =
-                await _authService.IsUserActiveAsync(model.UsernameOrEmail);
+                await _authService.IsUserActiveAsync(model.Email);
 
             if (!isActive)
             {
                 ModelState.AddModelError(
                     string.Empty,
-                    "Invalid login attempt.");
+                    "Invalid email address or password.");
 
                 return View(model);
             }
 
             var loggedIn = await _authService.LoginAsync(
-                model.UsernameOrEmail,
+                model.Email,
                 model.Password,
                 model.RememberMe);
 
@@ -57,9 +70,16 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             {
                 ModelState.AddModelError(
                     string.Empty,
-                    "Invalid username/email or password.");
+                    "Invalid email address or password.");
 
                 return View(model);
+            }
+
+            // Recent Activity (the user is not signed in on this request yet, so look them up)
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user != null)
+            {
+                await _activityService.LogAsync(user.Id, user.UserName, "Account", "Logged in");
             }
 
             return RedirectToAction("Dashboard", "Home");

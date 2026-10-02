@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.Models;
+﻿// Purpose: Contract (interface) for employee data access.
+// Authors: iqran0906 (from git history)
+
+using FMCGEnterpriseManagementSystem.Models;
 
 namespace FMCGEnterpriseManagementSystem.Repositories.Interfaces
 {
@@ -10,13 +13,19 @@ namespace FMCGEnterpriseManagementSystem.Repositories.Interfaces
 
         Task<Employee?> GetByEmployeeNumberAsync(string employeeNumber);
 
+        Task<IEnumerable<Employee>> SearchAsync(string keyword);
+
         Task AddAsync(Employee employee);
 
         Task UpdateAsync(Employee employee);
 
-        Task<bool> EmployeeNumberExistsAsync(string employeeNumber);
+        Task<bool> EmployeeNumberExistsAsync(
+            string employeeNumber,
+            string? excludeEmployeeId = null);
 
-        Task<bool> EmailExistsAsync(string email);
+        Task<bool> EmailExistsAsync(
+            string email,
+            string? excludeEmployeeId = null);
 
         Task SaveChangesAsync();
     }

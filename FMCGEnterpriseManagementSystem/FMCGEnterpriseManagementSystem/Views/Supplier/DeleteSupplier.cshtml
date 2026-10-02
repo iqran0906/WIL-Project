@@ -1,0 +1,43 @@
+﻿@*
+    Purpose: Confirmation page before removing a supplier.
+    Authors: Maseeha17 (from git history)
+*@
+@model FMCGEnterpriseManagementSystem.ViewModels.SupplierViewModel
+
+@{
+    ViewData["Title"] = "Delete Supplier";
+}
+
+<div class="content-card col-md-6 offset-md-3 py-4">
+    <h2 class="fw-bold mb-3" style="color: #dc3545;">Delete Supplier</h2>
+    <p class="text-muted mb-4">Are you sure you want to delete this supplier? This action cannot be undone.</p>
+
+    <div class="mb-4 p-3 bg-light rounded border">
+        <div class="row mb-2">
+            <div class="col-4 fw-bold">Company Name:</div>
+            <div class="col-8">@Model.CompanyName</div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-4 fw-bold">Contact Person:</div>
+            <div class="col-8">@Model.ContactPerson</div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-4 fw-bold">Telephone:</div>
+            <div class="col-8">@Model.ContactNumber</div>
+        </div>
+        <div class="row">
+            <div class="col-4 fw-bold">Email:</div>
+            <div class="col-8">@Model.Email</div>
+        </div>
+    </div>
+
+    <form asp-controller="Supplier" asp-action="DeleteSupplierConfirmed" asp-route-supplierId="@Model.SupplierId" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="SupplierId" />
+
+        <div class="d-flex justify-content-end gap-3">
+            <a asp-controller="Supplier" asp-action="SupplierList" class="btn btn-link text-decoration-none text-secondary align-self-center">Cancel</a>
+            <button type="submit" class="btn btn-danger px-4">Delete Supplier</button>
+        </div>
+    </form>
+</div>

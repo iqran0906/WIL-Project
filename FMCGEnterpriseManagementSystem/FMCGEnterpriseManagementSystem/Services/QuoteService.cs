@@ -1,5 +1,9 @@
-﻿using FMCGEnterpriseManagementSystem.Enums;
+﻿// Purpose: Business logic for quote.
+// Authors: Sayali-St10458649 (from git history)
+
+using FMCGEnterpriseManagementSystem.Enums;
 using FMCGEnterpriseManagementSystem.Models;
+using FMCGEnterpriseManagementSystem.Repositories;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 
@@ -8,18 +12,56 @@ namespace FMCGEnterpriseManagementSystem.Services
     public class QuoteService : IQuoteService
     {
         private readonly IQuoteRepository _quoteRepository;
+        private readonly IInvoiceRepository _invoiceRepository;
 
-        // Temporary flat VAT rate until VatHelper/VatSettings is merged from Invoices branch
         private const decimal VatRate = 0.15m;
 
-        public QuoteService(IQuoteRepository quoteRepository)
+        public QuoteService(IQuoteRepository quoteRepository, IInvoiceRepository invoiceRepository)
         {
             _quoteRepository = quoteRepository;
+            _invoiceRepository = invoiceRepository;
         }
 
         public async Task<IEnumerable<Quote>> GetAllQuotesAsync()
         {
             return await _quoteRepository.GetAllAsync();
+        }
+
+        public async Task<IEnumerable<Quote>> SearchQuotesAsync(
+            int? customerId,
+            DateTime? startDate,
+            DateTime? endDate,
+            QuoteStatus? status,
+            string? keyword)
+        {
+            var quotes = (await _quoteRepository.GetAllAsync()).AsEnumerable();
+
+            if (customerId.HasValue)
+                quotes = quotes.Where(q => q.CustomerId == customerId.Value);
+
+            if (startDate.HasValue)
+                quotes = quotes.Where(q => q.QuoteDate >= startDate.Value.Date);
+
+            // Include the whole end day, not just up to midnight
+            if (endDate.HasValue)
+                quotes = quotes.Where(q => q.QuoteDate < endDate.Value.Date.AddDays(1));
+
+            if (status.HasValue)
+                quotes = quotes.Where(q => q.Status == status.Value);
+
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                keyword = keyword.Trim();
+
+                quotes = quotes.Where(q =>
+                    (q.QuoteNumber?.Contains(keyword, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                    (q.Customer != null &&
+                     $"{q.Customer.Name} {q.Customer.Surname}".Contains(keyword, StringComparison.OrdinalIgnoreCase)));
+            }
+
+            return quotes
+                .OrderByDescending(q => q.QuoteDate)
+                .ToList();
         }
 
         public async Task<Quote> GetQuoteByIdAsync(int quoteId)
@@ -30,16 +72,15 @@ namespace FMCGEnterpriseManagementSystem.Services
         public async Task<Quote> CreateQuoteAsync(Quote quote)
         {
             quote.QuoteNumber = await _quoteRepository.GenerateNextQuoteNumberAsync();
-            quote.Status = QuoteStatus.Draft;
+            quote.Status = QuoteStatus.Pending;
 
-            CalculateTotals(quote);
-
+           CalculateTotals(quote, VatRate);
             return await _quoteRepository.AddAsync(quote);
         }
 
         public async Task<Quote> UpdateQuoteAsync(Quote quote)
         {
-            CalculateTotals(quote);
+            CalculateTotals(quote, VatRate);
             return await _quoteRepository.UpdateAsync(quote);
         }
 
@@ -47,7 +88,6 @@ namespace FMCGEnterpriseManagementSystem.Services
         {
             return await _quoteRepository.DeleteAsync(quoteId);
         }
-
         public async Task<bool> ConvertToInvoiceAsync(int quoteId)
         {
             var quote = await _quoteRepository.GetByIdAsync(quoteId);
@@ -56,14 +96,38 @@ namespace FMCGEnterpriseManagementSystem.Services
                 return false;
             }
 
-            // TODO: implement once Invoice module is merged into this branch
-            quote.Status = QuoteStatus.Converted;
+            var invoice = new Invoice
+            {
+                InvoiceNumber = await _invoiceRepository.GetNextInvoiceNumberAsync(),
+                InvoiceDate = DateTime.Today,
+                QuoteId = quote.QuoteId,
+                CustomerId = quote.CustomerId,
+                BillingAddress = quote.BillingAddress,
+                PaymentTerms = quote.PaymentTerms,
+                SalesRepresentativeId = quote.SalesRepresentativeId,
+                Status = "Draft",
+                Subtotal = quote.Subtotal,
+                Total = quote.Total,
+                InvoiceItems = quote.QuoteItems.Select(qi => new InvoiceItem
+                {
+                    ProductId = qi.ProductId,
+                    Quantity = qi.Quantity,
+                    UnitPrice = qi.UnitPrice,
+                    DiscountPercent = qi.DiscountPercent,
+                    VatCategory = qi.VatCategory,
+                    LineTotal = qi.LineTotal
+                }).ToList()
+            };
+
+            await _invoiceRepository.AddAsync(invoice);
+
+            quote.Status = QuoteStatus.Invoiced;
             await _quoteRepository.UpdateAsync(quote);
 
             return true;
         }
 
-        private void CalculateTotals(Quote quote)
+        private static void CalculateTotals(Quote quote, decimal vatRate)
         {
             decimal subtotal = 0;
 
@@ -73,8 +137,11 @@ namespace FMCGEnterpriseManagementSystem.Services
                 var discountAmount = lineBeforeDiscount * (item.DiscountPercent / 100);
                 var lineAfterDiscount = lineBeforeDiscount - discountAmount;
 
-                var vatAmount = item.VatCategory == "[NONE]" ? 0 : lineAfterDiscount * VatRate;
+                var vatAmount = item.VatCategory == "STANDARD"
+    ? lineAfterDiscount * VatRate
+    : 0;
 
+                item.LineTotalExclVat = lineAfterDiscount;
                 item.LineTotal = lineAfterDiscount + vatAmount;
                 subtotal += lineAfterDiscount;
             }

@@ -1,4 +1,7 @@
-﻿using FMCGEnterpriseManagementSystem.Models;
+﻿// Purpose: Business logic for customer.
+// Authors: Naseeha27, Maseeha17 (from git history)
+
+using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;
@@ -14,9 +17,21 @@ namespace FMCGEnterpriseManagementSystem.Services
             _customerRepository = customerRepository;
         }
 
-        public async Task<IEnumerable<CustomerViewModel>> GetAllCustomersAsync()
+        public async Task<IEnumerable<CustomerViewModel>> GetAllCustomersAsync(string? searchKeyword = null)
         {
             var customers = await _customerRepository.GetAllAsync();
+
+            if (!string.IsNullOrWhiteSpace(searchKeyword))
+            {
+                var query = searchKeyword.Trim().ToLower();
+                customers = customers.Where(c =>
+                    (c.Name != null && c.Name.ToLower().Contains(query)) ||
+                    (c.Surname != null && c.Surname.ToLower().Contains(query)) ||
+                    (c.Email != null && c.Email.ToLower().Contains(query)) ||
+                    (c.CellNumber != null && c.CellNumber.Contains(query))
+                );
+            }
+
             return customers.Select(c => MapToViewModel(c));
         }
 
@@ -30,7 +45,6 @@ namespace FMCGEnterpriseManagementSystem.Services
         {
             var customer = MapToEntity(model);
 
-            // Auto-fallback: use billing/physical address if delivery address is left empty[cite: 1]
             if (string.IsNullOrWhiteSpace(customer.DeliveryAddress))
             {
                 customer.DeliveryAddress = customer.PhysicalAddress;
@@ -42,6 +56,12 @@ namespace FMCGEnterpriseManagementSystem.Services
         public async Task UpdateCustomerAsync(CustomerViewModel model)
         {
             var customer = MapToEntity(model);
+
+            if (string.IsNullOrWhiteSpace(customer.DeliveryAddress))
+            {
+                customer.DeliveryAddress = customer.PhysicalAddress;
+            }
+
             await _customerRepository.UpdateAsync(customer);
         }
 
@@ -66,6 +86,10 @@ namespace FMCGEnterpriseManagementSystem.Services
             PaymentMethod = c.PaymentMethod,
             Notes = c.Notes,
             SalesRepresentativeId = c.SalesRepresentativeId,
+
+            SalesRep = c.SalesRepresentative?.Employee != null
+    ? $"{c.SalesRepresentative.Employee.FirstName} {c.SalesRepresentative.Employee.LastName} ({c.SalesRepresentative.SalesRepCode})"
+    : "Unassigned",
             VATNumber = c.VATNumber
         };
 
@@ -75,17 +99,18 @@ namespace FMCGEnterpriseManagementSystem.Services
             Name = vm.Name,
             Surname = vm.Surname,
             IdNumber = vm.IdNumber,
-            TelephoneNumber = vm.TelephoneNumber,
+           
+            TelephoneNumber = vm.TelephoneNumber ?? string.Empty,
             CellNumber = vm.CellNumber,
             Email = vm.Email,
             PhysicalAddress = vm.PhysicalAddress,
-            DeliveryAddress = vm.DeliveryAddress,
+            DeliveryAddress = string.IsNullOrWhiteSpace(vm.DeliveryAddress) ? vm.PhysicalAddress : vm.DeliveryAddress,
             CustomerGroup = vm.CustomerGroup,
             PaymentTerms = vm.PaymentTerms,
             PaymentMethod = vm.PaymentMethod,
-            Notes = vm.Notes,
+            Notes = vm.Notes ?? string.Empty,
             SalesRepresentativeId = vm.SalesRepresentativeId,
-            VATNumber = vm.VATNumber
+            VATNumber = vm.VATNumber ?? string.Empty
         };
-    };
     }
+}

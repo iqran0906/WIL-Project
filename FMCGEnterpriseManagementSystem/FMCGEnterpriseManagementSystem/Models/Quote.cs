@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿// Purpose: Database entity: quote (maps to a table).
+// Authors: Naseeha27, Sayali-St10458649 (from git history)
+
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using FMCGEnterpriseManagementSystem.Enums;
 
@@ -12,16 +15,18 @@ namespace FMCGEnterpriseManagementSystem.Models
         [Required]
         public string QuoteNumber { get; set; }
 
+
+
         [Required]
         public DateTime QuoteDate { get; set; }
 
-        public DateTime ExpiryDate { get; set; }
+       
 
         [Required]
         public int CustomerId { get; set; }
 
         [ForeignKey("CustomerId")]
-        public Customer Customer { get; set; }
+        public Customer? Customer { get; set; }
 
         public string BillingAddress { get; set; }
 
@@ -32,7 +37,7 @@ namespace FMCGEnterpriseManagementSystem.Models
         public SalesRepresentative? SalesRepresentative { get; set; }
 
         [Required]
-        public QuoteStatus Status { get; set; } = QuoteStatus.Draft;
+        public QuoteStatus Status { get; set; } = QuoteStatus.Pending;
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal Subtotal { get; set; }

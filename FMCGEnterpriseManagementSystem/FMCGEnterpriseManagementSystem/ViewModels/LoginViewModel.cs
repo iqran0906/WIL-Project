@@ -1,12 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿// Purpose: Data and validation rules for the login form.
+// Authors: iqran0906 (from git history)
+
+using System.ComponentModel.DataAnnotations;
 
 namespace FMCGEnterpriseManagementSystem.ViewModels
 {
     public class LoginViewModel
     {
-        [Required(ErrorMessage = "Username or email is required.")] // Lets the user log in using either their username or email.
-        [Display(Name = "Username or Email")] 
-        public string UsernameOrEmail { get; set; } = string.Empty;
+        [Required(ErrorMessage = "Email address is required.")]
+        [EmailAddress(ErrorMessage = "Please enter a valid email address.")]
+        [Display(Name = "Email Address")]
+        public string Email { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Password is required.")]
         [DataType(DataType.Password)]

@@ -1,4 +1,9 @@
-﻿@model FMCGEnterpriseManagementSystem.ViewModels.LoginViewModel
+﻿@*
+    Purpose: Login page.
+    Authors: iqran0906 (from git history)
+    Uses: jQuery Validation + Unobtrusive (MIT) https://jqueryvalidation.org
+*@
+@model FMCGEnterpriseManagementSystem.ViewModels.LoginViewModel
 
 @{
     Layout = null;
@@ -75,19 +80,25 @@
                 }
 
             .brand-icon {
-                width: 70px;
-                height: 70px;
-                background: #1c323d;
-                color: white;
+                width: 80px;
+                height: 80px;
+                background: white;
                 border-radius: 50%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 margin: 0 auto 20px auto;
-                font-weight: bold;
-                font-size: 1.5rem;
-                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                overflow: hidden;
+                padding: 5px;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.15);
             }
+
+                .brand-icon img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain;
+                    border-radius: 50%;
+                }
 
             .validation-summary-errors {
                 text-align: left;
@@ -100,7 +111,9 @@
 
     <div class="login-card text-center">
 
-        <div class="brand-icon">ED</div>
+        <div class="brand-icon">
+            <img src="~/images/logo.png" alt="Exclusive Distributors Logo" />
+        </div>
 
         <h3 class="fw-bold mb-1"
             style="color: #1c323d;">
@@ -124,51 +137,68 @@
 
             <div class="mb-3 text-start">
 
-                <label asp-for="UsernameOrEmail"
-                       class="form-label fw-bold text-secondary small">
-                </label>
+                <div class="mb-3 text-start">
 
-                <div class="input-group">
+    <label asp-for="Email"
+           class="form-label fw-bold text-secondary small">
+    </label>
 
-                    <span class="input-group-text bg-white text-muted">
-                        <i class="bi bi-person"></i>
-                    </span>
+    <div class="input-group">
 
-                    <input asp-for="UsernameOrEmail"
-                           class="form-control"
-                           placeholder="Enter username or email" />
+        <span class="input-group-text bg-white text-muted">
+            <i class="bi bi-envelope"></i>
+        </span>
 
-                </div>
+        <input asp-for="Email"
+               class="form-control"
+               placeholder="Enter email address"
+               autocomplete="email" />
 
-                <span asp-validation-for="UsernameOrEmail"
-                      class="text-danger small">
-                </span>
+    </div>
 
-            </div>
+    <span asp-validation-for="Email"
+          class="text-danger small">
+    </span>
+
+</div>
 
             <div class="mb-3 text-start">
 
-                <label asp-for="Password"
-                       class="form-label fw-bold text-secondary small">
-                </label>
+                <div class="mb-3 text-start">
 
-                <div class="input-group">
+    <label asp-for="Password"
+           class="form-label fw-bold text-secondary small">
+    </label>
 
-                    <span class="input-group-text bg-white text-muted">
-                        <i class="bi bi-lock"></i>
-                    </span>
+    <div class="input-group">
 
-                    <input asp-for="Password"
-                           class="form-control"
-                           placeholder="Enter password" />
+        <span class="input-group-text bg-white text-muted">
+            <i class="bi bi-lock"></i>
+        </span>
 
-                </div>
+        <input asp-for="Password"
+               id="passwordInput"
+               class="form-control"
+               placeholder="Enter password"
+               autocomplete="current-password" />
 
-                <span asp-validation-for="Password"
-                      class="text-danger small">
-                </span>
+        <button type="button"
+                id="togglePassword"
+                class="btn btn-outline-secondary"
+                aria-label="Show password">
 
-            </div>
+            <i id="passwordIcon"
+               class="bi bi-eye"></i>
+
+        </button>
+
+    </div>
+
+    <span asp-validation-for="Password"
+          class="text-danger small">
+    </span>
+
+</div>
 
             <div class="form-check text-start mb-4">
 
@@ -193,6 +223,40 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+    <script>
+    const passwordInput =
+        document.getElementById("passwordInput");
+
+    const togglePassword =
+        document.getElementById("togglePassword");
+
+    const passwordIcon =
+        document.getElementById("passwordIcon");
+
+    togglePassword.addEventListener("click", function () {
+
+        const passwordIsHidden =
+            passwordInput.type === "password";
+
+        passwordInput.type =
+            passwordIsHidden ? "text" : "password";
+
+        passwordIcon.classList.toggle(
+            "bi-eye",
+            !passwordIsHidden);
+
+        passwordIcon.classList.toggle(
+            "bi-eye-slash",
+            passwordIsHidden);
+
+        togglePassword.setAttribute(
+            "aria-label",
+            passwordIsHidden
+                ? "Hide password"
+                : "Show password");
+    });
+</script>
 
 </body>
 </html>
