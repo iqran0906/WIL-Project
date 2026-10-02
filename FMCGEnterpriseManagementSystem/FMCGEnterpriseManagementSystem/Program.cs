@@ -279,7 +279,7 @@ builder.Services.AddScoped<SystemAlertObserver>();
 // ==========================================================
 
 var app = builder.Build();
-
+Rotativa.AspNetCore.RotativaConfiguration.Setup(app.Environment.WebRootPath, "Rotativa");
 
 // ==========================================================
 // ERROR HANDLING / SECURITY

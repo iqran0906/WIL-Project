@@ -23,7 +23,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IEmailApiClientService _emailApiClientService;
 
-        public InvoicesController(IInvoiceService invoiceService, ICustomerRepository customerRepository, ApplicationDbContext context, IEmailApiClientService emailApiClientService)
+        public InvoicesController(IInvoiceService invoiceService, ICustomerRepository customerRepository, ApplicationDbContext context, IEmailApiClientService emailApiClientService, IInvoiceExportService invoiceExportService)
         {
             _invoiceService = invoiceService;
             _invoiceExportService = invoiceExportService;
@@ -209,9 +209,16 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         // POST: Invoices/EmailInvoice/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+      
         public async Task<IActionResult> EmailInvoice(int id, string recipientEmail)
         {
-            var result = await _emailApiClientService.EmailInvoiceAsync(id, recipientEmail);
+            var invoice = await _invoiceService.GetByIdAsync(id);
+            if (invoice == null) return NotFound();
+
+            var fileName = $"Invoice-{invoice.InvoiceNumber}.pdf";
+            var pdfBytes = _invoiceExportService.GenerateInvoicePdf(invoice);
+
+            var result = await _emailApiClientService.EmailInvoiceAsync(id, recipientEmail, pdfBytes, fileName);
 
             if (result.Success)
             {

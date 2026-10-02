@@ -262,9 +262,16 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         // POST: Quotes/EmailQuote/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+       
         public async Task<IActionResult> EmailQuote(int id, string recipientEmail)
         {
-            var result = await _emailApiClientService.EmailQuoteAsync(id, recipientEmail);
+            var quote = await _quoteService.GetQuoteByIdAsync(id);
+            if (quote == null) return NotFound();
+
+            var fileName = $"Quote-{quote.QuoteNumber}.pdf";
+            var pdfBytes = QuotePdfGenerator.Generate(quote);
+
+            var result = await _emailApiClientService.EmailQuoteAsync(id, recipientEmail, pdfBytes, fileName);
 
             if (result.Success)
             {

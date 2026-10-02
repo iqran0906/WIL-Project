@@ -16,20 +16,26 @@ namespace FMCGEnterpriseManagementSystem.Services
             _httpClient = httpClient;
         }
 
-        public Task<(bool Success, string Message)> EmailInvoiceAsync(int invoiceId, string recipientEmail)
-            => SendAsync($"api/invoices/{invoiceId}/email", recipientEmail, invoiceId);
+        public Task<(bool Success, string Message)> EmailInvoiceAsync(int invoiceId, string recipientEmail, byte[]? attachmentBytes, string? attachmentFileName)
+            => SendAsync($"api/invoices/{invoiceId}/email", recipientEmail, invoiceId, attachmentBytes, attachmentFileName);
 
-        public Task<(bool Success, string Message)> EmailQuoteAsync(int quoteId, string recipientEmail)
-            => SendAsync($"api/quotes/{quoteId}/email", recipientEmail, quoteId);
+        public Task<(bool Success, string Message)> EmailQuoteAsync(int quoteId, string recipientEmail, byte[]? attachmentBytes, string? attachmentFileName)
+            => SendAsync($"api/quotes/{quoteId}/email", recipientEmail, quoteId, attachmentBytes, attachmentFileName);
 
-        public Task<(bool Success, string Message)> EmailPaymentAsync(int paymentId, string recipientEmail)
-            => SendAsync($"api/payments/{paymentId}/email", recipientEmail, paymentId);
+        public Task<(bool Success, string Message)> EmailPaymentAsync(int paymentId, string recipientEmail, byte[]? attachmentBytes, string? attachmentFileName)
+            => SendAsync($"api/payments/{paymentId}/email", recipientEmail, paymentId, attachmentBytes, attachmentFileName);
 
-        private async Task<(bool Success, string Message)> SendAsync(string endpoint, string recipientEmail, int recordId)
+        private async Task<(bool Success, string Message)> SendAsync(string endpoint, string recipientEmail, int recordId, byte[]? attachmentBytes, string? attachmentFileName)
         {
             try
             {
-                var payload = new { RecordId = recordId, RecipientEmail = recipientEmail };
+                var payload = new
+                {
+                    RecordId = recordId,
+                    RecipientEmail = recipientEmail,
+                    AttachmentBytes = attachmentBytes,
+                    AttachmentFileName = attachmentFileName
+                };
                 var response = await _httpClient.PostAsJsonAsync(endpoint, payload);
 
                 if (response.IsSuccessStatusCode)

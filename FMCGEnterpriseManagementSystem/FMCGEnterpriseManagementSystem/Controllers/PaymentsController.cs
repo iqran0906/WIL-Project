@@ -72,10 +72,17 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         // POST: Payments/EmailPayment/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+      
         public async Task<IActionResult> EmailPayment(int id, string recipientEmail)
         {
-            var result = await _emailApiClientService.EmailPaymentAsync(id, recipientEmail);
+            var payment = await _paymentService.GetPaymentByIdAsync(id);
+            if (payment == null) return NotFound();
 
+            var fileName = $"Payment-{id}.pdf";
+            var pdf = new Rotativa.AspNetCore.ViewAsPdf("View", payment) { FileName = fileName };
+            var pdfBytes = await pdf.BuildFile(ControllerContext);
+
+            var result = await _emailApiClientService.EmailPaymentAsync(id, recipientEmail, pdfBytes, fileName);
             if (result.Success)
             {
                 TempData["SuccessMessage"] = result.Message;

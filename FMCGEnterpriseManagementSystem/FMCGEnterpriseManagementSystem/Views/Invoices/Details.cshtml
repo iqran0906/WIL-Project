@@ -6,6 +6,8 @@
 
 @{
     ViewData["Title"] = "Invoice Preview";
+   Layout = Context.Request.Query.ContainsKey("pdfmode") ? "_PdfLayout" : "_Layout";
+
 }
 
 <div class="content-card">
@@ -126,7 +128,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Send</button>
+                        <button type="submit" class="btn btn-primary" onclick="this.disabled=true; this.form.submit();">Send</button>
                     </div>
                 </form>
             </div>

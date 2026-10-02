@@ -307,8 +307,9 @@
 
                                         <li>
                                             <a class="dropdown-item"
-                                               href="#"
-                                               onclick="alert('Email quote coming soon'); return false;">
+                                               asp-controller="Quotes"
+                                               asp-action="Details"
+                                               asp-route-id="@quote.QuoteId">
                                                 Email Quote
                                             </a>
                                         </li>

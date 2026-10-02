@@ -1,8 +1,11 @@
-﻿namespace FMCGEnterpriseManagementSystem.Api.DTOs
+﻿
+namespace FMCGEnterpriseManagementSystem.Api.DTOs
 {
     public class EmailRequestDto
     {
         public int RecordId { get; set; }
         public string RecipientEmail { get; set; } = string.Empty;
+        public byte[]? AttachmentBytes { get; set; }
+        public string? AttachmentFileName { get; set; }
     }
 }
