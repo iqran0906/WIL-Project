@@ -9,10 +9,9 @@ namespace FMCGEnterpriseManagementSystem.ViewModels
     {
         public string? EmployeeID { get; set; }
 
-        [Required]
-        [StringLength(50)]
+        [StringLength(20)]
         [Display(Name = "Employee Number")]
-        public string EmployeeNumber { get; set; } = string.Empty;
+        public string? EmployeeNumber { get; set; }
 
         [Required]
         [StringLength(50)]

@@ -57,14 +57,6 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 return View(model);
             }
 
-            if (await _employeeService.EmployeeNumberExistsAsync(model.EmployeeNumber))
-            {
-                ModelState.AddModelError(
-                    nameof(model.EmployeeNumber),
-                    "This employee number is already in use.");
-
-                return View(model);
-            }
 
             if (await _employeeService.EmailExistsAsync(model.Email))
             {
@@ -77,7 +69,6 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
             var employee = new Employee
             {
-                EmployeeNumber = model.EmployeeNumber,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 Email = model.Email,
@@ -101,7 +92,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             {
                 ModelState.AddModelError(
                     string.Empty,
-                    "An employee with the same employee number or email already exists.");
+                   "The employee could not be created. Please check the employee details and try again.");
 
                 return View(model);
             }
@@ -157,17 +148,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 return View(model);
             }
 
-            if (await _employeeService.EmployeeNumberExistsAsync(
-          model.EmployeeNumber,
-          model.EmployeeID))
-            {
-                ModelState.AddModelError(
-                    nameof(model.EmployeeNumber),
-                    "This employee number is already in use.");
-
-                return View(model);
-            }
-
+            
             if (await _employeeService.EmailExistsAsync(
                     model.Email,
                     model.EmployeeID))
@@ -186,7 +167,6 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 return NotFound();
             }
 
-            employee.EmployeeNumber = model.EmployeeNumber;
             employee.FirstName = model.FirstName;
             employee.LastName = model.LastName;
             employee.Email = model.Email;
