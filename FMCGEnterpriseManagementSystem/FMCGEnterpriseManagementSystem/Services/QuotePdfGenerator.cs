@@ -120,8 +120,8 @@ namespace FMCGEnterpriseManagementSystem.Services
                                 header.Cell().Element(HeaderCellStyle).Text("Description");
                                 header.Cell().Element(HeaderCellStyle).AlignRight().Text("Unit Price");
                                 header.Cell().Element(HeaderCellStyle).AlignRight().Text("Disc %");
-                                header.Cell().Element(HeaderCellStyle).AlignRight().Text("Total");
                                 header.Cell().Element(HeaderCellStyle).AlignRight().Text("VAT");
+                                header.Cell().Element(HeaderCellStyle).AlignRight().Text("Total");
                             });
 
                             foreach (var item in quote.QuoteItems)
@@ -146,13 +146,14 @@ namespace FMCGEnterpriseManagementSystem.Services
                                     .AlignRight()
                                     .Text($"{item.DiscountPercent:0.00}%");
 
-                                table.Cell().Element(DataCellStyle)
-                                    .AlignRight()
-                                    .Text($"R{lineExVat:0.00}");
 
                                 table.Cell().Element(DataCellStyle)
                                     .AlignRight()
                                     .Text($"R{lineVat:0.00}");
+
+                                table.Cell().Element(DataCellStyle)
+                                  .AlignRight()
+                                  .Text($"R{lineExVat:0.00}");
                             }
                         });
 

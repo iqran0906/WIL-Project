@@ -22,13 +22,15 @@
             <div class="col-md-6 border-end pe-md-4">
 
                 <div class="mb-3">
-                    <label asp-for="EmployeeNumber" class="form-label"></label>
-                    <input asp-for="EmployeeNumber"
-                           class="form-control"
-                           placeholder="Enter Employee Number" />
-                    <span asp-validation-for="EmployeeNumber"
-                          class="text-danger"></span>
-                </div>
+    <label class="form-label">Employee Number</label>
+    <input type="text"
+           class="form-control"
+           value="Generated automatically when saved"
+           readonly />
+    <div class="form-text">
+        A unique employee number will be generated automatically.
+    </div>
+</div>
 
                 <div class="mb-3">
                     <label asp-for="FirstName" class="form-label"></label>
