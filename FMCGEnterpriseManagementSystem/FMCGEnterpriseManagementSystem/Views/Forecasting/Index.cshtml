@@ -10,14 +10,14 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-        <h3 class="fw-bold mb-1 text-dark">Demand & Stock Forecasting</h3>
-        <p class="text-muted mb-0">Automated stock requirement projections based on minimum inventory thresholds.</p>
+        <h3 class="fw-bold mb-1 text-white">Demand & Stock Forecasting</h3>
+        <p class="text-light opacity-75 mb-0">Automated stock requirement projections based on minimum inventory thresholds.</p>
     </div>
     <div class="d-flex gap-2">
         <a asp-action="ExportCsv"
            asp-route-category="@Model.SelectedCategory"
            asp-route-statusFilter="@Model.StatusFilter"
-           class="btn btn-outline-secondary">
+           class="btn btn-outline-light">
             <i class="bi bi-download me-1"></i> Export CSV
         </a>
     </div>
@@ -33,7 +33,7 @@
 
 <form method="get" asp-action="Index" class="row g-3 mb-4 align-items-end">
     <div class="col-md-4">
-        <label class="form-label">Filter by Category</label>
+        <label class="form-label text-light fw-semibold">Filter by Category</label>
         <select name="category" class="form-select" onchange="this.form.submit()">
             <option value="">All Categories</option>
             @foreach (var cat in Model.Categories)
@@ -43,7 +43,7 @@
         </select>
     </div>
     <div class="col-md-4">
-        <label class="form-label">Filter by Status</label>
+        <label class="form-label text-light fw-semibold">Filter by Status</label>
         <select name="statusFilter" class="form-select" onchange="this.form.submit()">
             <option value="">All Statuses</option>
             <option value="Critical" selected="@(Model.StatusFilter == "Critical")">Critical</option>
@@ -52,8 +52,8 @@
         </select>
     </div>
     <div class="col-md-4 text-end">
-        <span class="text-muted d-block small">Total Projected Reorder Budget</span>
-        <span class="fw-bold fs-5 text-dark">@Model.TotalProjectedReorderCost.ToString("C")</span>
+        <span class="text-light opacity-75 d-block small">Total Projected Reorder Budget</span>
+       <span class="fw-bold fs-5 text-white">@Model.TotalProjectedReorderCost.ToString("C")</span>
     </div>
 </form>
 
