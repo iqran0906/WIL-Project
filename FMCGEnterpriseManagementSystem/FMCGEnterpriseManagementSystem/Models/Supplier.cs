@@ -13,7 +13,7 @@ namespace FMCGEnterpriseManagementSystem.Models
 
         public string ContactNumber { get; set; }
 
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         public string PhysicalAddress { get; set; }
 
