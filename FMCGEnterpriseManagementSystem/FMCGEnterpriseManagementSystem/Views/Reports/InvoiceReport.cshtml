@@ -11,8 +11,8 @@
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2>Invoice Report</h2>
-            <p class="text-muted">Invoice totals, payments and outstanding balances.</p>
+            <h2 class="text-white fw-bold">Invoice Report</h2>
+            <p class="text-light opacity-75 mb-0">Invoice totals, payments and outstanding balances.</p>
         </div>
 
         <partial name="_ReportToolbar" model="@("InvoiceReport")" />
@@ -20,7 +20,7 @@
 
     <form method="get" class="row g-3 mb-4 no-print">
         <div class="col-md-4">
-            <label class="form-label">Start Date</label>
+            <label class="form-label text-light fw-semibold">Start Date</label>
             <input type="date"
                    name="startDate"
                    value="@ViewBag.StartDate"
@@ -28,7 +28,7 @@
         </div>
 
         <div class="col-md-4">
-            <label class="form-label">End Date</label>
+            <label class="form-label text-light fw-semibold">End Date</label>
             <input type="date"
                    name="endDate"
                    value="@ViewBag.EndDate"
@@ -39,7 +39,7 @@
             <button type="submit" class="btn btn-primary">Filter</button>
 
             <a asp-action="InvoiceReport"
-               class="btn btn-outline-secondary">
+               class="btn btn-outline-light">
                 Clear
             </a>
         </div>
