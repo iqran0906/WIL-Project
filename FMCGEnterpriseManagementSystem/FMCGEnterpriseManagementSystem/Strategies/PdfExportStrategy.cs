@@ -1,7 +1,10 @@
-// Purpose: Strategy pattern: exports report rows to a formatted PDF.
-// Authors: Sayali-St10458649 (from git history)
-// Uses: QuestPDF (QuestPDF Community License) https://www.questpdf.com
-
+/***************************************************************************************
+*    Title: QuestPDF Documentation
+*    Author: Sayali
+*    Date: 2026
+*    Code version: QuestPDF
+*    Availability: https://www.questpdf.com
+***************************************************************************************/
 using FMCGEnterpriseManagementSystem.DTOs;
 using FMCGEnterpriseManagementSystem.Strategies.Interfaces;
 using QuestPDF.Fluent;

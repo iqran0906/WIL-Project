@@ -1,7 +1,26 @@
-// Purpose: Strategy pattern: exports report rows to an Excel spreadsheet.
-// Authors: Sayali-St10458649 (from git history)
-// Uses: ClosedXML (MIT) https://github.com/ClosedXML/ClosedXML
+/***************************************************************************************
+*    Title: Excel Report Export Strategy
+*    Author: Sayali-St10458649
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Strategies/ExcelExportStrategy.cs
+***************************************************************************************/
 
+/***************************************************************************************
+*    Title: Classes and Objects - C# Programming Guide
+*    Author: Microsoft
+*    Date: 2026
+*    Code version: C#
+*    Availability: https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/types/classes
+***************************************************************************************/
+
+/***************************************************************************************
+*    Title: ClosedXML Documentation
+*    Author: ClosedXML
+*    Date: 2026
+*    Code version: ClosedXML
+*    Availability: https://github.com/ClosedXML/ClosedXML
+***************************************************************************************/
 using ClosedXML.Excel;
 using FMCGEnterpriseManagementSystem.DTOs;
 using FMCGEnterpriseManagementSystem.Strategies.Interfaces;

@@ -1,5 +1,18 @@
-﻿// Purpose: Observer pattern: sends notifications by email (respects the Settings switch).
-// Authors: Sayali-St10458649 (from git history)
+﻿/***************************************************************************************
+*    Title: Email Notification Observer
+*    Author: Sayali-St10458649
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Observers/EmailNotificationObserver.cs
+***************************************************************************************/
+
+/***************************************************************************************
+*    Title: Dependency injection in ASP.NET Core
+*    Author: Microsoft
+*    Date: 2026
+*    Code version: ASP.NET Core
+*    Availability: https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection
+***************************************************************************************/
 
 using FMCGEnterpriseManagementSystem.DTOs;
 using FMCGEnterpriseManagementSystem.Models;

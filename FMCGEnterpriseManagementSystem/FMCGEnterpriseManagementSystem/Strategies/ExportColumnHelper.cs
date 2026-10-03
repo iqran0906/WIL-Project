@@ -1,5 +1,18 @@
-// Purpose: Shared column headings and value formatting for the PDF and Excel exports.
-// Authors: ST10068525 (new file, not yet committed)
+/***************************************************************************************
+*    Title: Shared Export Formatting Helper
+*    Author: ST10068525
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Strategies/ExportFormattingHelper.cs
+***************************************************************************************/
+
+/***************************************************************************************
+*    Title: Classes and Objects - C# Programming Guide
+*    Author: Microsoft
+*    Date: 2026
+*    Code version: C#
+*    Availability: https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/types/classes
+***************************************************************************************/
 
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
