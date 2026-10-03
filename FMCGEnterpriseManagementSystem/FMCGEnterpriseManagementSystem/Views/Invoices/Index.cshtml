@@ -29,12 +29,7 @@
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <i class="bi bi-exclamation-triangle me-1"></i>
             @TempData["ErrorMessage"]
-
-            <button type="button"
-                    class="btn-close"
-                    data-bs-dismiss="alert"
-                    aria-label="Close">
-            </button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
 
@@ -182,7 +177,7 @@
                     <th>Amount Due</th>
                     <th>Total</th>
                     <th>Status</th>
-                    <th>Actions</th>
+                    <th class="text-center">Actions</th>
                 </tr>
 
             </thead>
@@ -315,7 +310,6 @@
                                     }
 
                                 </div>
-
                             </td>
 
                         </tr>
@@ -324,14 +318,18 @@
                 else
                 {
                     <tr>
-
                         <td colspan="7"
-                            class="text-center text-muted">
+                            class="text-center py-5">
 
-                            No invoices match your filters.
+                            <div class="fw-semibold mb-1">
+                                No invoices match your filters.
+                            </div>
+
+                            <div class="text-muted small">
+                                Try changing your search or date criteria.
+                            </div>
 
                         </td>
-
                     </tr>
                 }
 
