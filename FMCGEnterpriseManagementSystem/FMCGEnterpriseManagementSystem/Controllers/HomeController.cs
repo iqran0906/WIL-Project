@@ -1,8 +1,10 @@
-// Purpose: Dashboard (with charts), customer list, user profile, error pages and older prototype pages.
-// Authors: Sayali-St10458649, iqran0906, ST10068525, Naseeha27 (from git history)
-// Uses: ASP.NET Core Identity (Microsoft, MIT) https://learn.microsoft.com/aspnet/core/security/authentication/identity
-
-// Purpose: Dashboard, user profile, error pages and legacy route support.
+/***************************************************************************************
+*    Title: Home Controller
+*    Author: Sayali-St10458649, iqran0906, ST10068525, Naseeha27, Maseeha17
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Controllers/HomeController.cs
+***************************************************************************************/
 
 using System.Diagnostics;
 using FMCGEnterpriseManagementSystem.Data;
@@ -17,6 +19,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
+    // Requires users to be authenticated to access the Home Controller.
     [Authorize]
     public class HomeController : Controller
     {
@@ -25,6 +28,8 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IDashboardService _dashboardService;
 
+        // Dependency injection provides logging, database access,
+        // user management and dashboard services.
         public HomeController(
             ILogger<HomeController> logger,
             ApplicationDbContext context,
@@ -47,7 +52,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return View("Dashboard", analytics);
         }
 
-        // Direct Dashboard route.
+        // Direct Dashboard route with an optional number of months for the analytics.
         [HttpGet]
         public async Task<IActionResult> Dashboard(int months = 12)
         {
@@ -57,7 +62,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return View("Dashboard", analytics);
         }
 
-        // Settings now has its own controller.
+        // Redirects Settings requests to the dedicated Settings controller.
         [HttpGet]
         public IActionResult Settings()
         {
@@ -68,9 +73,11 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [HttpGet]
         public async Task<IActionResult> UserProfile()
         {
+            // Retrieves the currently authenticated user.
             var user =
                 await _userManager.GetUserAsync(User);
 
+            // Redirects to login if no authenticated user is found.
             if (user == null)
             {
                 return RedirectToAction(
@@ -78,12 +85,14 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                     "Account");
             }
 
+            // Retrieves the employee record linked to the user.
             var employee =
                 await _context.Employees
                     .AsNoTracking()
                     .FirstOrDefaultAsync(
                         e => e.UserId == user.Id);
 
+            // Retrieves the sales representative record when an employee exists.
             var salesRep =
                 employee == null
                     ? null
@@ -93,6 +102,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                             sr => sr.EmployeeID ==
                                   employee.EmployeeID);
 
+            // Builds the view model using user, employee and sales representative information.
             var model =
                 new UserProfileViewModel
                 {
@@ -148,7 +158,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return View();
         }
 
-        // Reports have their own controller.
+        // Redirects Reports requests to the dedicated Reports controller.
         [HttpGet]
         public IActionResult Reports()
         {
@@ -157,7 +167,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 "Reports");
         }
 
-        // Legacy customer route - redirect to the real Customers feature.
+        // Legacy customer route - redirects to the real Customers feature.
         [HttpGet]
         [Authorize(
             Roles =
@@ -210,7 +220,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 "Quotes");
         }
 
-        // Older prototype pages.
+        // Older prototype pages retained for compatibility.
         public IActionResult AddCustomer() => View();
 
         public IActionResult AddSupplier() => View();
@@ -225,6 +235,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
         public IActionResult CreateQuote() => View();
 
+        // Allows the error page to be displayed without authentication.
         [AllowAnonymous]
         [ResponseCache(
             Duration = 0,
@@ -232,6 +243,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             NoStore = true)]
         public IActionResult Error()
         {
+            // Creates an identifier that can be used to trace the request.
             var requestId =
                 Activity.Current?.Id ??
                 HttpContext.TraceIdentifier;
@@ -240,6 +252,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 HttpContext.Features
                     .Get<IExceptionHandlerPathFeature>();
 
+            // Logs the unhandled exception and the request path.
             if (exceptionFeature != null)
             {
                 _logger.LogError(
@@ -258,6 +271,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 });
         }
 
+        // Displays the error page for HTTP status codes such as 404 or 403.
         [AllowAnonymous]
         [ResponseCache(
             Duration = 0,
@@ -269,6 +283,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 HttpContext.Features
                     .Get<IStatusCodeReExecuteFeature>();
 
+            // Logs the returned status code and original request path.
             _logger.LogWarning(
                 "Status code {StatusCode} " +
                 "returned for {Path}",

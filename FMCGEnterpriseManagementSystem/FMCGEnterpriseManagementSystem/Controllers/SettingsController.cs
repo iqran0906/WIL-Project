@@ -1,5 +1,18 @@
-// Purpose: Settings page: company profile, banking details (admin) and personal preferences.
-// Authors: ST10068525 (new file, not yet committed)
+/***************************************************************************************
+*    Title: Settings Controller
+*    Author: ST10068525
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Controllers/SettingsController.cs
+***************************************************************************************/
+
+/***************************************************************************************
+*    Title: Role-based authorization in ASP.NET Core
+*    Author: Microsoft
+*    Date: 2026
+*    Code version: ASP.NET Core
+*    Availability: https://learn.microsoft.com/aspnet/core/security/authorization/roles
+***************************************************************************************/
 
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
@@ -9,14 +22,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
-    // Everyone can open Settings (personal preferences + account);
-    // only administrators can change the company profile and banking details.
+    // Allows authenticated users to access their settings and personal preferences.
+    // Only administrators can submit changes to system settings.
     [Authorize]
     public class SettingsController : Controller
     {
         private readonly ISettingsService _settingsService;
         private readonly ILogger<SettingsController> _logger;
 
+        // Injects the settings service and logger through dependency injection.
         public SettingsController(ISettingsService settingsService, ILogger<SettingsController> logger)
         {
             _settingsService = settingsService;
@@ -27,9 +41,12 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            // Retrieves the current system settings from the service.
             var settings = await _settingsService.GetAsync();
 
             var model = ToViewModel(settings);
+
+            // Controls whether the current user can edit system settings.
             model.CanEditSystemSettings = User.IsInRole("Administrator");
 
             return View(model);
@@ -41,10 +58,12 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Index(SettingsViewModel model)
         {
+            // The POST action is administrator-only, so editing is enabled.
             model.CanEditSystemSettings = true;
 
             var current = await _settingsService.GetAsync();
 
+            // Preserve existing audit information when validation fails.
             if (!ModelState.IsValid)
             {
                 model.UpdatedAt = current.UpdatedAt;
@@ -52,14 +71,17 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 return View(model);
             }
 
+            // Applies editable values while retaining system settings that are not part of this page.
             await _settingsService.UpdateAsync(ApplyTo(current, model), User.Identity?.Name);
 
+            // Records which authenticated user updated the company settings.
             _logger.LogInformation("Company settings updated by {User}", User.Identity?.Name);
 
             TempData["SuccessMessage"] = "Settings saved.";
             return RedirectToAction(nameof(Index));
         }
 
+        // Converts the database settings model into the ViewModel used by the page.
         private static SettingsViewModel ToViewModel(SystemSetting s) => new()
         {
             UpdatedAt = s.UpdatedAt,
@@ -83,8 +105,8 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             ProofOfPaymentEmail = s.ProofOfPaymentEmail
         };
 
-        // Copies the page's fields onto the current settings. Values that are not on the
-        // page (VAT rate, number prefixes, notifications, ...) are kept as they are.
+        // Copies editable page fields onto the current settings.
+        // Values not displayed on this page are retained from the existing settings.
         private static SystemSetting ApplyTo(SystemSetting current, SettingsViewModel m) => new()
         {
             CompanyName = Clean(m.CompanyName) ?? string.Empty,
@@ -114,6 +136,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             NotificationEmail = current.NotificationEmail
         };
 
+        // Removes unnecessary whitespace and converts blank values to null.
         private static string? Clean(string? value) =>
             string.IsNullOrWhiteSpace(value) ? null : value.Trim();
     }

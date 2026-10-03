@@ -1,5 +1,18 @@
-﻿// Purpose: Controller for the user accounts pages and form submissions.
-// Authors: iqran0906 (from git history)
+﻿/***************************************************************************************
+*    Title: User Accounts Controller
+*    Author: iqran0906
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Controllers/UserAccountsController.cs
+***************************************************************************************/
+
+/***************************************************************************************
+*    Title: Role-based authorization in ASP.NET Core
+*    Author: Microsoft
+*    Date: 2026
+*    Code version: ASP.NET Core
+*    Availability: https://learn.microsoft.com/aspnet/core/security/authorization/roles
+***************************************************************************************/
 
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;
@@ -8,11 +21,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
-    [Authorize(Roles = "Administrator")] 
+    // Restricts user account management to administrators.
+    [Authorize(Roles = "Administrator")]
     public class UserAccountsController : Controller
     {
         private readonly IUserAccountService _userAccountService;
 
+        // Injects the user account service through dependency injection.
         public UserAccountsController(IUserAccountService userAccountService)
         {
             _userAccountService = userAccountService;
@@ -21,6 +36,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            // Retrieves employees with and without linked user accounts.
             var employeesWithAccounts =
                 await _userAccountService.GetEmployeesWithAccountsAsync();
 
@@ -35,6 +51,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [HttpGet]
         public async Task<IActionResult> Create(string employeeId)
         {
+            // A valid employee ID is required to create an account.
             if (string.IsNullOrWhiteSpace(employeeId))
             {
                 return BadRequest();
@@ -48,6 +65,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 return NotFound();
             }
 
+            // Prevents multiple user accounts from being created for one employee.
             if (!string.IsNullOrWhiteSpace(employee.UserId))
             {
                 TempData["ErrorMessage"] =
@@ -73,6 +91,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         public async Task<IActionResult> Create(
             CreateUserAccountViewModel model)
         {
+            // Stops invalid account information from being submitted.
             if (!ModelState.IsValid)
             {
                 var employee = await _userAccountService
@@ -85,6 +104,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 return View(model);
             }
 
+            // Creates the account using the selected employee, credentials and role.
             var created = await _userAccountService.CreateAccountAsync(
                 model.EmployeeID,
                 model.Email,
@@ -117,6 +137,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Activate(string employeeId)
         {
+            // A valid employee ID is required before activating the account.
             if (string.IsNullOrWhiteSpace(employeeId))
             {
                 return BadRequest();
@@ -137,6 +158,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Deactivate(string employeeId)
         {
+            // A valid employee ID is required before deactivating the account.
             if (string.IsNullOrWhiteSpace(employeeId))
             {
                 return BadRequest();

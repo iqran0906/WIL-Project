@@ -1,5 +1,11 @@
-﻿// Purpose: Controller for the employees pages and form submissions.
-// Authors: iqran0906 (from git history)
+﻿/***************************************************************************************
+*    Title: Employees Controller
+*    Author: iqran0906
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Controllers/EmployeesController.cs
+***************************************************************************************/
+
 
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
@@ -9,16 +15,28 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
+    // Only users with the Administrator role can manage employees.
     [Authorize(Roles = "Administrator")]
+
+    /***************************************************************************************
+*    Title: Role-based authorization in ASP.NET Core
+*    Author: Microsoft
+*    Date: 2026
+*    Code version: ASP.NET Core
+*    Availability: https://learn.microsoft.com/aspnet/core/security/authorization/roles
+***************************************************************************************/
+
     public class EmployeesController : Controller
     {
         private readonly IEmployeeService _employeeService;
 
+        // Dependency injection provides the employee service to the controller.
         public EmployeesController(IEmployeeService employeeService)
         {
             _employeeService = employeeService;
         }
 
+        // Displays all employees or filters the list using a search keyword.
         public async Task<IActionResult> Index(string? keyword)
         {
             IEnumerable<Employee> employees;
@@ -37,6 +55,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return View(employees);
         }
 
+        // Displays the employee creation form with today's date as the default employment date.
         [HttpGet]
         public IActionResult Create()
         {
@@ -48,16 +67,18 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return View(viewModel);
         }
 
+        // Processes the submitted employee creation form.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(EmployeeViewModel model)
         {
+            // Return the form if the submitted data fails validation.
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-
+            // Prevents duplicate employee email addresses.
             if (await _employeeService.EmailExistsAsync(model.Email))
             {
                 ModelState.AddModelError(
@@ -67,6 +88,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 return View(model);
             }
 
+            // Maps the submitted view model data to an Employee entity.
             var employee = new Employee
             {
                 FirstName = model.FirstName,
@@ -75,8 +97,8 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 ContactNumber = model.ContactNumber,
                 JobTitle = model.JobTitle,
                 DateOfEmployment = model.DateOfEmployment,
-              
 
+                // Creates the employee's Next of Kin details.
                 NextOfKin = new NextOfKin
                 {
                     FullName = model.NextOfKinFullName,
@@ -88,11 +110,12 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
             var created = await _employeeService.CreateEmployeeAsync(employee);
 
+            // Displays the form again if the employee could not be created.
             if (!created)
             {
                 ModelState.AddModelError(
                     string.Empty,
-                   "The employee could not be created. Please check the employee details and try again.");
+                    "The employee could not be created. Please check the employee details and try again.");
 
                 return View(model);
             }
@@ -102,9 +125,11 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // Retrieves an employee and displays their details for editing.
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
+            // Validate that an employee ID was supplied.
             if (string.IsNullOrWhiteSpace(id))
             {
                 return BadRequest();
@@ -112,11 +137,13 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
             var employee = await _employeeService.GetEmployeeByIdAsync(id);
 
+            // Return NotFound if the employee does not exist.
             if (employee == null)
             {
                 return NotFound();
             }
 
+            // Maps the existing employee data into the edit view model.
             var viewModel = new EmployeeViewModel
             {
                 EmployeeID = employee.EmployeeID,
@@ -129,6 +156,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 DateOfEmployment = employee.DateOfEmployment,
                 IsActive = employee.IsActive,
 
+                // Safely loads Next of Kin details if they exist.
                 NextOfKinID = employee.NextOfKin?.NextOfKinID,
                 NextOfKinFullName = employee.NextOfKin?.FullName ?? string.Empty,
                 NextOfKinRelationship = employee.NextOfKin?.Relationship ?? string.Empty,
@@ -139,16 +167,18 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return View(viewModel);
         }
 
+        // Processes the submitted employee edit form.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(EmployeeViewModel model)
         {
+            // Return the form if the submitted data fails validation.
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            
+            // Checks for duplicate email addresses while excluding the current employee.
             if (await _employeeService.EmailExistsAsync(
                     model.Email,
                     model.EmployeeID))
@@ -162,24 +192,27 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
             var employee = await _employeeService.GetEmployeeByIdAsync(model.EmployeeID!);
 
+            // Return NotFound if the employee no longer exists.
             if (employee == null)
             {
                 return NotFound();
             }
 
+            // Updates the employee's details using the submitted model.
             employee.FirstName = model.FirstName;
             employee.LastName = model.LastName;
             employee.Email = model.Email;
             employee.ContactNumber = model.ContactNumber;
             employee.JobTitle = model.JobTitle;
             employee.DateOfEmployment = model.DateOfEmployment;
-            
 
+            // Creates a Next of Kin record if one does not already exist.
             if (employee.NextOfKin == null)
             {
                 employee.NextOfKin = new NextOfKin();
             }
 
+            // Updates the employee's Next of Kin details.
             employee.NextOfKin.FullName = model.NextOfKinFullName;
             employee.NextOfKin.Relationship = model.NextOfKinRelationship;
             employee.NextOfKin.ContactNumber = model.NextOfKinContactNumber;
@@ -187,6 +220,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
             var updated = await _employeeService.UpdateEmployeeAsync(employee);
 
+            // Displays an error if the employee could not be updated.
             if (!updated)
             {
                 ModelState.AddModelError(
@@ -201,10 +235,12 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // Deactivates an employee rather than permanently deleting the record.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Deactivate(string id)
         {
+            // Validate that an employee ID was supplied.
             if (string.IsNullOrWhiteSpace(id))
             {
                 return BadRequest();
@@ -212,6 +248,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
             var deactivated = await _employeeService.DeactivateEmployeeAsync(id);
 
+            // Return NotFound if the employee could not be found.
             if (!deactivated)
             {
                 return NotFound();

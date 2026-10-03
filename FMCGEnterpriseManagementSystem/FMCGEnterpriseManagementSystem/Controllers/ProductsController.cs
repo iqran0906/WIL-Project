@@ -1,5 +1,18 @@
-﻿// Purpose: Controller for the products pages and form submissions.
-// Authors: iqran0906, Maseeha17 (from git history)
+﻿/***************************************************************************************
+*    Title: Products Controller
+*    Author: Maseeha17
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Controllers/ProductsController.cs
+***************************************************************************************/
+
+/***************************************************************************************
+*    Title: Implement CRUD - ASP.NET MVC with Entity Framework Core
+*    Author: Microsoft
+*    Date: 2026
+*    Code version: ASP.NET Core 10.0
+*    Availability: https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/crud
+***************************************************************************************/
 
 using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
@@ -11,12 +24,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
+    // Restricts product management to administrators and employees.
     [Authorize(Roles = "Administrator,Employee")]
     public class ProductsController : Controller
     {
+        // Service handles product-related business operations.
         private readonly IProductService _productService;
+
+        // Database context is used for supplier and category lookup data.
         private readonly ApplicationDbContext _context;
 
+        // Dependencies are supplied through dependency injection.
         public ProductsController(
             IProductService productService,
             ApplicationDbContext context)
@@ -25,16 +43,19 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             _context = context;
         }
 
+        // Displays the product list with search and filter options.
         public async Task<IActionResult> Index(
      string? search,
      string? category,
      int? supplierId,
      string? status)
         {
+            // Retrieve the complete product list before applying display filters.
             var products = (await _productService.GetAllProductsAsync()).ToList();
 
 
-            ViewBag.TotalProducts = products.Count; // Summary cards use the complete product list
+            // Summary cards use the complete product list.
+            ViewBag.TotalProducts = products.Count;
             ViewBag.ActiveProducts = products.Count(p => p.IsActive);
             ViewBag.InactiveProducts = products.Count(p => !p.IsActive);
             ViewBag.TotalSuppliers = products
@@ -42,8 +63,9 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 .Distinct()
                 .Count();
 
-           
-            if (!string.IsNullOrWhiteSpace(search))  // Search
+
+            // Apply keyword search across product and supplier information.
+            if (!string.IsNullOrWhiteSpace(search))
             {
                 search = search.Trim();
 
@@ -67,24 +89,27 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                     .ToList();
             }
 
-            
-            if (!string.IsNullOrWhiteSpace(category)) // Category filter
+
+            // Apply the selected product category filter.
+            if (!string.IsNullOrWhiteSpace(category))
             {
                 products = products
                     .Where(p => p.Category == category)
                     .ToList();
             }
 
-            
-            if (supplierId.HasValue) // Supplier filter
+
+            // Apply the selected supplier filter.
+            if (supplierId.HasValue)
             {
                 products = products
                     .Where(p => p.SupplierId == supplierId.Value)
                     .ToList();
             }
 
-           
-            if (status == "active")  // Status filter
+
+            // Apply the active or inactive product status filter.
+            if (status == "active")
             {
                 products = products
                     .Where(p => p.IsActive)
@@ -97,14 +122,16 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                     .ToList();
             }
 
-           
-            ViewBag.Categories = await _context.Products  // Filter options
+
+            // Load distinct categories used by the product filter.
+            ViewBag.Categories = await _context.Products
                 .AsNoTracking()
                 .Select(p => p.Category)
                 .Distinct()
                 .OrderBy(c => c)
                 .ToListAsync();
 
+            // Load active suppliers for the supplier filter.
             var suppliers = await _context.Suppliers
                 .AsNoTracking()
                 .Where(s => s.IsActive)
@@ -117,6 +144,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 "CompanyName",
                 supplierId);
 
+            // Preserve the selected filter values for the view.
             ViewBag.Search = search;
             ViewBag.SelectedCategory = category;
             ViewBag.SelectedStatus = status;
@@ -124,16 +152,19 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return View(products);
         }
 
+        // Displays the form for creating a new product.
         public async Task<IActionResult> Create()
         {
             await LoadSuppliersAsync();
             return View(new ProductViewModel());
         }
 
+        // Processes a new product submission.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProductViewModel model)
         {
+            // Prevent invalid product information from being submitted.
             if (!ModelState.IsValid)
             {
                 await LoadSuppliersAsync();
@@ -145,6 +176,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // Loads an existing product for editing.
         public async Task<IActionResult> Edit(int id)
         {
             if (id <= 0)
@@ -164,17 +196,20 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return View(product);
         }
 
+        // Processes changes made to an existing product.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(
             int id,
             ProductViewModel model)
         {
+            // Ensure the route ID matches the product being edited.
             if (id != model.ProductId)
             {
                 return BadRequest();
             }
 
+            // Return the form if validation fails.
             if (!ModelState.IsValid)
             {
                 await LoadSuppliersAsync();
@@ -186,6 +221,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // Displays the confirmation page before deleting a product.
         public async Task<IActionResult> Delete(int id)
         {
             if (id <= 0)
@@ -203,6 +239,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return View(product);
         }
 
+        // Processes the confirmed product deletion.
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -212,6 +249,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // Re-activates a previously inactive product.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Activate(int id)
@@ -224,6 +262,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // Loads active suppliers for product forms.
         private async Task LoadSuppliersAsync()
         {
             var suppliers = await _context.Suppliers

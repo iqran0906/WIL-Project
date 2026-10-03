@@ -1,6 +1,18 @@
-﻿// Purpose: Supplier pages: list, search, add, edit, activate/deactivate and supplier products.
-// Authors: iqran0906, Maseeha17, Naseeha27 (from git history)
+﻿/***************************************************************************************
+*    Title: Supplier Controller
+*    Author: iqran0906, Maseeha17, Naseeha27
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Controllers/SupplierController.cs
+***************************************************************************************/
 
+/***************************************************************************************
+*    Title: Implement CRUD - ASP.NET MVC with Entity Framework Core
+*    Author: Microsoft
+*    Date: 2026
+*    Code version: ASP.NET Core
+*    Availability: https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/crud
+***************************************************************************************/
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -8,12 +20,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
+    // Restricts supplier management to administrators and employees.
     [Authorize(Roles = "Administrator,Employee")]
     public class SupplierController : Controller
     {
         private readonly ISupplierService _supplierService;
         private readonly IProductService _productService;
 
+        // Injects the supplier and product services through dependency injection.
         public SupplierController(
             ISupplierService supplierService,
             IProductService productService)
@@ -26,12 +40,14 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [HttpGet]
         public async Task<IActionResult> SupplierList(string? search)
         {
+            // Loads the supplier records used for the list and search.
             var suppliers = (await _supplierService.GetAllSuppliersAsync()).ToList();
 
             if (!string.IsNullOrWhiteSpace(search))
             {
                 search = search.Trim();
 
+                // Searches across the main supplier contact and business fields.
                 suppliers = suppliers
                     .Where(s =>
                         s.CompanyName.Contains(
@@ -66,8 +82,9 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
             ViewBag.Search = search;
 
+            // Loads all suppliers again to calculate the summary statistics.
             var allSuppliers =
-    (await _supplierService.GetAllSuppliersAsync()).ToList();
+                (await _supplierService.GetAllSuppliersAsync()).ToList();
 
             ViewBag.TotalSuppliers = allSuppliers.Count;
             ViewBag.ActiveSuppliers = allSuppliers.Count(s => s.IsActive);
@@ -83,6 +100,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [HttpGet]
         public IActionResult AddSupplier()
         {
+            // Displays an empty ViewModel for the new supplier form.
             return View(new SupplierViewModel());
         }
 
@@ -91,6 +109,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddSupplier(SupplierViewModel model)
         {
+            // Prevents invalid supplier data from being submitted.
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -104,7 +123,9 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [HttpGet]
         public async Task<IActionResult> EditSupplier(int id)
         {
+            // Retrieves the supplier that will be edited.
             var supplier = await _supplierService.GetSupplierByIdAsync(id);
+
             if (supplier == null)
             {
                 return NotFound();
@@ -118,6 +139,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditSupplier(int id, SupplierViewModel model)
         {
+            // Ensures the route ID matches the supplier being edited.
             if (id != model.SupplierId)
             {
                 return NotFound();
@@ -135,6 +157,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [HttpGet]
         public async Task<IActionResult> Products(int id)
         {
+            // Prevents an invalid supplier ID from being used.
             if (id <= 0)
             {
                 return NotFound();
@@ -147,6 +170,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 return NotFound();
             }
 
+            // Gets products belonging to the selected supplier.
             var products = (await _productService.GetAllProductsAsync())
                 .Where(p => p.SupplierId == id)
                 .OrderBy(p => p.ProductName)
@@ -162,6 +186,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeactivateSupplier(int id)
         {
+            // Deactivates the supplier while retaining the supplier record.
             await _supplierService.DeactivateSupplierAsync(id);
 
             return RedirectToAction(nameof(SupplierList));
@@ -171,6 +196,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ActivateSupplier(int id)
         {
+            // Reactivates an existing supplier.
             await _supplierService.ActivateSupplierAsync(id);
 
             return RedirectToAction(nameof(SupplierList));
