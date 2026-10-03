@@ -178,16 +178,22 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         // POST: Invoices/UpdateStatus/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> UpdateStatus(int id, string status)
         {
             try
             {
                 await _invoiceService.UpdateStatusAsync(id, status);
+
+                TempData["SuccessMessage"] =
+                    "Invoice approved successfully. The invoice is now finalised.";
+
                 return RedirectToAction(nameof(Details), new { id });
             }
             catch (InvalidOperationException ex)
             {
-                ModelState.AddModelError(string.Empty, ex.Message);
+                TempData["ErrorMessage"] = ex.Message;
+
                 return RedirectToAction(nameof(Details), new { id });
             }
         }
@@ -224,7 +230,18 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _invoiceService.DeleteAsync(id);
+            try
+            {
+                await _invoiceService.DeleteAsync(id);
+
+                TempData["SuccessMessage"] =
+                    "Invoice deleted successfully.";
+            }
+            catch (InvalidOperationException ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+            }
+
             return RedirectToAction(nameof(Index));
         }
     }

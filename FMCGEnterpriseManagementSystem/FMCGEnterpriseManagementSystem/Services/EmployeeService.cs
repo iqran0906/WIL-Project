@@ -60,15 +60,38 @@ namespace FMCGEnterpriseManagementSystem.Services
         }
         public async Task<bool> CreateEmployeeAsync(Employee employee)
         {
-            if (await _employeeRepository.EmployeeNumberExistsAsync(employee.EmployeeNumber))
-            {
-                return false;
-            }
-
             if (await _employeeRepository.EmailExistsAsync(employee.Email))
             {
                 return false;
             }
+
+            var employees = await _employeeRepository.GetAllAsync();
+
+            var highestNumber = employees
+                .Where(e => !string.IsNullOrWhiteSpace(e.EmployeeNumber)
+                            && e.EmployeeNumber.StartsWith("EMP-"))
+                .Select(e =>
+                {
+                    var numberPart = e.EmployeeNumber.Substring(4);
+
+                    return int.TryParse(numberPart, out var number)
+                        ? number
+                        : 0;
+                })
+                .DefaultIfEmpty(0)
+                .Max();
+
+            var nextNumber = highestNumber + 1;
+            var generatedEmployeeNumber = $"EMP-{nextNumber:D3}";
+
+            while (await _employeeRepository.EmployeeNumberExistsAsync(
+                       generatedEmployeeNumber))
+            {
+                nextNumber++;
+                generatedEmployeeNumber = $"EMP-{nextNumber:D3}";
+            }
+
+            employee.EmployeeNumber = generatedEmployeeNumber;
 
             employee.EmployeeID =
                 "EMP-" + Guid.NewGuid().ToString("N")[..16];
@@ -102,12 +125,7 @@ namespace FMCGEnterpriseManagementSystem.Services
                 return false;
             }
 
-            if (await _employeeRepository.EmployeeNumberExistsAsync(
-                    employee.EmployeeNumber,
-                    employee.EmployeeID))
-            {
-                return false;
-            }
+           
 
             if (await _employeeRepository.EmailExistsAsync(
                     employee.Email,
@@ -116,7 +134,7 @@ namespace FMCGEnterpriseManagementSystem.Services
                 return false;
             }
 
-            existingEmployee.EmployeeNumber = employee.EmployeeNumber;
+          
             existingEmployee.FirstName = employee.FirstName;
             existingEmployee.LastName = employee.LastName;
             existingEmployee.Email = employee.Email;
