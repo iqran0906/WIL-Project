@@ -1,9 +1,24 @@
-﻿// Purpose: Names of the user roles (Administrator, Employee, SalesRepresentative) used for access control.
-// Authors: iqran0906 (from git history)
+﻿/***************************************************************************************
+*    Title: Role Settings
+*    Author: iqran0906
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Configurations/RoleSettings.cs
+***************************************************************************************/
+
+/***************************************************************************************
+*    Title: Role-based authorization in ASP.NET Core
+*    Author: Microsoft
+*    Date: 2026
+*    Code version: ASP.NET Core
+*    Availability: https://learn.microsoft.com/aspnet/core/security/authorization/roles
+***************************************************************************************/
 
 
 namespace FMCGEnterpriseManagementSystem.Configurations
 {
+    // Stores the application's role names in one central location.
+    // This helps keep role names consistent when used for access control.
     public static class RoleSettings
     {
         public const string Administrator = "Administrator";

@@ -1,6 +1,18 @@
-﻿// Purpose: Turns an export result into a downloadable file response.
-// Authors: Sayali-St10458649 (from git history)
+﻿/***************************************************************************************
+*    Title: Export Result Action Result
+*    Author: Sayali-St10458649
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Results/ExportResultActionResult.cs
+***************************************************************************************/
 
+/***************************************************************************************
+*    Title: Controller action return types in ASP.NET Core MVC
+*    Author: Microsoft
+*    Date: 2026
+*    Code version: ASP.NET Core MVC
+*    Availability: https://learn.microsoft.com/en-us/aspnet/core/mvc/controllers/actions
+***************************************************************************************/
 using FMCGEnterpriseManagementSystem.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
