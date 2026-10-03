@@ -37,8 +37,19 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
         public async Task<IActionResult> Create(int invoiceId)
         {
-            var model = await _paymentService.GetPaymentFormForInvoiceAsync(invoiceId);
-            return View(model);
+            try
+            {
+                var model =
+                    await _paymentService.GetPaymentFormForInvoiceAsync(invoiceId);
+
+                return View(model);
+            }
+            catch (InvalidOperationException ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+
+                return RedirectToAction(nameof(SelectInvoice));
+            }
         }
 
         [HttpPost]
@@ -56,9 +67,9 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             }
             catch (InvalidOperationException ex)
             {
-                ModelState.AddModelError(string.Empty, ex.Message);
-                var refreshed = await _paymentService.GetPaymentFormForInvoiceAsync(model.InvoiceId);
-                return View(refreshed);
+                TempData["ErrorMessage"] = ex.Message;
+
+                return RedirectToAction(nameof(SelectInvoice));
             }
         }
 
