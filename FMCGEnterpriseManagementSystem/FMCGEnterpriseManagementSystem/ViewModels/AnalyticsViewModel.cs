@@ -1,4 +1,11 @@
-﻿using System;
+﻿/***************************************************************************************
+*    Title: Analytics View Model
+*    Author: Maseeha17
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/ViewModels/AnalyticsViewModel.cs
+***************************************************************************************/
+using System;
 
 namespace FMCGEnterpriseManagementSystem.ViewModels
 {

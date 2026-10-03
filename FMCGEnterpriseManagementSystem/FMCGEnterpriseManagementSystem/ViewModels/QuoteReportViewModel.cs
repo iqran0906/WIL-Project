@@ -1,6 +1,10 @@
-﻿// Purpose: One row of the quote report.
-// Authors: iqran0906 (from git history)
-
+﻿/***************************************************************************************
+*    Title: Quote Report View Model
+*    Author: iqran0906
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/ViewModels/Reports/QuoteReportViewModel.cs
+***************************************************************************************/
 namespace FMCGEnterpriseManagementSystem.ViewModels.Reports
 {
     public class QuoteReportViewModel

@@ -1,5 +1,10 @@
-﻿// Purpose: Data and validation rules for the notification pages and forms.
-// Authors: Sayali-St10458649 (from git history)
+﻿/***************************************************************************************
+*    Title: Notification View Model
+*    Author: Sayali-St10458649
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/ViewModels/NotificationViewModel.cs
+***************************************************************************************/
 
 namespace FMCGEnterpriseManagementSystem.ViewModels
 {

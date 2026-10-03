@@ -1,5 +1,10 @@
-﻿// Purpose: One row of the customer report.
-// Authors: iqran0906 (from git history)
+﻿/***************************************************************************************
+*    Title: Customer Report View Model
+*    Author: iqran0906
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/ViewModels/Reports/CustomerReportViewModel.cs
+***************************************************************************************/
 
 namespace FMCGEnterpriseManagementSystem.ViewModels.Reports
 {

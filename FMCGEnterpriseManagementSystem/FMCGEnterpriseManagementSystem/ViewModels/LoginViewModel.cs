@@ -1,5 +1,10 @@
-﻿// Purpose: Data and validation rules for the login form.
-// Authors: iqran0906 (from git history)
+﻿/***************************************************************************************
+*    Title: Login View Model
+*    Author: iqran0906
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/ViewModels/LoginViewModel.cs
+***************************************************************************************/
 
 using System.ComponentModel.DataAnnotations;
 

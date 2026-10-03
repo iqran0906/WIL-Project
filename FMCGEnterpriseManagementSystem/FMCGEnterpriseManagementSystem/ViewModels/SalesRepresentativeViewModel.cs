@@ -1,5 +1,10 @@
-﻿// Purpose: Data and validation rules for the sales representative pages and forms.
-// Authors: iqran0906 (from git history)
+﻿/***************************************************************************************
+*    Title: Sales Representative View Model
+*    Author: iqran0906
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/ViewModels/SalesRepresentativeViewModel.cs
+***************************************************************************************/
 
 using System.ComponentModel.DataAnnotations;
 

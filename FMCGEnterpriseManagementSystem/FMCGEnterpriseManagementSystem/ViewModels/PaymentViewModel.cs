@@ -1,5 +1,10 @@
-// Purpose: Data and validation rules for the payment pages and forms.
-// Authors: Sayali-St10458649 (from git history)
+/***************************************************************************************
+*    Title: Payment View Model
+*    Author: Sayali-St10458649
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/ViewModels/PaymentViewModel.cs
+***************************************************************************************/
 
 using FMCGEnterpriseManagementSystem.Enums;
 using System.ComponentModel.DataAnnotations;

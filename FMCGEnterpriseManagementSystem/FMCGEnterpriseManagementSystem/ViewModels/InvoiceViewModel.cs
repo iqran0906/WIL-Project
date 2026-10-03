@@ -1,5 +1,10 @@
-// Purpose: Data and validation rules for invoices (New Invoice form, lists and details).
-// Authors: Sayali-St10458649 (from git history)
+/***************************************************************************************
+*    Title: Invoice View Model
+*    Author: Sayali-St10458649
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/ViewModels/InvoiceViewModel.cs
+***************************************************************************************/
 
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;

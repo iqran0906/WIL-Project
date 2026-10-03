@@ -1,5 +1,10 @@
-// Purpose: Details of the logged-in user shown on the User Profile page.
-// Authors: ST10068525 (new file, not yet committed)
+/***************************************************************************************
+*    Title: User Profile View Model
+*    Author: ST10068525
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/ViewModels/UserProfileViewModel.cs
+***************************************************************************************/
 
 namespace FMCGEnterpriseManagementSystem.ViewModels
 {

@@ -1,6 +1,10 @@
-﻿// Purpose: Data and validation rules for the product pages and forms.
-// Authors: iqran0906, Maseeha17 (from git history)
-
+﻿/***************************************************************************************
+*    Title: Product View Model
+*    Author: iqran0906, Maseeha17
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/ViewModels/ProductViewModel.cs
+***************************************************************************************/
 using System.ComponentModel.DataAnnotations;
 
 namespace FMCGEnterpriseManagementSystem.ViewModels

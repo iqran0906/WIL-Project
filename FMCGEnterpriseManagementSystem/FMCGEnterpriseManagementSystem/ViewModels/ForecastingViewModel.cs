@@ -1,5 +1,10 @@
-﻿// Purpose: Data for the forecasting page and the reorder form.
-// Authors: Maseeha17 (from git history)
+﻿/***************************************************************************************
+*    Title: Forecasting View Model
+*    Author: Maseeha17
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/ViewModels/ForecastingViewModel.cs
+***************************************************************************************/
 
 using System.ComponentModel.DataAnnotations;
 

@@ -1,6 +1,10 @@
-﻿// Purpose: One row of the sales vat report.
-// Authors: iqran0906 (from git history)
-
+﻿/***************************************************************************************
+*    Title: Sales Vat Report View Model
+*    Author: iqran0906
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/ViewModels/Reports/SalesVatReportViewModel.cs
+***************************************************************************************/
 namespace FMCGEnterpriseManagementSystem.ViewModels.Reports
 {
     public class SalesVatReportViewModel
