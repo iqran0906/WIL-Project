@@ -55,6 +55,21 @@ namespace FMCGEnterpriseManagementSystem.Services
 
             return await BuildViewModelAsync(invoice, alreadyPaid);
         }
+
+        public async Task<List<InvoiceViewModel>> GetAvailableInvoicesAsync()
+        {
+            var invoices = await _paymentRepository.GetAllInvoicesAsync();
+
+            return invoices.Select(i => new InvoiceViewModel
+            {
+                InvoiceId = i.InvoiceId,
+                InvoiceNumber = i.InvoiceNumber,
+                CustomerName = i.Customer?.Name,
+                Total = i.Total,
+                AmountDue = i.Total
+            }).ToList();
+        }
+
         public async Task<List<PaymentViewModel>> GetAllPaymentsAsync()
         {
             var payments = await _paymentRepository.GetAllAsync();
