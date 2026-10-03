@@ -144,27 +144,61 @@ namespace FMCGEnterpriseManagementSystem.Services
         public async Task UpdateStatusAsync(int invoiceId, string newStatus)
         {
             var invoice = await _invoiceRepository.GetByIdAsync(invoiceId);
+
             if (invoice == null)
             {
                 throw new InvalidOperationException("Invoice not found.");
             }
 
-            var previousStatus = invoice.Status;
-            invoice.Status = newStatus;
-
-            if (newStatus == "Approved" && previousStatus != "Approved")
+            if (!string.Equals(
+                    newStatus,
+                    "Approved",
+                    StringComparison.OrdinalIgnoreCase))
             {
-                foreach (var item in invoice.InvoiceItems)
-                {
-                    await _inventoryRepository.DeductStockAsync(item.ProductId, item.Quantity);
-                }
+                throw new InvalidOperationException(
+                    "Invalid invoice status change.");
             }
+
+            if (!string.Equals(
+                    invoice.Status,
+                    "Pending",
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException(
+                    "Only pending invoices can be approved.");
+            }
+
+            foreach (var item in invoice.InvoiceItems)
+            {
+                await _inventoryRepository.DeductStockAsync(
+                    item.ProductId,
+                    item.Quantity);
+            }
+
+            invoice.Status = "Approved";
+            invoice.UpdatedAt = DateTime.UtcNow;
 
             await _invoiceRepository.UpdateAsync(invoice);
         }
 
         public async Task DeleteAsync(int id)
         {
+            var invoice = await _invoiceRepository.GetByIdAsync(id);
+
+            if (invoice == null)
+            {
+                throw new InvalidOperationException("Invoice not found.");
+            }
+
+            if (!string.Equals(
+                    invoice.Status,
+                    "Pending",
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException(
+                    "Approved invoices cannot be deleted.");
+            }
+
             await _invoiceRepository.DeleteAsync(id);
         }
 
