@@ -36,6 +36,7 @@ namespace FMCGEnterpriseManagementSystem.Repositories
         {
             return await _context.Payments
                 .Include(p => p.Invoice)
+                    .ThenInclude(i => i.Customer)
                 .OrderByDescending(p => p.PaymentDate)
                 .ToListAsync();
         }
