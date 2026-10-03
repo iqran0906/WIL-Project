@@ -17,6 +17,20 @@
         </div>
     }
 
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle me-1"></i>
+            @TempData["ErrorMessage"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+            </button>
+        </div>
+    }
+
     <div class="row align-items-start mb-3">
         <div class="col-md-4">
             <h2 class="text-white fw-bold mb-3">Invoice</h2>
@@ -94,7 +108,14 @@
                             <td>@($"R{invoice.AmountDue:0.00}")</td>
                             <td>@($"R{invoice.Total:0.00}")</td>
                             <td>
-                             @if (invoice.Status == "Paid")
+                            @if (invoice.Status == "Approved")
+{
+    <span class="badge bg-success">
+        <i class="bi bi-check-circle me-1"></i>
+        Approved
+    </span>
+}
+else if (invoice.Status == "Paid")
 {
     <span class="badge bg-success">Paid</span>
 }
@@ -110,7 +131,14 @@ else
                                                        <td>
                                 <a asp-action="Details" asp-route-id="@invoice.InvoiceId" class="btn btn-sm btn-outline-secondary">View</a>
                                 <a asp-action="Download" asp-route-id="@invoice.InvoiceId" class="btn btn-sm btn-outline-primary">Download</a>
-                                <a asp-action="Delete" asp-route-id="@invoice.InvoiceId" class="btn btn-sm btn-outline-danger">Delete</a>
+                                @if (invoice.Status == "Pending")
+                                {
+                                    <a asp-action="Delete"
+                                       asp-route-id="@invoice.InvoiceId"
+                                       class="btn btn-sm btn-outline-danger">
+                                        Delete
+                                    </a>
+                                }
                             </td>
                         </tr>
                     }
