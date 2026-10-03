@@ -37,7 +37,6 @@ namespace FMCGEnterpriseManagementSystem.Services
                 throw new InvalidOperationException(
                     "Payment amount must be greater than zero.");
             }
-            throw new InvalidOperationException("Payment amount must be greater than zero.");
 
             var alreadyPaid = await _paymentRepository.GetTotalPaidForInvoiceAsync(model.InvoiceId);
             var outstanding = invoice.Total - alreadyPaid;
@@ -239,8 +238,8 @@ namespace FMCGEnterpriseManagementSystem.Services
         }
 
         private async Task<PaymentViewModel> BuildViewModelAsync(
-            Invoice invoice,
-            decimal totalPaid)
+         Invoice invoice,
+         decimal totalPaid)
         {
             var outstanding = invoice.Total - totalPaid;
             var status = CalculateStatus(invoice, totalPaid, outstanding);
@@ -249,11 +248,18 @@ namespace FMCGEnterpriseManagementSystem.Services
             {
                 InvoiceId = invoice.InvoiceId,
                 InvoiceNumber = invoice.InvoiceNumber,
+
+                CustomerName = invoice.Customer != null
+                    ? $"{invoice.Customer.Name} {invoice.Customer.Surname}"
+                    : null,
+
                 InvoiceTotal = invoice.Total,
                 AmountAlreadyPaid = totalPaid,
                 OutstandingBalance = outstanding < 0 ? 0 : outstanding,
+
                 Status = status,
                 IsOverdue = status == PaymentStatus.Overdue,
+
                 PaymentHistory = await GetPaymentsForInvoiceAsync(invoice.InvoiceId)
             };
         }

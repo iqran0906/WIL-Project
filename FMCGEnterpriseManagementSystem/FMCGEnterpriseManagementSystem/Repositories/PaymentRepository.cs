@@ -59,6 +59,7 @@ namespace FMCGEnterpriseManagementSystem.Repositories
         public async Task<Invoice?> GetInvoiceByIdAsync(int invoiceId)
         {
             return await _context.Invoices
+                .Include(i => i.Customer)
                 .FirstOrDefaultAsync(i => i.InvoiceId == invoiceId);
         }
 
