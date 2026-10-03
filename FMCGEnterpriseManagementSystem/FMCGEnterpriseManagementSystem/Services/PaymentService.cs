@@ -21,13 +21,32 @@ namespace FMCGEnterpriseManagementSystem.Services
         public async Task<PaymentViewModel> RecordPaymentAsync(PaymentViewModel model)
         {
             var invoice = await _paymentRepository.GetInvoiceByIdAsync(model.InvoiceId)
-                ?? throw new InvalidOperationException("Invoice not found.");
+    ?? throw new InvalidOperationException("Invoice not found.");
+
+            if (!string.Equals(
+                    invoice.Status,
+                    "Approved",
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException(
+                    "Payments can only be recorded for approved invoices.");
+            }
 
             if (model.AmountPaid <= 0)
-                throw new InvalidOperationException("Payment amount must be greater than zero.");
+            {
+                throw new InvalidOperationException(
+                    "Payment amount must be greater than zero.");
+            }
+            throw new InvalidOperationException("Payment amount must be greater than zero.");
 
             var alreadyPaid = await _paymentRepository.GetTotalPaidForInvoiceAsync(model.InvoiceId);
             var outstanding = invoice.Total - alreadyPaid;
+
+            if (outstanding <= 0)
+            {
+                throw new InvalidOperationException(
+                    "This invoice has already been paid in full.");
+            }
 
             if (model.AmountPaid > outstanding)
                 throw new InvalidOperationException(
@@ -51,7 +70,25 @@ namespace FMCGEnterpriseManagementSystem.Services
             var invoice = await _paymentRepository.GetInvoiceByIdAsync(invoiceId)
                 ?? throw new InvalidOperationException("Invoice not found.");
 
-            var alreadyPaid = await _paymentRepository.GetTotalPaidForInvoiceAsync(invoiceId);
+            if (!string.Equals(
+                    invoice.Status,
+                    "Approved",
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException(
+                    "Payments can only be recorded for approved invoices.");
+            }
+
+            var alreadyPaid =
+                await _paymentRepository.GetTotalPaidForInvoiceAsync(invoiceId);
+
+            var outstanding = invoice.Total - alreadyPaid;
+
+            if (outstanding <= 0)
+            {
+                throw new InvalidOperationException(
+                    "This invoice has already been paid in full.");
+            }
 
             return await BuildViewModelAsync(invoice, alreadyPaid);
         }
@@ -60,14 +97,48 @@ namespace FMCGEnterpriseManagementSystem.Services
         {
             var invoices = await _paymentRepository.GetAllInvoicesAsync();
 
-            return invoices.Select(i => new InvoiceViewModel
+            var result = new List<InvoiceViewModel>();
+
+            foreach (var invoice in invoices)
             {
-                InvoiceId = i.InvoiceId,
-                InvoiceNumber = i.InvoiceNumber,
-                CustomerName = i.Customer?.Name,
-                Total = i.Total,
-                AmountDue = i.Total
-            }).ToList();
+                // Only approved invoices may receive payments.
+                if (!string.Equals(
+                        invoice.Status,
+                        "Approved",
+                        StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                var totalPaid =
+                    await _paymentRepository.GetTotalPaidForInvoiceAsync(
+                        invoice.InvoiceId);
+
+                var outstanding = invoice.Total - totalPaid;
+
+                
+                if (outstanding <= 0)
+                {
+                    continue;
+                }
+
+                result.Add(new InvoiceViewModel
+                {
+                    InvoiceId = invoice.InvoiceId,
+                    InvoiceNumber = invoice.InvoiceNumber,
+                    InvoiceDate = invoice.InvoiceDate,
+
+                    CustomerName = invoice.Customer != null
+                        ? $"{invoice.Customer.Name} {invoice.Customer.Surname}"
+                        : null,
+
+                    Total = invoice.Total,
+                    AmountDue = outstanding,
+                    Status = invoice.Status
+                });
+            }
+
+            return result;
         }
 
         public async Task<List<PaymentViewModel>> GetAllPaymentsAsync()
@@ -93,7 +164,9 @@ namespace FMCGEnterpriseManagementSystem.Services
                     PaymentId = payment.PaymentId,
                     InvoiceId = payment.InvoiceId,
                     InvoiceNumber = payment.Invoice?.InvoiceNumber,
-                    CustomerName = payment.Invoice?.Customer?.Name,
+                    CustomerName = payment.Invoice?.Customer != null
+    ? $"{payment.Invoice.Customer.Name} {payment.Invoice.Customer.Surname}"
+    : null,
 
                     InvoiceTotal = invoiceTotal,
                     AmountAlreadyPaid = totalPaid,
@@ -151,7 +224,9 @@ namespace FMCGEnterpriseManagementSystem.Services
                 PaymentId = payment.PaymentId,
                 InvoiceId = payment.InvoiceId,
                 InvoiceNumber = payment.Invoice?.InvoiceNumber,
-                CustomerName = payment.Invoice?.Customer?.Name,
+                CustomerName = payment.Invoice?.Customer != null
+    ? $"{payment.Invoice.Customer.Name} {payment.Invoice.Customer.Surname}"
+    : null,
                 InvoiceTotal = payment.Invoice.Total,
                 AmountAlreadyPaid = totalPaid,
                 OutstandingBalance = outstanding < 0 ? 0 : outstanding,

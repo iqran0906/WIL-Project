@@ -6,6 +6,20 @@
 
 <div class="container-fluid py-4">
 
+    @if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle me-1"></i>
+        @TempData["ErrorMessage"]
+
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close">
+        </button>
+    </div>
+}
+
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h1 class="fw-bold text-white">Select Invoice</h1>
@@ -70,24 +84,13 @@
                                     </td>
 
                                     <td>
-                                @if (invoice.Status == "Paid")
-                                        {
-                                            <span class="badge bg-success">
-                                                Paid
-                                            </span>
-                                        }
-                                        else if (invoice.Status == "Cancelled")
-                                        {
-                                            <span class="badge bg-danger">
-                                                Cancelled
-                                            </span>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge bg-warning text-dark">
-                                                Pending
-                                            </span>
-                                        }
+                       @if (invoice.Status == "Approved")
+{
+    <span class="badge bg-success">
+        <i class="bi bi-check-circle me-1"></i>
+        Approved
+    </span>
+}
                                     </td>
 
                                     <td>
