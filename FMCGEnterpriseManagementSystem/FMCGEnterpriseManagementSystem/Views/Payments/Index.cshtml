@@ -17,13 +17,18 @@
         </div>
 
         <div>
-            <a asp-action="ExportPdf" class="btn btn-outline-light me-2">
+            <a asp-action="ExportPdf"
+               class="btn btn-outline-light me-2">
                 Export PDF
             </a>
-            <a asp-action="ExportExcel" class="btn btn-outline-light me-2">
+
+            <a asp-action="ExportExcel"
+               class="btn btn-outline-light me-2">
                 Export Excel
             </a>
-            <a asp-action="Create" class="btn btn-success">
+
+            <a asp-action="SelectInvoice"
+               class="btn-action-primary text-decoration-none">
                 + New Payment
             </a>
         </div>
@@ -33,6 +38,7 @@
     {
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             @TempData["SuccessMessage"]
+
             <button type="button"
                     class="btn-close"
                     data-bs-dismiss="alert"
@@ -63,9 +69,11 @@
                         </thead>
 
                         <tbody>
+
                             @foreach (var payment in Model)
                             {
                                 <tr>
+
                                     <td>
                                         @payment.PaymentDate.ToString("dd/MM/yyyy")
                                     </td>
@@ -97,21 +105,31 @@
                                     </td>
 
                                     <td>
+
                                 @if (payment.Status == FMCGEnterpriseManagementSystem.Enums.PaymentStatus.Paid)
                                         {
-                                            <span class="badge bg-success">Paid</span>
+                                            <span class="badge bg-success">
+                                                Paid
+                                            </span>
                                         }
                                         else if (payment.Status == FMCGEnterpriseManagementSystem.Enums.PaymentStatus.PartiallyPaid)
                                         {
-                                            <span class="badge bg-warning text-dark">Partially Paid</span>
+                                            <span class="badge bg-warning text-dark">
+                                                Partially Paid
+                                            </span>
                                         }
                                         else
                                         {
-                                            <span class="badge bg-secondary">Unpaid</span>
+                                            <span class="badge bg-secondary">
+                                                Unpaid
+                                            </span>
                                         }
+
                                     </td>
+
                                 </tr>
                             }
+
                         </tbody>
 
                     </table>
@@ -122,13 +140,16 @@
             {
                 <div class="text-center py-5">
 
-                    <h3 class="fw-bold">No Payments Found</h3>
+                    <h3 class="fw-bold">
+                        No Payments Found
+                    </h3>
 
                     <p class="text-muted">
                         There are currently no recorded payments.
                     </p>
 
-                    <a asp-action="Create" class="btn btn-success">
+                    <a asp-action="SelectInvoice"
+                       class="btn-action-primary text-decoration-none">
                         Create a Payment
                     </a>
 
