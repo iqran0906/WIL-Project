@@ -1,6 +1,10 @@
-﻿// Purpose: Database entity: employee (maps to a table).
-// Authors: Naseeha27, iqran0906 (from git history)
-
+﻿/***************************************************************************************
+*    Title: Employee Database Entity
+*    Author: Naseeha27, iqran0906
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Models/Employee.cs
+***************************************************************************************/
 using System.ComponentModel.DataAnnotations;
 
 namespace FMCGEnterpriseManagementSystem.Models

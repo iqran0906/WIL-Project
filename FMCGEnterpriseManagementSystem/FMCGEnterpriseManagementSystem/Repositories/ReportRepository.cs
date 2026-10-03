@@ -1,5 +1,10 @@
-﻿// Purpose: Repository pattern: database queries for report.
-// Authors: iqran0906 (from git history)
+﻿/***************************************************************************************
+*    Title: Report Repository
+*    Author: iqran0906
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Repositories/ReportRepository.cs
+***************************************************************************************/
 
 using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;

@@ -1,6 +1,10 @@
-﻿// Purpose: VAT rate record (standard South African VAT).
-// Authors: Sayali-St10458649 (from git history)
-
+﻿/***************************************************************************************
+*    Title: VAT Rate Record
+*    Author: Sayali-St10458649
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Models/VatRate.cs
+***************************************************************************************/
 namespace FMCGEnterpriseManagementSystem.Models
 {
     public class VatSettings

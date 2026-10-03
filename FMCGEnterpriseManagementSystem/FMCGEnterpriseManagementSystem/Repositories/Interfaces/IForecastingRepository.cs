@@ -1,5 +1,10 @@
-﻿// Purpose: Contract (interface) for forecasting data access.
-// Authors: Maseeha17 (from git history)
+﻿/***************************************************************************************
+*    Title: Forecasting Repository Interface
+*    Author: Maseeha17
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Repositories/Interfaces/IForecastingRepository.cs
+***************************************************************************************/
 
 using FMCGEnterpriseManagementSystem.Models;
 

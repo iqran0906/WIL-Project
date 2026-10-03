@@ -1,6 +1,10 @@
-﻿// Purpose: Repository pattern: database queries for supplier.
-// Authors: Naseeha27, Maseeha17 (from git history)
-
+﻿/***************************************************************************************
+*    Title: Supplier Repository
+*    Author: Naseeha27, Maseeha17
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Repositories/SupplierRepository.cs
+***************************************************************************************/
 using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;

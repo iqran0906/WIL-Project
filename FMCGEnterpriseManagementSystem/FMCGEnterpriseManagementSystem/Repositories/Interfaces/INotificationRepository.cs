@@ -1,6 +1,14 @@
-﻿// Purpose: Contract (interface) for notification data access.
-// Authors: Sayali-St10458649 (from git history)
+﻿// P/***************************************************************************************
+using FMCGEnterpriseManagementSystem.Models;
+using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
+*Title: Notification Repository Interface
+* Author: Sayali - St10458649
+* Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem / Repositories / Interfaces / INotificationRepository.cs
+* **************************************************************************************/
 using FMCGEnterpriseManagementSystem.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;

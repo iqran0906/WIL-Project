@@ -1,6 +1,10 @@
-// Purpose: One entry in the Recent Activity log (who did what, and when).
-// Authors: ST10068525 (new file, not yet committed)
-
+/***************************************************************************************
+*    Title: Recent Activity Log Entry
+*    Author: ST10068525
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Models/ActivityLog.cs
+***************************************************************************************/
 using System.ComponentModel.DataAnnotations;
 
 namespace FMCGEnterpriseManagementSystem.Models

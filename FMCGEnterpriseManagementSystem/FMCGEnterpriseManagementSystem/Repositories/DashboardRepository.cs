@@ -1,4 +1,11 @@
-﻿using FMCGEnterpriseManagementSystem.Data;
+﻿/***************************************************************************************
+*    Title: Dashboard Repository
+*    Author: Maseeha17
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Repositories/DashboardRepository.cs
+***************************************************************************************/
+using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;

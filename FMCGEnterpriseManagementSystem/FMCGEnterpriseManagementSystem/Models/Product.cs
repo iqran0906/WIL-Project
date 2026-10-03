@@ -1,5 +1,10 @@
-﻿// Purpose: Database entity: product (maps to a table).
-// Authors: iqran0906, Maseeha17, Naseeha27 (from git history)
+﻿/***************************************************************************************
+*    Title: Product Database Entity
+*    Author: Maseeha17, Naseeha27
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Models/Product.cs
+***************************************************************************************/
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

@@ -1,6 +1,10 @@
-﻿// Purpose: Database entity: next of kin (maps to a table).
-// Authors: iqran0906 (from git history)
-
+﻿/***************************************************************************************
+*    Title: Next of Kin Database Entity
+*    Author: iqran0906
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Models/NextOfKin.cs
+***************************************************************************************/
 using System.ComponentModel.DataAnnotations;
 
 namespace FMCGEnterpriseManagementSystem.Models

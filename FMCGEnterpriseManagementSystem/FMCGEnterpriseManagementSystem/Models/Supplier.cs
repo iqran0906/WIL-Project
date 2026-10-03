@@ -1,6 +1,10 @@
-﻿// Purpose: Database entity: supplier (maps to a table).
-// Authors: Naseeha27, Maseeha17 (from git history)
-
+﻿/***************************************************************************************
+*    Title: Supplier Database Entity
+*    Author: Naseeha27, Maseeha17
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Models/Supplier.cs
+***************************************************************************************/
 namespace FMCGEnterpriseManagementSystem.Models
 {
     public class Supplier

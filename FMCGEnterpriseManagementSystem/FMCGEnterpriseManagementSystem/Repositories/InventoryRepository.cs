@@ -1,5 +1,10 @@
-﻿// Purpose: Repository pattern: database queries for inventory.
-// Authors: Maseeha17, Sayali-St10458649 (from git history)
+﻿/***************************************************************************************
+*    Title: Inventory Repository
+*    Author: Maseeha17, Sayali-St10458649
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Repositories/InventoryRepository.cs
+***************************************************************************************/
 
 using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;

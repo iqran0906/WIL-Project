@@ -1,5 +1,10 @@
-﻿// Purpose: Contract (interface) for employee data access.
-// Authors: iqran0906 (from git history)
+﻿/***************************************************************************************
+*    Title: Employee Repository Interface
+*    Author: iqran0906
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Repositories/Interfaces/IEmployeeRepository.cs
+***************************************************************************************/
 
 using FMCGEnterpriseManagementSystem.Models;
 

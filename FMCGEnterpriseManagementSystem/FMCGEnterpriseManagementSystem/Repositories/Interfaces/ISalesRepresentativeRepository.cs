@@ -1,5 +1,10 @@
-﻿// Purpose: Contract (interface) for sales representative data access.
-// Authors: iqran0906 (from git history)
+﻿/***************************************************************************************
+*    Title: Sales Representative Repository Interface
+*    Author: iqran0906
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Repositories/Interfaces/ISalesRepresentativeRepository.cs
+***************************************************************************************/
 
 using FMCGEnterpriseManagementSystem.Models;
 

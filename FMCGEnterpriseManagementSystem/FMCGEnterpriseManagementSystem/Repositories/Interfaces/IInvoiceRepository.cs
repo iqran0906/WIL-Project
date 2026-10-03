@@ -1,5 +1,10 @@
-﻿// Purpose: Contract (interface) for invoice data access.
-// Authors: Sayali-St10458649 (from git history)
+﻿/***************************************************************************************
+*    Title: Invoice Repository Interface
+*    Author: Sayali-St10458649
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Repositories/Interfaces/IInvoiceRepository.cs
+***************************************************************************************/
 
 using FMCGEnterpriseManagementSystem.Models;
 

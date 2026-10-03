@@ -1,6 +1,10 @@
-// Purpose: Data for the friendly error / not found / access denied page.
-// Authors: Naseeha27 (from git history)
-
+/***************************************************************************************
+*    Title: Error View Model
+*    Author: Naseeha27
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Models/ErrorViewModel.cs
+***************************************************************************************/
 namespace FMCGEnterpriseManagementSystem.Models
 {
     public class ErrorViewModel

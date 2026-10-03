@@ -1,5 +1,10 @@
-﻿// Purpose: Database entity: invoice (maps to a table).
-// Authors: iqran0906, Naseeha27, Sayali-St10458649 (from git history)
+﻿/***************************************************************************************
+*    Title: Invoice Database Entity
+*    Author: iqran0906, Naseeha27, Sayali-St10458649
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Models/Invoice.cs
+***************************************************************************************/
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

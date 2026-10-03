@@ -1,6 +1,10 @@
-﻿// Purpose: Repository pattern: database queries for forecasting.
-// Authors: Maseeha17 (from git history)
-
+﻿/***************************************************************************************
+*    Title: Forecasting Repository
+*    Author: Maseeha17
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Repositories/ForecastingRepository.cs
+***************************************************************************************/
 using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;

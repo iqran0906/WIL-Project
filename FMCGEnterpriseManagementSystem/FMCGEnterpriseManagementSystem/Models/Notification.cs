@@ -1,6 +1,10 @@
-﻿// Purpose: Database entity: notification (maps to a table).
-// Authors: Sayali-St10458649, Naseeha27 (from git history)
-
+﻿/***************************************************************************************
+*    Title: Notification Database Entity
+*    Author: Sayali-St10458649, Naseeha27
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Models/Notification.cs
+***************************************************************************************/
 using System;
 
 namespace FMCGEnterpriseManagementSystem.Models

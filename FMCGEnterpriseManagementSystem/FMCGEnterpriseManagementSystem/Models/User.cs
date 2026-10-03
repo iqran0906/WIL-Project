@@ -1,6 +1,10 @@
-﻿// Purpose: Login account (ASP.NET Core Identity user) with an active/inactive flag.
-// Authors: Naseeha27 (from git history)
-// Uses: ASP.NET Core Identity (Microsoft, MIT) https://learn.microsoft.com/aspnet/core/security/authentication/identity
+﻿/***************************************************************************************
+*    Title: Identity User Account
+*    Author: Naseeha27
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Models/User.cs
+***************************************************************************************/
 
 using Microsoft.AspNetCore.Identity;
 

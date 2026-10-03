@@ -1,5 +1,10 @@
-﻿// Purpose: Repository pattern: database queries for employee.
-// Authors: iqran0906 (from git history)
+﻿/***************************************************************************************
+*    Title: Employee Repository
+*    Author: iqran0906
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Repositories/EmployeeRepository.cs
+***************************************************************************************/
 
 using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;
