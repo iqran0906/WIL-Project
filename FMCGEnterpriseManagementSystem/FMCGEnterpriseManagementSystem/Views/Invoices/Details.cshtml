@@ -338,6 +338,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <form asp-controller="Invoices" asp-action="EmailInvoice" method="post">
+                    @Html.AntiForgeryToken()
                     <input type="hidden" name="id" value="@Model.InvoiceId" />
                     <div class="modal-header">
                         <h5 class="modal-title">Email Invoice @Model.InvoiceNumber</h5>
@@ -345,7 +346,12 @@
                     </div>
                     <div class="modal-body">
                         <label class="fw-bold text-secondary mb-1">Recipient Email</label>
-                        <input type="email" name="recipientEmail" class="form-control" required placeholder="customer@example.com" />
+                        <input type="email"
+                               name="recipientEmail"
+                               class="form-control"
+                               value="@ViewBag.CustomerEmail"
+                               required
+                               placeholder="customer@example.com" />
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>

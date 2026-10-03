@@ -75,8 +75,15 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             var invoice = await _invoiceService.GetByIdAsync(id.Value);
             if (invoice == null) return NotFound();
 
+            var customer = await _context.Customers
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.CustomerId == invoice.CustomerId);
+
+            ViewBag.CustomerEmail = customer?.Email;
+
             return View(invoice);
         }
+
         // GET: Invoices/Create
         public async Task<IActionResult> Create()
         {

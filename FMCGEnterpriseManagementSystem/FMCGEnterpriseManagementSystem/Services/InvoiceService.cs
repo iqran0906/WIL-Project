@@ -210,6 +210,26 @@ namespace FMCGEnterpriseManagementSystem.Services
             await _invoiceRepository.DeleteAsync(id);
         }
 
+        public async Task<bool> SendInvoiceEmailAsync(int invoiceId)
+        {
+            var invoice = await _invoiceRepository.GetByIdAsync(invoiceId);
+            if (invoice == null)
+            {
+                throw new InvalidOperationException("Invoice not found.");
+            }
+
+            if (invoice.Customer == null || string.IsNullOrWhiteSpace(invoice.Customer.Email))
+            {
+                throw new InvalidOperationException("This customer has no email address on file.");
+            }
+
+            // TODO: once the Email API project is merged in, replace this
+            // with a real call (e.g. via HttpClient to the API's /email endpoint).
+            // For now this is a placeholder so the UI flow can be tested end-to-end.
+            await Task.Delay(300); // simulates a network call
+            return true;
+        }
+
         private static InvoiceViewModel MapToViewModel(Invoice invoice)
         {
             decimal vatTotal = invoice.Total - invoice.Subtotal;

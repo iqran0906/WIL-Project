@@ -12,5 +12,7 @@ namespace FMCGEnterpriseManagementSystem.Services.Interfaces
         Task<IEnumerable<InvoiceViewModel>> SearchAsync(int? customerId, DateTime? startDate, DateTime? endDate, string? keyword); Task<InvoiceViewModel> CreateAsync(InvoiceViewModel model);
         Task UpdateStatusAsync(int invoiceId, string newStatus);
         Task DeleteAsync(int id);
+
+        Task<bool> SendInvoiceEmailAsync(int invoiceId);
     }
 }
