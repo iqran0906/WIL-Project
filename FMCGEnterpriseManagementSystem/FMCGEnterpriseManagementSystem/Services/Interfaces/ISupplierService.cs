@@ -1,5 +1,10 @@
-﻿// Purpose: Contract (interface) for the supplier service.
-// Authors: iqran0906, Naseeha27, Maseeha17 (from git history)
+﻿/***************************************************************************************
+*    Title: Supplier Service Interface
+*    Author: iqran0906, Naseeha27, Maseeha17
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Services/Interfaces/ISupplierService.cs
+***************************************************************************************/
 
 using FMCGEnterpriseManagementSystem.ViewModels;
 

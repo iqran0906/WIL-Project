@@ -1,5 +1,10 @@
-﻿// Purpose: Contract (interface) for the quote service.
-// Authors: Sayali-St10458649 (from git history)
+﻿/***************************************************************************************
+*    Title: Quote Service Interface
+*    Author: Sayali-St10458649
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Services/Interfaces/IQuoteService.cs
+***************************************************************************************/
 
 using FMCGEnterpriseManagementSystem.Enums;
 using FMCGEnterpriseManagementSystem.Models;

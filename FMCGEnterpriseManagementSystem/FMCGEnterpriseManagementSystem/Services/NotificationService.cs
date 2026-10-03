@@ -1,5 +1,10 @@
-﻿// Purpose: Business logic for notification.
-// Authors: Sayali-St10458649 (from git history)
+﻿/***************************************************************************************
+*    Title: Notification Service
+*    Author: Sayali-St10458649
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Services/NotificationService.cs
+***************************************************************************************/
 
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Observers;

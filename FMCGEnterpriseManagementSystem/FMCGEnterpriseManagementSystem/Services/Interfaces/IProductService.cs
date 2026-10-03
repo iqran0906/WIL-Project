@@ -1,5 +1,10 @@
-﻿// Purpose: Contract (interface) for the product service.
-// Authors: iqran0906, Maseeha17 (from git history)
+﻿/***************************************************************************************
+*    Title: Product Service Interface
+*    Author: iqran0906, Maseeha17
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Services/Interfaces/IProductService.cs
+***************************************************************************************/
 
 using FMCGEnterpriseManagementSystem.ViewModels;
 

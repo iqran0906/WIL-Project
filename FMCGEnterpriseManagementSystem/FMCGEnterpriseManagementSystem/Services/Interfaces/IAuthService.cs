@@ -1,5 +1,10 @@
-﻿// Purpose: Contract (interface) for the auth service.
-// Authors: iqran0906 (from git history)
+﻿/***************************************************************************************
+*    Title: Authentication Service Interface
+*    Author: iqran0906
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Services/Interfaces/IAuthService.cs
+***************************************************************************************/
 
 namespace FMCGEnterpriseManagementSystem.Services.Interfaces
 {

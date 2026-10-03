@@ -1,5 +1,10 @@
-﻿// Purpose: Contract (interface) for the payment service.
-// Authors: Naseeha27, Sayali-St10458649 (from git history)
+﻿/***************************************************************************************
+*    Title: Payment Service Interface
+*    Author: Naseeha27, Sayali-St10458649
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Services/Interfaces/IPaymentService.cs
+***************************************************************************************/
 
 using FMCGEnterpriseManagementSystem.ViewModels;
 

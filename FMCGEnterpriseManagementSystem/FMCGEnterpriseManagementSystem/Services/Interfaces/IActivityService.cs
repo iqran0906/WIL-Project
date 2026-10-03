@@ -1,5 +1,9 @@
-// Purpose: Contract (interface) for the activity service.
-// Authors: ST10068525 (new file, not yet committed)
+/***************************************************************************************
+*    Title: Contract (interface) for the activity service
+*    Author: ST10068525
+*    Date: 2026
+*    Availability: FMCGEnterpriseManagementSystem Local Repository
+***************************************************************************************/
 
 using FMCGEnterpriseManagementSystem.Models;
 

@@ -1,5 +1,10 @@
-﻿// Purpose: Contract (interface) for the inventory service.
-// Authors: Maseeha17 (from git history)
+﻿/***************************************************************************************
+*    Title: Inventory Service Interface
+*    Author: Maseeha17
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Services/Interfaces/IInventoryService.cs
+***************************************************************************************/
 
 using FMCGEnterpriseManagementSystem.ViewModels;
 

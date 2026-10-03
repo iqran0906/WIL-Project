@@ -1,5 +1,10 @@
-﻿// Purpose: Business logic for supplier.
-// Authors: iqran0906, Maseeha17, Naseeha27 (from git history)
+﻿/***************************************************************************************
+*    Title: Supplier Service
+*    Author: iqran0906, Naseeha27, Maseeha17
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Services/SupplierService.cs
+***************************************************************************************/
 
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;

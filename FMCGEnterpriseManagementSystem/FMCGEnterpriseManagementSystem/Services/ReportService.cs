@@ -1,5 +1,10 @@
-﻿// Purpose: Business logic for report.
-// Authors: iqran0906 (from git history)
+﻿/***************************************************************************************
+*    Title: Report Service
+*    Author: iqran0906
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Services/ReportService.cs
+***************************************************************************************/
 
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;

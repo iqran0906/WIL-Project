@@ -1,5 +1,10 @@
-﻿// Purpose: Contract (interface) for the user account service.
-// Authors: iqran0906 (from git history)
+﻿/***************************************************************************************
+*    Title: User Account Service Interface
+*    Author: iqran0906
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Services/Interfaces/IUserAccountService.cs
+***************************************************************************************/
 
 using FMCGEnterpriseManagementSystem.Models;
 

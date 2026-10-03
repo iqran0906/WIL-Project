@@ -1,5 +1,10 @@
-﻿// Purpose: Business logic for forecasting.
-// Authors: iqran0906, Maseeha17 (from git history)
+﻿/***************************************************************************************
+*    Title: Forecasting Service
+*    Author: Maseeha17
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Services/ForecastingService.cs
+***************************************************************************************/
 
 using System.Text;
 using FMCGEnterpriseManagementSystem.Models;

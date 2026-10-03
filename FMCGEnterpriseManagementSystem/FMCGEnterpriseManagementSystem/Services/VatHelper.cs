@@ -1,5 +1,10 @@
-﻿// Purpose: Helper for VAT calculations.
-// Authors: Sayali-St10458649 (from git history)
+﻿/***************************************************************************************
+*    Title: VAT Calculation Helper
+*    Author: Sayali-St10458649
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Helpers/VatHelper.cs
+***************************************************************************************/
 
 namespace FMCGEnterpriseManagementSystem.Services
 {

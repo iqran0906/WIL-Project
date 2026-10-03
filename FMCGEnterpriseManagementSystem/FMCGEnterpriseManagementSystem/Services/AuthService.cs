@@ -1,7 +1,10 @@
-﻿// Purpose: Logs users in and out (only active accounts can log in).
-// Authors: iqran0906 (from git history)
-// Uses: ASP.NET Core Identity (Microsoft, MIT) https://learn.microsoft.com/aspnet/core/security/authentication/identity
-
+﻿/***************************************************************************************
+*    Title: Authentication Service
+*    Author: iqran0906
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: ASP.NET Core Identity (Microsoft, MIT) https://learn.microsoft.com/aspnet/core/security/authentication/identity
+***************************************************************************************/
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;

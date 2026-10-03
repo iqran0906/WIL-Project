@@ -1,5 +1,10 @@
-// Purpose: Global search: finds customers, invoices, quotes, payments, products, suppliers and staff.
-// Authors: ST10068525 (new file, not yet committed)
+/***************************************************************************************
+*    Title: Search Service
+*    Author: ST10068525
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Services/SearchService.cs
+***************************************************************************************/
 
 using System.Globalization;
 using System.Security.Claims;

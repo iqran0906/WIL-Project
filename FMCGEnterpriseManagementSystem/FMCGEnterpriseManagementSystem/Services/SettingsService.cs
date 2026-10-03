@@ -1,5 +1,10 @@
-// Purpose: Reads (cached) and saves the company-wide settings.
-// Authors: ST10068525 (new file, not yet committed)
+/***************************************************************************************
+*    Title: Settings Service
+*    Author: ST10068525
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Services/SettingsService.cs
+***************************************************************************************/
 
 using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;

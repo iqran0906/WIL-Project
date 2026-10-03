@@ -1,7 +1,11 @@
-﻿// Purpose: Business logic for inventory.
-// Authors: Maseeha17 (from git history)
-
-﻿using System.Globalization;
+﻿/***************************************************************************************
+*    Title: Inventory Service
+*    Author: Maseeha17
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Services/InventoryService.cs
+***************************************************************************************/
+using System.Globalization;
 using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;

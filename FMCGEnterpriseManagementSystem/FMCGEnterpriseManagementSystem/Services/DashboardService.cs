@@ -1,4 +1,11 @@
-﻿using System;
+﻿/***************************************************************************************
+*    Title: Dashboard Service
+*    Author: Maseeha17
+*    Date: 3 October 2026
+*    Code version: Version 1.0
+*    Availability: FMCGEnterpriseManagementSystem/Services/DashboardService.cs
+***************************************************************************************/
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
