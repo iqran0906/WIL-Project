@@ -6,8 +6,8 @@ namespace FMCGEnterpriseManagementSystem.Models
     public enum NotificationType
     {
         LowStock,
-        QuoteExpired,
         NewQuote,
+        QuoteExpired,
         NewInvoice,
         NewCustomer,
         NewItem,

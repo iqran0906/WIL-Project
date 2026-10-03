@@ -23,6 +23,23 @@ namespace FMCGEnterpriseManagementSystem.Observers
             _observers.Remove(observer);
         }
 
+
+        public async Task NotifyNewQuoteAsync(string quoteNumber, int quoteId, string customerName)
+        {
+            var dto = new NotificationDto
+            {
+                Type = NotificationType.NewQuote,
+                Title = "New quote created",
+                Message = $"Quote {quoteNumber} was created for {customerName}.",
+                RelatedEntityId = quoteId,
+                RelatedEntityType = "Quote"
+            };
+
+            foreach (var observer in _observers)
+            {
+                await observer.HandleAsync(dto);
+            }
+        }
         public async Task NotifyNewInvoiceAsync(string invoiceNumber, int invoiceId, string customerName)
         {
             var dto = new NotificationDto

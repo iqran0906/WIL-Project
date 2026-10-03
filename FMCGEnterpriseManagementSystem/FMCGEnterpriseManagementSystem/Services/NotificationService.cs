@@ -42,6 +42,10 @@ namespace FMCGEnterpriseManagementSystem.Services
             _paymentSubject.Attach(_emailObserver);
         }
 
+        public async Task NotifyNewQuoteAsync(string quoteNumber, int quoteId, string customerName)
+        {
+            await _paymentSubject.NotifyNewQuoteAsync(quoteNumber, quoteId, customerName);
+        }
         public async Task<List<NotificationViewModel>> GetAllAsync()
         {
             var notifications = await _notificationRepository.GetAllAsync();
@@ -59,6 +63,10 @@ namespace FMCGEnterpriseManagementSystem.Services
             await _notificationRepository.MarkAsReadAsync(id);
         }
 
+        public async Task<int> GetUnreadCountAsync()
+        {
+            return await _notificationRepository.GetUnreadCountAsync();
+        }
         public async Task NotifyLowStockAsync(string productName, int currentQuantity, int threshold)
         {
             await _inventorySubject.NotifyLowStockAsync(productName, currentQuantity, threshold);

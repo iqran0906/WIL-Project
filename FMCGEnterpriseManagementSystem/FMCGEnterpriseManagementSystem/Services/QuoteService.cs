@@ -14,12 +14,15 @@ namespace FMCGEnterpriseManagementSystem.Services
         private readonly IQuoteRepository _quoteRepository;
         private readonly IInvoiceRepository _invoiceRepository;
 
+        private readonly INotificationService _notificationService;
+
         private const decimal VatRate = 0.15m;
 
-        public QuoteService(IQuoteRepository quoteRepository, IInvoiceRepository invoiceRepository)
+        public QuoteService(IQuoteRepository quoteRepository, IInvoiceRepository invoiceRepository, INotificationService notificationService)
         {
             _quoteRepository = quoteRepository;
             _invoiceRepository = invoiceRepository;
+            _notificationService = notificationService;
         }
 
         public async Task<IEnumerable<Quote>> GetAllQuotesAsync()
@@ -74,8 +77,13 @@ namespace FMCGEnterpriseManagementSystem.Services
             quote.QuoteNumber = await _quoteRepository.GenerateNextQuoteNumberAsync();
             quote.Status = QuoteStatus.Pending;
 
-           CalculateTotals(quote, VatRate);
-            return await _quoteRepository.AddAsync(quote);
+                       CalculateTotals(quote, VatRate);
+
+            var saved = await _quoteRepository.AddAsync(quote);
+
+            await _notificationService.NotifyNewQuoteAsync(saved.QuoteNumber, saved.QuoteId, saved.CustomerId.ToString());
+
+            return saved;
         }
 
         public async Task<Quote> UpdateQuoteAsync(Quote quote)
@@ -123,6 +131,8 @@ namespace FMCGEnterpriseManagementSystem.Services
 
             quote.Status = QuoteStatus.Invoiced;
             await _quoteRepository.UpdateAsync(quote);
+
+            await _notificationService.NotifyNewInvoiceAsync(invoice.InvoiceNumber, invoice.InvoiceId, quote.CustomerId.ToString());
 
             return true;
         }

@@ -47,6 +47,11 @@ namespace FMCGEnterpriseManagementSystem.Repositories
                 .ToListAsync();
         }
 
+        public async Task<int> GetUnreadCountAsync()
+        {
+            return await _context.Notifications.CountAsync(n => !n.IsRead);
+        }
+
         public async Task<List<Notification>> GetByTypeAsync(NotificationType type)
         {
             return await _context.Notifications

@@ -11,7 +11,6 @@ namespace FMCGEnterpriseManagementSystem.Repositories
     public class InventoryRepository : IInventoryRepository
     {
         private readonly ApplicationDbContext _context;
-
         public InventoryRepository(ApplicationDbContext context)
         {
             _context = context;
