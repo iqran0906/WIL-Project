@@ -23,6 +23,7 @@ namespace FMCGEnterpriseManagementSystem.Repositories
                 .Include(i => i.InvoiceItems)
                     .ThenInclude(ii => ii.Product)
                 .Include(i => i.Customer)
+                .Include(i => i.Payments)
                 .FirstOrDefaultAsync(i => i.InvoiceId == id);
         }
 
@@ -32,6 +33,7 @@ namespace FMCGEnterpriseManagementSystem.Repositories
                 .Include(i => i.InvoiceItems)
                     .ThenInclude(ii => ii.Product)
                 .Include(i => i.Customer)
+                .Include(i => i.Payments)
                 .ToListAsync();
         }
 

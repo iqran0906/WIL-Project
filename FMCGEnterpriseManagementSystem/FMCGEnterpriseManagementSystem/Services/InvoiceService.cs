@@ -206,6 +206,14 @@ namespace FMCGEnterpriseManagementSystem.Services
         {
             decimal vatTotal = invoice.Total - invoice.Subtotal;
 
+            decimal totalPaid = invoice.Payments?.Sum(p => p.AmountPaid) ?? 0m;
+            decimal amountDue = invoice.Total - totalPaid;
+
+            if (amountDue < 0)
+            {
+                amountDue = 0;
+            }
+
             return new InvoiceViewModel
             {
                 InvoiceId = invoice.InvoiceId,
@@ -221,7 +229,7 @@ namespace FMCGEnterpriseManagementSystem.Services
                 Subtotal = invoice.Subtotal,
                 VatTotal = vatTotal,
                 Total = invoice.Total,
-                AmountDue = invoice.Total,
+                AmountDue = amountDue,
                 Status = invoice.Status,
                 Items = invoice.InvoiceItems.Select(i => new InvoiceItemViewModel
                 {
