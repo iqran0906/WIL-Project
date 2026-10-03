@@ -13,5 +13,6 @@ namespace FMCGEnterpriseManagementSystem.Repositories.Interfaces
         Task<List<Payment>> GetByInvoiceIdAsync(int invoiceId);
         Task<decimal> GetTotalPaidForInvoiceAsync(int invoiceId);
         Task<Invoice?> GetInvoiceByIdAsync(int invoiceId);
+        Task<List<Invoice>> GetAllInvoicesAsync();
     }
 }

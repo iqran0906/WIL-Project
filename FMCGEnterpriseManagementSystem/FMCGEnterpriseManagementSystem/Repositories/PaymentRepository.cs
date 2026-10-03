@@ -27,9 +27,9 @@ namespace FMCGEnterpriseManagementSystem.Repositories
         public async Task<Payment?> GetByIdAsync(int paymentId)
         {
             return await _context.Payments
-             .Include(p => p.Invoice)
-             .ThenInclude(i => i.Customer)
-              .FirstOrDefaultAsync(p => p.PaymentId == paymentId);
+                .Include(p => p.Invoice)
+                .ThenInclude(i => i.Customer)
+                .FirstOrDefaultAsync(p => p.PaymentId == paymentId);
         }
 
         public async Task<List<Payment>> GetAllAsync()
@@ -59,6 +59,14 @@ namespace FMCGEnterpriseManagementSystem.Repositories
         {
             return await _context.Invoices
                 .FirstOrDefaultAsync(i => i.InvoiceId == invoiceId);
+        }
+
+        public async Task<List<Invoice>> GetAllInvoicesAsync()
+        {
+            return await _context.Invoices
+                .Include(i => i.Customer)
+                .OrderByDescending(i => i.InvoiceDate)
+                .ToListAsync();
         }
     }
 }
