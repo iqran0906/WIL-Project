@@ -31,6 +31,12 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return View(payments);
         }
 
+        public async Task<IActionResult> SelectInvoice()
+        {
+            var invoices = await _paymentService.GetAvailableInvoicesAsync();
+            return View(invoices);
+        }
+
         public async Task<IActionResult> Create(int invoiceId)
         {
             var model = await _paymentService.GetPaymentFormForInvoiceAsync(invoiceId);
