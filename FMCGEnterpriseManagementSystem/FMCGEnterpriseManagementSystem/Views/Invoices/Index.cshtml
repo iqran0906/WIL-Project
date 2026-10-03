@@ -1,6 +1,6 @@
 ﻿@*
     Purpose: Invoices list page (table with search / filters and actions).
-    Authors: Sayali-St10458649 (from git history)
+    Authors: Sayali-St10458649, iqran0906 (from git history)
 *@
 @model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.InvoiceViewModel>
 
@@ -9,69 +9,172 @@
 }
 
 <div class="px-2 py-3">
+
     @if (TempData["SuccessMessage"] != null)
     {
         <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="bi bi-check-circle me-1"></i>@TempData["SuccessMessage"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <i class="bi bi-check-circle me-1"></i>
+            @TempData["SuccessMessage"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+            </button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle me-1"></i>
+            @TempData["ErrorMessage"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+            </button>
         </div>
     }
 
     <div class="row align-items-start mb-3">
+
         <div class="col-md-4">
-            <h2 class="text-white fw-bold mb-3">Invoice</h2>
-            <a asp-controller="Invoices" asp-action="Create" class="btn btn-action-primary text-decoration-none">
+
+            <h2 class="text-white fw-bold mb-3">
+                Invoice
+            </h2>
+
+            <a asp-controller="Invoices"
+               asp-action="Create"
+               class="btn btn-action-primary text-decoration-none">
+
                 New Invoice
+
             </a>
+
         </div>
 
         <div class="col-md-8">
-            <form asp-action="Index" method="get">
+
+            <form asp-action="Index"
+                  method="get">
+
                 <div class="row g-2 justify-content-md-end text-white">
+
                     <div class="col-6 col-sm-3">
-                        <label class="small fw-bold">Customer:</label>
+
+                        <label class="small fw-bold">
+                            Customer:
+                        </label>
+
                         <select name="customerId"
                                 asp-items="ViewBag.CustomerFilter"
                                 class="form-select form-select-sm">
-                            <option value="">All</option>
+
+                            <option value="">
+                                All
+                            </option>
+
                         </select>
+
                     </div>
+
                     <div class="col-6 col-sm-3">
-                        <label class="small fw-bold">Start:</label>
-                        <input type="date" name="startDate" value="@ViewBag.StartDate" class="form-control form-control-sm">
+
+                        <label class="small fw-bold">
+                            Start:
+                        </label>
+
+                        <input type="date"
+                               name="startDate"
+                               value="@ViewBag.StartDate"
+                               class="form-control form-control-sm" />
+
                     </div>
+
                     <div class="col-6 col-sm-3">
-                        <label class="small fw-bold">End:</label>
-                        <input type="date" name="endDate" value="@ViewBag.EndDate" class="form-control form-control-sm">
+
+                        <label class="small fw-bold">
+                            End:
+                        </label>
+
+                        <input type="date"
+                               name="endDate"
+                               value="@ViewBag.EndDate"
+                               class="form-control form-control-sm" />
+
                     </div>
+
                     <div class="col-6 col-sm-3">
-                        <label class="small fw-bold">&nbsp;</label>
+
+                        <label class="small fw-bold">
+                            &nbsp;
+                        </label>
+
                         <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-sm btn-light flex-fill">Filter</button>
-                            <a asp-action="Index" class="btn btn-sm btn-outline-light">Clear</a>
+
+                            <button type="submit"
+                                    class="btn btn-sm btn-light flex-fill">
+                                Filter
+                            </button>
+
+                            <a asp-action="Index"
+                               class="btn btn-sm btn-outline-light">
+                                Clear
+                            </a>
+
                         </div>
+
                     </div>
+
                 </div>
 
                 <div class="d-flex justify-content-md-end align-items-center gap-2 mt-3">
-                    <span class="text-white fw-bold small">Keyword:</span>
+
+                    <span class="text-white fw-bold small">
+                        Keyword:
+                    </span>
+
                     <div class="position-relative">
-                        <input type="text" name="keyword" value="@ViewBag.Keyword" class="form-control form-control-sm search-field" placeholder="Invoice no. or customer">
+
+                        <input type="text"
+                               name="keyword"
+                               value="@ViewBag.Keyword"
+                               class="form-control form-control-sm search-field"
+                               placeholder="Invoice no. or customer" />
+
                         <i class="bi bi-search position-absolute end-0 top-50 translate-middle-y me-2 text-white-50 small"></i>
+
                     </div>
+
                 </div>
+
             </form>
+
         </div>
+
     </div>
+
 
     @if (ViewBag.DateError != null)
     {
-        <div class="alert alert-danger"><i class="bi bi-exclamation-triangle me-1"></i>@ViewBag.DateError</div>
+        <div class="alert alert-danger">
+
+            <i class="bi bi-exclamation-triangle me-1"></i>
+            @ViewBag.DateError
+
+        </div>
     }
 
+
     <div class="table-responsive">
+
         <table class="custom-data-table">
+
             <thead>
+
                 <tr>
                     <th>Date</th>
                     <th>Invoice No.</th>
@@ -81,47 +184,161 @@
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
+
             </thead>
+
             <tbody>
+
                 @if (Model != null && Model.Any())
                 {
-                    @foreach (var invoice in Model)
+                    foreach (var invoice in Model)
                     {
                         <tr>
-                            <td>@invoice.InvoiceDate.ToString("yyyy-MM-dd")</td>
-                            <td>@invoice.InvoiceNumber</td>
-                            <td>@invoice.CustomerName</td>
-                            <td>@($"R{invoice.AmountDue:0.00}")</td>
-                            <td>@($"R{invoice.Total:0.00}")</td>
+
                             <td>
-                             @if (invoice.Status == "Paid")
-{
-    <span class="badge bg-success">Paid</span>
-}
-else if (invoice.Status == "Cancelled")
-{
-    <span class="badge bg-danger">Cancelled</span>
-}
-else
-{
-    <span class="badge bg-warning text-dark">Pending</span>
-}
+                                @invoice.InvoiceDate.ToString("yyyy-MM-dd")
                             </td>
-                                                       <td>
-                                <a asp-action="Details" asp-route-id="@invoice.InvoiceId" class="btn btn-sm btn-outline-secondary">View</a>
-                                <a asp-action="Download" asp-route-id="@invoice.InvoiceId" class="btn btn-sm btn-outline-primary">Download</a>
-                                <a asp-action="Delete" asp-route-id="@invoice.InvoiceId" class="btn btn-sm btn-outline-danger">Delete</a>
+
+                            <td>
+                                @invoice.InvoiceNumber
                             </td>
+
+                            <td>
+                                @invoice.CustomerName
+                            </td>
+
+                            <td>
+                                @($"R{invoice.AmountDue:0.00}")
+                            </td>
+
+                            <td>
+                                @($"R{invoice.Total:0.00}")
+                            </td>
+
+
+                            @* ===========================
+                               INVOICE / PAYMENT STATUS
+                               =========================== *@
+
+                            <td>
+
+                                @if (invoice.Status == "Pending")
+                                {
+                                    <span class="badge bg-warning text-dark">
+
+                                        <i class="bi bi-clock me-1"></i>
+                                        Pending Approval
+
+                                    </span>
+                                }
+                                else if (invoice.Status == "Approved" &&
+                                         invoice.AmountDue <= 0)
+                                {
+                                    <span class="badge bg-success">
+
+                                        <i class="bi bi-check-circle me-1"></i>
+                                        Paid
+
+                                    </span>
+                                }
+                                else if (invoice.Status == "Approved" &&
+                                         invoice.AmountDue < invoice.Total)
+                                {
+                                    <span class="badge bg-info text-dark">
+
+                                        <i class="bi bi-hourglass-split me-1"></i>
+                                        Partially Paid
+
+                                    </span>
+                                }
+                                else if (invoice.Status == "Approved")
+                                {
+                                    <span class="badge bg-success">
+
+                                        <i class="bi bi-check-circle me-1"></i>
+                                        Approved
+
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">
+                                        @invoice.Status
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            @* ===========================
+                               ACTIONS
+                               =========================== *@
+
+                            <td>
+
+                                <div class="d-flex gap-2 flex-wrap">
+
+                                    <a asp-action="Details"
+                                       asp-route-id="@invoice.InvoiceId"
+                                       class="btn btn-sm btn-outline-secondary">
+
+                                        View
+
+                                    </a>
+
+                                    <a asp-action="Download"
+                                       asp-route-id="@invoice.InvoiceId"
+                                       class="btn btn-sm btn-outline-primary">
+
+                                        Download
+
+                                    </a>
+
+
+                                    @*
+                                        Only pending invoices may be deleted.
+
+                                        Once approved, the invoice has been
+                                        finalised and stock has been deducted,
+                                        so it should no longer be removable.
+                                    *@
+
+                                    @if (invoice.Status == "Pending")
+                                    {
+                                        <a asp-action="Delete"
+                                           asp-route-id="@invoice.InvoiceId"
+                                           class="btn btn-sm btn-outline-danger">
+
+                                            Delete
+
+                                        </a>
+                                    }
+
+                                </div>
+
+                            </td>
+
                         </tr>
                     }
                 }
                 else
                 {
                     <tr>
-                        <td colspan="7" class="text-center text-muted">No invoices match your filters.</td>
+
+                        <td colspan="7"
+                            class="text-center text-muted">
+
+                            No invoices match your filters.
+
+                        </td>
+
                     </tr>
                 }
+
             </tbody>
+
         </table>
+
     </div>
+
 </div>
