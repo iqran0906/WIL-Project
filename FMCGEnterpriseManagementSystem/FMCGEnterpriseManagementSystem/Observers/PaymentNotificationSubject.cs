@@ -1,12 +1,9 @@
-﻿
+﻿// Title: Dependency injection in ASP.NET Core
+// Author: Microsoft
+// Date: 18-09-2024
+// Code version: ASP.NET Core 10,0
+// Availability: https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection
 
-/***************************************************************************************
-*    Title: Dependency injection in ASP.NET Core
-*    Author: Microsoft
-*    Date: 2026
-*    Code version: ASP.NET Core
-*    Availability: https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection
-***************************************************************************************/
 using FMCGEnterpriseManagementSystem.DTOs;
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Observers.Interfaces;
@@ -15,22 +12,30 @@ using System.Threading.Tasks;
 
 namespace FMCGEnterpriseManagementSystem.Observers
 {
+    // Subject responsible for notifying observers about quote and payment events.
     public class PaymentNotificationSubject : INotificationSubject
     {
-        private readonly List<INotificationObserver> _observers = new List<INotificationObserver>();
+        // Stores the observers subscribed to payment-related notifications.
+        private readonly List<INotificationObserver> _observers =
+            new List<INotificationObserver>();
 
+        // Adds an observer to the notification list.
         public void Attach(INotificationObserver observer)
         {
             _observers.Add(observer);
         }
 
+        // Removes an observer from the notification list.
         public void Detach(INotificationObserver observer)
         {
             _observers.Remove(observer);
         }
 
-
-        public async Task NotifyNewQuoteAsync(string quoteNumber, int quoteId, string customerName)
+        // Creates and sends a notification when a new quote is created.
+        public async Task NotifyNewQuoteAsync(
+            string quoteNumber,
+            int quoteId,
+            string customerName)
         {
             var dto = new NotificationDto
             {
@@ -41,12 +46,18 @@ namespace FMCGEnterpriseManagementSystem.Observers
                 RelatedEntityType = "Quote"
             };
 
+            // Notifies each registered observer.
             foreach (var observer in _observers)
             {
                 await observer.HandleAsync(dto);
             }
         }
-        public async Task NotifyNewInvoiceAsync(string invoiceNumber, int invoiceId, string customerName)
+
+        // Creates and sends a notification when a new invoice is created.
+        public async Task NotifyNewInvoiceAsync(
+            string invoiceNumber,
+            int invoiceId,
+            string customerName)
         {
             var dto = new NotificationDto
             {
@@ -57,13 +68,18 @@ namespace FMCGEnterpriseManagementSystem.Observers
                 RelatedEntityType = "Invoice"
             };
 
+            // Notifies each registered observer.
             foreach (var observer in _observers)
             {
                 await observer.HandleAsync(dto);
             }
         }
 
-        public async Task NotifyQuoteExpiredAsync(string quoteNumber, int quoteId, string customerName)
+        // Creates and sends a notification when a quote expires.
+        public async Task NotifyQuoteExpiredAsync(
+            string quoteNumber,
+            int quoteId,
+            string customerName)
         {
             var dto = new NotificationDto
             {
@@ -74,13 +90,19 @@ namespace FMCGEnterpriseManagementSystem.Observers
                 RelatedEntityType = "Quote"
             };
 
+            // Notifies each registered observer.
             foreach (var observer in _observers)
             {
                 await observer.HandleAsync(dto);
             }
         }
 
-        public async Task NotifyOverduePaymentAsync(string invoiceNumber, int invoiceId, string customerName, decimal amountDue)
+        // Creates and sends a notification when an invoice payment becomes overdue.
+        public async Task NotifyOverduePaymentAsync(
+            string invoiceNumber,
+            int invoiceId,
+            string customerName,
+            decimal amountDue)
         {
             var dto = new NotificationDto
             {
@@ -91,6 +113,7 @@ namespace FMCGEnterpriseManagementSystem.Observers
                 RelatedEntityType = "Invoice"
             };
 
+            // Notifies each registered observer.
             foreach (var observer in _observers)
             {
                 await observer.HandleAsync(dto);
