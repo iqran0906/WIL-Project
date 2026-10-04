@@ -5,7 +5,6 @@
 // Code version: ASP.NET Core 10.0
 // Availability: https://learn.microsoft.com/aspnet/core/mvc/controllers/actions
 
-
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Authorization;

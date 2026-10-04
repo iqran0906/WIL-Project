@@ -1,43 +1,48 @@
-
 // Title: ASP.NET Core MVC Views and ViewModels
 // Author: Microsoft
-// Date: 01-10-2026
+// Date: 04-10-2026
 // Code version: C# / .NET 10
 // Availability: https://learn.microsoft.com/en-us/aspnet/core/mvc/views/overview
 
-namespace FMCGEnterpriseManagementSystem.ViewModels.Reports
+namespace FMCGEnterpriseManagementSystem.ViewModels
 {
-    // View model containing the information required to generate
-    // or display an inventory report.
-    public class InventoryReportViewModel
+    public class GlobalSearchViewModel
     {
-        // Product identification information.
-        public int ProductId { get; set; }
-        public string ProductCode { get; set; } = string.Empty;
-        public string ProductName { get; set; } = string.Empty;
+        public string Query { get; set; } = string.Empty;
 
-        // Product category used for reporting and grouping.
+        public List<SearchResultItem> Results { get; set; } = new();
+
+        public int TotalResults => Results.Count;
+    }
+
+    public class SearchResultItem
+    {
+        // e.g. "Customer", "Invoice", "Product"
         public string Category { get; set; } = string.Empty;
 
-        // Current quantity available in inventory and the
-        // minimum quantity that should normally be maintained.
-        public int QuantityOnHand { get; set; }
-        public int ReorderLevel { get; set; }
+        public string Icon { get; set; } = "bi-search";
 
-        // Current selling price of the product.
-        public decimal SellingPrice { get; set; }
+        public string Title { get; set; } = string.Empty;
 
-        // Total monetary value represented by the available stock.
-        public decimal StockValue { get; set; }
+        public string? Subtitle { get; set; }
 
-        // Indicates whether the current quantity has reached
-        // or fallen below the product's reorder level.
-        public bool IsLowStock { get; set; }
+        // Extra label/value pairs shown under the result (used for customers)
+        public Dictionary<string, string> Details { get; set; } = new();
 
-        // Stores the earliest known expiry date for stock associated
-        // with the product. Nullable because a product may not have
-        // an expiry date recorded.
-        public DateTime? EarliestExpiryDate { get; set; }
+        // Where the result links to
+        public string Controller { get; set; } = string.Empty;
+
+        public string Action { get; set; } = "Index";
+
+        public Dictionary<string, string> RouteValues { get; set; } = new();
+
+        public string LinkText { get; set; } = "Open";
+
+        // True when the search text matched this record's number/code exactly
+        public bool IsExactMatch { get; set; }
+
+        // False when there is no page for the record itself (e.g. customers),
+        // so the user should see the details on the results page instead
+        public bool CanRedirect { get; set; } = true;
     }
 }
-
