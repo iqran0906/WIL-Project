@@ -1,33 +1,40 @@
+// Title: Activity log entity for recording user actions in the system.
+// Authors: ImranHussain78612
+// Date: 12-01-2023
+// Code version: ASP.NET Core 10.0
+// Availability: https://learn.microsoft.com/en-us/ef/core/modeling/entity-properties
 
 using System.ComponentModel.DataAnnotations;
 
 namespace FMCGEnterpriseManagementSystem.Models
 {
-    // One thing a user did in the system (created an invoice, logged in, exported a report, ...)
+    // Stores a record of an action performed by a user in the system.
     public class ActivityLog
     {
         [Key]
         public int ActivityLogId { get; set; }
 
-        // Identity user who did it
+        // Stores the Identity user ID of the person who performed the action.
         [Required, StringLength(450)]
         public string UserId { get; set; } = string.Empty;
 
+        // Stores the user's name for easier identification in activity records.
         [StringLength(256)]
         public string? UserName { get; set; }
 
-        // Area of the system, e.g. "Invoices", "Suppliers", "Account"
+        // Identifies the area of the system where the action occurred.
         [Required, StringLength(50)]
         public string Category { get; set; } = string.Empty;
 
-        // Short description, e.g. "Created an invoice"
+        // Provides a short description of the action performed.
         [Required, StringLength(200)]
         public string Description { get; set; } = string.Empty;
 
-        // Extra detail, e.g. the page's success message "Quote QT00003 created successfully."
+        // Stores additional information about the activity when required.
         [StringLength(500)]
         public string? Details { get; set; }
 
+        // Records when the activity occurred using UTC time.
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
     }
 }
