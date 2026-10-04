@@ -1,10 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Invoice Export Service
-*    Author: Sayali-St10458649
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Services/InvoiceExportService.cs
-***************************************************************************************/
+﻿
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;
 using QuestPDF.Fluent;

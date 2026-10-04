@@ -1,10 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Quote PDF Generator
-*    Author: Sayali-St10458649
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Services/QuotePdfGenerator.cs
-***************************************************************************************/
+﻿
 using FMCGEnterpriseManagementSystem.Models;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;

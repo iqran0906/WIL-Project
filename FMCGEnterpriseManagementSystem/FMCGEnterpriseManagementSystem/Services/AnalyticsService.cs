@@ -1,10 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Analytics Service
-*    Author: ST10068525
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Services/AnalyticsService.cs
-***************************************************************************************/
+﻿
 using System.Threading.Tasks;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;

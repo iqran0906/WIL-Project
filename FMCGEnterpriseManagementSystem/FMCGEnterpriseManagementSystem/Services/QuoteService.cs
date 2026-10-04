@@ -1,10 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Quote Service
-*    Author: Sayali-St10458649
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Services/QuoteService.cs
-***************************************************************************************/
+﻿
 
 using FMCGEnterpriseManagementSystem.Enums;
 using FMCGEnterpriseManagementSystem.Models;

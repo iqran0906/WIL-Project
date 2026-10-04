@@ -1,6 +1,6 @@
 ﻿/***************************************************************************************
 *    Title: User Account Service
-*    Author: iqran0906
+*    Author: Microsoft
 *    Date: 3 October 2026
 *    Code version: Version 1.0
 *    Availability: ASP.NET Core Identity (Microsoft, MIT) https://learn.microsoft.com/aspnet/core/security/authentication/identity

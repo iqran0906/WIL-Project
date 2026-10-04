@@ -1,10 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Customer Service
-*    Author: Naseeha27, Maseeha17
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Services/CustomerService.cs
-***************************************************************************************/
+﻿
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;

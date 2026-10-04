@@ -1,10 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Inventory Service
-*    Author: Maseeha17
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Services/InventoryService.cs
-***************************************************************************************/
+﻿
 using System.Globalization;
 using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;
