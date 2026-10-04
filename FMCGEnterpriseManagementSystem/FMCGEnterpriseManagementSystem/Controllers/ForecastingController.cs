@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 // Title: Controller for managing inventory forecasting and reorder operations.
 // Authors: Maseeha17
 // Date: 27-04-2026
-// Code version: ASP.NET Core 10
+// Code version: ASP.NET Core 10.0
 // Availability: https://learn.microsoft.com/aspnet/core/mvc/controllers/actions
 
 namespace FMCGEnterpriseManagementSystem.Controllers

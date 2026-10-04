@@ -1,4 +1,8 @@
-﻿
+﻿// Title: Controller actions in ASP.NET Core MVC
+// Author: ImranHussain78612
+// Date: 27-04-2026
+// Code version: ASP.NET Core 10.0
+// Availability: https://learn.microsoft.com/aspnet/core/mvc/controllers/actions
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -8,6 +12,12 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 {
     // Only Administrators, Employees and Sales Representatives can access notifications.
     [Authorize(Roles = "Administrator,Employee,SalesRepresentative")]
+
+    // Title: Dependency injection in ASP.NET Core
+    // Author: Microsoft
+    // Date: 22-09-2026
+    // Code version: ASP.NET Core 10.0
+    // Availability: https://learn.microsoft.com/aspnet/core/fundamentals/dependency-injection
     public class NotificationsController : Controller
     {
         private readonly INotificationService _notificationService;
@@ -47,6 +57,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             await _notificationService.MarkAsReadAsync(id);
 
             return RedirectToAction(nameof(Index));
+
         }
     }
 }

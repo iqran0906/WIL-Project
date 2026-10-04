@@ -1,4 +1,8 @@
-﻿
+﻿// Title: ASP.NET Core MVC Controllers and Actions
+// Author: Sayali-St10458649
+// Date: 27-04-2026
+// Code version: ASP.NET Core 10.0
+// Availability: https://learn.microsoft.com/aspnet/core/mvc/controllers/actions
 
 using FMCGEnterpriseManagementSystem.Factories;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
@@ -23,6 +27,12 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         // Dependency injection provides the payment service and export factory.
         public PaymentsController(IPaymentService paymentService, ExportFactory exportFactory)
         {
+            // Title: Factory Design Pattern in C#
+            // Author: Code Maze
+            // Date: 18-02-2019
+            // Code version: C# / .NET
+            // Availability: https://code-maze.com/factory-method/
+
             _paymentService = paymentService;
             _exportFactory = exportFactory;
         }

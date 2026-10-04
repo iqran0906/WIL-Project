@@ -1,11 +1,9 @@
 
-/***************************************************************************************
-*    Title: Controller action return types in ASP.NET Core MVC
-*    Author: Microsoft
-*    Date: 2026
-*    Code version: ASP.NET Core
-*    Availability: https://learn.microsoft.com/en-us/aspnet/core/mvc/controllers/actions
-***************************************************************************************/
+// Title: Controller action return types in ASP.NET Core MVC
+// Authors: ImranHussain78612
+// Date: 27-04-2026
+// Code version: ASP.NET Core 10.0
+// Availability: https://learn.microsoft.com/aspnet/core/mvc/controllers/actions
 
 
 using FMCGEnterpriseManagementSystem.Services.Interfaces;

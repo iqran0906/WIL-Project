@@ -1,12 +1,8 @@
-
-
-/***************************************************************************************
-*    Title: Controller action return types in ASP.NET Core MVC
-*    Author: Microsoft
-*    Date: 2026
-*    Code version: ASP.NET Core\
-*    Availability: https://learn.microsoft.com/en-us/aspnet/core/mvc/controllers/actions
-***************************************************************************************/
+//   Title: Controller action return types in ASP.NET Core MVC
+//   Author: iqra0906
+//   Date: 27-4-2026
+//   Code version: ASP.NET Core 10.0
+//   Availability: https://learn.microsoft.com/en-us/aspnet/core/mvc/controllers/actions
 
 using FMCGEnterpriseManagementSystem.Enums;
 using FMCGEnterpriseManagementSystem.Factories;

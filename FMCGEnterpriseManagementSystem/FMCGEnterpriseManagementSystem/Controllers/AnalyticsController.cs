@@ -8,7 +8,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
     // Title: Controller for displaying sales and inventory analytics.
     // Authors: Maseeha17
     // Date: 27-04-2026
-    // Code version: ASP.NET Core 10
+    // Code version: ASP.NET Core 10.0
     // Availability: https://learn.microsoft.com/aspnet/core/mvc/controllers/actions
 
     // Restricts access to authenticated users.

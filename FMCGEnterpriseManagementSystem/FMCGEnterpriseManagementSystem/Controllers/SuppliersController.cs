@@ -1,12 +1,9 @@
-﻿
+﻿// Title: Controller for managing suppliers, supplier products and supplier status.
+// Authors: Maseeha17
+// Date: 10-04-2024
+// Code version: ASP.NET Core 10.0
+// Availability: https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/crud
 
-/***************************************************************************************
-*    Title: Implement CRUD - ASP.NET MVC with Entity Framework Core
-*    Author: Microsoft
-*    Date: 2026
-*    Code version: ASP.NET Core
-*    Availability: https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/crud
-***************************************************************************************/
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -16,6 +13,11 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 {
     // Restricts supplier management to administrators and employees.
     [Authorize(Roles = "Administrator,Employee")]
+    // Title: Dependency injection in ASP.NET Core
+    // Author: Microsoft
+    // Date: 22-09-2026
+    // Code version: ASP.NET Core 10.0
+    // Availability: https://learn.microsoft.com/aspnet/core/fundamentals/dependency-injection
     public class SupplierController : Controller
     {
         private readonly ISupplierService _supplierService;
@@ -31,6 +33,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         }
 
         // GET: Supplier/SupplierList
+        // Displays suppliers and provides searching and summary statistics.
         [HttpGet]
         public async Task<IActionResult> SupplierList(string? search)
         {
@@ -91,6 +94,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         }
 
         // GET: Supplier/AddSupplier
+        // Displays the form used to add a new supplier.
         [HttpGet]
         public IActionResult AddSupplier()
         {
@@ -99,6 +103,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         }
 
         // POST: Supplier/AddSupplier
+        // Validates and creates a new supplier.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddSupplier(SupplierViewModel model)
@@ -114,6 +119,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         }
 
         // GET: Supplier/EditSupplier/5
+        // Retrieves and displays the selected supplier for editing.
         [HttpGet]
         public async Task<IActionResult> EditSupplier(int id)
         {
@@ -129,6 +135,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         }
 
         // POST: Supplier/EditSupplier/5
+        // Validates and saves changes made to an existing supplier.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditSupplier(int id, SupplierViewModel model)
@@ -148,6 +155,8 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return RedirectToAction(nameof(SupplierList));
         }
 
+        // GET: Supplier/Products/5
+        // Displays the products associated with the selected supplier.
         [HttpGet]
         public async Task<IActionResult> Products(int id)
         {
@@ -176,6 +185,8 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return View(products);
         }
 
+        // POST: Supplier/DeactivateSupplier/5
+        // Deactivates a supplier while keeping the supplier record.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeactivateSupplier(int id)
@@ -186,6 +197,8 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return RedirectToAction(nameof(SupplierList));
         }
 
+        // POST: Supplier/ActivateSupplier/5
+        // Reactivates an existing supplier.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ActivateSupplier(int id)

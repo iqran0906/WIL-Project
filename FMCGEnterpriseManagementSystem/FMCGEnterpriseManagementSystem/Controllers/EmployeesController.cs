@@ -11,9 +11,9 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
    
   //  Title: Role-based authorization in ASP.NET Core
-  //  Author: Microsoft
+  //  Author: iqra0906
   //  Date: 14-10-2024
-  //  Code version: ASP.NET Core
+  //  Code version: ASP.NET Core 10.0
   //  Availability: https://learn.microsoft.com/aspnet/core/security/authorization/roles
 
     public class EmployeesController : Controller

@@ -1,12 +1,8 @@
-﻿
-
-/***************************************************************************************
-*    Title: Role-based authorization in ASP.NET Core
-*    Author: Microsoft
-*    Date: 2026
-*    Code version: ASP.NET Core
-*    Availability: https://learn.microsoft.com/aspnet/core/security/authorization/roles
-***************************************************************************************/
+﻿//  Title: Role-based authorization in ASP.NET Core
+//  Author: iqra0906
+//  Date: 14-10-2024
+//  Code version: ASP.NET Core 10.0
+//  Availability: https://learn.microsoft.com/aspnet/core/security/authorization/roles
 
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;

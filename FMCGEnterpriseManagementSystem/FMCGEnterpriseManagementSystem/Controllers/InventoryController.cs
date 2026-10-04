@@ -1,10 +1,14 @@
-﻿
-
-using FMCGEnterpriseManagementSystem.Services.Interfaces;
+﻿using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
+
+// Title: Controller for managing inventory items and stock adjustments.
+// Authors: Maseeha17
+// Date: 27-04-2026
+// Code version: ASP.NET Core 10.0
+// Availability: https://learn.microsoft.com/aspnet/core/mvc/controllers/actions
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
@@ -12,7 +16,10 @@ namespace FMCGEnterpriseManagementSystem.Controllers
     [Authorize(Roles = "Administrator,Employee")]
     public class InventoryController : Controller
     {
+        // Service responsible for inventory-related business operations.
         private readonly IInventoryService _inventoryService;
+
+        // Repository responsible for retrieving product information.
         private readonly IProductRepository _productRepository;
 
         // Dependency injection provides the inventory service and product repository.
@@ -27,7 +34,10 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         // Retrieves and displays all inventory items.
         public async Task<IActionResult> Index()
         {
+            // Retrieves inventory records through the inventory service.
             var inventory = await _inventoryService.GetAllInventoryAsync();
+
+            // Sends the inventory data to the View.
             return View(inventory);
         }
 
@@ -38,8 +48,10 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             // Load available products for the inventory form.
             var products = await _productRepository.GetAllAsync();
 
+            // Makes the product list available to the View.
             ViewBag.Products = products;
 
+            // Displays an empty inventory model for the form.
             return View(new InventoryViewModel());
         }
 
@@ -48,31 +60,36 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddItem(InventoryViewModel model)
         {
-            // Return the form if the submitted data is invalid.
+            // Checks whether the submitted inventory data is valid.
             if (!ModelState.IsValid)
             {
+                // Reloads the product list when validation fails.
                 ViewBag.Products = await _productRepository.GetAllAsync();
+
+                // Returns the submitted model to the form.
                 return View(model);
             }
 
             try
             {
-                // Create the inventory item through the inventory service.
+                // Creates the inventory item through the inventory service.
                 await _inventoryService.CreateInventoryItemAsync(model);
 
+                // Returns the user to the inventory list after successful creation.
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                // Display the database or service error on the form.
+                // Displays the database or service error on the form.
                 ModelState.AddModelError(
                     string.Empty,
                     $"Save failed: {ex.InnerException?.Message ?? ex.Message}"
                 );
 
-                // Reload the product list before returning to the form.
+                // Reloads the product list before returning to the form.
                 ViewBag.Products = await _productRepository.GetAllAsync();
 
+                // Returns the submitted model with the error message.
                 return View(model);
             }
         }
@@ -81,11 +98,13 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
+            // Retrieves the selected inventory item by its ID.
             var item = await _inventoryService.GetByIdAsync(id);
 
             // Return NotFound if the inventory item does not exist.
             if (item == null) return NotFound();
 
+            // Sends the inventory item to the edit View.
             return View(item);
         }
 
@@ -100,8 +119,10 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             // Return the form if validation fails.
             if (!ModelState.IsValid) return View(model);
 
+            // Updates the inventory item through the inventory service.
             await _inventoryService.UpdateInventoryItemAsync(model);
 
+            // Returns the user to the inventory list.
             return RedirectToAction(nameof(Index));
         }
 
@@ -109,6 +130,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [HttpGet]
         public async Task<IActionResult> AdjustStock(int id)
         {
+            // Retrieves the selected inventory item.
             var item = await _inventoryService.GetByIdAsync(id);
 
             // Return NotFound if the inventory item does not exist.
@@ -122,6 +144,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 CurrentQuantity = item.QuantityOnHand
             };
 
+            // Sends the populated adjustment model to the View.
             return View(model);
         }
 
@@ -133,8 +156,10 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             // Return the form if the submitted data is invalid.
             if (!ModelState.IsValid) return View(model);
 
+            // Updates the stock quantity through the inventory service.
             await _inventoryService.AdjustStockAsync(model);
 
+            // Returns the user to the inventory list.
             return RedirectToAction(nameof(Index));
         }
 
@@ -142,11 +167,13 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
+            // Retrieves the selected inventory item.
             var item = await _inventoryService.GetByIdAsync(id);
 
             // Return NotFound if the inventory item does not exist.
             if (item == null) return NotFound();
 
+            // Sends the inventory item to the deletion confirmation View.
             return View(item);
         }
 
@@ -155,8 +182,10 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            // Deletes the inventory item through the inventory service.
             await _inventoryService.DeleteInventoryItemAsync(id);
 
+            // Returns the user to the inventory list after deletion.
             return RedirectToAction(nameof(Index));
         }
     }

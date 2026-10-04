@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
    // Title: Claims-based authorization in ASP.NET Core
-   // Author: Microsoft
+   // Author: ImranHussain78612
    // Date: 08-04-2026
-   // Code version: ASP.NET Core
+   // Code version: ASP.NET Core 10.0
    // Availability: https://learn.microsoft.com/aspnet/core/security/authorization/claims
 namespace FMCGEnterpriseManagementSystem.Controllers
 {

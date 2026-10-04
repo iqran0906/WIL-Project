@@ -1,12 +1,9 @@
 ﻿
-
-/***************************************************************************************
-*    Title: Implement CRUD - ASP.NET MVC with Entity Framework Core
-*    Author: Microsoft
-*    Date: 2026
-*    Code version: ASP.NET Core 10.0
-*    Availability: https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/crud
-***************************************************************************************/
+//   Title: Implement CRUD - ASP.NET MVC with Entity Framework Core
+// Author: Sayali-St10458649
+// Date: 10-04-2024
+// Code version: ASP.NET Core 10.0
+// Availability: https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/crud
 
 using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Enums;

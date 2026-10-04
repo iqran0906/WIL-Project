@@ -1,12 +1,8 @@
-
-
-/***************************************************************************************
-*    Title: Role-based authorization in ASP.NET Core
-*    Author: Microsoft
-*    Date: 2026
-*    Code version: ASP.NET Core
-*    Availability: https://learn.microsoft.com/aspnet/core/security/authorization/roles
-***************************************************************************************/
+//  Title: Role-based authorization in ASP.NET Core
+//  Author: ImranHussain78612
+//  Date: 14-10-2024
+//  Code version: ASP.NET Core 10.0
+//  Availability: https://learn.microsoft.com/aspnet/core/security/authorization/roles
 
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
@@ -98,9 +94,17 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             PaymentReference = s.PaymentReference,
             ProofOfPaymentEmail = s.ProofOfPaymentEmail
         };
+        // Title: Object and Collection Initializers
+        // Author: Microsoft
+        // Date: 11-02-2026
+        // Code version: C# 14 / .NET 10
+        // Availability: https://learn.microsoft.com/dotnet/csharp/programming-guide/classes-and-structs/object-and-collection-initializers
 
         // Copies editable page fields onto the current settings.
         // Values not displayed on this page are retained from the existing settings.
+        // Maps the submitted settings ViewModel to a new SystemSetting entity.
+        // Cleans user-entered company and banking information before storing it.
+        // Existing system-controlled settings are preserved from the current record.
         private static SystemSetting ApplyTo(SystemSetting current, SettingsViewModel m) => new()
         {
             CompanyName = Clean(m.CompanyName) ?? string.Empty,
@@ -120,6 +124,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             PaymentReference = Clean(m.PaymentReference),
             ProofOfPaymentEmail = Clean(m.ProofOfPaymentEmail),
 
+            // Preserves existing system settings that are not edited by the ViewModel.
             VatRatePercent = current.VatRatePercent,
             InvoicePrefix = current.InvoicePrefix,
             QuotePrefix = current.QuotePrefix,
@@ -129,7 +134,6 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             EmailNotificationsEnabled = current.EmailNotificationsEnabled,
             NotificationEmail = current.NotificationEmail
         };
-
         // Removes unnecessary whitespace and converts blank values to null.
         private static string? Clean(string? value) =>
             string.IsNullOrWhiteSpace(value) ? null : value.Trim();

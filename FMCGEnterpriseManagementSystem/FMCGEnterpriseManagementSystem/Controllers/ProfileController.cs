@@ -1,12 +1,8 @@
-
-
-/***************************************************************************************
-*    Title: ASP.NET Core Identity
-*    Author: Microsoft
-*    Date: 2026
-*    Code version: ASP.NET Core
-*    Availability: https://learn.microsoft.com/aspnet/core/security/authentication/identity
-***************************************************************************************/
+ // Title: ASP.NET Core Identity
+ // Author: ImranHussain78612
+ // Date: 10-11-2025
+ // Code version: ASP.NET Core 10.0
+ // Availability: https://learn.microsoft.com/aspnet/core/security/authentication/identity
 
 using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;

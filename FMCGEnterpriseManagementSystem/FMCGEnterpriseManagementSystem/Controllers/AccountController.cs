@@ -86,9 +86,9 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             // Retrieves the logged-in user's account so that the login action can be recorded in the recent activity section.
 
                // Title: ASP.NET Core Identity
-                // Author: Microsoft
+                // Author: iqra0906
                 // Date: 10-11-2025
-                // Code version: ASP.NET Core
+                // Code version: ASP.NET Core 10.0
                 // Availability: https://learn.microsoft.com/aspnet/core/security/authentication/identity
 
             var user = await _userManager.FindByEmailAsync(model.Email);
