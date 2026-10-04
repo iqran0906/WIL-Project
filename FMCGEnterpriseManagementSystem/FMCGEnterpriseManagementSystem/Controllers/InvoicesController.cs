@@ -174,6 +174,9 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 TempData["SuccessMessage"] =
                     "Invoice created successfully.";
 
+                // Pop-up message shown on the next page (see _Layout.cshtml).
+                TempData["ChangeMessage"] = "Invoice was added.";
+
                 return RedirectToAction(nameof(Index));
             }
             catch (InvalidOperationException ex)
@@ -334,6 +337,9 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
                 TempData["SuccessMessage"] =
                     "Invoice deleted successfully.";
+
+                // Pop-up message shown on the next page (see _Layout.cshtml).
+                TempData["ChangeMessage"] = "Invoice was deleted.";
             }
             catch (InvalidOperationException ex)
             {

@@ -84,6 +84,9 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             // Creates the customer through the customer service.
             await _customerService.CreateCustomerAsync(model);
 
+            // Pop-up message shown on the next page (see _Layout.cshtml).
+            TempData["ChangeMessage"] = $"Customer \"{model.Name}\" was added.";
+
             // Returns the user to the customer list after successful creation.
             return RedirectToAction(nameof(CustomerList));
         }
@@ -150,6 +153,9 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _customerService.DeleteCustomerAsync(id);
+
+            // Pop-up message shown on the next page (see _Layout.cshtml).
+            TempData["ChangeMessage"] = "Customer was deleted.";
 
             // Returns the user to the customer list after deletion.
             return RedirectToAction(nameof(CustomerList));

@@ -1,6 +1,4 @@
-﻿/**************
-
-using FMCGEnterpriseManagementSystem.Models;
+﻿using FMCGEnterpriseManagementSystem.Models;
 
 namespace FMCGEnterpriseManagementSystem.Repositories.Interfaces
 {

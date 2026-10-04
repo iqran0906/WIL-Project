@@ -110,6 +110,10 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             }
 
             await _supplierService.CreateSupplierAsync(model);
+
+            // Pop-up message shown on the next page (see _Layout.cshtml).
+            TempData["ChangeMessage"] = $"Supplier \"{model.CompanyName}\" was added.";
+
             return RedirectToAction(nameof(SupplierList));
         }
 
@@ -182,6 +186,9 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         {
             // Deactivates the supplier while retaining the supplier record.
             await _supplierService.DeactivateSupplierAsync(id);
+
+            // Pop-up message shown on the next page (see _Layout.cshtml).
+            TempData["ChangeMessage"] = "Supplier was deactivated.";
 
             return RedirectToAction(nameof(SupplierList));
         }

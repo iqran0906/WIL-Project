@@ -167,6 +167,9 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
             await _productService.CreateProductAsync(model);
 
+            // Pop-up message shown on the next page (see _Layout.cshtml).
+            TempData["ChangeMessage"] = $"Product \"{model.ProductName}\" was added.";
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -239,6 +242,9 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _productService.DeleteProductAsync(id);
+
+            // Pop-up message shown on the next page (see _Layout.cshtml).
+            TempData["ChangeMessage"] = "Product was removed (marked inactive).";
 
             return RedirectToAction(nameof(Index));
         }

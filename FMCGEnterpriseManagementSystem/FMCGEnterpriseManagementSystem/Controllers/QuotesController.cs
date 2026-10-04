@@ -167,6 +167,10 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
             await _quoteService.CreateQuoteAsync(quote);
 
+            // Pop-up message shown on the next page (see _Layout.cshtml).
+            // The quote service fills in the quote number when it saves.
+            TempData["ChangeMessage"] = $"Quote {quote.QuoteNumber} was added.";
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -300,7 +304,13 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            await _quoteService.DeleteQuoteAsync(id);
+            var deleted = await _quoteService.DeleteQuoteAsync(id);
+
+            // Pop-up message shown on the next page (see _Layout.cshtml).
+            if (deleted)
+            {
+                TempData["ChangeMessage"] = "Quote was deleted.";
+            }
 
             return RedirectToAction(nameof(Index));
         }

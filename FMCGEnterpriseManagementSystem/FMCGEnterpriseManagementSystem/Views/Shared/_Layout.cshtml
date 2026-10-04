@@ -206,6 +206,12 @@
                 }
             }
 
+            /* Keep pop-ups above the page, so banner close (X) buttons
+               (z-index 2 in Bootstrap) do not show through them */
+            .toast-container {
+                z-index: 1090;
+            }
+
             .page-toast {
                 background-color: var(--sidebar-bg);
                 color: #ffffff;
@@ -1039,6 +1045,35 @@
 
         </div>
 
+        <!-- CHANGE MESSAGE
+             Shown after a customer, supplier, product, quote or invoice is
+             added or removed. Set with TempData["ChangeMessage"] in the controller. -->
+        @if (TempData["ChangeMessage"] != null)
+        {
+            <div id="changeToast"
+                 class="toast page-toast align-items-center border-0"
+                 role="status"
+                 aria-live="polite"
+                 aria-atomic="true"
+                 data-bs-delay="5000">
+
+                <div class="d-flex">
+
+                    <div class="toast-body">
+                        <i class="bi bi-check-circle me-2"></i>
+                        @TempData["ChangeMessage"]
+                    </div>
+
+                    <button type="button"
+                            class="btn-close btn-close-white me-2 m-auto"
+                            data-bs-dismiss="toast"
+                            aria-label="Close"></button>
+
+                </div>
+
+            </div>
+        }
+
     </div>
 
 
@@ -1093,6 +1128,12 @@ const icon = toggle.querySelector("i");
             bootstrap.Toast
                 .getOrCreateInstance(document.getElementById("pageToast"))
                 .show();
+        }
+
+        // Change messages always show (they are not tips)
+        const changeToast = document.getElementById("changeToast");
+        if (changeToast) {
+            bootstrap.Toast.getOrCreateInstance(changeToast).show();
         }
     </script>
 

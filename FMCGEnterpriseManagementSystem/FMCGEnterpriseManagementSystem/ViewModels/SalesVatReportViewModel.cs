@@ -1,5 +1,4 @@
-﻿/
-namespace FMCGEnterpriseManagementSystem.ViewModels.Reports
+﻿namespace FMCGEnterpriseManagementSystem.ViewModels.Reports
 {
     public class SalesVatReportViewModel
     {
