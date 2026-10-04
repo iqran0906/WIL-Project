@@ -1,6 +1,6 @@
 ﻿
 // Title: ASP.NET Core Identity
-// Author: Naseeha27
+// Author: Microsoft
 // Date: 10-11-2025
 // Code version: ASP.NET Core 10.0
 // Availability: https://learn.microsoft.com/aspnet/core/security/authentication/identity

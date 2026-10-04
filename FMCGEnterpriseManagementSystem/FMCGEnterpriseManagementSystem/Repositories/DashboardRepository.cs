@@ -1,5 +1,5 @@
 ﻿// Title: Grouping Data: LINQ
-// Author: Maseeha17
+// Author: Microsoft
 // Date: 31-05-2024
 // Code version: .NET 10
 // Availability: https://learn.microsoft.com/en-us/dotnet/csharp/linq/standard-query-operators/grouping-data

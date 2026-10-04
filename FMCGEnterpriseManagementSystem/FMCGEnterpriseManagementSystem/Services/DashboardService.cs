@@ -1,5 +1,5 @@
 ﻿// Title: Asynchronous programming with async and await
-// Author: Maseeha17
+// Author: Microsoft
 // Date: 01-10-2026
 // Code version: C# / .NET 10
 // Availability: https://learn.microsoft.com/en-us/dotnet/csharp/asynchronous-programming/

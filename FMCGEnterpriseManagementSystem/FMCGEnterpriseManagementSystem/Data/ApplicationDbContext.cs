@@ -1,5 +1,5 @@
 ﻿//   Title: Creating and Configuring a Model - EF Core
-//   Author: Naseeha27
+//   Author: Microsoft
 //   Date: 28-03-2023
 //   Code version: Entity Framework Core 10.0
 // Availability: https://learn.microsoft.com/en-us/ef/core/modeling/

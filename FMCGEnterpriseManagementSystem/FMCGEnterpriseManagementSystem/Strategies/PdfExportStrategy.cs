@@ -1,6 +1,6 @@
 
 //    Title: QuestPDF Documentation
-//    Author: Sayali
+//    Author: Marcin Ziąbek 
 //    Date: 2026
 //    Code version: QuestPDF
 //    Availability: https://www.questpdf.com

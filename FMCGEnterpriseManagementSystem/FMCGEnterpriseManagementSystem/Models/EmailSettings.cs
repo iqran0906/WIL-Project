@@ -1,5 +1,5 @@
 ﻿// Title: SMTP email settings model for configuring outgoing application emails.
-// Author: Sayali-St10458649
+// Author: Microsoft
 // Date: 04-10-2026
 // Code version: ASP.NET Core 10.0
 // Availability: https://learn.microsoft.com/en-us/dotnet/api/system.net.mail.smtpclient

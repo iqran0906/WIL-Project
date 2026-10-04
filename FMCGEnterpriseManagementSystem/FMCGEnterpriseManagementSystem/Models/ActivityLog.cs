@@ -1,5 +1,5 @@
 // Title: Activity log entity for recording user actions in the system.
-// Authors: ImranHussain78612
+// Authors: Microsoft
 // Date: 12-01-2023
 // Code version: ASP.NET Core 10.0
 // Availability: https://learn.microsoft.com/en-us/ef/core/modeling/entity-properties

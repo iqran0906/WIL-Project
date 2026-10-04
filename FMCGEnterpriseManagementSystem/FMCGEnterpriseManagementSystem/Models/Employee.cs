@@ -1,5 +1,5 @@
 ﻿// Title: Employee entity for storing employee and employment information.
-// Author: iqra0906
+// Author: Microsoft
 // Date: 12-01-2023
 // Code version: ASP.NET Core 10.0
 // Availability: https://learn.microsoft.com/en-us/ef/core/modeling/entity-properties

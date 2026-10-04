@@ -1,5 +1,5 @@
 ﻿// Title: Entity Framework Core - Entity Properties
-// Author: Maseeha17
+// Author: Microsoft
 // Date: 12-01-2023
 // Code version: Entity Framework Core
 // Availability: https://learn.microsoft.com/en-us/ef/core/modeling/entity-properties
