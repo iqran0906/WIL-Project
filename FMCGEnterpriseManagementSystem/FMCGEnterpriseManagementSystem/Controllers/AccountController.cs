@@ -4,20 +4,18 @@ using FMCGEnterpriseManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
+using System.Text;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
     // Controller responsible for handling user account authentication.
     public class AccountController : Controller
     {
-        // Services used for authentication and recording user activity.
         private readonly IAuthService _authService;
         private readonly IActivityService _activityService;
-
-        // ASP.NET Core Identity manager used to retrieve user account information.
         private readonly UserManager<User> _userManager;
 
-        // Dependency injection provides the required services to the controller.
         public AccountController(
             IAuthService authService,
             IActivityService activityService,
@@ -28,12 +26,15 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             _userManager = userManager;
         }
 
-        // Displays the login page to users who are not authenticated.
+
+        // =========================
+        // LOGIN
+        // =========================
+
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Login()
         {
-            // Prevents an already authenticated user from returning to the login page.
             if (User.Identity?.IsAuthenticated == true)
             {
                 return RedirectToAction("Dashboard", "Home");
@@ -42,19 +43,17 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return View(new LoginViewModel());
         }
 
-        // Processes the submitted login form.
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            // Checks whether the information entered by the user satisfies the validation rules in the ViewModel.
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            // Checks whether the user account is active before attempting login.
             var isActive =
                 await _authService.IsUserActiveAsync(model.Email);
 
@@ -67,13 +66,11 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 return View(model);
             }
 
-            // Attempts to authenticate the user using the authentication service.
             var loggedIn = await _authService.LoginAsync(
                 model.Email,
                 model.Password,
                 model.RememberMe);
 
-            // Displays an error if the login credentials are not accepted.
             if (!loggedIn)
             {
                 ModelState.AddModelError(
@@ -83,19 +80,11 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 return View(model);
             }
 
-            // Retrieves the logged-in user's account so that the login action can be recorded in the recent activity section.
-
-            // Title: ASP.NET Core Identity
-            // Author: Microsoft
-            // Date: 10-11-2025
-            // Code version: ASP.NET Core 10.0
-            // Availability: https://learn.microsoft.com/aspnet/core/security/authentication/identity
-
-            var user = await _userManager.FindByEmailAsync(model.Email);
+            var user =
+                await _userManager.FindByEmailAsync(model.Email);
 
             if (user != null)
             {
-                // Records the successful login as recent account activity.
                 await _activityService.LogAsync(
                     user.Id,
                     user.UserName,
@@ -103,11 +92,14 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                     "Logged in");
             }
 
-            // Sends the authenticated user to the Dashboard.
             return RedirectToAction("Dashboard", "Home");
         }
 
-        // Logs out the currently authenticated user.
+
+        // =========================
+        // LOGOUT
+        // =========================
+
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
@@ -115,11 +107,188 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         {
             await _authService.LogoutAsync();
 
-            // Returns the user to the login page after logging out.
             return RedirectToAction(nameof(Login));
         }
 
-        // Displays the page shown when a user does not have permission to access a particular resource.
+
+        // =========================
+        // FORGOT PASSWORD
+        // =========================
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ForgotPassword()
+        {
+            return View(new ForgotPasswordViewModel());
+        }
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword(
+            ForgotPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user =
+                await _userManager.FindByEmailAsync(model.Email);
+
+            // Do not reveal whether an account exists.
+            if (user == null || !user.IsActive)
+            {
+                return RedirectToAction(
+                    nameof(ForgotPasswordConfirmation));
+            }
+
+            var token =
+                await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            var encodedToken =
+                WebEncoders.Base64UrlEncode(
+                    Encoding.UTF8.GetBytes(token));
+
+            /*
+             * TEMPORARY DEVELOPMENT FLOW
+             *
+             * Once Sayali's email notification API is connected,
+             * the reset URL generated here should be emailed to
+             * the user instead of redirecting directly to it.
+             */
+
+            return RedirectToAction(
+                nameof(ResetPassword),
+                new
+                {
+                    email = user.Email,
+                    token = encodedToken
+                });
+        }
+
+
+        // =========================
+        // FORGOT PASSWORD CONFIRMATION
+        // =========================
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ForgotPasswordConfirmation()
+        {
+            return View();
+        }
+
+
+        // =========================
+        // RESET PASSWORD
+        // =========================
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ResetPassword(
+            string? email,
+            string? token)
+        {
+            if (string.IsNullOrWhiteSpace(email) ||
+                string.IsNullOrWhiteSpace(token))
+            {
+                return RedirectToAction(nameof(Login));
+            }
+
+            var model = new ResetPasswordViewModel
+            {
+                Email = email,
+                Token = token
+            };
+
+            return View(model);
+        }
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(
+            ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user =
+                await _userManager.FindByEmailAsync(model.Email);
+
+            if (user == null || !user.IsActive)
+            {
+                return RedirectToAction(
+                    nameof(ResetPasswordConfirmation));
+            }
+
+            string decodedToken;
+
+            try
+            {
+                decodedToken =
+                    Encoding.UTF8.GetString(
+                        WebEncoders.Base64UrlDecode(model.Token));
+            }
+            catch
+            {
+                ModelState.AddModelError(
+                    string.Empty,
+                    "The password reset link is invalid.");
+
+                return View(model);
+            }
+
+            var result =
+                await _userManager.ResetPasswordAsync(
+                    user,
+                    decodedToken,
+                    model.Password);
+
+            if (result.Succeeded)
+            {
+                await _activityService.LogAsync(
+                    user.Id,
+                    user.UserName,
+                    "Account",
+                    "Password reset");
+
+                return RedirectToAction(
+                    nameof(ResetPasswordConfirmation));
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(
+                    string.Empty,
+                    error.Description);
+            }
+
+            return View(model);
+        }
+
+
+        // =========================
+        // RESET PASSWORD CONFIRMATION
+        // =========================
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ResetPasswordConfirmation()
+        {
+            return View();
+        }
+
+
+        // =========================
+        // ACCESS DENIED
+        // =========================
+
         [HttpGet]
         [AllowAnonymous]
         public IActionResult AccessDenied()
