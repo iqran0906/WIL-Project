@@ -2,7 +2,6 @@
 using System;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace FMCGEnterpriseManagementSystem.Services
@@ -16,16 +15,113 @@ namespace FMCGEnterpriseManagementSystem.Services
             _httpClient = httpClient;
         }
 
-        public Task<(bool Success, string Message)> EmailInvoiceAsync(int invoiceId, string recipientEmail, byte[]? attachmentBytes, string? attachmentFileName)
-            => SendAsync($"api/invoices/{invoiceId}/email", recipientEmail, invoiceId, attachmentBytes, attachmentFileName);
+        // INVOICE EMAIL
+       
+        public Task<(bool Success, string Message)> EmailInvoiceAsync( 
+            int invoiceId,
+            string recipientEmail,
+            byte[]? attachmentBytes,
+            string? attachmentFileName)
+        {
+            return SendAsync(
+                $"api/invoices/{invoiceId}/email",
+                recipientEmail,
+                invoiceId,
+                attachmentBytes,
+                attachmentFileName);
+        }
 
-        public Task<(bool Success, string Message)> EmailQuoteAsync(int quoteId, string recipientEmail, byte[]? attachmentBytes, string? attachmentFileName)
-            => SendAsync($"api/quotes/{quoteId}/email", recipientEmail, quoteId, attachmentBytes, attachmentFileName);
+        // QUOTE EMAIL
+       
+        public Task<(bool Success, string Message)> EmailQuoteAsync(
+            int quoteId,
+            string recipientEmail,
+            byte[]? attachmentBytes,
+            string? attachmentFileName)
+        {
+            return SendAsync(
+                $"api/quotes/{quoteId}/email",
+                recipientEmail,
+                quoteId,
+                attachmentBytes,
+                attachmentFileName);
+        }
 
-        public Task<(bool Success, string Message)> EmailPaymentAsync(int paymentId, string recipientEmail, byte[]? attachmentBytes, string? attachmentFileName)
-            => SendAsync($"api/payments/{paymentId}/email", recipientEmail, paymentId, attachmentBytes, attachmentFileName);
 
-        private async Task<(bool Success, string Message)> SendAsync(string endpoint, string recipientEmail, int recordId, byte[]? attachmentBytes, string? attachmentFileName)
+        // =========================
+        // PAYMENT EMAIL
+        // =========================
+
+        public Task<(bool Success, string Message)> EmailPaymentAsync(
+            int paymentId,
+            string recipientEmail,
+            byte[]? attachmentBytes,
+            string? attachmentFileName)
+        {
+            return SendAsync(
+                $"api/payments/{paymentId}/email",
+                recipientEmail,
+                paymentId,
+                attachmentBytes,
+                attachmentFileName);
+        }
+
+
+        // =========================
+        // PASSWORD RESET EMAIL
+        // =========================
+
+        public async Task<(bool Success, string Message)>
+            SendPasswordResetEmailAsync(
+                string recipientEmail,
+                string resetUrl)
+        {
+            try
+            {
+                var payload = new
+                {
+                    RecipientEmail = recipientEmail,
+                    ResetUrl = resetUrl
+                };
+
+                var response =
+                    await _httpClient.PostAsJsonAsync(
+                        "api/account/password-reset-email",
+                        payload);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return (
+                        true,
+                        "Password reset email sent successfully.");
+                }
+
+                var errorBody =
+                    await response.Content.ReadAsStringAsync();
+
+                return (
+                    false,
+                    $"API returned {(int)response.StatusCode}: {errorBody}");
+            }
+            catch (Exception ex)
+            {
+                return (
+                    false,
+                    $"Failed to reach the email API: {ex.Message}");
+            }
+        }
+
+
+        // =========================
+        // STANDARD EMAIL REQUEST
+        // =========================
+
+        private async Task<(bool Success, string Message)> SendAsync(
+            string endpoint,
+            string recipientEmail,
+            int recordId,
+            byte[]? attachmentBytes,
+            string? attachmentFileName)
         {
             try
             {
@@ -36,19 +132,31 @@ namespace FMCGEnterpriseManagementSystem.Services
                     AttachmentBytes = attachmentBytes,
                     AttachmentFileName = attachmentFileName
                 };
-                var response = await _httpClient.PostAsJsonAsync(endpoint, payload);
+
+                var response =
+                    await _httpClient.PostAsJsonAsync(
+                        endpoint,
+                        payload);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return (true, "Email sent successfully.");
+                    return (
+                        true,
+                        "Email sent successfully.");
                 }
 
-                var errorBody = await response.Content.ReadAsStringAsync();
-                return (false, $"API returned {(int)response.StatusCode}: {errorBody}");
+                var errorBody =
+                    await response.Content.ReadAsStringAsync();
+
+                return (
+                    false,
+                    $"API returned {(int)response.StatusCode}: {errorBody}");
             }
             catch (Exception ex)
             {
-                return (false, $"Failed to reach the email API: {ex.Message}");
+                return (
+                    false,
+                    $"Failed to reach the email API: {ex.Message}");
             }
         }
     }

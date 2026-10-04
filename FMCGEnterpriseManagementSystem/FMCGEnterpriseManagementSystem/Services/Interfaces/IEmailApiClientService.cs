@@ -7,5 +7,6 @@ namespace FMCGEnterpriseManagementSystem.Services.Interfaces
         Task<(bool Success, string Message)> EmailInvoiceAsync(int invoiceId, string recipientEmail, byte[]? attachmentBytes, string? attachmentFileName);
         Task<(bool Success, string Message)> EmailQuoteAsync(int quoteId, string recipientEmail, byte[]? attachmentBytes, string? attachmentFileName);
         Task<(bool Success, string Message)> EmailPaymentAsync(int paymentId, string recipientEmail, byte[]? attachmentBytes, string? attachmentFileName);
+        Task<(bool Success, string Message)> SendPasswordResetEmailAsync(string recipientEmail, string resetUrl);
     }
 }
