@@ -1,18 +1,9 @@
-﻿/***************************************************************************************
-*    Title: Moving Average Forecast Strategy
-*    Author: Maseeha17
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Strategies/MovingAverageForecastStrategy.cs
-***************************************************************************************/
-
-/***************************************************************************************
-*    Title: Dependency injection in ASP.NET Core
-*    Author: Microsoft
-*    Date: 2026
-*    Code version: ASP.NET Core
-*    Availability: https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection
-***************************************************************************************/
+﻿
+//    Title: Dependency injection in ASP.NET Core
+//    Author: Microsoft
+//    Date: 2026
+//    Code version: ASP.NET Core
+//    Availability: https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection
 
 using System.Collections.Generic;
 using System.Linq;
