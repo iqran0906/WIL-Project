@@ -211,7 +211,18 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         }
 
         // Older prototype pages.
-        public IActionResult AddCustomer() => View();
+        // Legacy customer route - redirects to the real Customers feature.
+        [HttpGet]
+        [Authorize(
+            Roles =
+                "Administrator,Employee,SalesRepresentative")]
+        public IActionResult AddCustomer()
+        {
+            // Redirects the request to the AddCustomer action in the Customers controller.
+            return RedirectToAction(
+                "AddCustomer",
+                "Customers");
+        }
 
         public IActionResult AddSupplier() => View();
 
