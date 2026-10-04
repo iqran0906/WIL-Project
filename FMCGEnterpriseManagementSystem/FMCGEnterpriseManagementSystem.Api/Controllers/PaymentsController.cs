@@ -10,11 +10,33 @@ namespace FMCGEnterpriseManagementSystem.Api.Controllers
     public class PaymentsController : ControllerBase
     {
         private readonly IEmailService _emailService;
+        private readonly FMCGEnterpriseManagementSystem.Services.Interfaces.IPaymentService _paymentService;
 
-        public PaymentsController(IEmailService emailService)
+
+        public PaymentsController(IEmailService emailService, FMCGEnterpriseManagementSystem.Services.Interfaces.IPaymentService paymentService)
         {
             _emailService = emailService;
+            _paymentService = paymentService;
+
         }
+
+        [HttpGet("{id}/email-check")]
+        public IActionResult CheckEmailEligibility(int id)
+        {
+            if (id <= 0)
+            {
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Invalid payment id",
+                    Detail = "Payment id must be a positive number.",
+                    Status = StatusCodes.Status400BadRequest
+                });
+            }
+
+            return Ok(new { PaymentId = id, CanEmail = true });
+        }
+
+
 
         [HttpPost("{id}/email")]
         public async Task<IActionResult> EmailPayment(int id, [FromBody] EmailRequestDto request)
@@ -29,7 +51,20 @@ namespace FMCGEnterpriseManagementSystem.Api.Controllers
                 });
             }
 
+            var payment = await _paymentService.GetPaymentByIdAsync(id);
+            if (payment == null)
+            {
+                return NotFound(new ProblemDetails
+                {
+                    Title = "Payment not found",
+                    Detail = $"No payment exists with id {id}.",
+                    Status = StatusCodes.Status404NotFound
+                });
+            }
+
             request.RecordId = id;
+            request.AttachmentBytes = FMCGEnterpriseManagementSystem.Services.PaymentPdfGenerator.Generate(payment);
+            request.AttachmentFileName = $"Payment-{id}.pdf";
 
             var result = await _emailService.SendPaymentEmailAsync(request);
 
