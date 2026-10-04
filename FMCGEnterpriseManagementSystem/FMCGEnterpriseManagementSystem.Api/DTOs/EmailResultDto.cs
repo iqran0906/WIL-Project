@@ -1,4 +1,7 @@
-﻿namespace FMCGEnterpriseManagementSystem.Api.DTOs
+﻿// Purpose: Contract (interface) for building and sending invoice, quote, and payment emails.
+// Authors: Sayali-St10458649
+
+namespace FMCGEnterpriseManagementSystem.Api.DTOs
 {
     public class EmailResultDto
     {

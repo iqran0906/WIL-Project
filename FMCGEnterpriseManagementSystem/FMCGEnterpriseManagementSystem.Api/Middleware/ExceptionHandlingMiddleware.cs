@@ -5,6 +5,15 @@ using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
 
+/*****************************
+*    Title: Handle errors in ASP.NET Core APIs
+*    Author: Microsoft
+*    Date: 2024
+*    Code version: ASP.NET Core 10
+*    Availability: https://learn.microsoft.com/aspnet/core/web-api/handle-errors
+******************************/
+
+
 namespace FMCGEnterpriseManagementSystem.Api.Middleware
 {
     public class ExceptionHandlingMiddleware
@@ -32,6 +41,15 @@ namespace FMCGEnterpriseManagementSystem.Api.Middleware
         {
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
+
+            /*****************************
+*    Title: Handle errors in ASP.NET Core APIs
+*    Author: Microsoft
+*    Date: 2024
+*    Code version: ASP.NET Core 10
+*    Availability: https://learn.microsoft.com/aspnet/core/web-api/handle-errors
+******************************/
 
             var problem = new ProblemDetails
             {

@@ -3,6 +3,26 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FMCGEnterpriseManagementSystem.Api
 {
+
+    /*****************************
+*    Title: Configuring a DbContext
+*    Author: Microsoft
+*    Date: 2024
+*    Code version: EF Core 9
+*    Availability: https://learn.microsoft.com/ef/core/dbcontext-configuration/
+******************************/
+
+
+
+    /*****************************
+*    Title: Swashbuckle.AspNetCore
+*    Author: Swashbuckle.AspNetCore contributors (Richard Morris et al.)
+*    Date: 2024
+*    Code version: 6.x
+*    Availability: https://github.com/domaindrivendev/Swashbuckle.AspNetCore
+******************************/
+
+
     public class Program
     {
         public static void Main(string[] args)
@@ -19,6 +39,15 @@ namespace FMCGEnterpriseManagementSystem.Api
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<FMCGEnterpriseManagementSystem.Data.ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            
+            /*****************************
+*    Title: Dependency injection in ASP.NET Core
+*    Author: Microsoft
+*    Date: 2024
+*    Code version: ASP.NET Core 10
+*    Availability: https://learn.microsoft.com/aspnet/core/fundamentals/dependency-injection
+******************************/
+
 
             builder.Services.AddMemoryCache();
             builder.Services.AddScoped<FMCGEnterpriseManagementSystem.Services.Interfaces.ISettingsService, FMCGEnterpriseManagementSystem.Services.SettingsService>();
@@ -57,6 +86,15 @@ namespace FMCGEnterpriseManagementSystem.Api
                 app.MapOpenApi();
                 app.UseSwagger();
                 app.UseSwaggerUI();
+
+
+                /*****************************
+*    Title: Swashbuckle.AspNetCore
+*    Author: Swashbuckle.AspNetCore contributors
+*    Date: 2024
+*    Code version: 6.x
+*    Availability: https://github.com/domaindrivendev/Swashbuckle.AspNetCore
+******************************/
             }
 
             app.UseMiddleware<FMCGEnterpriseManagementSystem.Api.Middleware.ExceptionHandlingMiddleware>();

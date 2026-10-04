@@ -3,6 +3,16 @@ using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 
+
+/*****************************
+*    Title: QuestPDF
+*    Author: QuestPDF (Marcin Ziąbek)
+*    Date: 2024
+*    Code version: Community License
+*    Availability: https://www.questpdf.com
+******************************/
+
+
 namespace FMCGEnterpriseManagementSystem.Services
 {
     public static class PaymentPdfGenerator

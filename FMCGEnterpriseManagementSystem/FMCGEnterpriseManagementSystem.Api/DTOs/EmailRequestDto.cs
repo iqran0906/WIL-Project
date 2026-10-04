@@ -1,4 +1,5 @@
-﻿
+﻿// Purpose: Data transfer object for an outgoing email request (recipient + optional PDF attachment).
+// Authors: Sayali-st10458649
 namespace FMCGEnterpriseManagementSystem.Api.DTOs
 {
     public class EmailRequestDto

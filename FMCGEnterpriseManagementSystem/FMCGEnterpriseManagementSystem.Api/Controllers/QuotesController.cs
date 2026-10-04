@@ -4,6 +4,16 @@ using FMCGEnterpriseManagementSystem.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
+/*****************************
+*    Title: Handle errors in ASP.NET Core APIs
+*    Author: Microsoft
+*    Date: 2024
+*    Code version: ASP.NET Core 10
+*    Availability: https://learn.microsoft.com/aspnet/core/web-api/handle-errors
+******************************/
+
+
+
 namespace FMCGEnterpriseManagementSystem.Api.Controllers
 {
     [ApiController]
@@ -62,6 +72,14 @@ namespace FMCGEnterpriseManagementSystem.Api.Controllers
                     Status = StatusCodes.Status404NotFound
                 });
             }
+            /*****************************
+            *    Title: QuestPDF
+            *    Author: QuestPDF (Marcin Ziąbek)
+            *    Date: 2024
+            *    Code version: Community License
+            *    Availability: https://www.questpdf.com
+            ******************************/
+
 
             request.RecordId = id;
             request.AttachmentBytes = FMCGEnterpriseManagementSystem.Services.QuotePdfGenerator.Generate(quote);
