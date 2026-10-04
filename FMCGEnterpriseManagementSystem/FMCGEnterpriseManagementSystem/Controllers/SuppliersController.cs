@@ -1,5 +1,5 @@
 ﻿// Title: Controller for managing suppliers, supplier products and supplier status.
-// Authors: Maseeha17
+// Authors: Microsoft
 // Date: 10-04-2024
 // Code version: ASP.NET Core 10.0
 // Availability: https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/crud

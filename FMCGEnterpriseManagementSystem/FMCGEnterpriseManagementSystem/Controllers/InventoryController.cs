@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 
 // Title: Controller for managing inventory items and stock adjustments.
-// Authors: Maseeha17
+// Authors: Microsoft
 // Date: 27-04-2026
 // Code version: ASP.NET Core 10.0
 // Availability: https://learn.microsoft.com/aspnet/core/mvc/controllers/actions

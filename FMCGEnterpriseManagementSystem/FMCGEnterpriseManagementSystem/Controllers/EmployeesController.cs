@@ -9,12 +9,12 @@ namespace FMCGEnterpriseManagementSystem.Controllers
     // Only users with the Administrator role can manage employees.
     [Authorize(Roles = "Administrator")]
 
-   
-  //  Title: Role-based authorization in ASP.NET Core
-  //  Author: iqra0906
-  //  Date: 14-10-2024
-  //  Code version: ASP.NET Core 10.0
-  //  Availability: https://learn.microsoft.com/aspnet/core/security/authorization/roles
+
+    //  Title: Role-based authorization in ASP.NET Core
+    //  Author: Microsoft
+    //  Date: 14-10-2024
+    //  Code version: ASP.NET Core 10.0
+    //  Availability: https://learn.microsoft.com/aspnet/core/security/authorization/roles
 
     public class EmployeesController : Controller
     {

@@ -1,6 +1,6 @@
 
 // Title: Controller action return types in ASP.NET Core MVC
-// Authors: ImranHussain78612
+// Authors: Microsoft
 // Date: 27-04-2026
 // Code version: ASP.NET Core 10.0
 // Availability: https://learn.microsoft.com/aspnet/core/mvc/controllers/actions

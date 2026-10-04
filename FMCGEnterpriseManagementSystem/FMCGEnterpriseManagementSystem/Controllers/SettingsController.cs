@@ -1,5 +1,5 @@
 //  Title: Role-based authorization in ASP.NET Core
-//  Author: ImranHussain78612
+//  Author: Microsoft
 //  Date: 14-10-2024
 //  Code version: ASP.NET Core 10.0
 //  Availability: https://learn.microsoft.com/aspnet/core/security/authorization/roles
