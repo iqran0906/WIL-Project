@@ -230,7 +230,18 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
         public IActionResult AddEmployee() => View();
 
-        public IActionResult AddItem() => View();
+        // Legacy inventory route - redirects to the real Inventory feature.
+        [HttpGet]
+        [Authorize(
+            Roles =
+                "Administrator,Employee")]
+        public IActionResult AddItem()
+        {
+            // Redirects the request to the AddItem action in the Inventory controller.
+            return RedirectToAction(
+                "AddItem",
+                "Inventory");
+        }
 
         public IActionResult CreateInvoice() => View();
 
