@@ -1,5 +1,4 @@
-﻿```csharp
-// Title: Asynchronous programming with async and await
+﻿// Title: Asynchronous programming with async and await
 // Author: Microsoft
 // Date: 01-10-2026
 // Code version: C# / .NET 10
@@ -220,4 +219,3 @@ namespace FMCGEnterpriseManagementSystem.Services
         }
     }
 }
-```
