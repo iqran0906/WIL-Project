@@ -30,6 +30,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         private readonly IInvoiceExportService _invoiceExportService;
 
         private readonly ApplicationDbContext _context;
+        private readonly IEmailApiClientService _emailApiClientService;
 
         // Dependency injection provides the required invoice, customer,
         // export and database services.
@@ -43,6 +44,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             _invoiceExportService = invoiceExportService;
             _customerRepository = customerRepository;
             _context = context;
+            _emailApiClientService = emailApiClientService;
         }
 
         // GET: Invoices
@@ -121,6 +123,12 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
             if (invoice == null)
                 return NotFound();
+
+            var customer = await _context.Customers
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.CustomerId == invoice.CustomerId);
+
+            ViewBag.CustomerEmail = customer?.Email;
 
             return View(invoice);
         }
@@ -304,6 +312,32 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 pdf,
                 "application/pdf",
                 $"Invoice-{invoice.InvoiceNumber}.pdf");
+        }
+
+        // POST: Invoices/EmailInvoice/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+      
+        public async Task<IActionResult> EmailInvoice(int id, string recipientEmail)
+        {
+            var invoice = await _invoiceService.GetByIdAsync(id);
+            if (invoice == null) return NotFound();
+
+            var fileName = $"Invoice-{invoice.InvoiceNumber}.pdf";
+            var pdfBytes = _invoiceExportService.GenerateInvoicePdf(invoice);
+
+            var result = await _emailApiClientService.EmailInvoiceAsync(id, recipientEmail, pdfBytes, fileName);
+
+            if (result.Success)
+            {
+                TempData["SuccessMessage"] = result.Message;
+            }
+            else
+            {
+                TempData["ErrorMessage"] = result.Message;
+            }
+
+            return RedirectToAction(nameof(Details), new { id });
         }
 
         // GET: Invoices/Delete/5

@@ -17,6 +17,7 @@ using FMCGEnterpriseManagementSystem.Strategies;
 using FMCGEnterpriseManagementSystem.Strategies.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System;
 using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -53,6 +54,44 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
+builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
+builder.Services.AddScoped<ISupplierService, SupplierService>();
+
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+
+builder.Services.AddScoped<IQuoteRepository, QuoteRepository>();
+builder.Services.AddScoped<IQuoteService, QuoteService>();
+
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+
+builder.Services.AddScoped<IReportRepository, ReportRepository>();
+builder.Services.AddScoped<IReportService, ReportService>();
+
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+
+builder.Services.AddScoped<IUserAccountService, UserAccountService>();
+
+builder.Services.AddHttpClient<FMCGEnterpriseManagementSystem.Services.Interfaces.IEmailApiClientService,
+                                FMCGEnterpriseManagementSystem.Services.EmailApiClientService>(client =>
+                                {
+                                    client.BaseAddress = new Uri("https://localhost:7194/");
+                                });
+builder.Services.AddScoped<IExportStrategy, PdfExportStrategy>();
+builder.Services.AddScoped<IExportStrategy, ExcelExportStrategy>();
+builder.Services.AddScoped<ExportFactory>();
+
+builder.Services.AddScoped<IUserAccountService, UserAccountService>();
+
+builder.Services.AddScoped<ISalesRepresentativeRepository, SalesRepresentativeRepository>();
+builder.Services.AddScoped<ISalesRepresentativeService, SalesRepresentativeService>();
 // ==========================================================
 // DATABASE
 // ==========================================================
@@ -240,7 +279,7 @@ builder.Services.AddScoped<SystemAlertObserver>();
 // ==========================================================
 
 var app = builder.Build();
-
+Rotativa.AspNetCore.RotativaConfiguration.Setup(app.Environment.WebRootPath, "Rotativa");
 
 // ==========================================================
 // ERROR HANDLING / SECURITY

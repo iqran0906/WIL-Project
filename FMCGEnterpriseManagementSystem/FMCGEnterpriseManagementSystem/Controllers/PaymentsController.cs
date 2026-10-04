@@ -23,9 +23,10 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
         // ExportFactory selects the required export strategy, such as PDF or Excel.
         private readonly ExportFactory _exportFactory;
+        private readonly IEmailApiClientService _emailApiClientService;
 
-        // Dependency injection provides the payment service and export factory.
-        public PaymentsController(IPaymentService paymentService, ExportFactory exportFactory)
+   // Dependency injection provides the payment service and export factory.
+        public PaymentsController(IPaymentService paymentService, ExportFactory exportFactory, IEmailApiClientService emailApiClientService)
         {
             // Title: Factory Design Pattern in C#
             // Author: Code Maze
@@ -35,6 +36,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
             _paymentService = paymentService;
             _exportFactory = exportFactory;
+            _emailApiClientService = emailApiClientService;
         }
 
         // Displays all recorded payments.
@@ -108,6 +110,33 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         }
 
         // Exports all payments as a PDF file.
+
+        // POST: Payments/EmailPayment/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+      
+        public async Task<IActionResult> EmailPayment(int id, string recipientEmail)
+        {
+            var payment = await _paymentService.GetPaymentByIdAsync(id);
+            if (payment == null) return NotFound();
+
+            var fileName = $"Payment-{id}.pdf";
+            var pdf = new Rotativa.AspNetCore.ViewAsPdf("View", payment) { FileName = fileName };
+            var pdfBytes = await pdf.BuildFile(ControllerContext);
+
+            var result = await _emailApiClientService.EmailPaymentAsync(id, recipientEmail, pdfBytes, fileName);
+            if (result.Success)
+            {
+                TempData["SuccessMessage"] = result.Message;
+            }
+            else
+            {
+                TempData["ErrorMessage"] = result.Message;
+            }
+
+            return RedirectToAction(nameof(View), new { id });
+        }
+
         public async Task<IActionResult> ExportPdf()
         {
             var payments = await _paymentService.GetAllPaymentsAsync();

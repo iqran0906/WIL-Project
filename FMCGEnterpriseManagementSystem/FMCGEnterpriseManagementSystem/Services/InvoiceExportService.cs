@@ -171,8 +171,8 @@ namespace FMCGEnterpriseManagementSystem.Services
                                 header.Cell().Element(HeaderCellStyle).Text("Description");
                                 header.Cell().Element(HeaderCellStyle).AlignRight().Text("Unit Price");
                                 header.Cell().Element(HeaderCellStyle).AlignRight().Text("Disc %");
-                                header.Cell().Element(HeaderCellStyle).AlignRight().Text("Total");
                                 header.Cell().Element(HeaderCellStyle).AlignRight().Text("VAT");
+                                header.Cell().Element(HeaderCellStyle).AlignRight().Text("Total");
                             });
 
                             // Loops through each item belonging to the invoice.
@@ -221,6 +221,10 @@ namespace FMCGEnterpriseManagementSystem.Services
                                 table.Cell().Element(DataCellStyle)
                                     .AlignRight()
                                     .Text($"R{lineVat:0.00}");
+
+                                table.Cell().Element(DataCellStyle)
+                                   .AlignRight()
+                                   .Text($"R{lineExVat:0.00}");
                             }
                         });
 
@@ -275,9 +279,8 @@ namespace FMCGEnterpriseManagementSystem.Services
                                     .Bold()
                                     .FontSize(11);
                             });
-
                         // =========================
-                        // PAYMENT INFORMATION
+                        // BANKING DETAILS
                         // =========================
 
                         // Adds payment instructions underneath the totals.
@@ -288,19 +291,24 @@ namespace FMCGEnterpriseManagementSystem.Services
                             .Column(payment =>
                             {
                                 payment.Item()
-                                    .Text("PAYMENT INFORMATION")
+                                    .Text("BANKING DETAILS")
                                     .Bold()
                                     .FontSize(10);
 
-                                // Displays the payment terms.
-                                payment.Item()
-                                    .PaddingTop(5)
-                                    .Text($"Payment Terms: {invoice.PaymentTerms ?? "N/A"}");
+                         // Displays the payment terms.
+
+                                payment.Item().PaddingTop(5).Text("Bank: FNB");
+                                payment.Item().Text("Branch Code: 250655");
+                                payment.Item().Text("Account Name: Exclusive Distributors (Pty) Ltd");
+                                payment.Item().Text("Account Number: 63191446202");
+                                payment.Item().Text($"Reference: Invoice {invoice.InvoiceNumber}");
+                                payment.Item().Text("Proof of Payment: exclusivedistributors2@gmail.com");
 
                                 // Instructs the customer to use the invoice
                                 // number when making a payment.
                                 payment.Item()
-                                    .Text("Please use the invoice number as your payment reference.");
+                                    .PaddingTop(8)
+                                    .Text($"Payment Terms: {invoice.PaymentTerms ?? "N/A"}");
                             });
 
                         // Displays a closing message at the bottom

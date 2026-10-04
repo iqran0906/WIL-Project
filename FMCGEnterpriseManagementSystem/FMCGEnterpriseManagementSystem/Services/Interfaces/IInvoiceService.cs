@@ -26,5 +26,7 @@ namespace FMCGEnterpriseManagementSystem.Services.Interfaces
 
         // Deletes an invoice using its ID.
         Task DeleteAsync(int id);
+
+        Task<bool> SendInvoiceEmailAsync(int invoiceId);
     }
 }

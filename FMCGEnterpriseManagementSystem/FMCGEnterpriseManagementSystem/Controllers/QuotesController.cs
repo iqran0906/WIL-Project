@@ -25,14 +25,17 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         private readonly IQuoteService _quoteService;
 
         // Database context is used to load products, customers and sales representatives.
+
+        private readonly IEmailApiClientService _emailApiClientService;
         private readonly ApplicationDbContext _context;
 
-        // Dependencies are supplied through dependency injection.
-        public QuotesController(
-            IQuoteService quoteService,
-            ApplicationDbContext context)
+   // Dependencies are supplied through dependency injection.
+        public QuotesController(IQuoteService quoteService, IEmailApiClientService emailApiClientService, ApplicationDbContext context)
+       
+          
         {
             _quoteService = quoteService;
+            _emailApiClientService = emailApiClientService;
             _context = context;
         }
 
@@ -289,6 +292,32 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             }
 
             return View(quote);
+        }
+
+        // POST: Quotes/EmailQuote/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+       
+        public async Task<IActionResult> EmailQuote(int id, string recipientEmail)
+        {
+            var quote = await _quoteService.GetQuoteByIdAsync(id);
+            if (quote == null) return NotFound();
+
+            var fileName = $"Quote-{quote.QuoteNumber}.pdf";
+            var pdfBytes = QuotePdfGenerator.Generate(quote);
+
+            var result = await _emailApiClientService.EmailQuoteAsync(id, recipientEmail, pdfBytes, fileName);
+
+            if (result.Success)
+            {
+                TempData["SuccessMessage"] = result.Message;
+            }
+            else
+            {
+                TempData["ErrorMessage"] = result.Message;
+            }
+
+            return RedirectToAction(nameof(Details), new { id });
         }
 
         // POST: Quotes/Delete/5
