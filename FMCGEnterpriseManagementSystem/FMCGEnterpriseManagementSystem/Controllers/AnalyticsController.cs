@@ -1,12 +1,16 @@
-﻿
-
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
+    // Title: Controller for displaying sales and inventory analytics.
+    // Authors: Maseeha17
+    // Date: 27-04-2026
+    // Code version: ASP.NET Core 10
+    // Availability: https://learn.microsoft.com/aspnet/core/mvc/controllers/actions
+
     // Restricts access to authenticated users.
     [Authorize]
     public class AnalyticsController : Controller

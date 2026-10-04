@@ -1,5 +1,3 @@
-
-
 using System.Diagnostics;
 using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;
@@ -11,15 +9,28 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+// Title: Controller for handling home, dashboard, profile, legacy routes and application errors.
+// Authors: ImranHussain78612
+// Date: 27-04-2026
+// Code version: ASP.NET Core 10
+// Availability: https://learn.microsoft.com/aspnet/core/mvc/controllers/actions
+
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
     // Requires users to be authenticated to access the Home Controller.
     [Authorize]
     public class HomeController : Controller
     {
+        // Logger used to record application errors and warnings.
         private readonly ILogger<HomeController> _logger;
+
+        // Database context used to retrieve application data.
         private readonly ApplicationDbContext _context;
+
+        // ASP.NET Core Identity manager used to retrieve the current user and their roles.
         private readonly UserManager<User> _userManager;
+
+        // Service responsible for retrieving dashboard analytics.
         private readonly IDashboardService _dashboardService;
 
         // Dependency injection provides logging, database access,
@@ -40,9 +51,11 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            // Retrieves the dashboard analytics from the dashboard service.
             var analytics =
                 await _dashboardService.GetDashboardAnalyticsAsync();
 
+            // Displays the Dashboard View with the retrieved analytics.
             return View("Dashboard", analytics);
         }
 
@@ -50,9 +63,11 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [HttpGet]
         public async Task<IActionResult> Dashboard(int months = 12)
         {
+            // Retrieves dashboard analytics for the requested number of months.
             var analytics =
                 await _dashboardService.GetDashboardAnalyticsAsync(months);
 
+            // Displays the Dashboard View using the retrieved analytics.
             return View("Dashboard", analytics);
         }
 
@@ -60,6 +75,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [HttpGet]
         public IActionResult Settings()
         {
+            // Sends the user to the Settings controller's Index action.
             return RedirectToAction("Index", "Settings");
         }
 
@@ -100,52 +116,67 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             var model =
                 new UserProfileViewModel
                 {
+                    // Stores the user's username.
                     UserName =
                         user.UserName ?? string.Empty,
 
+                    // Stores the user's email address.
                     Email =
                         user.Email ?? string.Empty,
 
+                    // Stores the user's active status.
                     IsActive =
                         user.IsActive,
 
+                    // Retrieves all roles assigned to the current user.
                     Roles =
                         (await _userManager
                             .GetRolesAsync(user))
                         .ToList(),
 
+                    // Indicates whether the user has a linked employee record.
                     HasEmployeeRecord =
                         employee != null,
 
+                    // Stores the employee's first name when available.
                     FirstName =
                         employee?.FirstName,
 
+                    // Stores the employee's last name when available.
                     LastName =
                         employee?.LastName,
 
+                    // Stores the employee number when available.
                     EmployeeNumber =
                         employee?.EmployeeNumber,
 
+                    // Uses the employee contact number or the user's phone number.
                     ContactNumber =
                         employee?.ContactNumber ??
                         user.PhoneNumber,
 
+                    // Stores the employee's job title when available.
                     JobTitle =
                         employee?.JobTitle,
 
+                    // Stores the employee's date of employment when available.
                     DateOfEmployment =
                         employee?.DateOfEmployment,
 
+                    // Stores the sales representative code when available.
                     SalesRepCode =
                         salesRep?.SalesRepCode,
 
+                    // Stores the sales representative's assigned area.
                     SalesArea =
                         salesRep?.Area
                 };
 
+            // Sends the completed profile model to the View.
             return View(model);
         }
 
+        // Displays the privacy page.
         [HttpGet]
         public IActionResult Privacy()
         {
@@ -156,6 +187,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [HttpGet]
         public IActionResult Reports()
         {
+            // Sends the user to the Reports controller's Index action.
             return RedirectToAction(
                 "Index",
                 "Reports");
@@ -168,6 +200,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 "Administrator,Employee,SalesRepresentative")]
         public IActionResult CustomerList()
         {
+            // Redirects the request to the Customers controller.
             return RedirectToAction(
                 "CustomerList",
                 "Customers");
@@ -177,6 +210,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [HttpGet]
         public IActionResult SupplierList()
         {
+            // Redirects the request to the Supplier controller.
             return RedirectToAction(
                 "SupplierList",
                 "Supplier");
@@ -185,6 +219,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [HttpGet]
         public IActionResult EmployeeList()
         {
+            // Redirects the request to the Employees controller.
             return RedirectToAction(
                 "Index",
                 "Employees");
@@ -193,6 +228,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [HttpGet]
         public IActionResult InventoryList()
         {
+            // Redirects the request to the Inventory controller.
             return RedirectToAction(
                 "Index",
                 "Inventory");
@@ -201,6 +237,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [HttpGet]
         public IActionResult InvoiceList()
         {
+            // Redirects the request to the Invoices controller.
             return RedirectToAction(
                 "Index",
                 "Invoices");
@@ -209,6 +246,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         [HttpGet]
         public IActionResult QuoteList()
         {
+            // Redirects the request to the Quotes controller.
             return RedirectToAction(
                 "Index",
                 "Quotes");
@@ -242,6 +280,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 Activity.Current?.Id ??
                 HttpContext.TraceIdentifier;
 
+            // Retrieves information about the exception that caused the error.
             var exceptionFeature =
                 HttpContext.Features
                     .Get<IExceptionHandlerPathFeature>();
@@ -257,6 +296,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                     requestId);
             }
 
+            // Creates the error model and displays the error View.
             return View(
                 new ErrorViewModel
                 {
@@ -273,6 +313,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             NoStore = true)]
         public IActionResult StatusCodePage(int code)
         {
+            // Retrieves information about the original request that produced the status code.
             var reExecute =
                 HttpContext.Features
                     .Get<IStatusCodeReExecuteFeature>();
@@ -285,16 +326,20 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 reExecute?.OriginalPath ??
                 "(unknown)");
 
+            // Sets the HTTP response status code.
             Response.StatusCode = code;
 
+            // Displays the error View with the relevant status code.
             return View(
                 "Error",
                 new ErrorViewModel
                 {
+                    // Creates a request identifier for tracing the error.
                     RequestId =
                         Activity.Current?.Id ??
                         HttpContext.TraceIdentifier,
 
+                    // Stores the HTTP status code in the error model.
                     StatusCode = code
                 });
         }

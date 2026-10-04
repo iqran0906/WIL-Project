@@ -1,14 +1,8 @@
-﻿
-
-/***************************************************************************************
-*    Title: Role-based authorization in ASP.NET Core
-*    Author: Microsoft
-*    Date: 2026
-*    Code version: ASP.NET Core
-*    Availability: https://learn.microsoft.com/aspnet/core/security/authorization/roles
-***************************************************************************************/
-
-
+﻿   // Title: Role-based authorization in ASP.NET Core
+   // Author: Microsoft
+   // Date: 14-10-2024
+   // Code version: ASP.NET Core
+   // Availability: https://learn.microsoft.com/aspnet/core/security/authorization/roles
 namespace FMCGEnterpriseManagementSystem.Configurations
 {
     // Stores the application's role names in one central location.
@@ -19,4 +13,4 @@ namespace FMCGEnterpriseManagementSystem.Configurations
         public const string Employee = "Employee";
         public const string SalesRepresentative = "SalesRepresentative";
     }
-}
+}   

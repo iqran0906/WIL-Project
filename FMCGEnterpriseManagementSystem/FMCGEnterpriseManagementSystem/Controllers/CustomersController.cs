@@ -1,4 +1,8 @@
-﻿
+﻿// Title: Controllers and Actions in ASP.NET Core.
+// Authors: Maseeha17
+// Date: 27-04-2026
+// Code version: ASP.NET Core 10
+// Availability: https://learn.microsoft.com/aspnet/core/mvc/controllers/actions
 
 using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;

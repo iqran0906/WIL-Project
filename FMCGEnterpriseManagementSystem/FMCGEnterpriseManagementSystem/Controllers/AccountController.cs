@@ -1,6 +1,4 @@
-﻿
-
-using FMCGEnterpriseManagementSystem.Services.Interfaces;
+﻿using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -87,13 +85,12 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
             // Retrieves the logged-in user's account so that the login action can be recorded in the recent activity section.
 
-            /***************************************************************************************
-            *    Title: ASP.NET Core Identity
-            *    Author: Microsoft
-            *    Date: 2026
-            *    Code version: ASP.NET Core
-            *    Availability: https://learn.microsoft.com/aspnet/core/security/authentication/identity
-            ***************************************************************************************/
+               // Title: ASP.NET Core Identity
+                // Author: Microsoft
+                // Date: 10-11-2025
+                // Code version: ASP.NET Core
+                // Availability: https://learn.microsoft.com/aspnet/core/security/authentication/identity
+
             var user = await _userManager.FindByEmailAsync(model.Email);
 
             if (user != null)

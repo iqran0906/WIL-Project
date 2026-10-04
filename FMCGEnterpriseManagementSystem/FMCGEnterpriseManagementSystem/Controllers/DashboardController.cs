@@ -1,4 +1,8 @@
-﻿
+﻿// Title: Controller for displaying dashboard analytics.
+// Authors: Maseeha17
+// Date: 27-04-2026
+// Code version: ASP.NET Core 10
+// Availability: https://learn.microsoft.com/aspnet/core/mvc/controllers/actions
 
 using System.Threading.Tasks;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
