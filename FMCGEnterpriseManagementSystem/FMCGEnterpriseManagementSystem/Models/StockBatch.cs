@@ -1,10 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Stock Batch Database Entity
-*    Author: Naseeha27
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Models/StockBatch.cs
-***************************************************************************************/
+﻿
 using System.ComponentModel.DataAnnotations;
 
 namespace FMCGEnterpriseManagementSystem.Models

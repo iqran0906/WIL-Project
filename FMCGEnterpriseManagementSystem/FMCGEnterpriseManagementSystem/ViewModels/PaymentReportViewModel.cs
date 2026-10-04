@@ -1,11 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Payment Report View Model
-*    Author: iqran0906
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/ViewModels/Reports/PaymentReportViewModel.cs
-***************************************************************************************/
-
+﻿
 namespace FMCGEnterpriseManagementSystem.ViewModels.Reports
 {
     public class PaymentReportViewModel

@@ -1,10 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Inventory Database Entity
-*    Author: Maseeha17
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Models/Inventory.cs
-***************************************************************************************/
+﻿
 
 using System.ComponentModel.DataAnnotations;
 ﻿using FMCGEnterpriseManagementSystem.Models;

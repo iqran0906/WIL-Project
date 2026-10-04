@@ -1,10 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Payments Controller
-*    Author: iqran0906, Sayali-St10458649, Naseeha27
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Controllers/PaymentsController.cs
-***************************************************************************************/
+﻿
 
 using FMCGEnterpriseManagementSystem.Factories;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;

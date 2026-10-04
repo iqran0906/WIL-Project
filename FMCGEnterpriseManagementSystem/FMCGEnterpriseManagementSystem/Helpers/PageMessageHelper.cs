@@ -1,10 +1,4 @@
-/***************************************************************************************
-*    Title: Page Tip Data Model
-*    Author: ST10068525
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Models/PageTip.cs
-***************************************************************************************/
+
 
 /***************************************************************************************
 *    Title: Classes and Objects - C# Programming Guide

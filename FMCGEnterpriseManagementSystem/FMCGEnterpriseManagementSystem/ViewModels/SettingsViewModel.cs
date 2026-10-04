@@ -1,10 +1,4 @@
-/***************************************************************************************
-*    Title: Settings View Model
-*    Author: ST10068525
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/ViewModels/SettingsViewModel.cs
-***************************************************************************************/
+
 
 using System.ComponentModel.DataAnnotations;
 

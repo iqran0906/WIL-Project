@@ -1,10 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Customer Database Entity
-*    Author: Maseeha17, Naseeha
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Models/Customer.cs
-***************************************************************************************/
+﻿
 
 namespace FMCGEnterpriseManagementSystem.Models
 {

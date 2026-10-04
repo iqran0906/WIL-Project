@@ -1,10 +1,3 @@
-/***************************************************************************************
-*    Title: System Settings Database Entity
-*    Author: ST10068525
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Models/SystemSetting.cs
-***************************************************************************************/
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

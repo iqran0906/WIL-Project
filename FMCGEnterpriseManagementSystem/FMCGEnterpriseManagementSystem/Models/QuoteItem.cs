@@ -1,10 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Quote Item Database Entity
-*    Author: Naseeha27, Sayali-St10458649
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Models/QuoteItem.cs
-***************************************************************************************/
+﻿
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

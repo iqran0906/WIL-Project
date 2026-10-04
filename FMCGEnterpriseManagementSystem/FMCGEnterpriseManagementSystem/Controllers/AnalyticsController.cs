@@ -1,10 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Analytics Controller
-*    Author:Maseeha17
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Controllers/AnalyticsController.cs
-***************************************************************************************/
+﻿
 
 using System.Threading.Tasks;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;

@@ -1,11 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Inventory Repository
-*    Author: Maseeha17, Sayali-St10458649
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Repositories/InventoryRepository.cs
-***************************************************************************************/
-
+﻿
 using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;

@@ -1,10 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Supplier Controller
-*    Author: iqran0906, Maseeha17, Naseeha27
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Controllers/SupplierController.cs
-***************************************************************************************/
+﻿
 
 /***************************************************************************************
 *    Title: Implement CRUD - ASP.NET MVC with Entity Framework Core

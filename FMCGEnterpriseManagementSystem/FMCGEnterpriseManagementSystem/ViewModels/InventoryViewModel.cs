@@ -1,10 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Inventory View Model
-*    Author: Maseeha17
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/ViewModels/InventoryViewModel.cs
-***************************************************************************************/
+﻿
 
 using System.ComponentModel.DataAnnotations;
 

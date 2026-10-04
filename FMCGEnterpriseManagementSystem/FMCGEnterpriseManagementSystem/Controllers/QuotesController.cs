@@ -1,10 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Quotes Controller
-*    Author: Sayali
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Controllers/QuotesController.cs
-***************************************************************************************/
+﻿
 
 /***************************************************************************************
 *    Title: Implement CRUD - ASP.NET MVC with Entity Framework Core

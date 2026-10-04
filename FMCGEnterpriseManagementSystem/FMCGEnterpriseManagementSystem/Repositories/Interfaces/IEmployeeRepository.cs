@@ -1,10 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Employee Repository Interface
-*    Author: iqran0906
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Repositories/Interfaces/IEmployeeRepository.cs
-***************************************************************************************/
+﻿
 
 using FMCGEnterpriseManagementSystem.Models;
 

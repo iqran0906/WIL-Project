@@ -1,10 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Payment Repository
-*    Author: Sayali-St10458649
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Repositories/PaymentRepository.cs
-***************************************************************************************/
+﻿
 
 using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;

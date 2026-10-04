@@ -1,10 +1,4 @@
-/***************************************************************************************
-*    Title: Global MVC Activity Logging Filter
-*    Author: ST10068525
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Filters/ActivityLoggingFilter.cs
-***************************************************************************************/
+
 
 /***************************************************************************************
 *    Title: Filters in ASP.NET Core MVC

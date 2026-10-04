@@ -1,10 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Seed Data
-*    Author: iqran0906, Naseeha27
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Data/SeedData.cs
-***************************************************************************************/
+﻿
 
 /***************************************************************************************
 *    Title: Identity management in ASP.NET Core

@@ -1,10 +1,4 @@
-/***************************************************************************************
-*    Title: Home Controller
-*    Author: Sayali-St10458649, iqran0906, ST10068525, Naseeha27, Maseeha17
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Controllers/HomeController.cs
-***************************************************************************************/
+
 
 using System.Diagnostics;
 using FMCGEnterpriseManagementSystem.Data;

@@ -1,10 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Dashboard Metric Data Transfer Object
-*    Author: Maseeha17
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/DTOs/DashboardMetricDto.cs
-***************************************************************************************/
+﻿
 
 /***************************************************************************************
 *    Title: Classes and Objects - C# Programming Guide

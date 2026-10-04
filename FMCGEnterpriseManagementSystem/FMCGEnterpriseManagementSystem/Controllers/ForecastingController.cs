@@ -1,10 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Forecasting Controller
-*    Author: Maseeha17
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Controllers/ForecastingController.cs
-***************************************************************************************/
+﻿
 
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;

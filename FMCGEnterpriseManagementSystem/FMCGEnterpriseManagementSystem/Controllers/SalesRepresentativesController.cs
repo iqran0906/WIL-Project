@@ -1,10 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Sales Representatives Controller
-*    Author: iqran0906
-*    Date: 3 October 2026
-*    Code version: Version 1.0]
-*    Availability: FMCGEnterpriseManagementSystem/Controllers/SalesRepresentativesController.cs
-***************************************************************************************/
+﻿
 
 /***************************************************************************************
 *    Title: Role-based authorization in ASP.NET Core

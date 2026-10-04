@@ -1,10 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Sales Representative Database Entity
-*    Author: Naseeha27
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Models/SalesRepresentative.cs
-***************************************************************************************/
+﻿
 
 using System.ComponentModel.DataAnnotations;
 

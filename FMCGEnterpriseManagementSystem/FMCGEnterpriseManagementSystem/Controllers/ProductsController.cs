@@ -1,10 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Products Controller
-*    Author: Maseeha17
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Controllers/ProductsController.cs
-***************************************************************************************/
+﻿
 
 /***************************************************************************************
 *    Title: Implement CRUD - ASP.NET MVC with Entity Framework Core

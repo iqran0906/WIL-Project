@@ -1,10 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Application Database Context
-*    Author: Naseeha27, Sayali-St10458649, iqran0906
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Data/ApplicationDbContext.cs
-***************************************************************************************/
+﻿
 
 /***************************************************************************************
 *    Title: Creating and Configuring a Model - EF Core

@@ -1,10 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Account Controller
-*    Author: iqran0906
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Controllers/AccountController.cs
-***************************************************************************************/
+﻿
 
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.Models;

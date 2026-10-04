@@ -1,11 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Dashboard Controller
-*    Author: Maseeha17
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Type: Source code
-*    Availability: FMCGEnterpriseManagementSystem/Controllers/DashboardController.cs
-***************************************************************************************/
+﻿
 
 using System.Threading.Tasks;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;

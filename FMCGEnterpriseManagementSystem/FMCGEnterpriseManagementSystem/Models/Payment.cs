@@ -1,10 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Payment Database Entity
-*    Author: Naseeha27
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Models/Payment.cs
-***************************************************************************************/
+﻿
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

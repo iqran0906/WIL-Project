@@ -1,10 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Stock Notification Observer
-*    Author: Sayali-St10458649
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Observers/StockNotificationObserver.cs
-***************************************************************************************/
+﻿
 
 /***************************************************************************************
 *    Title: Dependency injection in ASP.NET Core

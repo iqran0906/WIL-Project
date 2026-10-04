@@ -1,10 +1,3 @@
-/***************************************************************************************
-*    Title: Search Controller
-*    Author: ST10068525
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Controllers/SearchController.cs
-***************************************************************************************/
 
 /***************************************************************************************
 *    Title: Controller action return types in ASP.NET Core MVC

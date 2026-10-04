@@ -1,10 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Product Repository
-*    Author: iqran0906, Maseeha17, Sayali-St10458649
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Repositories/ProductRepository.cs
-***************************************************************************************/
+﻿
 
 using System.Collections.Generic;
 using System.Linq;

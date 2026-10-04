@@ -1,10 +1,4 @@
-/***************************************************************************************
-*    Title: Supplier View Model
-*    Author: iqran0906, Naseeha27, Maseeha17
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/ViewModels/SupplierViewModel.cs
-***************************************************************************************/
+
 
 using System.ComponentModel.DataAnnotations;
 

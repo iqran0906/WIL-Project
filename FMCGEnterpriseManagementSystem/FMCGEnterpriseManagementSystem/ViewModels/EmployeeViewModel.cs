@@ -1,11 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Employee View Model
-*    Author: iqran0906
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/ViewModels/EmployeeViewModel.cs
-***************************************************************************************/
-
+﻿
 using System.ComponentModel.DataAnnotations;
 
 namespace FMCGEnterpriseManagementSystem.ViewModels

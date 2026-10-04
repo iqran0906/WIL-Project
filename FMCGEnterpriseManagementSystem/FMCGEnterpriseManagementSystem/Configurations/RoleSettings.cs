@@ -1,10 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Role Settings
-*    Author: iqran0906
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Configurations/RoleSettings.cs
-***************************************************************************************/
+﻿
 
 /***************************************************************************************
 *    Title: Role-based authorization in ASP.NET Core

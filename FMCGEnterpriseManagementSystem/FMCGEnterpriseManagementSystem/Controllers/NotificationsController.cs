@@ -1,12 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Notifications Controller
-*    Author: iqran0906, Sayali-St10458649
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Controllers/NotificationsController.cs
-***************************************************************************************/
-
-
+﻿
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;

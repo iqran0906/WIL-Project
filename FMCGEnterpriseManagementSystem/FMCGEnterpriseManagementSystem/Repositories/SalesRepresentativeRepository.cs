@@ -1,10 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Sales Representative Repository
-*    Author: iqran0906
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Repositories/SalesRepresentativeRepository.cs
-***************************************************************************************/
+﻿
 
 using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;

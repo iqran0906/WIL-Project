@@ -1,10 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Supplier Database Entity
-*    Author: Naseeha27, Maseeha17
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/Models/Supplier.cs
-***************************************************************************************/
+﻿
 namespace FMCGEnterpriseManagementSystem.Models
 {
     public class Supplier

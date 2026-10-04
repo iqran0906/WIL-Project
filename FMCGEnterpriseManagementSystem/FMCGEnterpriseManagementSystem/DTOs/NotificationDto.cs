@@ -1,10 +1,4 @@
-﻿/***************************************************************************************
-*    Title: Notification Data Transfer Object
-*    Author: Sayali-St10458649
-*    Date: 3 October 2026
-*    Code version: Version 1.0
-*    Availability: FMCGEnterpriseManagementSystem/DTOs/NotificationDto.cs
-***************************************************************************************/
+﻿
 
 /***************************************************************************************
 *    Title: Classes and Objects - C# Programming Guide
