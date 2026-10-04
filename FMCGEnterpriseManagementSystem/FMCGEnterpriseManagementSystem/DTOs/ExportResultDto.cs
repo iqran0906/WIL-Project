@@ -1,12 +1,8 @@
-﻿
-
-/***************************************************************************************
-*    Title: Classes and Objects - C# Programming Guide
-*    Author: Microsoft
-*    Date: 2026
-*    Code version: C#
-*    Availability: https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/types/classes
-***************************************************************************************/
+﻿//    Title: Classes and Objects - C# Programming Guide
+//    Author: Microsoft
+//    Date: 08-04-2026
+//    Code version: C# .Net 10.0
+//    Availability: https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/types/classes
 namespace FMCGEnterpriseManagementSystem.DTOs
 {
     // Stores the information required to return an exported file to the user.

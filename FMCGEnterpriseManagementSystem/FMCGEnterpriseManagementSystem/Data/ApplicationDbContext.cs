@@ -1,12 +1,9 @@
-﻿
+﻿//   Title: Creating and Configuring a Model - EF Core
+//   Author: Naseeha27
+//   Date: 28-03-2023
+//   Code version: Entity Framework Core 10.0
+// Availability: https://learn.microsoft.com/en-us/ef/core/modeling/
 
-/***************************************************************************************
-*    Title: Creating and Configuring a Model - EF Core
-*    Author: Microsoft
-*    Date: 2026
-*    Code version: Entity Framework Core
-*    Availability: https://learn.microsoft.com/en-us/ef/core/modeling/
-***************************************************************************************/
 using FMCGEnterpriseManagementSystem.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

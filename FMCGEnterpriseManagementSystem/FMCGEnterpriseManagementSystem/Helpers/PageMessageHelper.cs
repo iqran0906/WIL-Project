@@ -1,12 +1,10 @@
 
-
-/***************************************************************************************
-*    Title: Classes and Objects - C# Programming Guide
-*    Author: Microsoft
-*    Date: 2026
-*    Code version: C#
-*    Availability: https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/types/classes
-***************************************************************************************/
+//    Title: Classes and Objects - C# Programming Guide
+//    Author: Microsoft
+//    Date: 08-04-2026
+//    Code version: C#
+//    Availability: https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/types/classes
+//
 namespace FMCGEnterpriseManagementSystem.Helpers
 {
     // Short "what you can do here" messages shown in the pop-up

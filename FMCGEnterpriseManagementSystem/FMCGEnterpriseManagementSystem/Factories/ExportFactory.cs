@@ -1,12 +1,8 @@
-﻿
-
-/***************************************************************************************
-*    Title: Dependency injection in ASP.NET Core
-*    Author: Microsoft
-*    Date: 2026
-*    Code version: ASP.NET Core
-*    Availability: https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection
-***************************************************************************************/
+﻿//   Title: Dependency injection in ASP.NET Core
+//   Author: Microsoft
+//   Date: 18-09-2024
+//   Code version: ASP.NET Core 10.0
+//   Availability: https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection
 
 using FMCGEnterpriseManagementSystem.Enums;
 using FMCGEnterpriseManagementSystem.Strategies;

@@ -1,12 +1,10 @@
 ﻿
+// Title: ASP.NET Core Identity
+// Author: Naseeha27
+// Date: 10-11-2025
+// Code version: ASP.NET Core 10.0
+// Availability: https://learn.microsoft.com/aspnet/core/security/authentication/identity
 
-/***************************************************************************************
-*    Title: Identity management in ASP.NET Core
-*    Author: Microsoft
-*    Date: 2026
-*    Code version: ASP.NET Core Identity
-*    Availability: https://learn.microsoft.com/aspnet/core/security/authentication/identity
-***************************************************************************************/
 using FMCGEnterpriseManagementSystem.Models;
 using Microsoft.AspNetCore.Identity;
 
