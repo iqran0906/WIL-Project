@@ -1,9 +1,4 @@
 ﻿
-//   Title: Implement CRUD - ASP.NET MVC with Entity Framework Core
-// Author: Sayali-St10458649
-// Date: 10-04-2024
-// Code version: ASP.NET Core 10.0
-// Availability: https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/crud
 
 using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Enums;
@@ -17,6 +12,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
+
+    // Title: Role-based authorization in ASP.NET Core
+    // Author: Microsoft
+    // Date: 2026
+    // Code version: ASP.NET Core 10.0
+    // Availability: https://learn.microsoft.com/en-us/aspnet/core/security/authorization/roles?view=aspnetcore-10.0
+
+
     // Restricts quote functionality to authorized business users.
     [Authorize(Roles = "Administrator,Employee,SalesRepresentative")]
     public class QuotesController : Controller
@@ -29,7 +32,14 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         private readonly IEmailApiClientService _emailApiClientService;
         private readonly ApplicationDbContext _context;
 
-   // Dependencies are supplied through dependency injection.
+
+        // Title: Dependency injection in ASP.NET Core
+        // Author: Microsoft
+        // Date: 2026
+        // Code version: ASP.NET Core 10.0
+        // Availability: https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection
+
+        // Dependencies are supplied through dependency injection.
         public QuotesController(IQuoteService quoteService, IEmailApiClientService emailApiClientService, ApplicationDbContext context)
        
           
@@ -38,6 +48,12 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             _emailApiClientService = emailApiClientService;
             _context = context;
         }
+
+        // Title: Querying Data - EF Core
+        // Author: Microsoft
+        // Date: 2026
+        // Code version: Entity Framework Core 10.0
+        // Availability: https://learn.microsoft.com/en-us/ef/core/querying/
 
         // Loads the dropdown data required by the create and edit quote forms.
         private async Task PopulateQuoteDropdownsAsync(
@@ -69,6 +85,12 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 .OrderBy(c => c.Name)
                 .ThenBy(c => c.Surname)
                 .ToListAsync();
+
+            // Title: Loading Related Data - EF Core
+            // Author: Microsoft
+            // Date: 2026
+            // Code version: Entity Framework Core 10.0
+            // Availability: https://learn.microsoft.com/en-us/ef/core/querying/related-data/
 
             // Loads active sales representatives for the sales representative dropdown.
             var salesReps = await _context.SalesRepresentatives
@@ -102,6 +124,13 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return View(quotes);
         }
 
+        // Title: Asynchronous Programming - EF Core
+        // Author: Microsoft
+        // Date: 2026
+        // Code version: Entity Framework Core 10.0
+        // Availability: https://learn.microsoft.com/en-us/ef/core/querying/async
+
+
         // GET: Quotes/Create
         // Displays the form for creating a new quote.
         [HttpGet]
@@ -116,6 +145,12 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
             return View(quote);
         }
+
+        // Title: Prevent Cross-Site Request Forgery (XSRF/CSRF) attacks in ASP.NET Core
+        // Author: Microsoft
+        // Date: 2026
+        // Code version: ASP.NET Core 10.0
+        // Availability: https://learn.microsoft.com/en-us/aspnet/core/security/anti-request-forgery?view=aspnetcore-10.0
 
         // POST: Quotes/Create
         // Validates and creates a new quote.
@@ -270,6 +305,13 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             {
                 return NotFound();
             }
+
+
+            // Title: Integration with ASP.NET
+            // Author: QuestPDF
+            // Date: 2026
+            // Code version: QuestPDF
+            // Availability: https://www.questpdf.com/examples/aspnet-integration.html
 
             var pdfBytes = QuotePdfGenerator.Generate(quote);
 

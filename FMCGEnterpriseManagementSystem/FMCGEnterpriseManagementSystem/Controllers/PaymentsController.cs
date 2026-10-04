@@ -1,8 +1,4 @@
-﻿// Title: ASP.NET Core MVC Controllers and Actions
-// Author: Sayali-St10458649
-// Date: 27-04-2026
-// Code version: ASP.NET Core 10.0
-// Availability: https://learn.microsoft.com/aspnet/core/mvc/controllers/actions
+﻿
 
 using FMCGEnterpriseManagementSystem.Factories;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;

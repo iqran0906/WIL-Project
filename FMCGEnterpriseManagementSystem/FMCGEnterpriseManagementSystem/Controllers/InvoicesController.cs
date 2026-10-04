@@ -1,8 +1,3 @@
-// Title: Implement CRUD - ASP.NET MVC with Entity Framework Core
-// Author: Sayali-St10458649
-// Date: 10-04-2024
-// Code version: ASP.NET Core 10.0
-// Availability: https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/crud
 
 using FMCGEnterpriseManagementSystem.Repositories.Interfaces;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
@@ -15,13 +10,17 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
+
+    // Reference:
+    // Title: Role-based authorization in ASP.NET Core
+    // Author: Microsoft
+    // Date: 2026
+    // Code version: ASP.NET Core 10.0
+    // Availability: https://learn.microsoft.com/en-us/aspnet/core/security/authorization/roles?view=aspnetcore-10.0
+
+
     // Only Administrators, Employees and Sales Representatives can access invoices.
     [Authorize(Roles = "Administrator,Employee,SalesRepresentative")]
-    // Title: Controller actions in ASP.NET Core MVC
-    // Author: Microsoft
-    // Date: 27-04-2026
-    // Code version: ASP.NET Core 10.0
-    // Availability: https://learn.microsoft.com/aspnet/core/mvc/controllers/actions
     public class InvoicesController : Controller
     {
         private readonly IInvoiceService _invoiceService;
@@ -34,11 +33,20 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
         // Dependency injection provides the required invoice, customer,
         // export and database services.
+
+
+
+        // Reference:
+        // Title: Dependency injection in ASP.NET Core
+        // Author: Microsoft
+        // Date: 2026
+        // Code version: ASP.NET Core 10.0
+        // Availability: https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection
         public InvoicesController(
      IInvoiceService invoiceService,
      IInvoiceExportService invoiceExportService,
      ICustomerRepository customerRepository,
-     ApplicationDbContext context)
+     ApplicationDbContext context, IEmailApiClientService emailApiClientService)
         {
             _invoiceService = invoiceService;
             _invoiceExportService = invoiceExportService;
@@ -46,6 +54,15 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             _context = context;
             _emailApiClientService = emailApiClientService;
         }
+
+
+
+        // Reference:
+        // Title: Efficient Querying - EF Core
+        // Author: Microsoft
+        // Date: 2026
+        // Code version: Entity Framework Core 10.0
+        // Availability: https://learn.microsoft.com/en-us/ef/core/performance/efficient-querying
 
         // GET: Invoices
         // Displays invoices using optional customer, date and keyword filters.
@@ -199,6 +216,15 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             }
         }
 
+
+
+        // Reference:
+        // Title: Loading Related Data - EF Core
+        // Author: Microsoft
+        // Date: 2026
+        // Code version: Entity Framework Core 10.0
+        // Availability: https://learn.microsoft.com/en-us/ef/core/querying/related-data/
+
         // Loads the customer and product information required by the invoice form.
         private async Task LoadLookupsAsync(
             InvoiceViewModel model)
@@ -262,6 +288,22 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 index++;
             }
         }
+
+        // Reference:
+        // Title: Role-based authorization in ASP.NET Core
+        // Author: Microsoft
+        // Date: 2026
+        // Code version: ASP.NET Core 10.0
+        // Availability: https://learn.microsoft.com/en-us/aspnet/core/security/authorization/roles?view=aspnetcore-10.0
+
+
+        // Reference:
+        // Title: Prevent Cross-Site Request Forgery (XSRF/CSRF) attacks in ASP.NET Core
+        // Author: Microsoft
+        // Date: 2026
+        // Code version: ASP.NET Core 10.0
+        // Availability: https://learn.microsoft.com/en-us/aspnet/core/security/anti-request-forgery?view=aspnetcore-10.0
+
 
         // POST: Invoices/UpdateStatus/5
         // Only Administrators can approve and finalise invoices.

@@ -11,6 +11,13 @@ using FMCGEnterpriseManagementSystem.ViewModels;
 
 namespace FMCGEnterpriseManagementSystem.Services
 {
+
+    // Title: Dependency injection in ASP.NET Core
+    // Author: Microsoft
+    // Date: 2026
+    // Code version: ASP.NET Core 10.0
+    // Availability: https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection
+
     // Provides business logic for creating, retrieving,
     // searching, updating and deleting invoices.
     public class InvoiceService : IInvoiceService
@@ -48,6 +55,12 @@ namespace FMCGEnterpriseManagementSystem.Services
         }
 
         // Creates a new invoice from the supplied view model.
+
+        // Title: Exception handling
+        // Author: Microsoft
+        // Date: 2026
+        // Code version: C# / .NET 10
+        // Availability: https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/exceptions/
         public async Task<InvoiceViewModel> CreateAsync(InvoiceViewModel model)
         {
             // An invoice must contain at least one item.
@@ -210,6 +223,12 @@ namespace FMCGEnterpriseManagementSystem.Services
             return MapToViewModel(invoice);
         }
 
+        // Title: Enumerable.Select Method
+        // Author: Microsoft
+        // Date: 2026
+        // Code version: .NET 10
+        // Availability: https://learn.microsoft.com/en-us/dotnet/api/system.linq.enumerable.select
+
         // Retrieves all invoices.
         public async Task<IEnumerable<InvoiceViewModel>> GetAllAsync()
         {
@@ -219,6 +238,13 @@ namespace FMCGEnterpriseManagementSystem.Services
             // Converts the entities into view models.
             return invoices.Select(MapToViewModel);
         }
+
+
+        // Title: LINQ (Language-Integrated Query)
+        // Author: Microsoft
+        // Date: 2026
+        // Code version: C# / .NET 10
+        // Availability: https://learn.microsoft.com/en-us/dotnet/csharp/linq/
 
         // Searches invoices using optional customer, date and keyword filters.
         public async Task<IEnumerable<InvoiceViewModel>> SearchAsync(
