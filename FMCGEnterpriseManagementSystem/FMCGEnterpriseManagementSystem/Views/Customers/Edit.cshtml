@@ -151,24 +151,26 @@
                 </div>
 
                 <!-- PAYMENT METHOD -->
-                <div class="mb-3">
+<div class="mb-3">
 
-                    <label asp-for="PaymentMethod" class="form-label">
-                        Payment Method
-                    </label>
+    <label asp-for="PaymentMethod" class="form-label">
+        Payment Method
+    </label>
 
-                    <select asp-for="PaymentMethod" class="form-select">
+    <select asp-for="PaymentMethod" class="form-select">
 
-                        <option value="">Select Payment Method</option>
-                        <option value="EFT">EFT</option>
-                        <option value="Cash">Cash</option>
+        <option value="">Select Payment Method</option>
+        <option value="EFT">EFT</option>
+        <option value="Cash">Cash</option>
+        <option value="COD">COD</option>
+        <option value="Up-Front Payment">Up-Front Payment</option>
 
-                    </select>
+    </select>
 
-                    <span asp-validation-for="PaymentMethod"
-                          class="text-danger small"></span>
+    <span asp-validation-for="PaymentMethod"
+          class="text-danger small"></span>
 
-                </div>
+</div>
 
                 <!-- SALES REPRESENTATIVE -->
                 <div class="mb-3">

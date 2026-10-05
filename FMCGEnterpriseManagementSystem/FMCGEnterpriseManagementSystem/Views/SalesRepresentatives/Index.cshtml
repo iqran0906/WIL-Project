@@ -28,7 +28,6 @@
         </div>
     }
 
-
     @if (TempData["ErrorMessage"] != null)
     {
         <div class="alert alert-danger alert-dismissible fade show"
@@ -213,23 +212,16 @@
                                     </a>
 
 
-                                    <form asp-controller="SalesRepresentatives"
-                                          asp-action="Deactivate"
-                                          asp-route-id="@salesRep.SalesRepresentativeId"
-                                          method="post"
-                                          class="d-inline">
+                                    <!-- Opens the in-system confirmation modal -->
+                                    <button type="button"
+                                            class="btn btn-sm btn-danger deactivate-salesrep-btn"
+                                            data-id="@salesRep.SalesRepresentativeId"
+                                            data-name="@salesRep.EmployeeName">
 
-                                        @Html.AntiForgeryToken()
+                                        <i class="bi bi-person-x me-1"></i>
+                                        Deactivate
 
-                                        <button type="submit"
-                                                class="btn btn-sm btn-danger">
-
-                                            <i class="bi bi-person-x me-1"></i>
-                                            Deactivate
-
-                                        </button>
-
-                                    </form>
+                                    </button>
 
                                 </div>
 
@@ -264,4 +256,135 @@
 
     </div>
 
+
+    <!-- DEACTIVATE SALES REPRESENTATIVE MODAL -->
+    <div class="modal fade"
+         id="deactivateSalesRepModal"
+         tabindex="-1"
+         aria-labelledby="deactivateSalesRepModalLabel"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <h5 class="modal-title"
+                        id="deactivateSalesRepModalLabel">
+
+                        Confirm Deactivation
+
+                    </h5>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close">
+                    </button>
+
+                </div>
+
+
+                <div class="modal-body">
+
+                    <p class="mb-2">
+                        Are you sure you want to deactivate
+                        <strong id="salesRepName"></strong>?
+                    </p>
+
+                    <p class="text-muted small mb-0">
+                        The sales representative will be moved to
+                        Inactive Sales Representatives and can be
+                        activated again later.
+                    </p>
+
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button type="button"
+                            class="btn btn-outline-secondary"
+                            data-bs-dismiss="modal">
+
+                        Cancel
+
+                    </button>
+
+
+                    <form asp-controller="SalesRepresentatives"
+                          asp-action="Deactivate"
+                          method="post"
+                          id="deactivateSalesRepForm">
+
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden"
+                               name="id"
+                               id="deactivateSalesRepId" />
+
+
+                        <button type="submit"
+                                class="btn btn-danger">
+
+                            <i class="bi bi-person-x me-1"></i>
+                            Deactivate
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
+
+
+@section Scripts {
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const modalElement =
+                document.getElementById("deactivateSalesRepModal");
+
+            const salesRepId =
+                document.getElementById("deactivateSalesRepId");
+
+            const salesRepName =
+                document.getElementById("salesRepName");
+
+            const modal =
+                new bootstrap.Modal(modalElement);
+
+
+            document
+                .querySelectorAll(".deactivate-salesrep-btn")
+                .forEach(function (button) {
+
+                    button.addEventListener("click", function () {
+
+                        salesRepId.value =
+                            this.dataset.id;
+
+                        salesRepName.textContent =
+                            this.dataset.name;
+
+                        modal.show();
+
+                    });
+
+                });
+
+        });
+
+    </script>
+
+}
