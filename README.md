@@ -2604,10 +2604,4 @@ This project was developed as an **academic Work Integrated Learning project**.
 
 It is not intended for commercial redistribution or production use without further development, testing, security review and deployment configuration.
 
-
-
-Uploading System Demo.mp4…
-
-
-
 Copyright © 2026 Exclusive Distributors WIL Development Team.
