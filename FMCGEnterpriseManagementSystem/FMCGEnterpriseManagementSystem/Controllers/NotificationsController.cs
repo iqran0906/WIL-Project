@@ -32,6 +32,9 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         // Retrieves and displays all notifications.
         public async Task<IActionResult> Index()
         {
+
+            await _notificationService.MarkAllAsReadAsync();
+
             var notifications =
                 await _notificationService.GetAllAsync();
 
