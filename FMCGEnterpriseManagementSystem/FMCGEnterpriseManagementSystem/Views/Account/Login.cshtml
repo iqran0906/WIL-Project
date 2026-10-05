@@ -1,5 +1,5 @@
 ﻿@*
-Purpose: Login page.
+Purpose: ERP Login page.
 Authors: iqran0906 (from git history)
 Uses: jQuery Validation + Unobtrusive (MIT) https://jqueryvalidation.org
 *@
@@ -18,6 +18,7 @@ Uses: jQuery Validation + Unobtrusive (MIT) https://jqueryvalidation.org
 <head>
 
     <meta charset="utf-8" />
+
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0" />
 
@@ -25,8 +26,14 @@ Uses: jQuery Validation + Unobtrusive (MIT) https://jqueryvalidation.org
         @ViewData["Title"] - Exclusive Distributors
     </title>
 
+
+    <!-- Bootstrap -->
+
     <link rel="stylesheet"
           href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+
+    <!-- Bootstrap Icons -->
 
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
@@ -39,753 +46,686 @@ Uses: jQuery Validation + Unobtrusive (MIT) https://jqueryvalidation.org
             --dark-navy: #0b2028;
             --teal: #357383;
             --light-teal: #4f9aaa;
+            --page-bg: #eef2f4;
+            --border: #dce4e7;
+            --text: #263940;
+            --muted: #718187;
             --white: #ffffff;
-            --soft-white: #f5f8f9;
-            --text-muted: #a9bcc2;
         }
+
 
         * {
             box-sizing: border-box;
         }
 
-        html {
-            scroll-behavior: smooth;
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
         }
+
 
         body {
             margin: 0;
-            background: var(--dark-navy);
-            color: white;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--page-bg);
+            color: var(--text);
             overflow-x: hidden;
         }
 
 
-        /* =========================
-           NAVIGATION BAR
-           ========================= */
+        /* =====================================================
+           ERP HEADER
+           ===================================================== */
 
-        .topbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 76px;
-            z-index: 1000;
-
+        .erp-header {
+            height: 72px;
+            width: 100%;
             display: flex;
             align-items: center;
             justify-content: space-between;
-
-            padding: 0 5%;
-
-            background: rgba(11, 32, 40, 0.88);
-
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-
+            padding: 0 42px;
+            background: var(--navy);
+            color: white;
             border-bottom: 1px solid rgba(255,255,255,0.08);
+            position: relative;
+            z-index: 10;
         }
 
-        .brand {
+
+        .erp-brand {
             display: flex;
             align-items: center;
-            gap: 12px;
-
-            text-decoration: none;
-            color: white;
+            gap: 13px;
         }
 
-        .brand-logo {
-            width: 46px;
-            height: 46px;
 
-            border-radius: 12px;
-
-            background: white;
+        .erp-logo {
+            width: 43px;
+            height: 43px;
             padding: 4px;
-
-            box-shadow: 0 5px 18px rgba(0,0,0,0.25);
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.18);
         }
 
-        .brand-logo img {
+
+        .erp-logo img {
             width: 100%;
             height: 100%;
             object-fit: contain;
+            border-radius: 5px;
         }
 
-        .brand-name {
-            font-size: 1.05rem;
+
+        .erp-brand-name {
+            font-size: 16px;
             font-weight: 700;
-            letter-spacing: 0.3px;
+            line-height: 1.2;
         }
 
-        .brand-subtitle {
+
+        .erp-brand-subtitle {
             display: block;
-
-            font-size: 0.68rem;
-            color: #91abb2;
-
-            letter-spacing: 1.5px;
+            color: #9fb2b8;
+            font-size: 10px;
+            letter-spacing: 1.2px;
             text-transform: uppercase;
-
-            margin-top: 1px;
-        }
-
-        .nav-login {
-            border: 1px solid rgba(255,255,255,0.25);
-
-            background: var(--teal);
-            color: white;
-
-            padding: 10px 23px;
-
-            border-radius: 7px;
-
-            font-weight: 600;
-            text-decoration: none;
-
-            transition: 0.25s ease;
-        }
-
-        .nav-login:hover {
-            background: var(--light-teal);
-            color: white;
-
-            transform: translateY(-1px);
-
-            box-shadow:
-                0 7px 20px rgba(53,115,131,0.35);
+            margin-top: 3px;
         }
 
 
-        /* =========================
-           HERO SECTION
-           ========================= */
-
-        .hero {
-            min-height: 100vh;
-
-            padding: 150px 7% 100px;
-
+        .secure-access {
             display: flex;
             align-items: center;
+            gap: 8px;
+            color: #b8c9ce;
+            font-size: 12px;
+        }
 
+
+        .secure-access i {
+            color: #67aebe;
+            font-size: 14px;
+        }
+
+
+        /* =====================================================
+           PAGE
+           ===================================================== */
+
+        .erp-page {
+            min-height: calc(100vh - 72px);
+            display: flex;
             position: relative;
             overflow: hidden;
 
             background:
-                radial-gradient(
-                    circle at 80% 30%,
-                    rgba(53,115,131,0.22),
-                    transparent 32%),
-                radial-gradient(
-                    circle at 10% 80%,
-                    rgba(53,115,131,0.12),
-                    transparent 30%),
                 linear-gradient(
                     135deg,
-                    #0b2028 0%,
-                    #102b35 55%,
-                    #163b47 100%);
+                    #eef2f4 0%,
+                    #f7f9fa 50%,
+                    #e9eff1 100%);
         }
 
-        .hero::before {
-            content: "";
 
+        /* =====================================================
+           SUBTLE ERP BACKGROUND
+           ===================================================== */
+
+        .erp-background {
             position: absolute;
             inset: 0;
+            pointer-events: none;
+            opacity: 0.55;
 
             background-image:
                 linear-gradient(
-                    rgba(255,255,255,0.025) 1px,
+                    rgba(53,115,131,0.035) 1px,
                     transparent 1px),
                 linear-gradient(
                     90deg,
-                    rgba(255,255,255,0.025) 1px,
+                    rgba(53,115,131,0.035) 1px,
                     transparent 1px);
 
-            background-size: 55px 55px;
+            background-size: 45px 45px;
+        }
 
+
+        .background-circle {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(53,115,131,0.08);
             pointer-events: none;
         }
 
-        .hero-content {
+
+        .circle-one {
+            width: 520px;
+            height: 520px;
+            right: -220px;
+            top: -150px;
+        }
+
+
+        .circle-two {
+            width: 350px;
+            height: 350px;
+            left: -190px;
+            bottom: -160px;
+        }
+
+
+        /* =====================================================
+           MAIN CONTENT
+           ===================================================== */
+
+        .erp-content {
+            width: 100%;
+            max-width: 1180px;
+            margin: auto;
+            padding: 55px 35px 75px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             position: relative;
             z-index: 2;
-
-            max-width: 720px;
         }
 
-        .eyebrow {
-            display: inline-flex;
-            align-items: center;
 
-            gap: 9px;
+        /* =====================================================
+           LOGIN CONTAINER
+           ===================================================== */
 
-            padding: 7px 13px;
-            margin-bottom: 22px;
+        .login-container {
+            width: 100%;
+            max-width: 950px;
+            min-height: 520px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 18px 45px rgba(16,43,53,0.10);
+        }
 
-            border:
-                1px solid rgba(255,255,255,0.12);
 
-            border-radius: 30px;
+        /* =====================================================
+           LEFT ERP INFORMATION PANEL
+           ===================================================== */
+
+        .login-info {
+            position: relative;
+            padding: 52px 48px;
 
             background:
-                rgba(255,255,255,0.05);
+                linear-gradient(
+                    150deg,
+                    #102b35 0%,
+                    #163b47 60%,
+                    #1c4a58 100%);
 
-            color: #a9d3dc;
+            color: white;
+            overflow: hidden;
+        }
 
-            font-size: 0.78rem;
+
+        .login-info::after {
+            content: "";
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            right: -145px;
+            bottom: -140px;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+
+
+        .info-content {
+            position: relative;
+            z-index: 2;
+        }
+
+
+        .module-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 11px;
+            border-radius: 5px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.10);
+            color: #a9cbd2;
+            font-size: 11px;
             font-weight: 600;
-
-            letter-spacing: 1.5px;
+            letter-spacing: 1px;
             text-transform: uppercase;
+            margin-bottom: 30px;
         }
 
-        .eyebrow i {
+
+        .module-label i {
             color: #67aebe;
         }
 
-        .hero h1 {
-            font-size:
-                clamp(2.8rem, 6vw, 5.2rem);
 
-            line-height: 1.02;
-
+        .login-info h1 {
+            font-size: 32px;
+            line-height: 1.2;
             font-weight: 700;
-
-            letter-spacing: -2px;
-
-            margin-bottom: 25px;
+            margin-bottom: 16px;
         }
 
-        .hero h1 span {
+
+        .login-info h1 span {
             color: #67aebe;
         }
 
-        .hero-description {
-            max-width: 650px;
 
-            color: #b8c9ce;
-
-            font-size: 1.08rem;
-
-            line-height: 1.8;
-
+        .login-info-description {
+            color: #b6c7cc;
+            font-size: 14px;
+            line-height: 1.75;
+            max-width: 390px;
             margin-bottom: 38px;
         }
 
 
-        /* =========================
-           BUSINESS INFO
-           ========================= */
+        /* =====================================================
+           ERP MODULE LIST
+           ===================================================== */
 
-        .business-strip {
-            display: flex;
-            flex-wrap: wrap;
-
-            gap: 12px;
-        }
-
-        .business-item {
-            padding: 13px 18px;
-
-            border:
-                1px solid rgba(255,255,255,0.09);
-
-            border-radius: 8px;
-
-            background:
-                rgba(255,255,255,0.045);
-
-            color: #d9e5e8;
-
-            font-size: 0.85rem;
-        }
-
-        .business-item i {
-            color: #67aebe;
-
-            margin-right: 7px;
-        }
-
-
-        /* =========================
-           DISTRIBUTION VISUAL
-           ========================= */
-
-        .distribution-visual {
-            position: absolute;
-
-            right: 5%;
-            top: 50%;
-
-            transform: translateY(-50%);
-
-            width: 390px;
-            height: 390px;
-
-            opacity: 0.85;
-        }
-
-        .visual-circle {
-            position: absolute;
-
-            border:
-                1px solid rgba(103,174,190,0.18);
-
-            border-radius: 50%;
-        }
-
-        .circle-one {
-            width: 390px;
-            height: 390px;
-            inset: 0;
-        }
-
-        .circle-two {
-            width: 270px;
-            height: 270px;
-
-            top: 60px;
-            left: 60px;
-        }
-
-        .circle-three {
-            width: 150px;
-            height: 150px;
-
-            top: 120px;
-            left: 120px;
-        }
-
-        .warehouse-box {
-            position: absolute;
-
-            top: 145px;
-            left: 145px;
-
-            width: 100px;
-            height: 100px;
-
-            border-radius: 18px;
-
-            background:
-                rgba(53,115,131,0.25);
-
-            border:
-                1px solid rgba(103,174,190,0.35);
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            box-shadow:
-                0 0 50px rgba(53,115,131,0.18);
-        }
-
-        .warehouse-box i {
-            font-size: 3rem;
-            color: #78bfce;
-        }
-
-        .route-point {
-            position: absolute;
-
-            width: 13px;
-            height: 13px;
-
-            border-radius: 50%;
-
-            background: #67aebe;
-
-            box-shadow:
-                0 0 18px rgba(103,174,190,0.65);
-        }
-
-        .point-one {
-            top: 45px;
-            left: 185px;
-        }
-
-        .point-two {
-            top: 190px;
-            right: 10px;
-        }
-
-        .point-three {
-            bottom: 40px;
-            left: 75px;
-        }
-
-        .point-four {
-            top: 90px;
-            left: 35px;
-        }
-
-
-        /* =========================
-           BUSINESS SECTION
-           ========================= */
-
-        .about-section {
-            padding: 110px 8%;
-
-            background: #f5f8f9;
-
-            color: var(--navy);
-        }
-
-        .section-label {
-            color: var(--teal);
-
-            text-transform: uppercase;
-
-            letter-spacing: 2px;
-
-            font-size: 0.75rem;
-            font-weight: 700;
-
-            margin-bottom: 12px;
-        }
-
-        .about-section h2 {
-            font-size:
-                clamp(2rem, 4vw, 3.2rem);
-
-            font-weight: 700;
-
-            margin-bottom: 20px;
-        }
-
-        .about-text {
-            max-width: 850px;
-
-            color: #61747a;
-
-            line-height: 1.85;
-
-            font-size: 1rem;
-        }
-
-        .operations {
-            margin-top: 55px;
-
+        .module-list {
             display: grid;
-
-            grid-template-columns:
-                repeat(4, 1fr);
-
-            gap: 18px;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            max-width: 400px;
         }
 
-        .operation-card {
-            background: white;
 
-            padding: 28px 23px;
-
-            border-radius: 12px;
-
-            border:
-                1px solid #e3eaec;
-
-            transition: 0.25s ease;
+        .module-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 12px;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.045);
+            border: 1px solid rgba(255,255,255,0.07);
+            color: #d6e2e5;
+            font-size: 12px;
         }
 
-        .operation-card:hover {
-            transform: translateY(-5px);
 
-            box-shadow:
-                0 15px 35px rgba(16,43,53,0.08);
+        .module-item i {
+            color: #67aebe;
+            font-size: 15px;
         }
 
-        .operation-icon {
-            width: 46px;
-            height: 46px;
 
-            border-radius: 10px;
+        /* =====================================================
+           RIGHT LOGIN PANEL
+           ===================================================== */
 
+        .login-panel {
             display: flex;
             align-items: center;
             justify-content: center;
-
-            background: #e8f1f3;
-
-            color: var(--teal);
-
-            font-size: 1.25rem;
-
-            margin-bottom: 18px;
+            padding: 52px 55px;
+            background: white;
         }
 
-        .operation-card h5 {
+
+        .login-form {
+            width: 100%;
+            max-width: 350px;
+        }
+
+
+        /* =====================================================
+           LOGIN HEADING
+           ===================================================== */
+
+        .login-heading {
+            margin-bottom: 30px;
+        }
+
+
+        .login-heading h2 {
+            font-size: 25px;
             font-weight: 700;
-
-            margin-bottom: 8px;
+            color: var(--navy);
+            margin-bottom: 7px;
         }
 
-        .operation-card p {
+
+        .login-heading p {
+            color: var(--muted);
+            font-size: 13px;
             margin: 0;
-
-            color: #718187;
-
-            font-size: 0.85rem;
-
-            line-height: 1.6;
         }
 
 
-        /* =========================
-           LOGIN OVERLAY
-           ========================= */
+        /* =====================================================
+           FORM
+           ===================================================== */
 
-        .login-overlay {
-            position: fixed;
-            inset: 0;
+        .form-label {
+            color: #43545a;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
 
-            z-index: 2000;
 
+        .input-group {
+            height: 46px;
+        }
+
+
+        .input-group-text {
+            width: 43px;
             display: flex;
             align-items: center;
             justify-content: center;
-
-            padding: 25px;
-
-            background:
-                rgba(6,20,25,0.82);
-
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-
-            opacity: 0;
-            visibility: hidden;
-
-            transition:
-                opacity 0.3s ease,
-                visibility 0.3s ease;
-        }
-
-        .login-overlay.active {
-            opacity: 1;
-            visibility: visible;
+            background: #f7f9fa;
+            border-color: #d5dfe2;
+            color: #7c8d93;
+            font-size: 15px;
         }
 
 
-        /* =========================
-           LOGIN CARD
-           ========================= */
-
-        .login-card {
-            width: 100%;
-            max-width: 430px;
-
-            background:
-                rgba(255,255,255,0.98);
-
-            color: var(--navy);
-
-            border-radius: 16px;
-
-            padding: 38px 32px;
-
-            box-shadow:
-                0 30px 80px rgba(0,0,0,0.45);
-
-            transform:
-                translateY(35px) scale(0.97);
-
-            transition:
-                transform 0.35s ease;
-
-            position: relative;
-        }
-
-        .login-overlay.active .login-card {
-            transform:
-                translateY(0) scale(1);
-        }
-
-        .close-login {
-            position: absolute;
-
-            top: 15px;
-            right: 17px;
-
-            width: 34px;
-            height: 34px;
-
-            border: none;
-            border-radius: 50%;
-
-            background: #eef2f3;
-
-            color: #65767b;
-
-            font-size: 1.1rem;
-
-            transition: 0.2s ease;
-        }
-
-        .close-login:hover {
-            background: #dde6e8;
-        }
-
-        .brand-icon {
-            width: 76px;
-            height: 76px;
-
+        .form-control {
+            height: 46px;
+            border-color: #d5dfe2;
+            color: #263940;
+            font-size: 13px;
             background: white;
-
-            border-radius: 50%;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            margin: 0 auto 18px auto;
-
-            overflow: hidden;
-
-            padding: 5px;
-
-            box-shadow:
-                0 5px 18px rgba(0,0,0,0.12);
-
-            border:
-                1px solid #e4eaec;
         }
 
-        .brand-icon img {
-            width: 100%;
-            height: 100%;
 
-            object-fit: contain;
-
-            border-radius: 50%;
+        .form-control::placeholder {
+            color: #a0adb1;
         }
 
-        .login-card h3 {
-            color: var(--navy);
-        }
 
-        .login-card .form-control {
-            border-radius: 6px;
-
-            border:
-                1px solid #ced4da;
-
-            padding: 10px 14px;
-
-            background-color: #f8f9fa;
-        }
-
-        .login-card .form-control:focus {
-            background-color: #fff;
-
+        .form-control:focus {
             border-color: var(--teal);
-
-            box-shadow:
-                0 0 0 0.25rem rgba(53,115,131,0.18);
+            box-shadow: 0 0 0 3px rgba(53,115,131,0.10);
+            z-index: 3;
         }
 
-        .login-card .input-group-text {
-            border-color: #ced4da;
+
+        .password-toggle {
+            border-color: #d5dfe2;
+            background: #f7f9fa;
+            color: #718187;
+            width: 45px;
         }
 
-        .btn-login {
-            background-color: var(--teal);
 
-            color: white;
-
-            padding: 12px;
-
-            font-weight: 600;
-
-            border-radius: 6px;
-
-            border: none;
-
-            transition: all 0.2s ease;
-        }
-
-        .btn-login:hover {
-            background-color: #275662;
-            color: white;
-        }
-
-        .forgot-password-link {
+        .password-toggle:hover {
+            background: #eef3f4;
             color: var(--teal);
+        }
 
-            font-size: 0.84rem;
+
+        .field-validation-error {
+            display: block;
+            margin-top: 5px;
+        }
+
+
+        /* =====================================================
+           LOGIN OPTIONS
+           ===================================================== */
+
+        .login-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            margin-bottom: 25px;
+        }
+
+
+        .form-check-label {
+            color: #718187;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+
+        .form-check-input {
+            border-color: #c6d1d5;
+        }
+
+
+        .form-check-input:checked {
+            background-color: var(--teal);
+            border-color: var(--teal);
+        }
+
+
+        .forgot-password {
+            color: var(--teal);
+            font-size: 12px;
             font-weight: 600;
-
             text-decoration: none;
         }
 
-        .forgot-password-link:hover {
+
+        .forgot-password:hover {
             color: #275662;
             text-decoration: underline;
         }
 
-        .validation-summary-errors {
-            text-align: left;
-            font-size: 0.9rem;
+
+        /* =====================================================
+           LOGIN BUTTON
+           ===================================================== */
+
+        .btn-login {
+            width: 100%;
+            height: 46px;
+            border: none;
+            border-radius: 5px;
+            background: var(--teal);
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+
+            transition:
+                background 0.2s ease,
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
         }
 
 
-        /* =========================
+        .btn-login:hover {
+            background: #2b6373;
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 7px 18px rgba(53,115,131,0.22);
+        }
+
+
+        .btn-login:active {
+            transform: translateY(0);
+        }
+
+
+        /* =====================================================
+           SECURITY MESSAGE
+           ===================================================== */
+
+        .security-message {
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+            margin-top: 25px;
+            padding: 11px 12px;
+            background: #f5f8f9;
+            border: 1px solid #e2eaec;
+            border-radius: 5px;
+            color: #718187;
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+
+        .security-message i {
+            color: var(--teal);
+            font-size: 14px;
+            margin-top: 1px;
+        }
+
+
+        /* =====================================================
+           FOOTER
+           ===================================================== */
+
+        .erp-footer {
+            position: absolute;
+            bottom: 18px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: #89999e;
+            font-size: 10px;
+            z-index: 3;
+        }
+
+
+        /* =====================================================
+           VALIDATION
+           ===================================================== */
+
+        .validation-summary-errors {
+            margin-bottom: 20px;
+            padding: 10px 12px;
+            border-radius: 5px;
+            background: #fff4f3;
+            border: 1px solid #f3d0cd;
+            color: #a33a32;
+            font-size: 12px;
+        }
+
+
+        .validation-summary-valid {
+            display: none;
+        }
+
+
+        .text-danger {
+            font-size: 11px;
+        }
+
+
+        /* =====================================================
            RESPONSIVE
-           ========================= */
+           ===================================================== */
 
-        @@media (max-width: 1000px) {
+        @@media (max-width: 850px) {
 
-            .distribution-visual {
+            .erp-header {
+                padding: 0 22px;
+            }
+
+
+            .secure-access {
                 display: none;
             }
 
-            .hero-content {
-                max-width: 850px;
+
+            .login-container {
+                grid-template-columns: 1fr;
+                max-width: 500px;
             }
 
-            .operations {
-                grid-template-columns:
-                    repeat(2, 1fr);
+
+            .login-info {
+                padding: 35px;
+            }
+
+
+            .login-info h1 {
+                font-size: 27px;
+            }
+
+
+            .login-info-description {
+                margin-bottom: 25px;
+            }
+
+
+            .module-list {
+                display: none;
+            }
+
+
+            .login-panel {
+                padding: 40px 35px;
             }
         }
+
 
         @@media (max-width: 576px) {
 
-            .topbar {
-                padding: 0 20px;
+            .erp-header {
+                height: 65px;
+                padding: 0 18px;
             }
 
-            .brand-subtitle {
+
+            .erp-page {
+                min-height: calc(100vh - 65px);
+            }
+
+
+            .erp-brand-subtitle {
                 display: none;
             }
 
-            .hero {
-                padding: 130px 25px 80px;
+
+            .erp-content {
+                padding: 25px 15px 60px;
             }
 
-            .hero h1 {
-                letter-spacing: -1px;
+
+            .login-container {
+                border-radius: 9px;
             }
 
-            .hero-description {
-                font-size: 0.98rem;
+
+            .login-info {
+                padding: 30px 25px;
             }
 
-            .about-section {
-                padding: 75px 25px;
+
+            .login-info h1 {
+                font-size: 24px;
             }
 
-            .operations {
-                grid-template-columns: 1fr;
+
+            .login-panel {
+                padding: 35px 25px;
             }
 
-            .login-card {
-                padding: 35px 22px;
+
+            .login-options {
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+
+            .erp-footer {
+                bottom: 10px;
             }
         }
 
@@ -797,309 +737,17 @@ Uses: jQuery Validation + Unobtrusive (MIT) https://jqueryvalidation.org
 <body>
 
 
-<!-- =========================
-     TOP NAVIGATION
-     ========================= -->
+    <!-- =========================================================
+         ERP HEADER
+         ========================================================= -->
 
-<nav class="topbar">
+    <header class="erp-header">
 
-    <a href="#" class="brand">
 
-        <div class="brand-logo">
+        <div class="erp-brand">
 
-            <img src="~/images/logo.png"
-                 alt="Exclusive Distributors Logo" />
 
-        </div>
-
-        <div>
-
-            <div class="brand-name">
-                Exclusive Distributors
-            </div>
-
-            <span class="brand-subtitle">
-                Enterprise Management System
-            </span>
-
-        </div>
-
-    </a>
-
-
-    <button type="button"
-            class="nav-login"
-            id="openLogin">
-
-        <i class="bi bi-box-arrow-in-right me-1"></i>
-
-        Login
-
-    </button>
-
-</nav>
-
-
-<!-- =========================
-     HERO
-     ========================= -->
-
-<section class="hero">
-
-    <div class="hero-content">
-
-        <div class="eyebrow">
-
-            <i class="bi bi-box-seam"></i>
-
-            FMCG Distribution Management
-
-        </div>
-
-
-        <h1>
-
-            Moving products.<br />
-
-            <span>
-                Connecting business.
-            </span>
-
-        </h1>
-
-
-        <p class="hero-description">
-
-            Exclusive Distributors is an FMCG distribution business
-            focused on managing products, customers, sales and
-            distribution efficiently. Our enterprise system brings
-            essential business operations together in one central
-            platform.
-
-        </p>
-
-
-        <div class="business-strip">
-
-            <div class="business-item">
-
-                <i class="bi bi-box-seam"></i>
-
-                Inventory Management
-
-            </div>
-
-
-            <div class="business-item">
-
-                <i class="bi bi-cart3"></i>
-
-                Sales & Orders
-
-            </div>
-
-
-            <div class="business-item">
-
-                <i class="bi bi-truck"></i>
-
-                Distribution
-
-            </div>
-
-
-            <div class="business-item">
-
-                <i class="bi bi-people"></i>
-
-                Customer Management
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div class="distribution-visual">
-
-        <div class="visual-circle circle-one"></div>
-
-        <div class="visual-circle circle-two"></div>
-
-        <div class="visual-circle circle-three"></div>
-
-
-        <div class="warehouse-box">
-
-            <i class="bi bi-box-seam"></i>
-
-        </div>
-
-
-        <div class="route-point point-one"></div>
-
-        <div class="route-point point-two"></div>
-
-        <div class="route-point point-three"></div>
-
-        <div class="route-point point-four"></div>
-
-    </div>
-
-</section>
-
-
-<!-- =========================
-     ABOUT THE BUSINESS
-     ========================= -->
-
-<section class="about-section">
-
-    <div class="section-label">
-        About Exclusive Distributors
-    </div>
-
-
-    <h2>
-        Built around the way an FMCG business operates.
-    </h2>
-
-
-    <p class="about-text">
-
-        Exclusive Distributors operates within the fast-moving consumer
-        goods environment, where products move continuously between
-        suppliers, the business and customers. Managing these activities
-        effectively requires accurate information, organised records and
-        visibility across everyday operations.
-
-        <br /><br />
-
-        The Enterprise Management System provides a central platform
-        designed to support the business as it grows, helping employees
-        manage important operational information while reducing
-        unnecessary manual processes.
-
-    </p>
-
-
-    <div class="operations">
-
-        <div class="operation-card">
-
-            <div class="operation-icon">
-
-                <i class="bi bi-boxes"></i>
-
-            </div>
-
-            <h5>
-                Inventory
-            </h5>
-
-            <p>
-
-                Manage products and stock information while maintaining
-                visibility across inventory operations.
-
-            </p>
-
-        </div>
-
-
-        <div class="operation-card">
-
-            <div class="operation-icon">
-
-                <i class="bi bi-receipt"></i>
-
-            </div>
-
-            <h5>
-                Sales
-            </h5>
-
-            <p>
-
-                Keep customer orders, sales information and invoicing
-                activities organised within one system.
-
-            </p>
-
-        </div>
-
-
-        <div class="operation-card">
-
-            <div class="operation-icon">
-
-                <i class="bi bi-truck"></i>
-
-            </div>
-
-            <h5>
-                Distribution
-            </h5>
-
-            <p>
-
-                Support the movement of FMCG products from the business
-                through to customers and delivery operations.
-
-            </p>
-
-        </div>
-
-
-        <div class="operation-card">
-
-            <div class="operation-icon">
-
-                <i class="bi bi-people"></i>
-
-            </div>
-
-            <h5>
-                Customers
-            </h5>
-
-            <p>
-
-                Maintain organised customer information and support
-                efficient day-to-day customer interactions.
-
-            </p>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =========================
-     LOGIN PANEL
-     ========================= -->
-
-<div class="login-overlay"
-     id="loginOverlay">
-
-    <div class="login-card">
-
-        <button type="button"
-                class="close-login"
-                id="closeLogin"
-                aria-label="Close login">
-
-            <i class="bi bi-x-lg"></i>
-
-        </button>
-
-
-        <div class="text-center">
-
-            <div class="brand-icon">
+            <div class="erp-logo">
 
                 <img src="~/images/logo.png"
                      alt="Exclusive Distributors Logo" />
@@ -1107,251 +755,473 @@ Uses: jQuery Validation + Unobtrusive (MIT) https://jqueryvalidation.org
             </div>
 
 
-            <h3 class="fw-bold mb-1">
-                Exclusive Distributors
-            </h3>
+            <div>
+
+                <div class="erp-brand-name">
+
+                    Exclusive Distributors
+
+                </div>
 
 
-            <p class="text-muted small mb-4">
-                Enterprise System Portal
-            </p>
+                <span class="erp-brand-subtitle">
+
+                    Enterprise Management System
+
+                </span>
+
+            </div>
+
 
         </div>
 
 
-        <form asp-controller="Account"
-              asp-action="Login"
-              method="post">
+        <div class="secure-access">
 
-            @Html.AntiForgeryToken()
+            <i class="bi bi-shield-lock-fill"></i>
+
+            Secure System Access
+
+        </div>
 
 
-            <div asp-validation-summary="ModelOnly"
-                 class="alert alert-danger"
-                 role="alert">
+    </header>
+
+
+
+    <!-- =========================================================
+         ERP PAGE
+         ========================================================= -->
+
+    <main class="erp-page">
+
+
+        <div class="erp-background"></div>
+
+
+        <div class="background-circle circle-one"></div>
+
+        <div class="background-circle circle-two"></div>
+
+
+
+        <div class="erp-content">
+
+
+            <div class="login-container">
+
+
+                <!-- =================================================
+                     LEFT INFORMATION PANEL
+                     ================================================= -->
+
+                <section class="login-info">
+
+
+                    <div class="info-content">
+
+
+                        <div class="module-label">
+
+                            <i class="bi bi-grid-1x2-fill"></i>
+
+                            Exclusive Distributors Portal
+
+                        </div>
+
+
+                        <h1>
+
+                            Manage your business
+
+                            <span>efficiently.</span>
+
+                        </h1>
+
+
+                        <p class="login-info-description">
+
+                            Access the Exclusive Distributors Enterprise
+                            Management System to manage your day-to-day
+                            business operations from one central platform.
+
+                        </p>
+
+
+
+                        <!-- ERP MODULES -->
+
+                        <div class="module-list">
+
+
+                            <div class="module-item">
+
+                                <i class="bi bi-people"></i>
+
+                                Customers
+
+                            </div>
+
+
+                            <div class="module-item">
+
+                                <i class="bi bi-truck"></i>
+
+                                Suppliers
+
+                            </div>
+
+
+                            <div class="module-item">
+
+                                <i class="bi bi-box-seam"></i>
+
+                                Inventory
+
+                            </div>
+
+
+                            <div class="module-item">
+
+                                <i class="bi bi-receipt"></i>
+
+                                Invoices
+
+                            </div>
+
+
+                            <div class="module-item">
+
+                                <i class="bi bi-file-earmark-text"></i>
+
+                                Quotes
+
+                            </div>
+
+
+                            <div class="module-item">
+
+                                <i class="bi bi-bar-chart"></i>
+
+                                Reports
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- =================================================
+                     RIGHT LOGIN PANEL
+                     ================================================= -->
+
+                <section class="login-panel">
+
+
+                    <div class="login-form">
+
+
+                        <div class="login-heading">
+
+                            <h2>
+                                Sign in
+                            </h2>
+
+
+                            <p>
+                                Enter your credentials to access the system.
+                            </p>
+
+                        </div>
+
+
+
+                        <form asp-controller="Account"
+                              asp-action="Login"
+                              method="post">
+
+
+                            @Html.AntiForgeryToken()
+
+
+
+                            <!-- VALIDATION -->
+
+                            <div asp-validation-summary="ModelOnly"
+                                 class="validation-summary-errors"
+                                 role="alert">
+                            </div>
+
+
+
+                            <!-- EMAIL -->
+
+                            <div class="mb-3">
+
+
+                                <label asp-for="Email"
+                                       class="form-label">
+
+                                    Email Address
+
+                                </label>
+
+
+                                <div class="input-group">
+
+
+                                    <span class="input-group-text">
+
+                                        <i class="bi bi-envelope"></i>
+
+                                    </span>
+
+
+                                    <input asp-for="Email"
+                                           class="form-control"
+                                           placeholder="Enter email address"
+                                           autocomplete="email" />
+
+
+                                </div>
+
+
+                                <span asp-validation-for="Email"
+                                      class="text-danger">
+                                </span>
+
+
+                            </div>
+
+
+
+                            <!-- PASSWORD -->
+
+                            <div class="mb-1">
+
+
+                                <label asp-for="Password"
+                                       class="form-label">
+
+                                    Password
+
+                                </label>
+
+
+                                <div class="input-group">
+
+
+                                    <span class="input-group-text">
+
+                                        <i class="bi bi-lock"></i>
+
+                                    </span>
+
+
+                                    <input asp-for="Password"
+                                           id="passwordInput"
+                                           class="form-control"
+                                           placeholder="Enter password"
+                                           autocomplete="current-password" />
+
+
+                                    <button type="button"
+                                            id="togglePassword"
+                                            class="btn password-toggle"
+                                            aria-label="Show password">
+
+                                        <i id="passwordIcon"
+                                           class="bi bi-eye">
+                                        </i>
+
+                                    </button>
+
+
+                                </div>
+
+
+                                <span asp-validation-for="Password"
+                                      class="text-danger">
+                                </span>
+
+
+                            </div>
+
+
+
+                            <!-- LOGIN OPTIONS -->
+
+                            <div class="login-options">
+
+
+                                <div class="form-check">
+
+
+                                    <input asp-for="RememberMe"
+                                           class="form-check-input" />
+
+
+                                    <label asp-for="RememberMe"
+                                           class="form-check-label">
+                                    </label>
+
+
+                                </div>
+
+
+                                <a asp-controller="Account"
+                                   asp-action="ForgotPassword"
+                                   class="forgot-password">
+
+                                    Forgot Password?
+
+                                </a>
+
+
+                            </div>
+
+
+
+                            <!-- LOGIN BUTTON -->
+
+                            <button type="submit"
+                                    class="btn-login">
+
+                                <i class="bi bi-box-arrow-in-right me-2"></i>
+
+                                Sign In to System
+
+                            </button>
+
+
+
+                            <!-- SECURITY MESSAGE -->
+
+                            <div class="security-message">
+
+
+                                <i class="bi bi-shield-lock-fill"></i>
+
+
+                                <span>
+
+                                    Your account is protected by secure
+                                    authentication. Please do not share
+                                    your login credentials with others.
+
+                                </span>
+
+
+                            </div>
+
+
+                        </form>
+
+
+                    </div>
+
+
+                </section>
+
+
             </div>
 
 
-            <!-- EMAIL -->
+        </div>
 
-            <div class="mb-3 text-start">
 
-                <label asp-for="Email"
-                       class="form-label fw-bold text-secondary small">
-                </label>
 
+        <!-- FOOTER -->
 
-                <div class="input-group">
+        <div class="erp-footer">
 
-                    <span class="input-group-text bg-white text-muted">
+            © @DateTime.Now.Year Exclusive Distributors
+            &nbsp; | &nbsp;
+            Enterprise Management System
 
-                        <i class="bi bi-envelope"></i>
+        </div>
 
-                    </span>
 
+    </main>
 
-                    <input asp-for="Email"
-                           class="form-control"
-                           placeholder="Enter email address"
-                           autocomplete="email" />
 
-                </div>
 
+    <!-- =========================================================
+         JAVASCRIPT
+         ========================================================= -->
 
-                <span asp-validation-for="Email"
-                      class="text-danger small">
-                </span>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
-            </div>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 
-            <!-- PASSWORD -->
 
-            <div class="mb-2 text-start">
+    <script>
 
-                <label asp-for="Password"
-                       class="form-label fw-bold text-secondary small">
-                </label>
+        /* =====================================================
+           PASSWORD VISIBILITY
+           ===================================================== */
 
+        const passwordInput =
+            document.getElementById("passwordInput");
 
-                <div class="input-group">
+        const togglePassword =
+            document.getElementById("togglePassword");
 
-                    <span class="input-group-text bg-white text-muted">
+        const passwordIcon =
+            document.getElementById("passwordIcon");
 
-                        <i class="bi bi-lock"></i>
 
-                    </span>
+        if (togglePassword && passwordInput && passwordIcon) {
 
+            togglePassword.addEventListener(
+                "click",
+                function () {
 
-                    <input asp-for="Password"
-                           id="passwordInput"
-                           class="form-control"
-                           placeholder="Enter password"
-                           autocomplete="current-password" />
 
+                    const isPassword =
+                        passwordInput.type === "password";
 
-                    <button type="button"
-                            id="togglePassword"
-                            class="btn btn-outline-secondary"
-                            aria-label="Show password">
 
-                        <i id="passwordIcon"
-                           class="bi bi-eye"></i>
+                    passwordInput.type =
+                        isPassword
+                            ? "text"
+                            : "password";
 
-                    </button>
 
-                </div>
+                    passwordIcon.classList.toggle(
+                        "bi-eye",
+                        !isPassword
+                    );
 
 
-                <span asp-validation-for="Password"
-                      class="text-danger small">
-                </span>
+                    passwordIcon.classList.toggle(
+                        "bi-eye-slash",
+                        isPassword
+                    );
 
-            </div>
 
+                    togglePassword.setAttribute(
+                        "aria-label",
+                        isPassword
+                            ? "Hide password"
+                            : "Show password"
+                    );
 
-            <!-- FORGOT PASSWORD -->
+                }
+            );
 
-            <div class="text-end mb-3">
+        }
 
-                <a asp-controller="Account"
-                   asp-action="ForgotPassword"
-                   class="forgot-password-link">
-
-                    Forgot Password?
-
-                </a>
-
-            </div>
-
-
-            <!-- REMEMBER ME -->
-
-            <div class="form-check text-start mb-4">
-
-                <input asp-for="RememberMe"
-                       class="form-check-input" />
-
-                <label asp-for="RememberMe"
-                       class="form-check-label text-secondary small">
-                </label>
-
-            </div>
-
-
-            <button type="submit"
-                    class="btn btn-login w-100 shadow-sm">
-
-                Login to System
-
-            </button>
-
-        </form>
-
-    </div>
-
-</div>
-
-
-<!-- =========================
-     JAVASCRIPT
-     ========================= -->
-
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-
-<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-
-<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-
-
-<script>
-
-    const openLogin =
-        document.getElementById("openLogin");
-
-    const closeLogin =
-        document.getElementById("closeLogin");
-
-    const loginOverlay =
-        document.getElementById("loginOverlay");
-
-
-    openLogin.addEventListener(
-        "click",
-        function () {
-
-            loginOverlay.classList.add("active");
-
-        });
-
-
-    closeLogin.addEventListener(
-        "click",
-        function () {
-
-            loginOverlay.classList.remove("active");
-
-        });
-
-
-    loginOverlay.addEventListener(
-        "click",
-        function (event) {
-
-            if (event.target === loginOverlay) {
-
-                loginOverlay.classList.remove("active");
-
-            }
-
-        });
-
-
-    /* Password visibility */
-
-    const passwordInput =
-        document.getElementById("passwordInput");
-
-    const togglePassword =
-        document.getElementById("togglePassword");
-
-    const passwordIcon =
-        document.getElementById("passwordIcon");
-
-
-    togglePassword.addEventListener(
-        "click",
-        function () {
-
-            const passwordIsHidden =
-                passwordInput.type === "password";
-
-
-            passwordInput.type =
-                passwordIsHidden
-                    ? "text"
-                    : "password";
-
-
-            passwordIcon.classList.toggle(
-                "bi-eye",
-                !passwordIsHidden);
-
-
-            passwordIcon.classList.toggle(
-                "bi-eye-slash",
-                passwordIsHidden);
-
-
-            togglePassword.setAttribute(
-                "aria-label",
-                passwordIsHidden
-                    ? "Hide password"
-                    : "Show password");
-
-        });
-
-</script>
+    </script>
 
 
 </body>
