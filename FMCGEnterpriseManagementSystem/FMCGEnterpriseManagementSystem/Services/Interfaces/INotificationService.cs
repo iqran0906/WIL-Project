@@ -24,6 +24,9 @@ namespace FMCGEnterpriseManagementSystem.Services.Interfaces
         // Marks a specific notification as read using its ID.
         Task MarkAsReadAsync(int id);
 
+        // Marks all unread notifications as read.
+        Task MarkAllAsReadAsync();
+
         // Retrieves the total number of unread notifications.
         Task<int> GetUnreadCountAsync();
 

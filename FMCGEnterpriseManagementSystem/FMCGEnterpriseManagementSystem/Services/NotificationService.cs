@@ -87,6 +87,12 @@ namespace FMCGEnterpriseManagementSystem.Services
             await _notificationRepository.MarkAsReadAsync(id);
         }
 
+        // Marks all unread notifications as read.
+        public async Task MarkAllAsReadAsync()
+        {
+            await _notificationRepository.MarkAllAsReadAsync();
+        }
+
         public async Task<int> GetUnreadCountAsync()
         {
             return await _notificationRepository.GetUnreadCountAsync();
