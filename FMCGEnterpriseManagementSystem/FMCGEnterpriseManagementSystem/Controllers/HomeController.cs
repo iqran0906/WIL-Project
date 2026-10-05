@@ -253,7 +253,15 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         }
 
         // Older prototype pages retained for compatibility.
-        public IActionResult AddCustomer() => View();
+        // Legacy customer shortcut redirects to the real Customers feature.
+        [HttpGet]
+        [Authorize(Roles = "Administrator,Employee,SalesRepresentative")]
+        public IActionResult AddCustomer()
+        {
+            return RedirectToAction(
+                "AddCustomer",
+                "Customers");
+        }
 
         public IActionResult AddSupplier() => View();
 
@@ -261,7 +269,15 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
         public IActionResult AddEmployee() => View();
 
-        public IActionResult AddItem() => View();
+        // Legacy inventory shortcut redirects to the real Inventory feature.
+        [HttpGet]
+        [Authorize(Roles = "Administrator,Employee")]
+        public IActionResult AddItem()
+        {
+            return RedirectToAction(
+                "AddItem",
+                "Inventory");
+        }
 
         public IActionResult CreateInvoice() => View();
 
