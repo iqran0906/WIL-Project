@@ -206,13 +206,13 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     try
     {
-        // Execute existing SeedData
+        // Execute existing SeedData initialization
         await SeedData.InitializeAsync(services, builder.Configuration);
 
-        // Explicit Admin Account Fallback Seeding
         var userManager = services.GetRequiredService<UserManager<User>>();
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
+        // Ensure Admin Role Exists
         if (!await roleManager.RoleExistsAsync("Admin"))
         {
             await roleManager.CreateAsync(new IdentityRole("Admin"));
@@ -223,7 +223,8 @@ using (var scope = app.Services.CreateScope())
 
         if (adminUser == null)
         {
-            var newAdmin = new User
+            // Create user if it does not exist
+            adminUser = new User
             {
                 UserName = adminEmail,
                 Email = adminEmail,
@@ -231,10 +232,26 @@ using (var scope = app.Services.CreateScope())
                 IsActive = true
             };
 
-            var result = await userManager.CreateAsync(newAdmin, "Wholesale101@");
-            if (result.Succeeded)
+            var createResult = await userManager.CreateAsync(adminUser, "Wholesale101@");
+            if (createResult.Succeeded)
             {
-                await userManager.AddToRoleAsync(newAdmin, "Admin");
+                await userManager.AddToRoleAsync(adminUser, "Admin");
+            }
+        }
+        else
+        {
+            // Force reset password to ensure credentials match Wholesale101@
+            var token = await userManager.GeneratePasswordResetTokenAsync(adminUser);
+            await userManager.ResetPasswordAsync(adminUser, token, "Wholesale101@");
+
+            // Ensure requirements are fulfilled
+            adminUser.EmailConfirmed = true;
+            adminUser.IsActive = true;
+            await userManager.UpdateAsync(adminUser);
+
+            if (!await userManager.IsInRoleAsync(adminUser, "Admin"))
+            {
+                await userManager.AddToRoleAsync(adminUser, "Admin");
             }
         }
     }
