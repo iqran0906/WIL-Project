@@ -1,5 +1,8 @@
-﻿// Purpose: Repository pattern: database queries for notification.
-// Authors: Sayali-St10458649 (from git history)
+﻿// Title: Asynchronous programming with async and await
+// Author: Microsoft
+// Date: 01-10-2026
+// Code version: C# / .NET 10
+// Availability: https://learn.microsoft.com/en-us/dotnet/csharp/asynchronous-programming/
 
 using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;
@@ -11,15 +14,19 @@ using System.Threading.Tasks;
 
 namespace FMCGEnterpriseManagementSystem.Repositories
 {
+    // Purpose: Provides database operations for creating and managing notifications.
     public class NotificationRepository : INotificationRepository
     {
+        // Provides access to the application's database.
         private readonly ApplicationDbContext _context;
 
+        // Receives the database context through dependency injection.
         public NotificationRepository(ApplicationDbContext context)
         {
             _context = context;
         }
 
+        // Adds a new notification and saves the changes.
         public async Task<Notification> AddAsync(Notification notification)
         {
             _context.Notifications.Add(notification);
@@ -27,11 +34,13 @@ namespace FMCGEnterpriseManagementSystem.Repositories
             return notification;
         }
 
+        // Retrieves a notification by its ID.
         public async Task<Notification> GetByIdAsync(int id)
         {
             return await _context.Notifications.FindAsync(id);
         }
 
+        // Retrieves all notifications ordered from newest to oldest.
         public async Task<List<Notification>> GetAllAsync()
         {
             return await _context.Notifications
@@ -39,6 +48,7 @@ namespace FMCGEnterpriseManagementSystem.Repositories
                 .ToListAsync();
         }
 
+        // Retrieves unread notifications ordered from newest to oldest.
         public async Task<List<Notification>> GetUnreadAsync()
         {
             return await _context.Notifications
@@ -47,6 +57,24 @@ namespace FMCGEnterpriseManagementSystem.Repositories
                 .ToListAsync();
         }
 
+        // Counts the number of unread notifications.
+        public async Task<int> GetUnreadCountAsync()
+        {
+            return await _context.Notifications.CountAsync(n => !n.IsRead);
+        }
+
+        //marks notification page as red once its viewed
+        public async Task MarkAllAsReadAsync()
+        {
+            var unread = await _context.Notifications.Where(n => !n.IsRead).ToListAsync();
+            foreach (var notification in unread)
+            {
+                notification.IsRead = true;
+            }
+            await _context.SaveChangesAsync();
+        }
+
+        // Retrieves notifications matching the specified notification type.
         public async Task<List<Notification>> GetByTypeAsync(NotificationType type)
         {
             return await _context.Notifications
@@ -55,6 +83,7 @@ namespace FMCGEnterpriseManagementSystem.Repositories
                 .ToListAsync();
         }
 
+        // Finds a notification and marks it as read.
         public async Task MarkAsReadAsync(int id)
         {
             var notification = await _context.Notifications.FindAsync(id);
@@ -65,6 +94,7 @@ namespace FMCGEnterpriseManagementSystem.Repositories
             }
         }
 
+        // Finds a notification and marks its email as sent.
         public async Task MarkEmailSentAsync(int id)
         {
             var notification = await _context.Notifications.FindAsync(id);

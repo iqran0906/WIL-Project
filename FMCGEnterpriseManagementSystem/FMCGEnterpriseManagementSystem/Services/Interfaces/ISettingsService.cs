@@ -1,18 +1,25 @@
-// Purpose: Contract (interface) for the settings service.
-// Authors: ST10068525 (new file, not yet committed)
+// Title: Asynchronous programming with async and await
+// Author: Microsoft
+// Date: 01-10-2026
+// Code version: C# / .NET 10
+// Availability: https://learn.microsoft.com/en-us/dotnet/csharp/asynchronous-programming/
 
 using FMCGEnterpriseManagementSystem.Models;
 
 namespace FMCGEnterpriseManagementSystem.Services.Interfaces
 {
+    // Defines the contract for managing system-wide application settings.
     public interface ISettingsService
     {
-        // Current settings (cached; created with defaults the first time)
+        // Retrieves the current system settings.
+        // Settings are cached and default settings are created when required.
         Task<SystemSetting> GetAsync();
 
-        // VAT as a fraction, e.g. 15% -> 0.15
+        // Retrieves the current VAT rate as a decimal fraction.
+        // For example, a VAT rate of 15% is represented as 0.15.
         Task<decimal> GetVatRateAsync();
 
+        // Updates the system settings and records the user responsible for the update.
         Task UpdateAsync(SystemSetting settings, string? updatedBy);
     }
 }

@@ -1,6 +1,10 @@
-// Purpose: Text of the short tip pop-up shown when each page opens.
-// Authors: ST10068525 (new file, not yet committed)
 
+//    Title: Classes and Objects - C# Programming Guide
+//    Author: Microsoft
+//    Date: 08-04-2026
+//    Code version: C#
+//    Availability: https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/types/classes
+//
 namespace FMCGEnterpriseManagementSystem.Helpers
 {
     // Short "what you can do here" messages shown in the pop-up

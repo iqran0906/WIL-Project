@@ -1,5 +1,8 @@
-// Purpose: Results of the global search.
-// Authors: ST10068525 (new file, not yet committed)
+// Title: ASP.NET Core MVC Views and ViewModels
+// Author: Microsoft
+// Date: 04-10-2026
+// Code version: C# / .NET 10
+// Availability: https://learn.microsoft.com/en-us/aspnet/core/mvc/views/overview
 
 namespace FMCGEnterpriseManagementSystem.ViewModels
 {

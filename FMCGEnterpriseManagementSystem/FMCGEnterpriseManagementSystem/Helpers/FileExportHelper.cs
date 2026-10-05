@@ -1,6 +1,9 @@
-﻿// Purpose: Turns an export result into a downloadable file response.
-// Authors: Sayali-St10458649 (from git history)
-
+﻿// Title: Controllers and Actions in ASP.NET Core.
+// Authors: Microsoft
+// Date: 27-04-2026
+// Code version: ASP.NET Core 10.0
+// Availability: https://learn.microsoft.com/aspnet/core/mvc/controllers/actions
+//
 using FMCGEnterpriseManagementSystem.DTOs;
 using Microsoft.AspNetCore.Mvc;
 

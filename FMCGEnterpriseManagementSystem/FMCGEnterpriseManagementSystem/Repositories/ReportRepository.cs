@@ -1,5 +1,8 @@
-﻿// Purpose: Repository pattern: database queries for report.
-// Authors: iqran0906 (from git history)
+﻿// Title: Querying Data with Entity Framework Core
+// Author: Microsoft
+// Date: 11-03-2021
+// Code version: Entity Framework Core / .NET 10
+// Availability: https://learn.microsoft.com/en-us/ef/core/querying/
 
 using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;

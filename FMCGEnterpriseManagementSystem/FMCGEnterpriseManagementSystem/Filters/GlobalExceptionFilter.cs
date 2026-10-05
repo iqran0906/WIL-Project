@@ -1,5 +1,8 @@
-// Purpose: Global MVC filter: logs unexpected errors on form submissions and shows a friendly message.
-// Authors: ST10068525 (new file, not yet committed)
+//    Title: Filters in ASP.NET Core MVC
+//   Author: Microsoft
+//   Date: 18-09-2024
+//   Code version: ASP.NET Core MVC 10.0
+//   Availability: https://learn.microsoft.com/en-us/aspnet/core/mvc/controllers/filters
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;

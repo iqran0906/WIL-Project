@@ -1,11 +1,15 @@
-﻿// Purpose: Factory pattern: builds notification messages for each notification type.
-// Authors: Sayali-St10458649 (from git history)
+﻿//   Title: Dependency injection in ASP.NET Core
+//   Author: Microsoft
+//   Date: 18-09-2024
+//   Code version: ASP.NET Core 10.0
+//   Availability: https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection
 
 using FMCGEnterpriseManagementSystem.DTOs;
 using FMCGEnterpriseManagementSystem.Models;
 
 namespace FMCGEnterpriseManagementSystem.Factories
 {
+    // Creates Notification objects from the notification data received by the application.
     public static class NotificationFactory
     {
         public static Notification Create(NotificationDto dto)

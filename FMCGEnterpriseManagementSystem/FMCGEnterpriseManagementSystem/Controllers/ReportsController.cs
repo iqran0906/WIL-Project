@@ -1,5 +1,3 @@
-// Purpose: Reports: shows each report with date filters and exports them to PDF / Excel.
-// Authors: iqran0906 (from git history)
 
 using FMCGEnterpriseManagementSystem.Enums;
 using FMCGEnterpriseManagementSystem.Factories;
@@ -10,13 +8,20 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
+    // Only administrators can access the reports section.
     [Authorize(Roles = "Administrator")]
     public class ReportsController : Controller
     {
+        // Service handles retrieving the different report datasets.
         private readonly IReportService _reportService;
+
+        // Factory selects the PDF or Excel export strategy.
         private readonly ExportFactory _exportFactory;
+
+        // Logger records important report and export activity.
         private readonly ILogger<ReportsController> _logger;
 
+        // Dependencies are supplied through dependency injection.
         public ReportsController(
             IReportService reportService,
             ExportFactory exportFactory,
@@ -38,6 +43,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         // REPORTS WITH A DATE RANGE
         // ==================================================
 
+        // Each dated report uses the shared DatedReport helper to apply date validation and load the requested report.
         [HttpGet]
         public Task<IActionResult> InvoiceReport(DateTime? startDate, DateTime? endDate) =>
             DatedReport(startDate, endDate, () => _reportService.GetInvoiceReportAsync(startDate, endDate));
@@ -104,6 +110,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             DateTime? startDate,
             DateTime? endDate)
         {
+            // Convert the requested format into the corresponding export strategy.
             ExportType? exportType = format?.ToLowerInvariant() switch
             {
                 "pdf" => ExportType.Pdf,
@@ -111,12 +118,14 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 _ => null
             };
 
+            // Reject unsupported export formats.
             if (exportType == null)
             {
                 TempData["ErrorMessage"] = "Please choose PDF or Excel as the export format.";
                 return RedirectToReport(report, startDate, endDate);
             }
 
+            // Prevent reports from being exported with an invalid date range.
             if (!IsValidDateRange(startDate, endDate))
             {
                 TempData["ErrorMessage"] = "The report was not exported because the end date is before the start date.";
@@ -126,6 +135,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             var type = exportType.Value;
             var period = DescribePeriod(startDate, endDate);
 
+            // Select the requested report and generate it using the chosen export strategy.
             IActionResult? file = report switch
             {
                 nameof(InvoiceReport) => ToFile(await _reportService.GetInvoiceReportAsync(startDate, endDate), $"Invoice Report{period}", type),
@@ -148,6 +158,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 return NotFound();
             }
 
+            // Record which user exported which report and in which format.
             _logger.LogInformation(
                 "{User} exported {Report} as {Format}{Period}",
                 User.Identity?.Name,
@@ -163,6 +174,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         // HELPERS
         // ==================================================
 
+        // Shared helper for reports that support start and end dates.
         private async Task<IActionResult> DatedReport<T>(
             DateTime? startDate,
             DateTime? endDate,
@@ -171,7 +183,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             ViewBag.StartDate = startDate?.ToString("yyyy-MM-dd");
             ViewBag.EndDate = endDate?.ToString("yyyy-MM-dd");
 
-            // Don't run the report on an impossible range - show the error instead
+            // Don't run the report on an impossible range - show the error instead.
             if (!IsValidDateRange(startDate, endDate))
             {
                 ViewBag.DateError = "The end date cannot be before the start date.";
@@ -181,9 +193,11 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return View(await loadReport());
         }
 
+        // Checks that the start date is not later than the end date.
         private static bool IsValidDateRange(DateTime? startDate, DateTime? endDate) =>
             !(startDate.HasValue && endDate.HasValue && startDate.Value.Date > endDate.Value.Date);
 
+        // Creates a readable description of the selected reporting period.
         private static string DescribePeriod(DateTime? startDate, DateTime? endDate) =>
             (startDate, endDate) switch
             {
@@ -193,11 +207,14 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 ({ } s, { } e) => $" {s:yyyy-MM-dd} to {e:yyyy-MM-dd}"
             };
 
+        // Uses the selected export strategy to convert report data into a downloadable file.
         private IActionResult ToFile<T>(IEnumerable<T> data, string title, ExportType type) =>
             FileExportHelper.ToFileResult(_exportFactory.GetStrategy(type).Export(data, title));
 
+        // Redirects users back to a valid report when export validation fails.
         private IActionResult RedirectToReport(string? report, DateTime? startDate, DateTime? endDate)
         {
+            // Only known report actions are allowed as redirect targets.
             var knownReports = new[]
             {
                 nameof(InvoiceReport), nameof(QuoteReport), nameof(CustomerSales), nameof(PaymentsReport),

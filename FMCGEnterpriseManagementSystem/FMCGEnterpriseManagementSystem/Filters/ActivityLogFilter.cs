@@ -1,5 +1,9 @@
-// Purpose: Global MVC filter that records successful user actions for the Recent Activity page.
-// Authors: ST10068525 (new file, not yet committed)
+//    Title: Filters in ASP.NET Core MVC
+//   Author: Microsoft
+//   Date: 18-09-2024
+//   Code version: ASP.NET Core MVC 10.0
+//   Availability: https://learn.microsoft.com/en-us/aspnet/core/mvc/controllers/filters
+
 
 using System.Security.Claims;
 using FMCGEnterpriseManagementSystem.Services.Interfaces;

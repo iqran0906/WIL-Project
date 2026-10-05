@@ -1,6 +1,8 @@
-﻿// Purpose: Entity Framework database context: the tables (DbSets) and their relationships.
-// Authors: Naseeha27, Sayali-St10458649, iqran0906 (from git history)
-// Uses: ASP.NET Core Identity (Microsoft, MIT) https://learn.microsoft.com/aspnet/core/security/authentication/identity
+﻿//   Title: Creating and Configuring a Model - EF Core
+//   Author: Microsoft
+//   Date: 28-03-2023
+//   Code version: Entity Framework Core 10.0
+// Availability: https://learn.microsoft.com/en-us/ef/core/modeling/
 
 using FMCGEnterpriseManagementSystem.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -8,13 +10,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FMCGEnterpriseManagementSystem.Data
 {
+    // Extends ASP.NET Core Identity's database context to include application entities.
     public class ApplicationDbContext : IdentityDbContext<User>
     {
+        // Configures the database context using the application's database options.
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
 
+        // DbSets represent the main tables managed by Entity Framework Core.
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Product> Products { get; set; }
@@ -32,15 +37,18 @@ namespace FMCGEnterpriseManagementSystem.Data
         public DbSet<SystemSetting> SystemSettings { get; set; }
         public DbSet<ActivityLog> ActivityLogs { get; set; }
 
+        // Configures indexes, decimal precision, relationships and delete behaviour.
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Keeps the default ASP.NET Core Identity database configuration.
             base.OnModelCreating(modelBuilder);
 
-            // Recent Activity is always read per user, newest first
+            // Recent Activity is always read per user, newest first.
+            // The composite index supports queries using UserId and Timestamp.
             modelBuilder.Entity<ActivityLog>()
                 .HasIndex(a => new { a.UserId, a.Timestamp });
 
-            // Product decimal precision
+            // Product decimal precision.
             modelBuilder.Entity<Product>()
                 .Property(p => p.CostExVat)
                 .HasPrecision(18, 2);
@@ -53,110 +61,114 @@ namespace FMCGEnterpriseManagementSystem.Data
                 .Property(p => p.SellingPrice)
                 .HasPrecision(18, 2);
 
-            // Supplier decimal precision
+            // Supplier decimal precision.
             modelBuilder.Entity<Supplier>()
                 .Property(s => s.CreditLimit)
                 .HasPrecision(18, 2);
 
-            // Employee -> NextOfKin
+            // Employee -> NextOfKin.
+            // Defines the one-to-one relationship and prevents automatic deletion
+            // of the related NextOfKin record when an employee is deleted.
             modelBuilder.Entity<Employee>()
                 .HasOne(e => e.NextOfKin)
                 .WithOne(n => n.Employee)
                 .HasForeignKey<NextOfKin>(n => n.EmployeeID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Employee -> Identity User
+            // Employee -> Identity User.
+            // Removes the employee's UserId relationship when the Identity user
+            // is deleted rather than deleting the employee.
             modelBuilder.Entity<Employee>()
                 .HasOne(e => e.User)
                 .WithOne()
                 .HasForeignKey<Employee>(e => e.UserId)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            // Employee -> SalesRepresentative
+            // Employee -> SalesRepresentative.
             modelBuilder.Entity<SalesRepresentative>()
                 .HasOne(sr => sr.Employee)
                 .WithOne()
                 .HasForeignKey<SalesRepresentative>(sr => sr.EmployeeID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // SalesRepresentative -> Customers
+            // SalesRepresentative -> Customers.
             modelBuilder.Entity<Customer>()
                 .HasOne(c => c.SalesRepresentative)
                 .WithMany(sr => sr.Customers)
                 .HasForeignKey(c => c.SalesRepresentativeId)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            // SalesRepresentative -> Quotes
+            // SalesRepresentative -> Quotes.
             modelBuilder.Entity<Quote>()
                 .HasOne(q => q.SalesRepresentative)
                 .WithMany(sr => sr.Quotes)
                 .HasForeignKey(q => q.SalesRepresentativeId)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            // Supplier -> Products
+            // Supplier -> Products.
             modelBuilder.Entity<Product>()
                 .HasOne(p => p.Supplier)
                 .WithMany()
                 .HasForeignKey(p => p.SupplierId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Product -> Inventory
+            // Product -> Inventory.
             modelBuilder.Entity<Inventory>()
                 .HasOne(i => i.Product)
                 .WithOne(p => p.Inventory)
                 .HasForeignKey<Inventory>(i => i.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Inventory -> StockBatches
+            // Inventory -> StockBatches.
             modelBuilder.Entity<StockBatch>()
                 .HasOne(sb => sb.Inventory)
                 .WithMany(i => i.StockBatches)
                 .HasForeignKey(sb => sb.InventoryId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Quote -> Invoice
+            // Quote -> Invoice.
             modelBuilder.Entity<Invoice>()
                 .HasOne(i => i.Quote)
                 .WithMany()
                 .HasForeignKey(i => i.QuoteId)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            // Customer -> Invoice
+            // Customer -> Invoice.
             modelBuilder.Entity<Invoice>()
                 .HasOne(i => i.Customer)
                 .WithMany()
                 .HasForeignKey(i => i.CustomerId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // SalesRepresentative -> Invoice
+            // SalesRepresentative -> Invoice.
             modelBuilder.Entity<Invoice>()
                 .HasOne(i => i.SalesRepresentative)
                 .WithMany()
                 .HasForeignKey(i => i.SalesRepresentativeId)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            // Invoice -> InvoiceItems
+            // Invoice -> InvoiceItems.
             modelBuilder.Entity<InvoiceItem>()
                 .HasOne(ii => ii.Invoice)
                 .WithMany(i => i.InvoiceItems)
                 .HasForeignKey(ii => ii.InvoiceId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Invoice -> Payments
+            // Invoice -> Payments.
             modelBuilder.Entity<Payment>()
                 .HasOne(p => p.Invoice)
                 .WithMany(i => i.Payments)
                 .HasForeignKey(p => p.InvoiceId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Product -> InvoiceItems
+            // Product -> InvoiceItems.
             modelBuilder.Entity<InvoiceItem>()
                 .HasOne(ii => ii.Product)
                 .WithMany()
                 .HasForeignKey(ii => ii.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Invoice decimal precision
+            // Invoice decimal precision.
             modelBuilder.Entity<Invoice>()
                 .Property(i => i.Subtotal)
                 .HasPrecision(18, 2);
@@ -165,7 +177,7 @@ namespace FMCGEnterpriseManagementSystem.Data
                 .Property(i => i.Total)
                 .HasPrecision(18, 2);
 
-            // InvoiceItem decimal precision
+            // InvoiceItem decimal precision.
             modelBuilder.Entity<InvoiceItem>()
                 .Property(ii => ii.UnitPrice)
                 .HasPrecision(18, 2);
@@ -178,7 +190,7 @@ namespace FMCGEnterpriseManagementSystem.Data
                 .Property(ii => ii.LineTotal)
                 .HasPrecision(18, 2);
 
-            // SalesRepresentative decimal precision
+            // SalesRepresentative decimal precision.
             modelBuilder.Entity<SalesRepresentative>()
                 .Property(sr => sr.Salary)
                 .HasPrecision(18, 2);

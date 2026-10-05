@@ -1,8 +1,9 @@
 ﻿@*
-    Purpose: Login page.
-    Authors: iqran0906 (from git history)
-    Uses: jQuery Validation + Unobtrusive (MIT) https://jqueryvalidation.org
+Purpose: Login page.
+Authors: iqran0906 (from git history)
+Uses: jQuery Validation + Unobtrusive (MIT) https://jqueryvalidation.org
 *@
+
 @model FMCGEnterpriseManagementSystem.ViewModels.LoginViewModel
 
 @{
@@ -11,11 +12,18 @@
 }
 
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
+
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Exclusive Distributors</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>
+        @ViewData["Title"] - Exclusive Distributors
+    </title>
 
     <link rel="stylesheet"
           href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -23,106 +31,1093 @@
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 
+
     <style>
-            :root {
-                --sidebar-bg: #357383;
-                --main-bg: #1c323d;
-                --card-bg: rgba(255, 255, 255, 0.95);
+
+        :root {
+            --navy: #102b35;
+            --dark-navy: #0b2028;
+            --teal: #357383;
+            --light-teal: #4f9aaa;
+            --white: #ffffff;
+            --soft-white: #f5f8f9;
+            --text-muted: #a9bcc2;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            background: var(--dark-navy);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
+
+
+        /* =========================
+           NAVIGATION BAR
+           ========================= */
+
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 76px;
+            z-index: 1000;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 5%;
+
+            background: rgba(11, 32, 40, 0.88);
+
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            text-decoration: none;
+            color: white;
+        }
+
+        .brand-logo {
+            width: 46px;
+            height: 46px;
+
+            border-radius: 12px;
+
+            background: white;
+            padding: 4px;
+
+            box-shadow: 0 5px 18px rgba(0,0,0,0.25);
+        }
+
+        .brand-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .brand-name {
+            font-size: 1.05rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .brand-subtitle {
+            display: block;
+
+            font-size: 0.68rem;
+            color: #91abb2;
+
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+
+            margin-top: 1px;
+        }
+
+        .nav-login {
+            border: 1px solid rgba(255,255,255,0.25);
+
+            background: var(--teal);
+            color: white;
+
+            padding: 10px 23px;
+
+            border-radius: 7px;
+
+            font-weight: 600;
+            text-decoration: none;
+
+            transition: 0.25s ease;
+        }
+
+        .nav-login:hover {
+            background: var(--light-teal);
+            color: white;
+
+            transform: translateY(-1px);
+
+            box-shadow:
+                0 7px 20px rgba(53,115,131,0.35);
+        }
+
+
+        /* =========================
+           HERO SECTION
+           ========================= */
+
+        .hero {
+            min-height: 100vh;
+
+            padding: 150px 7% 100px;
+
+            display: flex;
+            align-items: center;
+
+            position: relative;
+            overflow: hidden;
+
+            background:
+                radial-gradient(
+                    circle at 80% 30%,
+                    rgba(53,115,131,0.22),
+                    transparent 32%),
+                radial-gradient(
+                    circle at 10% 80%,
+                    rgba(53,115,131,0.12),
+                    transparent 30%),
+                linear-gradient(
+                    135deg,
+                    #0b2028 0%,
+                    #102b35 55%,
+                    #163b47 100%);
+        }
+
+        .hero::before {
+            content: "";
+
+            position: absolute;
+            inset: 0;
+
+            background-image:
+                linear-gradient(
+                    rgba(255,255,255,0.025) 1px,
+                    transparent 1px),
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,0.025) 1px,
+                    transparent 1px);
+
+            background-size: 55px 55px;
+
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+
+            max-width: 720px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+
+            gap: 9px;
+
+            padding: 7px 13px;
+            margin-bottom: 22px;
+
+            border:
+                1px solid rgba(255,255,255,0.12);
+
+            border-radius: 30px;
+
+            background:
+                rgba(255,255,255,0.05);
+
+            color: #a9d3dc;
+
+            font-size: 0.78rem;
+            font-weight: 600;
+
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .eyebrow i {
+            color: #67aebe;
+        }
+
+        .hero h1 {
+            font-size:
+                clamp(2.8rem, 6vw, 5.2rem);
+
+            line-height: 1.02;
+
+            font-weight: 700;
+
+            letter-spacing: -2px;
+
+            margin-bottom: 25px;
+        }
+
+        .hero h1 span {
+            color: #67aebe;
+        }
+
+        .hero-description {
+            max-width: 650px;
+
+            color: #b8c9ce;
+
+            font-size: 1.08rem;
+
+            line-height: 1.8;
+
+            margin-bottom: 38px;
+        }
+
+
+        /* =========================
+           BUSINESS INFO
+           ========================= */
+
+        .business-strip {
+            display: flex;
+            flex-wrap: wrap;
+
+            gap: 12px;
+        }
+
+        .business-item {
+            padding: 13px 18px;
+
+            border:
+                1px solid rgba(255,255,255,0.09);
+
+            border-radius: 8px;
+
+            background:
+                rgba(255,255,255,0.045);
+
+            color: #d9e5e8;
+
+            font-size: 0.85rem;
+        }
+
+        .business-item i {
+            color: #67aebe;
+
+            margin-right: 7px;
+        }
+
+
+        /* =========================
+           DISTRIBUTION VISUAL
+           ========================= */
+
+        .distribution-visual {
+            position: absolute;
+
+            right: 5%;
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            width: 390px;
+            height: 390px;
+
+            opacity: 0.85;
+        }
+
+        .visual-circle {
+            position: absolute;
+
+            border:
+                1px solid rgba(103,174,190,0.18);
+
+            border-radius: 50%;
+        }
+
+        .circle-one {
+            width: 390px;
+            height: 390px;
+            inset: 0;
+        }
+
+        .circle-two {
+            width: 270px;
+            height: 270px;
+
+            top: 60px;
+            left: 60px;
+        }
+
+        .circle-three {
+            width: 150px;
+            height: 150px;
+
+            top: 120px;
+            left: 120px;
+        }
+
+        .warehouse-box {
+            position: absolute;
+
+            top: 145px;
+            left: 145px;
+
+            width: 100px;
+            height: 100px;
+
+            border-radius: 18px;
+
+            background:
+                rgba(53,115,131,0.25);
+
+            border:
+                1px solid rgba(103,174,190,0.35);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            box-shadow:
+                0 0 50px rgba(53,115,131,0.18);
+        }
+
+        .warehouse-box i {
+            font-size: 3rem;
+            color: #78bfce;
+        }
+
+        .route-point {
+            position: absolute;
+
+            width: 13px;
+            height: 13px;
+
+            border-radius: 50%;
+
+            background: #67aebe;
+
+            box-shadow:
+                0 0 18px rgba(103,174,190,0.65);
+        }
+
+        .point-one {
+            top: 45px;
+            left: 185px;
+        }
+
+        .point-two {
+            top: 190px;
+            right: 10px;
+        }
+
+        .point-three {
+            bottom: 40px;
+            left: 75px;
+        }
+
+        .point-four {
+            top: 90px;
+            left: 35px;
+        }
+
+
+        /* =========================
+           BUSINESS SECTION
+           ========================= */
+
+        .about-section {
+            padding: 110px 8%;
+
+            background: #f5f8f9;
+
+            color: var(--navy);
+        }
+
+        .section-label {
+            color: var(--teal);
+
+            text-transform: uppercase;
+
+            letter-spacing: 2px;
+
+            font-size: 0.75rem;
+            font-weight: 700;
+
+            margin-bottom: 12px;
+        }
+
+        .about-section h2 {
+            font-size:
+                clamp(2rem, 4vw, 3.2rem);
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+        }
+
+        .about-text {
+            max-width: 850px;
+
+            color: #61747a;
+
+            line-height: 1.85;
+
+            font-size: 1rem;
+        }
+
+        .operations {
+            margin-top: 55px;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 18px;
+        }
+
+        .operation-card {
+            background: white;
+
+            padding: 28px 23px;
+
+            border-radius: 12px;
+
+            border:
+                1px solid #e3eaec;
+
+            transition: 0.25s ease;
+        }
+
+        .operation-card:hover {
+            transform: translateY(-5px);
+
+            box-shadow:
+                0 15px 35px rgba(16,43,53,0.08);
+        }
+
+        .operation-icon {
+            width: 46px;
+            height: 46px;
+
+            border-radius: 10px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #e8f1f3;
+
+            color: var(--teal);
+
+            font-size: 1.25rem;
+
+            margin-bottom: 18px;
+        }
+
+        .operation-card h5 {
+            font-weight: 700;
+
+            margin-bottom: 8px;
+        }
+
+        .operation-card p {
+            margin: 0;
+
+            color: #718187;
+
+            font-size: 0.85rem;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================
+           LOGIN OVERLAY
+           ========================= */
+
+        .login-overlay {
+            position: fixed;
+            inset: 0;
+
+            z-index: 2000;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 25px;
+
+            background:
+                rgba(6,20,25,0.82);
+
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+
+            opacity: 0;
+            visibility: hidden;
+
+            transition:
+                opacity 0.3s ease,
+                visibility 0.3s ease;
+        }
+
+        .login-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+
+        /* =========================
+           LOGIN CARD
+           ========================= */
+
+        .login-card {
+            width: 100%;
+            max-width: 430px;
+
+            background:
+                rgba(255,255,255,0.98);
+
+            color: var(--navy);
+
+            border-radius: 16px;
+
+            padding: 38px 32px;
+
+            box-shadow:
+                0 30px 80px rgba(0,0,0,0.45);
+
+            transform:
+                translateY(35px) scale(0.97);
+
+            transition:
+                transform 0.35s ease;
+
+            position: relative;
+        }
+
+        .login-overlay.active .login-card {
+            transform:
+                translateY(0) scale(1);
+        }
+
+        .close-login {
+            position: absolute;
+
+            top: 15px;
+            right: 17px;
+
+            width: 34px;
+            height: 34px;
+
+            border: none;
+            border-radius: 50%;
+
+            background: #eef2f3;
+
+            color: #65767b;
+
+            font-size: 1.1rem;
+
+            transition: 0.2s ease;
+        }
+
+        .close-login:hover {
+            background: #dde6e8;
+        }
+
+        .brand-icon {
+            width: 76px;
+            height: 76px;
+
+            background: white;
+
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            margin: 0 auto 18px auto;
+
+            overflow: hidden;
+
+            padding: 5px;
+
+            box-shadow:
+                0 5px 18px rgba(0,0,0,0.12);
+
+            border:
+                1px solid #e4eaec;
+        }
+
+        .brand-icon img {
+            width: 100%;
+            height: 100%;
+
+            object-fit: contain;
+
+            border-radius: 50%;
+        }
+
+        .login-card h3 {
+            color: var(--navy);
+        }
+
+        .login-card .form-control {
+            border-radius: 6px;
+
+            border:
+                1px solid #ced4da;
+
+            padding: 10px 14px;
+
+            background-color: #f8f9fa;
+        }
+
+        .login-card .form-control:focus {
+            background-color: #fff;
+
+            border-color: var(--teal);
+
+            box-shadow:
+                0 0 0 0.25rem rgba(53,115,131,0.18);
+        }
+
+        .login-card .input-group-text {
+            border-color: #ced4da;
+        }
+
+        .btn-login {
+            background-color: var(--teal);
+
+            color: white;
+
+            padding: 12px;
+
+            font-weight: 600;
+
+            border-radius: 6px;
+
+            border: none;
+
+            transition: all 0.2s ease;
+        }
+
+        .btn-login:hover {
+            background-color: #275662;
+            color: white;
+        }
+
+        .forgot-password-link {
+            color: var(--teal);
+
+            font-size: 0.84rem;
+            font-weight: 600;
+
+            text-decoration: none;
+        }
+
+        .forgot-password-link:hover {
+            color: #275662;
+            text-decoration: underline;
+        }
+
+        .validation-summary-errors {
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+           ========================= */
+
+        @@media (max-width: 1000px) {
+
+            .distribution-visual {
+                display: none;
             }
 
-            body {
-                background-color: var(--main-bg);
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                min-height: 100vh;
+            .hero-content {
+                max-width: 850px;
+            }
+
+            .operations {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+        }
+
+        @@media (max-width: 576px) {
+
+            .topbar {
+                padding: 0 20px;
+            }
+
+            .brand-subtitle {
+                display: none;
+            }
+
+            .hero {
+                padding: 130px 25px 80px;
+            }
+
+            .hero h1 {
+                letter-spacing: -1px;
+            }
+
+            .hero-description {
+                font-size: 0.98rem;
+            }
+
+            .about-section {
+                padding: 75px 25px;
+            }
+
+            .operations {
+                grid-template-columns: 1fr;
             }
 
             .login-card {
-                background: var(--card-bg);
-                border-radius: 12px;
-                padding: 30px 20px;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-                max-width: 420px;
-                width: 100%;
+                padding: 35px 22px;
             }
+        }
 
-            @@media (min-width: 576px) {
-                .login-card {
-                    padding: 40px 30px;
-                }
-            }
-
-            .form-control {
-                border-radius: 6px;
-                border: 1px solid #ced4da;
-                padding: 10px 14px;
-                background-color: #f8f9fa;
-            }
-
-                .form-control:focus {
-                    background-color: #fff;
-                    border-color: #357383;
-                    box-shadow: 0 0 0 0.25rem rgba(53, 115, 131, 0.25);
-                }
-
-            .btn-login {
-                background-color: #357383;
-                color: white;
-                padding: 12px;
-                font-weight: 600;
-                border-radius: 6px;
-                border: none;
-                transition: all 0.2s ease;
-            }
-
-                .btn-login:hover {
-                    background-color: #275662;
-                    color: white;
-                }
-
-            .brand-icon {
-                width: 80px;
-                height: 80px;
-                background: white;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin: 0 auto 20px auto;
-                overflow: hidden;
-                padding: 5px;
-                box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            }
-
-                .brand-icon img {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: contain;
-                    border-radius: 50%;
-                }
-
-            .validation-summary-errors {
-                text-align: left;
-                font-size: 0.9rem;
-            }
     </style>
+
 </head>
 
-<body class="d-flex align-items-center justify-content-center p-3">
 
-    <div class="login-card text-center">
+<body>
 
-        <div class="brand-icon">
-            <img src="~/images/logo.png" alt="Exclusive Distributors Logo" />
+
+<!-- =========================
+     TOP NAVIGATION
+     ========================= -->
+
+<nav class="topbar">
+
+    <a href="#" class="brand">
+
+        <div class="brand-logo">
+
+            <img src="~/images/logo.png"
+                 alt="Exclusive Distributors Logo" />
+
         </div>
 
-        <h3 class="fw-bold mb-1"
-            style="color: #1c323d;">
-            Exclusive Distributors
-        </h3>
+        <div>
 
-        <p class="text-muted small mb-4">
-            Enterprise System Portal
+            <div class="brand-name">
+                Exclusive Distributors
+            </div>
+
+            <span class="brand-subtitle">
+                Enterprise Management System
+            </span>
+
+        </div>
+
+    </a>
+
+
+    <button type="button"
+            class="nav-login"
+            id="openLogin">
+
+        <i class="bi bi-box-arrow-in-right me-1"></i>
+
+        Login
+
+    </button>
+
+</nav>
+
+
+<!-- =========================
+     HERO
+     ========================= -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <div class="eyebrow">
+
+            <i class="bi bi-box-seam"></i>
+
+            FMCG Distribution Management
+
+        </div>
+
+
+        <h1>
+
+            Moving products.<br />
+
+            <span>
+                Connecting business.
+            </span>
+
+        </h1>
+
+
+        <p class="hero-description">
+
+            Exclusive Distributors is an FMCG distribution business
+            focused on managing products, customers, sales and
+            distribution efficiently. Our enterprise system brings
+            essential business operations together in one central
+            platform.
+
         </p>
+
+
+        <div class="business-strip">
+
+            <div class="business-item">
+
+                <i class="bi bi-box-seam"></i>
+
+                Inventory Management
+
+            </div>
+
+
+            <div class="business-item">
+
+                <i class="bi bi-cart3"></i>
+
+                Sales & Orders
+
+            </div>
+
+
+            <div class="business-item">
+
+                <i class="bi bi-truck"></i>
+
+                Distribution
+
+            </div>
+
+
+            <div class="business-item">
+
+                <i class="bi bi-people"></i>
+
+                Customer Management
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="distribution-visual">
+
+        <div class="visual-circle circle-one"></div>
+
+        <div class="visual-circle circle-two"></div>
+
+        <div class="visual-circle circle-three"></div>
+
+
+        <div class="warehouse-box">
+
+            <i class="bi bi-box-seam"></i>
+
+        </div>
+
+
+        <div class="route-point point-one"></div>
+
+        <div class="route-point point-two"></div>
+
+        <div class="route-point point-three"></div>
+
+        <div class="route-point point-four"></div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     ABOUT THE BUSINESS
+     ========================= -->
+
+<section class="about-section">
+
+    <div class="section-label">
+        About Exclusive Distributors
+    </div>
+
+
+    <h2>
+        Built around the way an FMCG business operates.
+    </h2>
+
+
+    <p class="about-text">
+
+        Exclusive Distributors operates within the fast-moving consumer
+        goods environment, where products move continuously between
+        suppliers, the business and customers. Managing these activities
+        effectively requires accurate information, organised records and
+        visibility across everyday operations.
+
+        <br /><br />
+
+        The Enterprise Management System provides a central platform
+        designed to support the business as it grows, helping employees
+        manage important operational information while reducing
+        unnecessary manual processes.
+
+    </p>
+
+
+    <div class="operations">
+
+        <div class="operation-card">
+
+            <div class="operation-icon">
+
+                <i class="bi bi-boxes"></i>
+
+            </div>
+
+            <h5>
+                Inventory
+            </h5>
+
+            <p>
+
+                Manage products and stock information while maintaining
+                visibility across inventory operations.
+
+            </p>
+
+        </div>
+
+
+        <div class="operation-card">
+
+            <div class="operation-icon">
+
+                <i class="bi bi-receipt"></i>
+
+            </div>
+
+            <h5>
+                Sales
+            </h5>
+
+            <p>
+
+                Keep customer orders, sales information and invoicing
+                activities organised within one system.
+
+            </p>
+
+        </div>
+
+
+        <div class="operation-card">
+
+            <div class="operation-icon">
+
+                <i class="bi bi-truck"></i>
+
+            </div>
+
+            <h5>
+                Distribution
+            </h5>
+
+            <p>
+
+                Support the movement of FMCG products from the business
+                through to customers and delivery operations.
+
+            </p>
+
+        </div>
+
+
+        <div class="operation-card">
+
+            <div class="operation-icon">
+
+                <i class="bi bi-people"></i>
+
+            </div>
+
+            <h5>
+                Customers
+            </h5>
+
+            <p>
+
+                Maintain organised customer information and support
+                efficient day-to-day customer interactions.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     LOGIN PANEL
+     ========================= -->
+
+<div class="login-overlay"
+     id="loginOverlay">
+
+    <div class="login-card">
+
+        <button type="button"
+                class="close-login"
+                id="closeLogin"
+                aria-label="Close login">
+
+            <i class="bi bi-x-lg"></i>
+
+        </button>
+
+
+        <div class="text-center">
+
+            <div class="brand-icon">
+
+                <img src="~/images/logo.png"
+                     alt="Exclusive Distributors Logo" />
+
+            </div>
+
+
+            <h3 class="fw-bold mb-1">
+                Exclusive Distributors
+            </h3>
+
+
+            <p class="text-muted small mb-4">
+                Enterprise System Portal
+            </p>
+
+        </div>
+
 
         <form asp-controller="Account"
               asp-action="Login"
@@ -130,75 +1125,107 @@
 
             @Html.AntiForgeryToken()
 
+
             <div asp-validation-summary="ModelOnly"
                  class="alert alert-danger"
                  role="alert">
             </div>
 
-            <div class="mb-3 text-start">
 
-                <div class="mb-3 text-start">
-
-    <label asp-for="Email"
-           class="form-label fw-bold text-secondary small">
-    </label>
-
-    <div class="input-group">
-
-        <span class="input-group-text bg-white text-muted">
-            <i class="bi bi-envelope"></i>
-        </span>
-
-        <input asp-for="Email"
-               class="form-control"
-               placeholder="Enter email address"
-               autocomplete="email" />
-
-    </div>
-
-    <span asp-validation-for="Email"
-          class="text-danger small">
-    </span>
-
-</div>
+            <!-- EMAIL -->
 
             <div class="mb-3 text-start">
 
-                <div class="mb-3 text-start">
+                <label asp-for="Email"
+                       class="form-label fw-bold text-secondary small">
+                </label>
 
-    <label asp-for="Password"
-           class="form-label fw-bold text-secondary small">
-    </label>
 
-    <div class="input-group">
+                <div class="input-group">
 
-        <span class="input-group-text bg-white text-muted">
-            <i class="bi bi-lock"></i>
-        </span>
+                    <span class="input-group-text bg-white text-muted">
 
-        <input asp-for="Password"
-               id="passwordInput"
-               class="form-control"
-               placeholder="Enter password"
-               autocomplete="current-password" />
+                        <i class="bi bi-envelope"></i>
 
-        <button type="button"
-                id="togglePassword"
-                class="btn btn-outline-secondary"
-                aria-label="Show password">
+                    </span>
 
-            <i id="passwordIcon"
-               class="bi bi-eye"></i>
 
-        </button>
+                    <input asp-for="Email"
+                           class="form-control"
+                           placeholder="Enter email address"
+                           autocomplete="email" />
 
-    </div>
+                </div>
 
-    <span asp-validation-for="Password"
-          class="text-danger small">
-    </span>
 
-</div>
+                <span asp-validation-for="Email"
+                      class="text-danger small">
+                </span>
+
+            </div>
+
+
+            <!-- PASSWORD -->
+
+            <div class="mb-2 text-start">
+
+                <label asp-for="Password"
+                       class="form-label fw-bold text-secondary small">
+                </label>
+
+
+                <div class="input-group">
+
+                    <span class="input-group-text bg-white text-muted">
+
+                        <i class="bi bi-lock"></i>
+
+                    </span>
+
+
+                    <input asp-for="Password"
+                           id="passwordInput"
+                           class="form-control"
+                           placeholder="Enter password"
+                           autocomplete="current-password" />
+
+
+                    <button type="button"
+                            id="togglePassword"
+                            class="btn btn-outline-secondary"
+                            aria-label="Show password">
+
+                        <i id="passwordIcon"
+                           class="bi bi-eye"></i>
+
+                    </button>
+
+                </div>
+
+
+                <span asp-validation-for="Password"
+                      class="text-danger small">
+                </span>
+
+            </div>
+
+
+            <!-- FORGOT PASSWORD -->
+
+            <div class="text-end mb-3">
+
+                <a asp-controller="Account"
+                   asp-action="ForgotPassword"
+                   class="forgot-password-link">
+
+                    Forgot Password?
+
+                </a>
+
+            </div>
+
+
+            <!-- REMEMBER ME -->
 
             <div class="form-check text-start mb-4">
 
@@ -211,20 +1238,77 @@
 
             </div>
 
+
             <button type="submit"
                     class="btn btn-login w-100 shadow-sm">
+
                 Login to System
+
             </button>
 
         </form>
 
     </div>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+</div>
 
-    <script>
+
+<!-- =========================
+     JAVASCRIPT
+     ========================= -->
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+
+<script>
+
+    const openLogin =
+        document.getElementById("openLogin");
+
+    const closeLogin =
+        document.getElementById("closeLogin");
+
+    const loginOverlay =
+        document.getElementById("loginOverlay");
+
+
+    openLogin.addEventListener(
+        "click",
+        function () {
+
+            loginOverlay.classList.add("active");
+
+        });
+
+
+    closeLogin.addEventListener(
+        "click",
+        function () {
+
+            loginOverlay.classList.remove("active");
+
+        });
+
+
+    loginOverlay.addEventListener(
+        "click",
+        function (event) {
+
+            if (event.target === loginOverlay) {
+
+                loginOverlay.classList.remove("active");
+
+            }
+
+        });
+
+
+    /* Password visibility */
+
     const passwordInput =
         document.getElementById("passwordInput");
 
@@ -234,29 +1318,42 @@
     const passwordIcon =
         document.getElementById("passwordIcon");
 
-    togglePassword.addEventListener("click", function () {
 
-        const passwordIsHidden =
-            passwordInput.type === "password";
+    togglePassword.addEventListener(
+        "click",
+        function () {
 
-        passwordInput.type =
-            passwordIsHidden ? "text" : "password";
+            const passwordIsHidden =
+                passwordInput.type === "password";
 
-        passwordIcon.classList.toggle(
-            "bi-eye",
-            !passwordIsHidden);
 
-        passwordIcon.classList.toggle(
-            "bi-eye-slash",
-            passwordIsHidden);
+            passwordInput.type =
+                passwordIsHidden
+                    ? "text"
+                    : "password";
 
-        togglePassword.setAttribute(
-            "aria-label",
-            passwordIsHidden
-                ? "Hide password"
-                : "Show password");
-    });
+
+            passwordIcon.classList.toggle(
+                "bi-eye",
+                !passwordIsHidden);
+
+
+            passwordIcon.classList.toggle(
+                "bi-eye-slash",
+                passwordIsHidden);
+
+
+            togglePassword.setAttribute(
+                "aria-label",
+                passwordIsHidden
+                    ? "Hide password"
+                    : "Show password");
+
+        });
+
 </script>
 
+
 </body>
+
 </html>

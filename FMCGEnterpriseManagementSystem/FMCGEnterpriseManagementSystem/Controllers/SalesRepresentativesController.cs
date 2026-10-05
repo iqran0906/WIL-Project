@@ -1,5 +1,8 @@
-﻿// Purpose: Controller for the sales representatives pages and form submissions.
-// Authors: iqran0906 (from git history)
+﻿//  Title: Role-based authorization in ASP.NET Core
+//  Author: Microsoft
+//  Date: 14-10-2024
+//  Code version: ASP.NET Core 10.0
+//  Availability: https://learn.microsoft.com/aspnet/core/security/authorization/roles
 
 using FMCGEnterpriseManagementSystem.Services.Interfaces;
 using FMCGEnterpriseManagementSystem.ViewModels;
@@ -9,12 +12,15 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FMCGEnterpriseManagementSystem.Controllers
 {
+    // Only administrators can manage sales representatives.
     [Authorize(Roles = "Administrator")]
     public class SalesRepresentativesController : Controller
     {
+        // Service handles sales representative business operations.
         private readonly ISalesRepresentativeService
             _salesRepresentativeService;
 
+        // Dependency injection provides the sales representative service.
         public SalesRepresentativesController(
             ISalesRepresentativeService salesRepresentativeService)
         {
@@ -22,7 +28,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 salesRepresentativeService;
         }
 
-        // Displays all sales representatives and supports searching
+        // Displays all sales representatives and supports searching.
         [HttpGet]
         public async Task<IActionResult> Index(string? keyword)
         {
@@ -35,7 +41,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return View(salesRepresentatives);
         }
 
-        // Displays the Create Sales Representative form
+        // Displays the Create Sales Representative form.
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -44,12 +50,13 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return View(new SalesRepresentativeViewModel());
         }
 
-        // Creates the Sales Representative
+        // Creates the Sales Representative.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
      SalesRepresentativeViewModel model)
         {
+            // Return the form when required information is missing or invalid.
             if (!ModelState.IsValid)
             {
                 await LoadEligibleEmployeesAsync(
@@ -58,6 +65,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 return View(model);
             }
 
+            // The service checks whether the selected employee can be assigned as a sales representative.
             var created =
                 await _salesRepresentativeService
                     .CreateAsync(model);
@@ -81,7 +89,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // Displays the Edit Sales Representative form
+        // Displays the Edit Sales Representative form.
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
@@ -97,17 +105,19 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return View(salesRepresentative);
         }
 
-        // Updates the Sales Representative
+        // Updates the Sales Representative.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(
             SalesRepresentativeViewModel model)
         {
+            // Prevent invalid sales representative information from being saved.
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
+            // Check that the sales representative code is unique, excluding the current sales representative.
             var codeExists =
                 await _salesRepresentativeService
                     .SalesRepCodeExistsAsync(
@@ -138,7 +148,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // Deactivates a Sales Representative without deleting history
+        // Deactivates a Sales Representative without deleting history.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Deactivate(int id)
@@ -158,6 +168,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // Loads employees who are eligible to become sales representatives.
         private async Task LoadEligibleEmployeesAsync(
      string? selectedEmployeeId = null)
         {
@@ -165,6 +176,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 await _salesRepresentativeService
                     .GetEligibleEmployeesAsync();
 
+            // Converts eligible employees into dropdown-friendly display values.
             var employeeOptions =
                 employees.Select(employee => new
                 {
