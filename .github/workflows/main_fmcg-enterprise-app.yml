@@ -19,10 +19,10 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Build with dotnet
-        run: dotnet build FMCGEnterpriseManagementSystem/FMCGEnterpriseManagementSystem.sln --configuration Release -p:TreatWarningsAsErrors=false
+        run: dotnet build FMCGEnterpriseManagementSystem/FMCGEnterpriseManagementSystem/FMCGEnterpriseManagementSystem.csproj --configuration Release -p:TreatWarningsAsErrors=false
 
       - name: dotnet publish
-        run: dotnet publish FMCGEnterpriseManagementSystem/FMCGEnterpriseManagementSystem.sln -c Release -o ./publish -p:TreatWarningsAsErrors=false
+        run: dotnet publish FMCGEnterpriseManagementSystem/FMCGEnterpriseManagementSystem/FMCGEnterpriseManagementSystem.csproj -c Release -o ./publish -p:TreatWarningsAsErrors=false
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
