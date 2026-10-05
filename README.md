@@ -4,13 +4,15 @@
 
 The **FMCG Enterprise Management System** is an ASP.NET Core MVC web application developed for **Exclusive Distributors (Pty) Ltd**, a Fast-Moving Consumer Goods (FMCG) business.
 
-The purpose of the system is to bring the company's day-to-day business operations together into one centralised platform. Instead of managing customers, products, inventory, quotations, invoices, payments and business reports separately, the system connects these processes so that information can move naturally from one part of the business to another.
+The purpose of the system is to bring the company's day-to-day business operations together into one centralised platform. Instead of managing customers, suppliers, products, inventory, quotations, invoices, payments and business reports separately, the system connects these processes so that information can move naturally between different areas of the business.
 
-For example, a sales representative can work with a customer, create a quotation, have the quotation approved, convert it into an invoice, record payments against that invoice and ultimately have the corresponding stock deducted from inventory.
+For example, a Sales Representative can work with a customer and create a quotation. The quotation can then be converted into an invoice, which initially enters a pending state. An Administrator can review and approve the invoice, at which point the relevant stock quantities are deducted from inventory. Payments can then be recorded against the approved invoice until the outstanding balance reaches zero and the completed invoice moves into invoice history.
 
-The system also provides role-based access, reporting, forecasting, notifications and document exporting, allowing different members of the organisation to work with the information relevant to their responsibilities.
+The system also provides role-based access control, employee and Sales Representative administration, stock forecasting, notifications, reporting, document exports, email functionality and user account management. These features allow different members of the organisation to access and manage the information relevant to their responsibilities.
 
-This project was developed as a **group Work Integrated Learning (WIL) project**, giving the development team practical experience in software development, database management, version control, system integration, security and collaborative development.
+The project also includes a separate API component that supports email communication between the system and its users, as well as automated unit testing for key business processes.
+
+This project was developed as a **group Work Integrated Learning (WIL) project**, providing the development team with practical experience in full-stack software development, database management, API integration, version control, automated testing, continuous integration, system integration, security and collaborative software development.
 
 ---
 
@@ -21,52 +23,80 @@ This project was developed as a **group Work Integrated Learning (WIL) project**
 3. [Solution](#solution)
 4. [Objectives](#objectives)
 5. [Main Features](#main-features)
+   - [1. Authentication, User Accounts and Role Management](#1-authentication-user-accounts-and-role-management)
+   - [2. Customer Management](#2-customer-management)
+   - [3. Supplier Management](#3-supplier-management)
+   - [4. Product Management](#4-product-management)
+   - [5. Inventory Management](#5-inventory-management)
+   - [6. Stock Batch Management](#6-stock-batch-management)
+   - [7. Quotation Management](#7-quotation-management)
+   - [8. Invoice Management](#8-invoice-management)
+   - [9. Payment Management](#9-payment-management)
+   - [10. Employee Management](#10-employee-management)
+   - [11. Sales Representative Management](#11-sales-representative-management)
 6. [Business Workflow](#business-workflow)
-7. [Forecasting](#forecasting)
-8. [Technology Stack](#technology-stack)
-9. [System Architecture](#system-architecture)
-10. [Design Patterns](#design-patterns)
-11. [Project Structure](#project-structure)
-12. [Database](#database)
-13. [Security](#security)
-14. [Notifications](#notifications)
-15. [Email API](#email-api)
-16. [PDF and Excel Exports](#pdf-and-excel-exports)
-17. [Getting Started](#getting-started)
-18. [Configuration](#configuration)
-19. [Running the Application](#running-the-application)
-20. [Git and Collaboration Workflow](#git-and-collaboration-workflow)
-21. [Testing and Integration](#testing-and-integration)
-22. [Team Responsibilities](#team-responsibilities)
-23. [Future Improvements](#future-improvements)
-24. [License](#license)
+7. [VAT Rules](#vat-rules)
+8. [Forecasting](#forecasting)
+9. [Dashboard and Reporting](#dashboard-and-reporting)
+10. [Technology Stack](#technology-stack)
+11. [System Architecture](#system-architecture)
+12. [Dependency Injection](#dependency-injection)
+13. [Design Patterns](#design-patterns)
+14. [Project Structure](#project-structure)
+15. [Database](#database)
+16. [Entity Framework Core](#entity-framework-core)
+17. [Security](#security)
+18. [Notifications](#notifications)
+19. [Email API](#email-api)
+20. [PDF and Excel Exports](#pdf-and-excel-exports)
+21. [Getting Started](#getting-started)
+22. [Clone the Repository](#clone-the-repository)
+23. [Database Configuration](#database-configuration)
+24. [Applying Database Migrations](#applying-database-migrations)
+25. [Email Configuration](#email-configuration)
+26. [Running the Application](#running-the-application)
+27. [Default Roles](#default-roles)
+28. [Git and Collaboration Workflow](#git-and-collaboration-workflow)
+29. [Shared Model and Migration Considerations](#shared-model-and-migration-considerations)
+30. [Testing and Integration](#testing-and-integration)
+31. [Team Responsibilities](#team-responsibilities)
+32. [Integration Between Modules](#integration-between-modules)
+33. [Example End-to-End Scenario](#example-end-to-end-scenario)
+34. [Future Improvements](#future-improvements)
+35. [Academic and WIL Context](#academic-and-wil-context)
+36. [Conclusion](#conclusion)
+37. [License](#license)
 
 ---
 
 # Project Overview
 
-Exclusive Distributors operates in the FMCG industry, where the business needs to manage a large amount of information relating to products, customers, suppliers, inventory and sales.
+Exclusive Distributors operates within the Fast-Moving Consumer Goods (FMCG) industry, where the business needs to manage information relating to customers, suppliers, products, inventory, sales, payments and employees efficiently.
 
-The **FMCG Enterprise Management System** was designed to provide a single system where these processes can be managed.
+The **FMCG Enterprise Management System** was developed to provide a single centralised system through which these business processes can be managed and connected.
 
-The application follows the journey of a sale from the initial customer interaction through to payment:
+Rather than functioning as a collection of independent CRUD modules, the application integrates the different areas of the business. Information created in one module can be used throughout later stages of the business workflow.
+
+The core sales process follows the journey from an initial customer quotation through to a completed and paid invoice:
 
 ```text
 Customer
    ↓
 Quotation
    ↓
-Quotation Approval
+Convert to Invoice
    ↓
-Invoice
+Pending Invoice
    ↓
-Invoice Confirmation
+Administrator Approval
    ↓
-Inventory Updated
+Inventory Deduction
    ↓
 Payment(s)
    ↓
-Payment Status
+Partially Paid / Paid
+   ↓
+Invoice History
 ```
 
 The system also supports the operational activities surrounding this workflow, including:
@@ -95,162 +125,368 @@ The overall goal is to provide a system where information entered in one part of
 
 # Problem Statement
 
-FMCG businesses deal with a large amount of information every day.
+Exclusive Distributors operates within the Fast-Moving Consumer Goods (FMCG) industry, where multiple business activities must be managed simultaneously. These activities include maintaining customer and supplier information, managing products and inventory, preparing quotations and invoices, recording payments, monitoring stock levels and providing management with useful operational information.
 
-Customers need to be managed, products need to be tracked, suppliers need to be recorded, stock levels need to be monitored and sales documents need to be created and followed through to payment.
+When these processes are handled separately or rely heavily on manual administration, business information can become fragmented and difficult to manage.
 
-When these processes are handled separately, several problems can occur.
+This can create several operational challenges, including:
 
-For example:
+* Customer and supplier information being stored or managed separately from related transactions.
+* Product information becoming disconnected from current inventory levels.
+* Difficulty monitoring available stock, reorder levels and stock batches.
+* Quotations not being clearly connected to the invoices generated from them.
+* Stock being updated inconsistently when sales take place.
+* Difficulty tracking outstanding, partially paid and fully paid invoices.
+* Limited visibility of historical or inactive business records.
+* Employees having access to functionality that is not relevant to their responsibilities.
+* Important business events, such as low stock or new transactions, being overlooked.
+* Management information requiring data to be gathered manually from different areas.
+* Difficulty maintaining a clear record of the progression of a transaction from quotation through to payment.
 
-* Customer information can become difficult to find.
-* Stock information may not accurately reflect sales.
-* Quotations and invoices can become disconnected.
-* Payment information can be difficult to track.
-* Employees may have access to information they do not require.
-* Business reports may require information to be collected manually.
-* Low stock may not be identified early enough.
-* Important business events may not be communicated to the relevant users.
+These challenges are particularly important in an FMCG environment because products and stock quantities can change frequently and the business needs reliable information to support day-to-day operations.
 
-These problems can make it harder for a business to maintain accurate information and make informed operational decisions.
+Exclusive Distributors therefore required a centralised system capable of connecting these business processes while maintaining appropriate access control, data consistency and historical information.
 
+The system needed to support the complete flow of information between customers, quotations, invoices, inventory and payments while also providing supporting functionality such as reporting, forecasting, notifications, document exports and user administration.
 ---
 
 # Solution
 
-The FMCG Enterprise Management System addresses these challenges by providing a **centralised business management platform**.
+The **FMCG Enterprise Management System** addresses these challenges by providing Exclusive Distributors with a centralised platform that connects the organisation's main operational, sales and administrative processes.
 
-The system connects the main business processes together.
+Rather than treating customers, products, inventory, quotations, invoices and payments as unrelated records, the system allows information to flow between these modules as part of a connected business process.
 
-For example:
+A typical sales transaction follows this process:
 
-1. A customer is registered in the system.
-2. A quotation can be created for that customer.
-3. The quotation can go through an approval process.
-4. Once approved, it can be converted into an invoice.
-5. The invoice contains the relevant products and pricing information.
-6. Confirming the invoice deducts the sold quantities from inventory.
-7. One or more payments can then be recorded against the invoice.
-8. The system determines whether the invoice is unpaid, partially paid or fully paid.
-9. Relevant records can be exported or included in reports.
-10. Notifications can be sent when important business events occur.
+1. A customer is registered and can be assigned to a Sales Representative.
+2. A quotation is created for the customer using products available within the system.
+3. The quotation can be reviewed and edited while it remains a current quotation.
+4. When the customer proceeds with the sale, the quotation can be converted into an invoice.
+5. The converted quotation is retained in quotation history, preserving the relationship between the original quotation and the resulting invoice.
+6. The newly created invoice enters a **Pending** state.
+7. An Administrator reviews the invoice and approves it.
+8. When the invoice changes from **Pending** to **Approved**, the corresponding product quantities are deducted from inventory.
+9. Payments can then be recorded against the approved invoice.
+10. The system calculates the amount already paid and the remaining outstanding balance.
+11. Multiple payments can be recorded until the invoice is fully paid.
+12. Once the outstanding balance reaches zero, the completed invoice is displayed in **Invoice History**.
+13. Transaction information can contribute to reports, dashboard information, notifications and other operational functionality.
 
-This creates a connected workflow rather than a collection of unrelated CRUD pages.
+The system also provides supporting administrative functionality for managing:
 
+* Employees
+* Sales Representatives
+* User accounts
+* Roles and permissions
+* Customers
+* Suppliers
+* Products
+* Inventory
+* Stock information
+
+Instead of permanently removing important business information in every situation, the application preserves records where appropriate through active, inactive, discontinued, deactivated and historical states. This allows previous business information to remain available without cluttering the current operational views.
+
+Role-based authorisation ensures that users only have access to the functionality appropriate to their responsibilities. Administrators have access to sensitive administrative functionality, while Employees and Sales Representatives are provided with access according to the requirements of their roles.
+
+The application further supports business operations through:
+
+* Dashboard analytics
+* Operational reports
+* Stock forecasting
+* Notifications
+* Email communication through a separate API
+* PDF and Excel exports
+* User profile and account functionality
+* Password recovery through email
+* Automated unit testing
+* Git-based collaborative development and integration
+
+Together, these features create an integrated enterprise management system rather than a collection of independent data-entry pages.
 ---
 
 # Objectives
 
-The main objectives of the system are to:
+The primary objective of the **FMCG Enterprise Management System** is to provide Exclusive Distributors with a centralised platform for managing and connecting its main business operations.
 
-* Centralise FMCG business information.
-* Improve the management of customers and suppliers.
-* Maintain accurate product and inventory information.
-* Track stock quantities and reorder levels.
-* Manage quotations and their approval process.
-* Create and manage invoices.
-* Track multiple payments against invoices.
-* Provide role-based access to system functionality.
-* Notify users about important business events.
-* Allow business documents to be exported.
-* Provide operational reports.
-* Provide basic stock forecasting.
-* Apply appropriate software engineering principles.
-* Demonstrate practical database and application development.
-* Provide experience with collaborative Git-based development.
+The objectives of the system are to:
+
+* Centralise customer, supplier, product, inventory, employee and sales information.
+* Provide secure user authentication and account management.
+* Implement role-based authorisation for Administrators, Employees and Sales Representatives.
+* Manage customer information and associate customers with Sales Representatives.
+* Maintain supplier and product information.
+* Monitor inventory quantities, reorder levels and stock information.
+* Support stock batch and expiry-related information.
+* Create and manage customer quotations.
+* Convert quotations into invoices while retaining the original quotation in quotation history.
+* Provide an invoice approval process before stock and payment processing takes place.
+* Automatically deduct the relevant stock quantities when an invoice is approved.
+* Record multiple payments against approved invoices.
+* Calculate outstanding invoice balances and distinguish between approved, partially paid and fully paid invoices.
+* Maintain invoice history for completed and fully paid transactions.
+* Preserve inactive, deactivated, discontinued and historical records where appropriate.
+* Provide operational reports and dashboard information to support business decision-making.
+* Provide stock forecasting to assist with inventory planning.
+* Generate notifications for relevant business events.
+* Support email communication through a separate API component.
+* Provide password recovery through email.
+* Allow applicable business information and documents to be exported to PDF and Excel formats.
+* Apply server-side validation and appropriate security controls.
+* Use a layered architecture to separate presentation, business logic and data access responsibilities.
+* Apply software design patterns where appropriate to improve maintainability and separation of concerns.
+* Use Entity Framework Core and SQL Server for relational data management.
+* Use automated unit testing to verify important business rules and workflows.
+* Use Git and GitHub to support collaborative development, feature branching and system integration.
+* Support continuous integration through GitHub Actions.
+* Provide practical experience with the development, integration, testing and deployment of a multi-module enterprise application.
 
 ---
 
 # Main Features
 
-## 1. Authentication and Role Management
+## 1. Authentication, User Accounts and Role Management
 
-The system uses **ASP.NET Core Identity** to manage user authentication.
+The system uses **ASP.NET Core Identity** for authentication, user account management and role-based authorisation.
 
-Users log into the system using their accounts, and access to functionality is controlled using roles.
+Users are required to authenticate before accessing protected areas of the application. ASP.NET Core Identity manages the underlying user accounts and provides secure password hashing rather than storing passwords as plain text.
 
-The main roles are:
+The system uses three primary roles:
 
 * **Administrator**
 * **Employee**
 * **Sales Representative**
 
-Role-based authorisation prevents every user from automatically having access to every area of the application.
+Access to system functionality is controlled according to these roles.
 
-This allows the system to reflect the responsibilities of different employees within the organisation.
+### Administrator
+
+Administrators have the highest level of access and are responsible for administrative and management functionality. This includes areas such as:
+
+* Employee management
+* Sales Representative management
+* User account management
+* Reports
+* System-wide administrative functionality
+
+### Employee
+
+Employees can access operational functionality required for day-to-day business activities, including applicable areas such as:
+
+* Customers
+* Suppliers
+* Products
+* Inventory
+* Forecasting
+* Quotations
+* Invoices
+* Payments
+* Notifications
+
+Employees do not automatically receive access to administrator-only user and employee administration functionality.
+
+### Sales Representative
+
+Sales Representatives are primarily provided with access to sales-related functionality, including applicable areas such as:
+
+* Customers
+* Quotations
+* Invoices
+* Payments
+* Notifications
+
+This allows Sales Representatives to work with customer and sales information without being given unnecessary access to administrative functionality.
+
+### User Account Management
+
+Administrator functionality is provided for managing system user accounts and their associated access.
+
+Employee and Sales Representative information can therefore operate alongside the application's Identity-based authentication and role system.
+
+### Login and Access Control
+
+The authentication workflow includes:
+
+* Secure login
+* Logout
+* Role-based access control
+* Access-denied handling
+* Authentication cookies
+* Server-side user validation
+* User profile functionality
+
+Controller actions are protected using ASP.NET Core authorisation mechanisms where appropriate.
+
+For example:
+
+```csharp
+[Authorize(Roles = "Administrator")]
+```
 
 ---
 
 ## 2. Customer Management
 
-The customer module allows the business to maintain customer information in one place.
+The Customer Management module provides a central location for maintaining customer information used throughout the sales process.
 
-Users can manage customer records and associate customers with Sales Representatives.
+Authorised users can:
 
-This relationship helps connect customer information with the sales process.
+* Add new customers
+* View customer information
+* Edit existing customer information
+* Search and filter customer records
+* Assign customers to Sales Representatives
+* Record customer contact information
+* Record the customer's preferred payment method
+* Deactivate customer records
+* Restore previously deactivated customers
 
-Customer information can subsequently be used by other modules such as:
+Customer information includes the details required by the business for customer administration and subsequent sales transactions.
 
-* Quotations
-* Invoices
-* Payments
-* Reports
-* Notifications
+Supported payment methods include:
+
+* EFT
+* Cash
+* COD
+* Up-Front Payment
+
+### Sales Representative Assignment
+
+Customers can be associated with a Sales Representative.
+
+This creates a relationship between customer management and the sales process and allows the business to identify the representative responsible for a particular customer.
+
+Conceptually:
+
+```text
+Sales Representative
+        ↓
+     Customer
+        ↓
+     Quotation
+        ↓
+      Invoice
+        ↓
+      Payment
+```
 
 ---
 
 ## 3. Supplier Management
 
-Supplier information is maintained separately from customer information.
+The Supplier Management module allows authorised users to maintain information about the suppliers used by Exclusive Distributors.
 
-Suppliers can be associated with products, allowing the business to maintain information about where products originate from.
+Supplier records provide the business with a central location for storing supplier information and maintaining the relationship between suppliers and the products they provide.
 
-Supplier and product information can then be used as part of inventory and purchasing-related processes.
+Authorised users can:
 
+* Add new suppliers
+* View supplier information
+* Edit supplier information
+* Search supplier records
+* Maintain supplier contact details
+* Deactivate suppliers
+* Reactivate previously deactivated suppliers
+
+### Supplier and Product Relationship
+
+Suppliers can be associated with products within the system.
+
+This creates the following relationship:
+
+```text
+Supplier
+    ↓
+ Product
+    ↓
+Inventory
+```
 ---
 
 ## 4. Product Management
 
-The Product module stores the master information about products sold by Exclusive Distributors.
+The Product Management module maintains the master information for the products sold by Exclusive Distributors.
 
-Product information includes information such as:
+Products are maintained separately from inventory because product information and stock information represent different business concepts.
+
+A **Product** describes the item being sold, while **Inventory** represents the current stock position of that product.
+
+Product information includes details such as:
 
 * Product code
 * Product name
 * Description
 * Category
+* Supplier
 * Cost excluding VAT
 * Cost including VAT
 * Selling price
-* Active/inactive status
+* Active status
 
-Products are kept separate from inventory because a product and its stock state represent different concepts.
+Authorised users can:
 
-The **Product** record describes what an item is, while **Inventory** describes how much of that item is currently available.
+* Add new products
+* View product information
+* Edit existing products
+* Search and filter products
+* Associate products with suppliers
+* Maintain product pricing information
+* Discontinue products
+* Reactivate previously discontinued products
 
+### Product Pricing
+
+The system maintains product cost and selling-price information that can subsequently be used throughout the sales workflow.
+
+Financial values are stored using decimal values to provide appropriate precision for currency-related information.
+
+### Selling Price Warning
+
+When creating or editing a product, the system checks whether the entered selling price is lower than the product's cost excluding VAT.
+
+If:
+
+```text
+Selling Price < Cost Excluding VAT
+```
 ---
 
 ## 5. Inventory Management
 
-The Inventory module manages the stock currently held by the business.
+The Inventory Management module maintains information about the stock held by Exclusive Distributors.
 
-Inventory includes information such as:
+Inventory is linked to products through `ProductId`, allowing the system to maintain product master information separately from stock quantities that change during normal business operations.
+
+Inventory information includes details such as:
 
 * Product
 * Quantity on hand
 * Reorder level
 * Notes
-* Stock batches
-* Expiry dates
+* Stock-related information
 
-Stock can also be tracked using individual batches.
+Authorised users can view and manage inventory information and monitor the current stock position of products.
 
-This is useful for FMCG products because different batches of the same product may have different quantities and expiry dates.
+### Quantity on Hand
 
-Inventory is also connected to the invoice workflow.
+The **Quantity on Hand** represents the current quantity of a product available within inventory.
 
-When an invoice is confirmed, the quantities sold can be deducted from inventory.
+This value can change as stock-related transactions take place.
 
+One of the most important integrations in the system occurs between **Invoices and Inventory**.
+
+The process is:
+
+```text
+Quotation
+     ↓
+Convert to Invoice
+     ↓
+Pending Invoice
+     ↓
+Administrator Approval
+     ↓
+Inventory Quantity Deducted
+```
 ---
 
 ## 6. Stock Batch Management
@@ -272,82 +508,90 @@ It also provides the foundation for monitoring products that have expiry dates.
 
 ## 7. Quotation Management
 
-The quotation module allows users to create quotations for customers.
+The Quotation Management module allows authorised users to prepare quotations for customers before a sale progresses to the invoice stage.
 
-A quotation represents a proposed sale before the sale is finalised.
+A quotation represents a proposed transaction and contains the customer, relevant products, quantities and pricing information required for the proposed sale.
 
-The quotation process includes an approval stage.
+Authorised users can:
 
-The general workflow is:
+* Create quotations
+* View quotation details
+* Edit current quotations
+* Search and filter quotations
+* Generate quotation documents
+* Send applicable quotation information through the email functionality
+* Convert quotations into invoices
+* View previously converted quotations in Quotation History
+
+### Quotation Workflow
+
+The quotation process forms the beginning of the application's main sales workflow.
+
+The final workflow is:
 
 ```text
 Customer
    ↓
 Quotation Created
    ↓
-Quotation Reviewed
+Quotation Reviewed / Edited
    ↓
-Quotation Approved
+Convert to Invoice
    ↓
-Invoice Created
+Pending Invoice
 ```
-
-Keeping quotations separate from invoices allows the business to distinguish between proposed sales and confirmed sales.
-
 ---
 
 ## 8. Invoice Management
 
-Invoices are created as part of the sales workflow.
+The Invoice Management module manages confirmed sales transactions after they progress beyond the quotation stage.
 
-An invoice contains the products being sold, quantities, prices and applicable VAT.
+Invoices can be created through the quotation-to-invoice workflow and contain the customer, products, quantities, pricing and financial information required for the transaction.
 
-The system also links an invoice to its originating quotation where applicable.
+The invoice workflow is connected directly to inventory and payment management, making it one of the central components of the system.
 
-This makes the sales process traceable.
+### Invoice Workflow
 
-For example:
+A newly created invoice does not immediately deduct stock or accept payments.
 
-```text
-Quotation ED00001
-       ↓
-Invoice ED00001
-```
+The invoice first enters a **Pending** state and must be approved by an Administrator.
 
-The system uses a document numbering convention consisting of:
+The workflow is:
 
 ```text
-ED + five-digit number
+Quotation
+    ↓
+Convert to Invoice
+    ↓
+Pending Invoice
+    ↓
+Administrator Approval
+    ↓
+Approved Invoice
+    ↓
+Inventory Deduction
+    ↓
+Payment(s)
+    ↓
+Partially Paid / Paid
+    ↓
+Invoice History
 ```
-
-Examples include:
-
-```text
-ED00001
-ED00002
-ED00003
-```
-
-When an invoice is confirmed, the corresponding inventory quantities are deducted.
-
 ---
 
 ## 9. Payment Management
 
-The payment module manages payments made against invoices.
+The Payment Management module records payments received against approved invoices and allows the business to track the outstanding balance of each transaction.
 
-The system supports **multiple payments against one invoice**.
-
-For example:
+Payments are directly associated with invoices, creating a one-to-many relationship:
 
 ```text
-Invoice Total:     R10,000
-
-Payment 1:          R3,000
-Payment 2:          R2,000
-Payment 3:          R5,000
-
-Total Paid:        R10,000
+Invoice
+   ↓
+Payments
+   ├── Payment 1
+   ├── Payment 2
+   └── Payment 3
 ```
 
 The payment status is determined from the relationship between the invoice total and the amount paid.
@@ -364,121 +608,405 @@ This means the payment status does not need to be manually guessed by the user. 
 
 ## 10. Employee Management
 
-Employee information is integrated with the application's Identity and role system.
+The Employee Management module allows Administrators to maintain information about employees working within Exclusive Distributors.
 
-Employees can be associated with roles and responsibilities within the organisation.
+Employee information is maintained separately from authentication information while still allowing the employee administration process to work alongside the application's Identity-based user account system.
 
-This allows the system to distinguish between different types of users while still maintaining one central user-management structure.
+Administrators can:
+
+* Add employees
+
+* View employee information
+
+* Edit employee information
+
+* Search employee records
+
+* Maintain employee contact and employment information
+
+* Store next-of-kin information
+
+* Deactivate employees
+
+* View former employees
+
+### Employee Numbers
+
+Employee records use employee numbers to provide a consistent internal identifier.
+
+The application automatically generates the required employee number when a new employee is created, reducing the need for users to manually determine the next available identifier.
+
+### Next-of-Kin Information
+
+Employee records can include next-of-kin information.
+
+This allows relevant employee and emergency-contact information to be maintained within the employee administration area.
+
+### Active and Former Employees
+
+Employees who are no longer active within the organisation do not need to be permanently removed from the system.
+
+Instead, the application distinguishes between:
+
+```text
+
+Active Employees
+
+       ↓
+
+   Deactivate
+
+       ↓
+
+Former Employees
+
+```
+
+This allows historical employee information to be retained while keeping the current employee list focused on active employees.
+
+### Role-Based Access
+
+Employee Management is restricted to:
+
+* Administrators
+
+This prevents normal Employees and Sales Representatives from accessing sensitive employee-administration functionality.
 
 ---
 
 ## 11. Sales Representative Management
 
-Sales Representatives are integrated into the customer and sales workflow.
+The Sales Representative Management module allows Administrators to maintain the representatives responsible for customer and sales activities.
 
-Customers can be associated with Sales Representatives, allowing the business to identify which representative is responsible for a particular customer.
+Sales Representatives form part of the wider sales workflow because customers can be associated with a particular representative.
 
-This information can also be used when working with sales-related reports and workflows.
+Administrators can:
+
+* Add Sales Representatives
+
+* View Sales Representative information
+
+* Edit Sales Representative information
+
+* Search Sales Representative records
+
+* Deactivate Sales Representatives
+
+* View inactive Sales Representatives
+
+### Sales Representative Numbers
+
+Sales Representative records use automatically generated identifiers following the application's Sales Representative numbering convention.
+
+For example:
+
+```text
+
+SR-001
+
+SR-002
+
+SR-003
+
+```
+
+Automatic generation provides a consistent identifier without requiring the Administrator to manually determine the next number.
+
+### Customer Relationship
+
+A Sales Representative can be associated with customers.
+
+Conceptually:
+
+```text
+
+Sales Representative
+
+        ↓
+
+     Customer
+
+        ↓
+
+     Quotation
+
+        ↓
+
+      Invoice
+
+        ↓
+
+      Payment
+
+```
+
+This allows customer and transaction information to remain connected to the relevant sales responsibility.
+
+### Active and Inactive Sales Representatives
+
+Sales Representatives can be deactivated when they are no longer active without unnecessarily removing their historical information.
+
+The application distinguishes between:
+
+```text
+
+Active Sales Representatives
+
+            ↓
+
+        Deactivate
+
+            ↓
+
+Inactive Sales Representatives
+
+```
+
+This preserves existing customer and transaction relationships while keeping the current list focused on active representatives.
+
+### Role-Based Access
+
+Sales Representative administration is restricted to:
+
+* Administrators
+
+This is separate from the **Sales Representative user role**, which determines the functionality a Sales Representative can access after logging into the system.
 
 ---
 
 # Business Workflow
 
-The core sales workflow can be represented as follows:
+The core business workflow connects the main sales, inventory and payment modules.
 
 ```text
-┌──────────┐
-│ Customer │
-└────┬─────┘
-     │
-     ▼
-┌─────────────┐
-│ Quotation   │
-└────┬────────┘
-     │
-     ▼
-┌─────────────┐
-│ Approval    │
-└────┬────────┘
-     │
-     ▼
-┌─────────────┐
-│ Invoice     │
-└────┬────────┘
-     │
-     ├───────────────┐
-     │               │
-     ▼               ▼
-┌─────────────┐   ┌─────────────┐
-│ Inventory   │   │ Payments    │
-│ Deduction   │   │ One or many │
-└─────────────┘   └──────┬──────┘
-                         │
-                         ▼
-                  ┌──────────────┐
-                  │ Payment      │
-                  │ Status       │
-                  └──────────────┘
+
+┌──────────────┐
+
+│   Customer   │
+
+└──────┬───────┘
+
+       │
+
+       ▼
+
+┌──────────────┐
+
+│  Quotation   │
+
+│   Pending    │
+
+└──────┬───────┘
+
+       │
+
+       │ Convert
+
+       ▼
+
+┌──────────────┐
+
+│   Invoice    │
+
+│   Pending    │
+
+└──────┬───────┘
+
+       │
+
+       │ Administrator Approval
+
+       ▼
+
+┌──────────────┐
+
+│   Approved   │
+
+│   Invoice    │
+
+└──────┬───────┘
+
+       │
+
+       ├──────────────────┐
+
+       │                  │
+
+       ▼                  ▼
+
+┌──────────────┐   ┌──────────────┐
+
+│  Inventory   │   │   Payment    │
+
+│  Deduction   │   │   (s)       │
+
+└──────────────┘   └──────┬───────┘
+
+                          │
+
+                          ▼
+
+                   ┌──────────────┐
+
+                   │ Partially    │
+
+                   │ Paid / Paid  │
+
+                   └──────┬───────┘
+
+                          │
+
+                          ▼
+
+                   ┌──────────────┐
+
+                   │   Invoice    │
+
+                   │   History    │
+
+                   └──────────────┘
+
 ```
 
-This workflow is one of the most important aspects of the application because it demonstrates how the different modules work together rather than functioning independently.
+The workflow demonstrates that the application's modules are connected rather than operating as independent CRUD pages.
+
+A quotation can progress into an invoice without the transaction having to be manually recreated. The invoice then enters a Pending state and must be approved by an Administrator.
+
+Inventory is deducted during the transition from Pending to Approved.
+
+Payments can then be recorded against the approved invoice. Multiple payments are supported until the outstanding balance reaches zero, after which the invoice is displayed in Invoice History.
+
+The original converted quotation is also retained in Quotation History, providing traceability across the transaction.
 
 ---
 
 # VAT Rules
 
-The application uses a business rule for calculating VAT.
+The application applies VAT according to the configured product/business rules.
 
-A VAT category of:
+Where a product or applicable category is treated as non-VAT:
 
 ```text
+
 [NONE]
+
 ```
 
-means that no VAT is charged.
+no VAT is applied.
 
-For other applicable VAT categories, the system applies:
+For applicable VAT items, the system uses:
 
 ```text
+
 15%
+
 ```
 
-VAT calculations are handled within the application's business logic rather than being calculated manually by users.
+VAT and financial calculations are handled within the application's business logic rather than requiring users to manually calculate transaction totals.
 
-Currency-related values use:
+Currency-related values use decimal data types to provide appropriate precision for financial information.
+
+Where configured within the database model, financial values use precision such as:
 
 ```text
+
 decimal(18,2)
+
 ```
 
-to provide predictable precision for financial values.
+This is more appropriate for financial calculations than floating-point data types.
 
 ---
 
 # Forecasting
 
-The application includes a basic stock forecasting feature.
+The system includes stock forecasting functionality to assist users with inventory planning.
 
-The forecasting functionality uses a:
+Forecasting uses available product and inventory information to provide an indication of future stock requirements and products that may require attention.
 
-**Moving Average Forecast Strategy**
+The implementation uses a **Moving Average Forecast Strategy** rather than a machine-learning model.
 
-The forecast considers product and inventory information such as:
+The forecasting process considers applicable inventory information such as:
 
 * Current stock
+
 * Reorder level
+
 * Product information
+
 * Available inventory data
 
-The system produces a **30-day stock forecast**.
+The system provides a **30-day stock forecast** to assist with identifying potential stock requirements.
 
-The forecasting implementation is intentionally a heuristic approach.
+Conceptually:
 
-It is **not a machine-learning model**.
+```text
 
-The Moving Average approach provides a relatively simple way of using existing business data to estimate future stock requirements.
+Inventory Data
 
-This can help users identify products that may require attention before stock becomes critically low.
+      ↓
+
+Moving Average Strategy
+
+      ↓
+
+30-Day Forecast
+
+      ↓
+
+Stock Planning Information
+
+```
+
+The forecasting functionality forms part of the operational area of the application and is available to:
+
+* Administrators
+
+* Employees
+
+The implementation is intentionally a heuristic forecasting approach and does not claim to provide machine-learning-based demand prediction.
+
+The Strategy Pattern allows forecasting logic to remain separated from the controllers and user interface, providing a foundation for alternative forecasting approaches in future versions.
+
+---
+
+# Dashboard and Reporting
+
+The system includes dashboard and reporting functionality to provide users with useful operational information derived from the data stored within the application.
+
+## Dashboard
+
+The Dashboard provides users with a central starting point after authentication.
+
+Dashboard information is generated from system data and provides quick access to relevant business information and application modules.
+
+Depending on the user's role, navigation and available functionality are restricted according to the application's authorisation rules.
+
+Dashboard analytics provide a higher-level view of information maintained across areas such as customers, products, inventory and sales-related functionality.
+
+## Reports
+
+The system includes reporting functionality for reviewing operational and business information.
+
+Reports are restricted to the appropriate administrative role because they may contain wider business information than normal operational users require.
+
+Reporting functionality can use information from areas such as:
+
+* Customers
+
+* Quotations
+
+* Invoices
+
+* Payments
+
+* Sales
+
+* Tax/VAT-related information
+
+* Inventory
+
+Reports allow information already stored within the system to be presented in a more useful format without requiring users to manually gather records from multiple modules.
 
 ---
 
@@ -491,7 +1019,7 @@ This can help users identify products that may require attention before stock be
 | Runtime              | .NET 8                                |
 | ORM / Data Access    | Entity Framework Core                 |
 | Database             | Microsoft SQL Server                  |
-| Development Database | SQL Server LocalDB                    |
+| Development Database | SQL Server LocalDB/ Local development database                |
 | Hosted Database      | Azure SQL Database                    |
 | Authentication       | ASP.NET Core Identity                 |
 | Email                | Gmail SMTP                            |
@@ -502,32 +1030,71 @@ This can help users identify products that may require attention before stock be
 | Version Control      | Git                                   |
 | Repository Hosting   | GitHub                                |
 | IDE                  | Visual Studio 2022                    |
+| Cloud Platform       | Microsoft Azure                       |
 
 ---
 
 # System Architecture
 
-The application uses a layered architecture.
+The application follows a layered architecture that separates presentation, business logic and data access responsibilities.
 
-The main flow is:
+The main MVC application follows the general flow:
 
 ```text
-View
+
+User
+
   ↓
+
+Razor View
+
+  ↓
+
 Controller
+
   ↓
+
 Service
+
   ↓
+
 Repository
+
   ↓
+
 ApplicationDbContext
+
   ↓
-SQL Server
+
+SQL Server / Azure SQL
+
 ```
 
-Each layer has a specific responsibility.
+For functionality requiring the separate API, the application can additionally communicate through HTTP:
 
-This prevents controllers from becoming responsible for every part of the application's logic.
+```text
+
+MVC Application
+
+      ↓
+
+HTTP Request
+
+      ↓
+
+Web API
+
+      ↓
+
+API Service
+
+      ↓
+
+External / Email Service
+
+```
+
+This separation prevents individual controllers or Views from becoming responsible for the entire application workflow.
 
 ---
 
@@ -539,13 +1106,19 @@ The application uses Razor Views to display information and provide forms throug
 
 Examples include:
 
+* Dashboard
 * Customer pages
+* Supplier pages
 * Product pages
 * Inventory pages
+* Employee pages
+* Sales Representative pages
 * Quotation pages
 * Invoice pages
 * Payment pages
-* Notification-related pages
+* Reports
+* Forecasting
+* User account pages
 
 Views should primarily focus on presentation rather than database operations or complex business logic.
 
@@ -573,13 +1146,18 @@ Services contain business logic.
 
 For example, services can handle:
 
-* VAT calculations
-* Invoice numbering
+* Customer operations
+* Product operations
+* Inventory operations
+* Invoice approval
 * Payment calculations
-* Inventory updates
-* Notification logic
+* Quote-to-invoice conversion
+* Notifications
+* Email communication
+* Reporting
+* Forecasting
 * Export operations
-* Forecasting logic
+* User administration
 
 This keeps business rules separate from the user interface.
 
@@ -594,8 +1172,10 @@ They communicate with Entity Framework Core and the application's `ApplicationDb
 Examples include repositories for:
 
 * Customers
+* Suppliers
 * Products
 * Inventory
+* Quotations
 * Invoices
 * Payments
 * Notifications
@@ -634,175 +1214,298 @@ This keeps the API contract clear and avoids sending unnecessary information.
 
 # Dependency Injection
 
-ASP.NET Core's dependency injection system is used throughout the application.
+The application uses ASP.NET Core's built-in Dependency Injection system.
 
-Controllers and services receive the interfaces they require instead of manually creating their dependencies.
+Controllers and services depend on interfaces where appropriate rather than manually creating every implementation.
 
 For example:
 
 ```text
+
 Controller
+
     ↓
-INotificationService
+
+IInvoiceService
+
     ↓
-NotificationService
+
+InvoiceService
+
     ↓
-INotificationRepository
+
+IInvoiceRepository
+
+    ↓
+
+InvoiceRepository
+
 ```
 
-This approach makes the application easier to maintain and test.
+Dependencies are registered with the application's service container and supplied to classes through constructor injection.
 
-It also means that implementations can be changed without requiring large changes throughout the application.
+This reduces tight coupling and makes components easier to replace, maintain and unit test.
 
 ---
 
 # Design Patterns
 
-The project uses several software design patterns.
+The project applies software design patterns where they provide a practical benefit to the system.
 
 ## Repository Pattern
 
-The Repository Pattern separates database operations from business logic.
+The Repository Pattern separates data-access operations from application business logic.
 
 For example:
 
 ```text
+
 IProductRepository
+
         ↓
+
 ProductRepository
+
         ↓
+
 ApplicationDbContext
+
 ```
 
-This keeps data-access responsibilities in the repository layer.
+This allows services to work through repository abstractions instead of directly performing all Entity Framework operations.
 
 ---
 
 ## Strategy Pattern
 
-The Strategy Pattern is used where the application needs interchangeable approaches.
+The Strategy Pattern is used where functionality can be represented by interchangeable implementations.
 
-It is used for areas such as:
-
-* Forecasting
-* PDF exports
-* Excel exports
+It is applicable to functionality such as forecasting and export-related operations.
 
 For example:
 
 ```text
-Export Strategy
-      │
-      ├── PDF Export
-      │
-      └── Excel Export
+
+Forecast Strategy
+
+       ↓
+
+Moving Average Strategy
+
 ```
 
-This allows additional export formats to be introduced without rewriting the entire export system.
+and where applicable:
+
+```text
+
+Export Strategy
+
+     ├── PDF
+
+     └── Excel
+
+```
+
+This structure allows an implementation to be changed or extended without requiring the entire consuming workflow to be rewritten.
 
 ---
 
 ## Factory Pattern
 
-The `ExportFactory` selects the appropriate export strategy.
+Factory-based components are used where the application needs to select or construct the appropriate implementation for a particular operation.
+
+For export-related functionality, this can allow the application to select the appropriate export implementation according to the required document type.
 
 Conceptually:
 
 ```text
-ExportFactory
-      │
-      ├── PDF → PDF Export Strategy
-      │
-      └── Excel → Excel Export Strategy
+
+Export Request
+
+      ↓
+
+Export Factory
+
+      ↓
+
+Appropriate Export Strategy
+
 ```
 
-This keeps the selection logic in one location.
+This centralises implementation-selection logic instead of distributing it throughout multiple controllers.
+
+---
+
+## Observer-Style Notification Components
+
+Notification functionality includes observer-style components designed to respond to relevant business events.
+
+Conceptually:
+
+```text
+
+Business Event
+
+      ↓
+
+Notification Subject
+
+      ↓
+
+Observer(s)
+
+      ↓
+
+System / Email Notification
+
+```
+
+This supports separation between the business event itself and the actions that may occur in response to that event.
 
 ---
 
 ## Dependency Injection
 
-Dependency Injection is used to connect controllers, services and repositories through interfaces.
+Dependency Injection is used throughout the system to connect controllers, services, repositories and supporting components.
 
-This reduces tight coupling between components.
-
+Although Dependency Injection is provided directly by ASP.NET Core, its use supports the wider design objective of reducing tight coupling between components.
 ---
 
 # Project Structure
 
-The main project is structured as follows:
+The solution contains the main MVC application, separate API and automated test project.
+
+A simplified representation is:
 
 ```text
-FMCGEnterpriseManagementSystem/
+
+WIL-Project/
+
 │
-├── Controllers/
+
+├── FMCGEnterpriseManagementSystem/
+
+│   ├── Controllers/
+
+│   ├── Data/
+
+│   ├── DTOs/
+
+│   ├── Enums/
+
+│   ├── Factories/
+
+│   ├── Helpers/
+
+│   ├── Models/
+
+│   ├── Repositories/
+
+│   │   └── Interfaces/
+
+│   ├── Services/
+
+│   │   └── Interfaces/
+
+│   ├── Strategies/
+
+│   │   └── Interfaces/
+
+│   ├── ViewModels/
+
+│   ├── Views/
+
+│   ├── wwwroot/
+
+│   ├── Program.cs
+
+│   └── appsettings.json
+
 │
-├── Data/
-│   └── ApplicationDbContext.cs
+
+├── FMCGEnterpriseManagementSystem.API/
+
+│   ├── Controllers/
+
+│   ├── DTOs/
+
+│   ├── Services/
+
+│   └── Program.cs
+
 │
-├── DTOs/
+
+├── FMCGEnterpriseManagementSystem.Tests/
+
+│   ├── InvoiceTests.cs
+
+│   ├── PaymentTests.cs
+
+│   ├── QuoteTests.cs
+
+│   ├── QuoteToInvoiceTests.cs
+
+│   ├── ForecastingTests.cs
+
+│   ├── SalesRepresentativeTests.cs
+
+│   └── UserAccountTests.cs
+
 │
-├── Enums/
+
+├── Task 2 - Meeting Minutes/
+
 │
-├── Factories/
-│
-├── Helpers/
-│
-├── Models/
-│
-├── Repositories/
-│   └── Interfaces/
-│
-├── Services/
-│   └── Interfaces/
-│
-├── Strategies/
-│   └── Interfaces/
-│
-├── ViewModels/
-│
-├── Views/
-│
-├── wwwroot/
-│
-├── Program.cs
-│
-└── appsettings.json
+
+├── README.md
+
+└── [Solution File]
+
 ```
 
-The project follows a consistent convention where interfaces are placed in an `Interfaces` folder within their relevant layer.
+The project uses interfaces within the relevant layers to separate contracts from implementations.
 
 For example:
 
 ```text
+
 Repositories/
+
 ├── Interfaces/
+
 │   └── IProductRepository.cs
-│
+
 └── ProductRepository.cs
+
 ```
 
 and:
 
 ```text
+
 Services/
+
 ├── Interfaces/
+
 │   └── IProductService.cs
-│
+
 └── ProductService.cs
+
 ```
 
-This makes the project easier for team members to navigate.
+This makes the solution easier to navigate and supports Dependency Injection and automated testing.
 
 ---
 
 # Database
 
-The application uses a relational SQL Server database.
+The application uses a relational Microsoft SQL Server database with Entity Framework Core acting as the ORM between the application and the database.
 
-Entity Framework Core is used as the ORM between the C# application and SQL Server.
+During development, the application can use a local SQL Server database.
 
-Database schema changes are managed through **EF Core migrations**.
+For the hosted environment, the application is designed to use **Azure SQL Database**.
+
+Database schema changes are managed through **Entity Framework Core migrations**.
 
 ---
 
@@ -922,25 +1625,37 @@ Passwords are not stored as plain text.
 
 ## Role-Based Authorisation
 
-Access is controlled through roles.
-
-The main roles are:
+The application uses the following primary roles:
 
 ```text
+
 Administrator
+
 Employee
+
 Sales Representative
+
 ```
 
-Controllers and actions can restrict access to particular roles.
+Access to controller actions can be restricted using ASP.NET Core authorisation.
 
 For example:
 
 ```csharp
-[Authorize(Roles = "Administrator,Employee")]
+
+[Authorize(Roles = "Administrator")]
+
 ```
 
-This prevents users from accessing functionality outside their responsibilities.
+or:
+
+```csharp
+
+[Authorize(Roles = "Administrator,Employee")]
+
+```
+
+This provides server-side access control rather than relying only on hidden menu items.
 
 ---
 
@@ -1127,121 +1842,129 @@ The export architecture allows PDF and Excel functionality to use separate strat
 
 ## Prerequisites
 
-Before running the project, ensure the following are installed:
+Before running the project locally, ensure that the required development tools are installed.
 
-* **.NET 8 SDK**
-* **Visual Studio 2022 or later**
-* **SQL Server LocalDB** or another SQL Server instance
-* **Git**
-* A Gmail account with an App Password if email functionality is required
+These include:
 
-Visual Studio's SQL Server LocalDB installation can be used for development.
+* Visual Studio
+
+* A compatible .NET SDK
+
+* Microsoft SQL Server / Local development SQL Server instance
+
+* Git
+
+* Entity Framework Core tooling where required
+
+* Appropriate email configuration if email functionality is being tested
+
+The exact SDK version should match the target framework configured within the project's `.csproj` files.
 
 ---
 
 # Clone the Repository
 
-Clone the project using Git:
+Clone the repository using Git:
 
 ```bash
-git clone [REPOSITORY-URL]
+
+git clone https://github.com/iqran0906/WIL-Project.git
+
 ```
 
-Then move into the project directory:
+Move into the repository:
 
 ```bash
-cd FMCGEnterpriseManagementSystem
+
+cd WIL-Project
+
 ```
 
 The solution can then be opened in Visual Studio.
+
+For normal development work, team members should use the agreed development workflow rather than making uncoordinated changes directly to the release branch.
 
 ---
 
 # Database Configuration
 
-The application's database connection is configured through `appsettings.json` or an appropriate environment-specific configuration file.
+The database connection is configured through the application's configuration system.
 
-A LocalDB development connection can follow this general structure:
+A local SQL Server configuration can be used during development, while the deployed application can use the hosted Azure SQL configuration.
 
-```json
-"ConnectionStrings": {
-  "DefaultConnection": "Server=(localdb)\\MSSQLLocalDB;Database=FMCGEnterpriseManagementSystem;Trusted_Connection=True;"
-}
-```
+Sensitive production connection information must not be committed directly to source control.
 
-The exact connection string should match the developer's local SQL Server configuration.
-
-Sensitive production connection information should not be committed to source control.
+Production connection strings should be configured through the hosting environment.
 
 ---
 
 # Applying Database Migrations
 
-After configuring the database, apply the existing Entity Framework Core migrations:
+After configuring the development database, existing Entity Framework Core migrations can be applied using the appropriate EF Core tooling.
+
+For example:
 
 ```bash
+
 dotnet ef database update
+
 ```
 
-If the `dotnet ef` command is not installed globally, it can be installed with:
+Where Package Manager Console is being used in Visual Studio, the equivalent migration commands can also be used according to the configured startup and data project.
 
-```bash
-dotnet tool install --global dotnet-ef
-```
-
-The database should be updated before attempting to use features that depend on newly introduced tables.
+Because database entities are shared between multiple modules, migrations should be coordinated rather than independently recreated by each team member.
 
 ---
 
 # Email Configuration
 
-Email functionality requires SMTP credentials.
+Email functionality requires the appropriate SMTP configuration.
 
-Sensitive credentials should **not** be placed directly into committed configuration files.
+Sensitive credentials such as SMTP usernames, passwords or application passwords should not be committed directly to the repository.
 
-For local development, .NET User Secrets can be used.
+For development, secure local configuration such as .NET User Secrets can be used where supported by the project.
 
-For example:
-
-```bash
-dotnet user-secrets set "Email:Username" "your-address@gmail.com"
-```
-
-and:
-
-```bash
-dotnet user-secrets set "Email:Password" "your-app-password"
-```
-
-The exact configuration keys should match the application's actual email settings.
-
-For Gmail, an **App Password** should be used rather than storing a normal Gmail account password in the application.
+For hosted environments, credentials should be configured through the hosting platform's application settings or secret-management facilities.
 
 ---
 
 # Running the Application
 
-The application can be started from Visual Studio by pressing:
+For local development, the solution can be run from Visual Studio.
+
+Because the system contains both the MVC application and separate API, both components may need to be running when testing functionality that depends on API communication.
+
+Visual Studio can be configured with multiple startup projects so that the MVC and API projects start together.
+
+The normal development process is:
 
 ```text
-F5
+
+Configure Database
+
+       ↓
+
+Apply Migrations
+
+       ↓
+
+Start MVC Application
+
+       ↓
+
+Start API
+
+       ↓
+
+Login
+
+       ↓
+
+Test Required Workflow
+
 ```
 
-or:
-
-```text
-Ctrl + F5
-```
-
-It can also be started through the command line:
-
-```bash
-dotnet run
-```
-
-If the Email API is required, both the MVC application and API project should be running.
-
-In Visual Studio, multiple startup projects can be configured so that both projects start together.
+For the deployed version, the application and required services must use the hosted configuration rather than development-only localhost addresses.
 
 ---
 
@@ -1263,42 +1986,63 @@ When setting up a new development environment, developers should ensure that an 
 
 # Git and Collaboration Workflow
 
-Because this was developed as a group WIL project, Git and GitHub were used to allow multiple developers to work on different features.
+Git and GitHub were used throughout the project to support collaborative development.
 
-Each major feature was developed on its own branch.
+The team used feature branches so that work on individual modules could be developed without every team member editing the integrated code simultaneously.
 
-Examples include:
+The primary integration branch was:
 
 ```text
-feature/invoices-management
-feature/quotes
-feature/payments
-feature/notifications
-feature/exports
+
+development
+
 ```
 
-The general workflow was:
+The release/deployment branch was:
 
 ```text
-Development
-     ↑
-     │
+
+main
+
+```
+
+The overall workflow was:
+
+```text
+
 Feature Branch
-     │
-     ↓
-Development Work
-     │
-     ↓
+
+      ↓
+
+Development and Testing
+
+      ↓
+
 Commit
-     │
-     ↓
-Push
-     │
-     ↓
-Pull Request / Merge
-     │
-     ↓
-Development Branch
+
+      ↓
+
+Push to GitHub
+
+      ↓
+
+Pull Request / Review
+
+      ↓
+
+development
+
+      ↓
+
+Integration and Testing
+
+      ↓
+
+main
+
+      ↓
+
+Deployment
 ```
 
 ---
@@ -1482,179 +2226,308 @@ Although each member had primary ownership of particular modules, the final appl
 
 # Integration Between Modules
 
-One of the key aspects of the project is that the modules are not completely independent.
+The application was designed so that its major modules work together.
 
-For example:
+The primary operational relationship can be represented as:
 
 ```text
+
+Supplier
+
+   ↓
+
 Product
+
    ↓
+
 Inventory
+
+   │
+
+   └────────────────────┐
+
+                        │
+
+Customer                │
+
+   ↓                    │
+
+Quotation               │
+
+   ↓                    │
+
+Invoice ────────────────┘
+
    ↓
-Quotation
+
+Approval
+
    ↓
-Invoice
+
+Inventory Deduction
+
    ↓
-Payment
+
+Payment(s)
+
    ↓
-Reports / Notifications
+
+Reports / Dashboard / History
+
 ```
 
-Customer information also flows through the sales process:
+Customer information flows through the sales process:
 
 ```text
+
 Customer
+
    ↓
+
 Quotation
+
    ↓
+
 Invoice
+
    ↓
+
 Payment
+
 ```
 
-This interconnected structure means that changes in one module can affect another module.
+Product and stock information flows through the operational process:
 
-The team therefore needed to consider integration whenever shared models, database relationships or business rules were changed.
+```text
 
+Supplier
+
+   ↓
+
+Product
+
+   ↓
+
+Inventory
+
+   ↓
+
+Invoice Approval
+
+   ↓
+
+Stock Deduction
+
+```
+
+This interconnected structure means that changes to one module can affect another.
+
+Integration therefore required the team to consider more than whether each individual page worked independently.
 ---
 
 # Example End-to-End Scenario
 
-A typical business transaction can look like this:
+A typical transaction can progress through the system as follows.
 
 ### Step 1 — Customer
 
 A customer is registered in the system.
 
+For example:
+
 ```text
+
 Customer:
+
 ABC Retail Store
+
 ```
 
-The customer can be associated with a Sales Representative.
+The customer can be assigned to a Sales Representative and the appropriate payment method can be recorded.
 
 ---
 
 ### Step 2 — Quotation
 
-A Sales Representative creates a quotation for the customer.
+An authorised sales user creates a quotation for the customer.
 
-The quotation contains the required products and quantities.
+The quotation contains the relevant products, quantities and pricing information.
 
----
-
-### Step 3 — Approval
-
-The quotation is reviewed and approved.
-
-Only after approval can the sales process continue to the invoice stage.
+The quotation initially remains part of the current quotation workflow.
 
 ---
 
-### Step 4 — Invoice
+### Step 3 — Quote-to-Invoice Conversion
 
-The approved quotation is converted into an invoice.
+When the transaction proceeds, the quotation is converted into an invoice.
 
-The invoice contains:
+The quotation is then marked as:
 
-* Product code
-* Product description
-* Quantity
-* Unit price
-* Discount
-* VAT
-* Total
+```text
 
-The invoice is linked to the original quotation.
+Invoiced
+
+```
+
+and is retained within **Quotation History**.
+
+The resulting invoice is created with:
+
+```text
+
+Status = Pending
+
+```
 
 ---
 
-### Step 5 — Inventory
+### Step 4 — Invoice Approval
 
-Once the invoice is confirmed, the sold quantities are deducted from inventory.
+An Administrator reviews the pending invoice.
+
+When the Administrator approves the invoice:
+
+```text
+
+Pending → Approved
+
+```
+
+the transaction is allowed to continue into the stock and payment stages.
+
+---
+
+### Step 5 — Inventory Deduction
+
+The relevant inventory quantities are deducted when the invoice is approved.
 
 For example:
 
 ```text
-Before:
-Quantity on hand = 100
 
-Sold:
-Quantity = 10
+Quantity on Hand Before: 100
 
-After:
-Quantity on hand = 90
+Invoice Quantity:          10
+
+Quantity on Hand After:    90
+
 ```
 
-If the remaining stock reaches the reorder level, the notification functionality can identify the low-stock event.
+This ensures that the inventory module reflects the approved sale.
 
 ---
 
 ### Step 6 — Payment
 
-The customer makes a payment.
-
-The payment is recorded against the invoice.
-
-If the customer pays in multiple instalments, each payment can be recorded separately.
-
----
-
-### Step 7 — Payment Status
-
-The system compares the total payments with the invoice total.
+A payment can be recorded against the approved invoice.
 
 For example:
 
 ```text
-Invoice total:  R10,000
-Paid:           R4,000
 
-Status:         Partially Paid
+Invoice Total: R10,000.00
+
+Payment:        R4,000.00
+
+Amount Due:     R6,000.00
+
 ```
 
-Once the full amount has been received:
-
-```text
-Invoice total:  R10,000
-Paid:          R10,000
-
-Status:         Paid
-```
+The invoice is therefore partially paid.
 
 ---
 
-### Step 8 — Documents and Reporting
+### Step 7 — Additional Payment
 
-The relevant invoice, quotation or payment can be exported where required.
+Additional payments can be recorded.
 
-The information generated by these transactions can also contribute to operational reporting.
+For example:
 
+```text
+
+Invoice Total:  R10,000.00
+
+Total Paid:     R10,000.00
+
+Amount Due:          R0.00
+
+```
+
+The invoice is now fully paid.
+
+The system prevents another normal payment from being initiated against an invoice that has already been settled.
+
+---
+
+### Step 8 — Invoice History
+
+Once the approved invoice has an outstanding balance of zero, it is displayed in **Invoice History**.
+
+The transaction is therefore preserved rather than deleted.
+
+The overall transaction can be traced as:
+
+```text
+
+Customer
+
+   ↓
+
+Quotation
+
+   ↓
+
+Quotation History
+
+   │
+
+   └──────→ Invoice
+
+               ↓
+
+            Approval
+
+               ↓
+
+        Inventory Deduction
+
+               ↓
+
+           Payment(s)
+
+               ↓
+
+          Invoice History
+
+```
 ---
 
 # Future Improvements
 
-The system provides the foundation for further development.
+The current system provides a foundation that can be extended further.
 
 Potential future improvements include:
 
-* More advanced forecasting algorithms
-* Improved stock demand prediction
-* More detailed dashboards
+* More advanced demand forecasting algorithms
+* Machine-learning-based stock prediction
+* More detailed management dashboards
 * Additional notification channels
 * SMS notifications
-* More detailed audit logging
-* Advanced reporting filters
-* Customer payment history dashboards
-* Supplier performance reporting
+* More extensive audit logging
+* Additional reporting and analytics filters
+* Customer payment-history dashboards
+* Supplier performance analysis
 * Automated scheduled reports
-* More advanced batch and expiry management
-* Expanded API functionality
-* Automated testing
-* Improved deployment automation
-* Cloud-based monitoring and logging
+* More advanced batch and expiry-management rules
+* Expanded public or partner API functionality
+* Additional integration and end-to-end automated tests
+* Automated UI testing
+* Advanced deployment pipelines
+* Cloud-based application monitoring and alerting
+* Performance and scalability optimisation
+* Additional security hardening for production use
 
-These improvements could be introduced without completely redesigning the application because the current layered architecture separates the main areas of responsibility.
+These improvements can build on the current layered architecture without requiring the entire system to be redesigned.
 
 ---
 
@@ -1695,13 +2568,19 @@ The project therefore demonstrates how multiple software engineering concepts ca
 
 The **FMCG Enterprise Management System** provides Exclusive Distributors with a centralised platform for managing important FMCG business operations.
 
-The application connects customers, products, inventory, quotations, invoices and payments into a single workflow while also providing supporting functionality such as notifications, email communication, exports, reporting and forecasting.
+The application connects customers, suppliers, products, inventory, quotations, invoices and payments into a structured business workflow.
 
-The system was designed using a layered architecture to keep presentation, business logic and data access separate.
+A customer transaction can progress from quotation through quote-to-invoice conversion, invoice approval, inventory deduction and multiple payments before the completed transaction is retained within invoice history.
 
-The use of repositories, services, strategies, factories, dependency injection, Entity Framework Core and ASP.NET Core Identity provides a structured foundation for maintaining and extending the application.
+Supporting functionality includes authentication, role-based authorisation, employee and Sales Representative administration, notifications, email communication, password recovery, PDF and Excel exports, reporting, dashboard analytics and stock forecasting.
 
-Most importantly, the project demonstrates the practical application of software engineering principles within a real-world business scenario and reflects the collaborative development experience gained through the WIL project.
+The application uses a layered architecture to separate presentation, business logic and data-access responsibilities.
+
+Repositories, services, strategies, factories, Dependency Injection, Entity Framework Core, ASP.NET Core Identity and a separate API component provide a structured technical foundation for the system.
+
+The solution also includes automated unit testing and continuous-integration practices to support software quality during development and integration.
+
+Most importantly, the project demonstrates the practical application of software-engineering principles within a realistic business scenario and reflects the collaborative development, integration, testing and deployment experience gained through the Work Integrated Learning project.
 
 ---
 
