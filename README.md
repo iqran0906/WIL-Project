@@ -2584,6 +2584,20 @@ Most importantly, the project demonstrates the practical application of software
 
 ---
 
+# Demo Login Credentials
+
+For assessment and demonstration purposes, the system includes test accounts for each of the main user roles.
+
+| Role | Email | Password |
+
+| --- | --- | --- |
+
+| Administrator | [admin@fmcg.com] | [Wholesale101@ |
+
+| Employee | [aisha.khan@exclusivedistributors.test  | [Employeetest@1234]|
+
+| Sales Representative | [ahmed.patel@exclusivedistributors.test] |[Salesreptest@1234] |
+
 # License
 
 This project was developed as an **academic Work Integrated Learning project**.
