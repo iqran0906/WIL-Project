@@ -13,11 +13,6 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 {
     // Restricts supplier management to administrators and employees.
     [Authorize(Roles = "Administrator,Employee")]
-    // Title: Dependency injection in ASP.NET Core
-    // Author: Microsoft
-    // Date: 22-09-2026
-    // Code version: ASP.NET Core 10.0
-    // Availability: https://learn.microsoft.com/aspnet/core/fundamentals/dependency-injection
     public class SupplierController : Controller
     {
         private readonly ISupplierService _supplierService;
@@ -32,19 +27,27 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             _productService = productService;
         }
 
+
         // GET: Supplier/SupplierList
-        // Displays suppliers and provides searching and summary statistics.
+        // Displays active suppliers and provides searching and summary statistics.
         [HttpGet]
         public async Task<IActionResult> SupplierList(string? search)
         {
-            // Loads the supplier records used for the list and search.
-            var suppliers = (await _supplierService.GetAllSuppliersAsync()).ToList();
+            // Retrieves all suppliers so that active and inactive
+            // supplier statistics can still be calculated.
+            var allSuppliers =
+                (await _supplierService.GetAllSuppliersAsync()).ToList();
 
+            // The main supplier page displays active suppliers only.
+            var suppliers = allSuppliers
+                .Where(s => s.IsActive)
+                .ToList();
+
+            // Applies the search to active suppliers.
             if (!string.IsNullOrWhiteSpace(search))
             {
                 search = search.Trim();
 
-                // Searches across the main supplier contact and business fields.
                 suppliers = suppliers
                     .Where(s =>
                         s.CompanyName.Contains(
@@ -59,9 +62,10 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                             search,
                             StringComparison.OrdinalIgnoreCase) ||
 
-                        s.Email.Contains(
-                            search,
-                            StringComparison.OrdinalIgnoreCase) ||
+                        (s.Email != null &&
+                         s.Email.Contains(
+                             search,
+                             StringComparison.OrdinalIgnoreCase)) ||
 
                         s.PhysicalAddress.Contains(
                             search,
@@ -77,54 +81,90 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                     .ToList();
             }
 
+            // Makes the current search value available to the view.
             ViewBag.Search = search;
 
-            // Loads all suppliers again to calculate the summary statistics.
-            var allSuppliers =
-                (await _supplierService.GetAllSuppliersAsync()).ToList();
+            // Summary statistics include all supplier records.
+            ViewBag.TotalSuppliers =
+                allSuppliers.Count;
 
-            ViewBag.TotalSuppliers = allSuppliers.Count;
-            ViewBag.ActiveSuppliers = allSuppliers.Count(s => s.IsActive);
-            ViewBag.InactiveSuppliers = allSuppliers.Count(s => !s.IsActive);
-            ViewBag.TotalCreditLimit = allSuppliers.Sum(s => s.CreditLimit);
+            ViewBag.ActiveSuppliers =
+                allSuppliers.Count(s => s.IsActive);
 
-            ViewBag.Search = search;
+            ViewBag.InactiveSuppliers =
+                allSuppliers.Count(s => !s.IsActive);
 
-            return View("~/Views/Supplier/SupplierList.cshtml", suppliers);
+            // Credit limit only represents suppliers currently in use.
+            ViewBag.TotalCreditLimit =
+                allSuppliers
+                    .Where(s => s.IsActive)
+                    .Sum(s => s.CreditLimit);
+
+            return View(
+                "~/Views/Supplier/SupplierList.cshtml",
+                suppliers);
         }
+
+
+        // GET: Supplier/DeactivatedSuppliers
+        // Displays suppliers that have been deactivated.
+        [HttpGet]
+        public async Task<IActionResult> DeactivatedSuppliers()
+        {
+            var suppliers =
+                (await _supplierService.GetAllSuppliersAsync())
+                .Where(s => !s.IsActive)
+                .OrderBy(s => s.CompanyName)
+                .ToList();
+
+            return View(
+                "~/Views/Supplier/DeactivatedSuppliers.cshtml",
+                suppliers);
+        }
+
 
         // GET: Supplier/AddSupplier
         // Displays the form used to add a new supplier.
         [HttpGet]
         public IActionResult AddSupplier()
         {
-            // Displays an empty ViewModel for the new supplier form.
             return View(new SupplierViewModel());
         }
+
 
         // POST: Supplier/AddSupplier
         // Validates and creates a new supplier.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddSupplier(SupplierViewModel model)
+        public async Task<IActionResult> AddSupplier(
+            SupplierViewModel model)
         {
-            // Prevents invalid supplier data from being submitted.
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
             await _supplierService.CreateSupplierAsync(model);
+
+            TempData["SuccessMessage"] =
+                "Supplier added successfully.";
+
             return RedirectToAction(nameof(SupplierList));
         }
+
 
         // GET: Supplier/EditSupplier/5
         // Retrieves and displays the selected supplier for editing.
         [HttpGet]
         public async Task<IActionResult> EditSupplier(int id)
         {
-            // Retrieves the supplier that will be edited.
-            var supplier = await _supplierService.GetSupplierByIdAsync(id);
+            if (id <= 0)
+            {
+                return NotFound();
+            }
+
+            var supplier =
+                await _supplierService.GetSupplierByIdAsync(id);
 
             if (supplier == null)
             {
@@ -134,13 +174,15 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return View(supplier);
         }
 
+
         // POST: Supplier/EditSupplier/5
         // Validates and saves changes made to an existing supplier.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditSupplier(int id, SupplierViewModel model)
+        public async Task<IActionResult> EditSupplier(
+            int id,
+            SupplierViewModel model)
         {
-            // Ensures the route ID matches the supplier being edited.
             if (id != model.SupplierId)
             {
                 return NotFound();
@@ -152,61 +194,101 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             }
 
             await _supplierService.UpdateSupplierAsync(model);
+
+            TempData["SuccessMessage"] =
+                "Supplier updated successfully.";
+
             return RedirectToAction(nameof(SupplierList));
         }
 
+
         // GET: Supplier/Products/5
-        // Displays the products associated with the selected supplier.
+        // Displays products associated with the selected supplier.
         [HttpGet]
         public async Task<IActionResult> Products(int id)
         {
-            // Prevents an invalid supplier ID from being used.
             if (id <= 0)
             {
                 return NotFound();
             }
 
-            var supplier = await _supplierService.GetSupplierByIdAsync(id);
+            var supplier =
+                await _supplierService.GetSupplierByIdAsync(id);
 
             if (supplier == null)
             {
                 return NotFound();
             }
 
-            // Gets products belonging to the selected supplier.
-            var products = (await _productService.GetAllProductsAsync())
+            var products =
+                (await _productService.GetAllProductsAsync())
                 .Where(p => p.SupplierId == id)
                 .OrderBy(p => p.ProductName)
                 .ToList();
 
-            ViewBag.SupplierName = supplier.CompanyName;
-            ViewBag.SupplierId = supplier.SupplierId;
+            ViewBag.SupplierName =
+                supplier.CompanyName;
+
+            ViewBag.SupplierId =
+                supplier.SupplierId;
 
             return View(products);
         }
 
+
         // POST: Supplier/DeactivateSupplier/5
-        // Deactivates a supplier while keeping the supplier record.
+        // Deactivates the supplier while retaining its historical record.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeactivateSupplier(int id)
         {
-            // Deactivates the supplier while retaining the supplier record.
-            await _supplierService.DeactivateSupplierAsync(id);
+            if (id <= 0)
+            {
+                return NotFound();
+            }
 
-            return RedirectToAction(nameof(SupplierList));
+            var success =
+                await _supplierService
+                    .DeactivateSupplierAsync(id);
+
+            if (!success)
+            {
+                return NotFound();
+            }
+
+            TempData["SuccessMessage"] =
+                "Supplier deactivated successfully.";
+
+            return RedirectToAction(
+                nameof(SupplierList));
         }
 
+
         // POST: Supplier/ActivateSupplier/5
-        // Reactivates an existing supplier.
+        // Reactivates a previously deactivated supplier.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ActivateSupplier(int id)
         {
-            // Reactivates an existing supplier.
-            await _supplierService.ActivateSupplierAsync(id);
+            if (id <= 0)
+            {
+                return NotFound();
+            }
 
-            return RedirectToAction(nameof(SupplierList));
+            var success =
+                await _supplierService
+                    .ActivateSupplierAsync(id);
+
+            if (!success)
+            {
+                return NotFound();
+            }
+
+            TempData["SuccessMessage"] =
+                "Supplier activated successfully.";
+
+            return RedirectToAction(
+                nameof(DeactivatedSuppliers));
         }
     }
 }

@@ -28,13 +28,35 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 salesRepresentativeService;
         }
 
-        // Displays all sales representatives and supports searching.
+        // Displays active sales representatives and supports searching.
         [HttpGet]
         public async Task<IActionResult> Index(string? keyword)
         {
             var salesRepresentatives =
                 await _salesRepresentativeService
                     .GetAllAsync(keyword);
+
+            // The main page only displays active representatives.
+            salesRepresentatives = salesRepresentatives
+                .Where(sr => sr.IsActive)
+                .ToList();
+
+            ViewBag.Keyword = keyword;
+
+            return View(salesRepresentatives);
+        }
+
+        // Displays inactive sales representatives.
+        [HttpGet]
+        public async Task<IActionResult> Inactive(string? keyword)
+        {
+            var salesRepresentatives =
+                await _salesRepresentativeService
+                    .GetAllAsync(keyword);
+
+            salesRepresentatives = salesRepresentatives
+                .Where(sr => !sr.IsActive)
+                .ToList();
 
             ViewBag.Keyword = keyword;
 
@@ -166,6 +188,30 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 "Sales representative deactivated successfully.";
 
             return RedirectToAction(nameof(Index));
+        }
+
+        // Reactivates an inactive sales representative.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Reactivate(int id)
+        {
+            var reactivated =
+                await _salesRepresentativeService
+                    .ReactivateAsync(id);
+
+            if (!reactivated)
+            {
+                TempData["ErrorMessage"] =
+                    "The sales representative could not be reactivated. " +
+                    "Make sure the linked employee is active.";
+
+                return RedirectToAction(nameof(Inactive));
+            }
+
+            TempData["SuccessMessage"] =
+                "Sales representative reactivated successfully.";
+
+            return RedirectToAction(nameof(Inactive));
         }
 
         // Loads employees who are eligible to become sales representatives.

@@ -11,60 +11,145 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FMCGEnterpriseManagementSystem.Repositories
 {
-    // Purpose: Implements database operations for managing customers.
+    // Implements database operations for managing customers.
     public class CustomerRepository : ICustomerRepository
     {
-        // Provides access to the application's database context.
         private readonly ApplicationDbContext _context;
 
-        // Receives the database context through dependency injection.
         public CustomerRepository(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // Retrieves all customers with their sales representative and employee details.
+
+        // Retrieves active customers only.
         public async Task<IEnumerable<Customer>> GetAllAsync()
         {
             return await _context.Customers
                 .Include(c => c.SalesRepresentative)
                     .ThenInclude(sr => sr.Employee)
+                .Where(c => c.IsActive)
                 .ToListAsync();
         }
 
-        // Retrieves a customer by ID with their sales representative and employee details.
+
+        // Retrieves soft-deleted customers only.
+        public async Task<IEnumerable<Customer>> GetDeletedAsync()
+        {
+            return await _context.Customers
+                .Include(c => c.SalesRepresentative)
+                    .ThenInclude(sr => sr.Employee)
+                .Where(c => !c.IsActive)
+                .ToListAsync();
+        }
+
+
+        // Retrieves a customer regardless of active status.
         public async Task<Customer?> GetByIdAsync(int id)
         {
             return await _context.Customers
                 .Include(c => c.SalesRepresentative)
                     .ThenInclude(sr => sr.Employee)
-                .FirstOrDefaultAsync(c => c.CustomerId == id);
+                .FirstOrDefaultAsync(
+                    c => c.CustomerId == id);
         }
 
-        // Adds a new customer to the database and saves the changes.
+
+        // Adds a new active customer.
         public async Task AddAsync(Customer customer)
         {
+            customer.IsActive = true;
+
             await _context.Customers.AddAsync(customer);
             await _context.SaveChangesAsync();
         }
 
-        // Updates an existing customer and saves the changes.
+
+        // Updates an existing customer without changing
+        // whether the customer is active or deleted.
         public async Task UpdateAsync(Customer customer)
         {
-            _context.Customers.Update(customer);
+            var existingCustomer =
+                await _context.Customers
+                    .FirstOrDefaultAsync(
+                        c => c.CustomerId ==
+                             customer.CustomerId);
+
+            if (existingCustomer == null)
+            {
+                return;
+            }
+
+            existingCustomer.Name = customer.Name;
+            existingCustomer.Surname = customer.Surname;
+            existingCustomer.IdNumber = customer.IdNumber;
+            existingCustomer.TelephoneNumber =
+                customer.TelephoneNumber;
+            existingCustomer.CellNumber =
+                customer.CellNumber;
+            existingCustomer.Email = customer.Email;
+            existingCustomer.PhysicalAddress =
+                customer.PhysicalAddress;
+            existingCustomer.DeliveryAddress =
+                customer.DeliveryAddress;
+            existingCustomer.CustomerGroup =
+                customer.CustomerGroup;
+            existingCustomer.PaymentTerms =
+                customer.PaymentTerms;
+            existingCustomer.PaymentMethod =
+                customer.PaymentMethod;
+            existingCustomer.Notes =
+                customer.Notes;
+            existingCustomer.SalesRepresentativeId =
+                customer.SalesRepresentativeId;
+            existingCustomer.VATNumber =
+                customer.VATNumber;
+
+            existingCustomer.UpdatedAt =
+                DateTime.UtcNow;
+
             await _context.SaveChangesAsync();
         }
 
-        // Finds and deletes a customer when the customer exists.
+
+        // Soft deletes the customer instead of removing
+        // the database record.
         public async Task DeleteAsync(int id)
         {
-            var customer = await GetByIdAsync(id);
+            var customer =
+                await _context.Customers
+                    .FirstOrDefaultAsync(
+                        c => c.CustomerId == id);
 
-            if (customer != null)
+            if (customer == null)
             {
-                _context.Customers.Remove(customer);
-                await _context.SaveChangesAsync();
+                return;
             }
+
+            customer.IsActive = false;
+            customer.UpdatedAt = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
+        }
+
+
+        // Restores a previously soft-deleted customer.
+        public async Task RestoreAsync(int id)
+        {
+            var customer =
+                await _context.Customers
+                    .FirstOrDefaultAsync(
+                        c => c.CustomerId == id);
+
+            if (customer == null)
+            {
+                return;
+            }
+
+            customer.IsActive = true;
+            customer.UpdatedAt = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
         }
     }
 }

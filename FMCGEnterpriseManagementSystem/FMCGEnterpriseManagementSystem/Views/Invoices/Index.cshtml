@@ -37,17 +37,35 @@
 
         <div class="col-md-4">
 
-            <h2 class="text-white fw-bold mb-3">
-                Invoice
+            <h2 class="text-white fw-bold mb-1">
+                Invoices
             </h2>
 
-            <a asp-controller="Invoices"
-               asp-action="Create"
-               class="btn btn-action-primary text-decoration-none">
+            <p class="text-white-50 small mb-3">
+                Manage pending, approved and outstanding invoices.
+            </p>
 
-                New Invoice
+            <div class="d-flex gap-2 flex-wrap">
 
-            </a>
+                <a asp-controller="Invoices"
+                   asp-action="Create"
+                   class="btn btn-action-primary text-decoration-none">
+
+                    <i class="bi bi-plus-lg me-1"></i>
+                    New Invoice
+
+                </a>
+
+                <a asp-controller="Invoices"
+                   asp-action="History"
+                   class="btn btn-outline-light text-decoration-none">
+
+                    <i class="bi bi-clock-history me-1"></i>
+                    Invoice History
+
+                </a>
+
+            </div>
 
         </div>
 

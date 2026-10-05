@@ -1,12 +1,7 @@
-﻿@*
-    Purpose: Active employees list page.
-    Authors: iqran0906 (from git history)
-*@
-
-@model IEnumerable<FMCGEnterpriseManagementSystem.Models.Employee>
+﻿@model IEnumerable<FMCGEnterpriseManagementSystem.Models.Employee>
 
 @{
-    ViewData["Title"] = "Employees";
+    ViewData["Title"] = "Former Employees";
 }
 
 <div class="px-2 py-3">
@@ -34,38 +29,24 @@
         <div>
 
             <h2 class="text-white fw-bold mb-1">
-                Employees
+                Former Employees
             </h2>
 
             <p class="text-white-50 mb-0">
-                Manage current employees and their employment information.
+                Employees who are no longer active in the business.
             </p>
 
         </div>
 
 
-        <div class="d-flex gap-2 flex-wrap">
+        <a asp-controller="Employees"
+           asp-action="Index"
+           class="btn btn-outline-light">
 
-            <a asp-controller="Employees"
-               asp-action="FormerEmployees"
-               class="btn btn-outline-light text-decoration-none">
+            <i class="bi bi-arrow-left me-1"></i>
+            Back to Employees
 
-                <i class="bi bi-person-dash me-1"></i>
-                Former Employees
-
-            </a>
-
-
-            <a asp-controller="Employees"
-               asp-action="Create"
-               class="btn btn-action-primary text-decoration-none">
-
-                <i class="bi bi-person-plus me-1"></i>
-                New Employee
-
-            </a>
-
-        </div>
+        </a>
 
     </div>
 
@@ -78,7 +59,7 @@
         </span>
 
         <form asp-controller="Employees"
-              asp-action="Index"
+              asp-action="FormerEmployees"
               method="get"
               class="d-flex gap-2">
 
@@ -96,7 +77,7 @@
 
 
             <a asp-controller="Employees"
-               asp-action="Index"
+               asp-action="FormerEmployees"
                class="btn btn-sm btn-outline-light">
                 Clear
             </a>
@@ -161,46 +142,31 @@
 
                             <td>
 
-                                <span class="badge bg-success">
-                                    Active
+                                <span class="badge bg-secondary">
+                                    Inactive
                                 </span>
 
                             </td>
 
                             <td>
 
-                                <div class="d-flex gap-2 flex-wrap">
+                                <form asp-controller="Employees"
+                                      asp-action="Reactivate"
+                                      asp-route-id="@employee.EmployeeID"
+                                      method="post"
+                                      class="d-inline">
 
-                                    <a asp-controller="Employees"
-                                       asp-action="Edit"
-                                       asp-route-id="@employee.EmployeeID"
-                                       class="btn btn-sm btn-warning">
+                                    @Html.AntiForgeryToken()
 
-                                        <i class="bi bi-pencil-square me-1"></i>
-                                        Edit
+                                    <button type="submit"
+                                            class="btn btn-sm btn-success">
 
-                                    </a>
+                                        <i class="bi bi-person-check me-1"></i>
+                                        Reactivate
 
+                                    </button>
 
-                                    <form asp-controller="Employees"
-                                          asp-action="Deactivate"
-                                          asp-route-id="@employee.EmployeeID"
-                                          method="post"
-                                          class="d-inline">
-
-                                        @Html.AntiForgeryToken()
-
-                                        <button type="submit"
-                                                class="btn btn-sm btn-danger">
-
-                                            <i class="bi bi-person-x me-1"></i>
-                                            Deactivate
-
-                                        </button>
-
-                                    </form>
-
-                                </div>
+                                </form>
 
                             </td>
 
@@ -215,11 +181,11 @@
                             class="text-center py-5">
 
                             <div class="fw-semibold mb-1">
-                                No active employees found.
+                                No former employees
                             </div>
 
                             <div class="text-muted small">
-                                Try changing your search criteria.
+                                Deactivated employees will appear here.
                             </div>
 
                         </td>

@@ -8,22 +8,28 @@ using FMCGEnterpriseManagementSystem.Models;
 
 namespace FMCGEnterpriseManagementSystem.Repositories.Interfaces
 {
-    // Purpose: Defines the database operations required for customer management.
+    // Defines the database operations required for customer management.
     public interface ICustomerRepository
     {
-        // Retrieves all customers.
+        // Retrieves active customers.
         Task<IEnumerable<Customer>> GetAllAsync();
+
+        // Retrieves inactive customers for the Recently Deleted page.
+        Task<IEnumerable<Customer>> GetDeletedAsync();
 
         // Retrieves a customer by their ID.
         Task<Customer?> GetByIdAsync(int id);
 
-        // Adds a new customer to the database.
+        // Adds a new customer.
         Task AddAsync(Customer customer);
 
         // Updates an existing customer.
         Task UpdateAsync(Customer customer);
 
-        // Deletes a customer using their ID.
+        // Soft deletes a customer.
         Task DeleteAsync(int id);
+
+        // Restores a previously deleted customer.
+        Task RestoreAsync(int id);
     }
 }

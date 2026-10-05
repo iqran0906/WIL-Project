@@ -40,10 +40,17 @@ namespace FMCGEnterpriseManagementSystem.Services.Interfaces
         Task<bool> DeactivateAsync(
             int salesRepresentativeId);
 
+        // Reactivates an inactive sales representative.
+        // Returns whether the operation was successful.
+        Task<bool> ReactivateAsync(
+            int salesRepresentativeId);
+
         // Checks whether a sales representative code already exists.
         // An optional ID can be excluded when checking during an update.
         Task<bool> SalesRepCodeExistsAsync(
             string salesRepCode,
             int? excludeSalesRepresentativeId = null);
+
+
     }
 }

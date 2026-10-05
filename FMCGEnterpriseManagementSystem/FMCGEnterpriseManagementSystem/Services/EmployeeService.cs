@@ -241,5 +241,31 @@ namespace FMCGEnterpriseManagementSystem.Services
 
             return true;
         }
+
+        // Reactivates a previously deactivated employee.
+        public async Task<bool> ReactivateEmployeeAsync(string id)
+        {
+            // Retrieves the employee using their ID.
+            var employee =
+                await _employeeRepository.GetByIdAsync(id);
+
+            // Stops the operation if the employee does not exist.
+            if (employee == null)
+            {
+                return false;
+            }
+
+            // Marks the employee as active again.
+            employee.IsActive = true;
+
+            // Records when the employee was reactivated.
+            employee.UpdatedAt = DateTime.UtcNow;
+
+            // Saves the updated employee.
+            await _employeeRepository.UpdateAsync(employee);
+            await _employeeRepository.SaveChangesAsync();
+
+            return true;
+        }
     }
 }

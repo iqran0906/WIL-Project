@@ -320,6 +320,50 @@ namespace FMCGEnterpriseManagementSystem.Services
             return true;
         }
 
+        // Reactivates a previously deactivated sales representative.
+        public async Task<bool> ReactivateAsync(
+            int salesRepresentativeId)
+        {
+            // Retrieves the sales representative by ID.
+            var salesRepresentative =
+                await _salesRepresentativeRepository.GetByIdAsync(
+                    salesRepresentativeId);
+
+            // Stops the operation when the record cannot be found.
+            if (salesRepresentative == null)
+            {
+                return false;
+            }
+
+            // If already active, no further update is required.
+            if (salesRepresentative.IsActive)
+            {
+                return true;
+            }
+
+            // A sales representative should not be reactivated
+            // when their linked employee is inactive.
+            if (salesRepresentative.Employee == null ||
+                !salesRepresentative.Employee.IsActive)
+            {
+                return false;
+            }
+
+            // Marks the sales representative as active.
+            salesRepresentative.IsActive = true;
+
+            // Records when the representative was reactivated.
+            salesRepresentative.UpdatedAt = DateTime.UtcNow;
+
+            _salesRepresentativeRepository.Update(
+                salesRepresentative);
+
+            await _salesRepresentativeRepository
+                .SaveChangesAsync();
+
+            return true;
+        }
+
         // Checks whether a sales representative code already exists.
         public async Task<bool> SalesRepCodeExistsAsync(
             string salesRepCode,

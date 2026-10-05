@@ -134,6 +134,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         // GET: /Customers/Delete/{id}
         // Displays the customer before deletion is confirmed.
         [HttpGet]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int id)
         {
             // Ensures that a valid customer ID was supplied.
@@ -150,6 +151,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         // POST: /Customers/Delete/{id}
         // Permanently removes the selected customer.
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Administrator")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
@@ -157,6 +159,41 @@ namespace FMCGEnterpriseManagementSystem.Controllers
 
             // Returns the user to the customer list after deletion.
             return RedirectToAction(nameof(CustomerList));
+        }
+
+        // GET: /Customers/RecentlyDeleted
+        // Displays customers that have been soft deleted.
+        [HttpGet]
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> RecentlyDeleted()
+        {
+            var customers =
+                await _customerService
+                    .GetDeletedCustomersAsync();
+
+            return View(customers);
+        }
+
+        // POST: /Customers/Restore/{id}
+        // Restores a previously deleted customer.
+        [HttpPost]
+        [Authorize(Roles = "Administrator")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Restore(int id)
+        {
+            if (id <= 0)
+            {
+                return NotFound();
+            }
+
+            await _customerService
+                .RestoreCustomerAsync(id);
+
+            TempData["SuccessMessage"] =
+                "Customer restored successfully.";
+
+            return RedirectToAction(
+                nameof(RecentlyDeleted));
         }
     }
 }

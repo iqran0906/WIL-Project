@@ -1,6 +1,4 @@
-﻿
-
-using FMCGEnterpriseManagementSystem.Data;
+﻿using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Enums;
 using FMCGEnterpriseManagementSystem.Models;
 using FMCGEnterpriseManagementSystem.Services;
@@ -116,10 +114,44 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         }
 
         // GET: Quotes
-        // Displays all quotes.
+        // Displays quotations that have not yet been converted to invoices.
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var quotes = await _quoteService.GetAllQuotesAsync();
+            var allQuotes =
+                (await _quoteService.GetAllQuotesAsync()).ToList();
+
+            // The main quotation screen is the working quotation list.
+            var currentQuotes = allQuotes
+                .Where(q => q.Status != QuoteStatus.Invoiced)
+                .OrderByDescending(q => q.QuoteDate)
+                .ToList();
+
+            // Statistics are calculated using all quotations.
+            ViewBag.TotalQuotes = allQuotes.Count;
+
+            ViewBag.PendingQuotes =
+                allQuotes.Count(q => q.Status == QuoteStatus.Pending);
+
+            ViewBag.InvoicedQuotes =
+                allQuotes.Count(q => q.Status == QuoteStatus.Invoiced);
+
+            ViewBag.TotalQuoteValue =
+                allQuotes.Sum(q => q.Total);
+
+            return View(currentQuotes);
+        }
+
+        // GET: Quotes/History
+        // Displays quotations that have already been converted to invoices.
+        [HttpGet]
+        public async Task<IActionResult> History()
+        {
+            var quotes =
+                (await _quoteService.GetAllQuotesAsync())
+                .Where(q => q.Status == QuoteStatus.Invoiced)
+                .OrderByDescending(q => q.QuoteDate)
+                .ToList();
 
             return View(quotes);
         }
@@ -284,12 +316,29 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         }
 
         // POST: Quotes/ConvertToInvoice/5
-        // Converts the selected quote into an invoice through the quote service.
+        // Converts a quotation into an invoice.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ConvertToInvoice(int id)
         {
-            await _quoteService.ConvertToInvoiceAsync(id);
+            if (id <= 0)
+            {
+                return NotFound();
+            }
+
+            var success =
+                await _quoteService.ConvertToInvoiceAsync(id);
+
+            if (!success)
+            {
+                TempData["ErrorMessage"] =
+                    "The quote could not be converted to an invoice.";
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            TempData["SuccessMessage"] =
+                "Quote converted to invoice successfully.";
 
             return RedirectToAction(nameof(Index));
         }

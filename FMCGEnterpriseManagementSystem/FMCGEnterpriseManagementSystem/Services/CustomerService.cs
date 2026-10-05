@@ -52,6 +52,17 @@ namespace FMCGEnterpriseManagementSystem.Services
             return customers.Select(c => MapToViewModel(c));
         }
 
+        // Retrieves customers that have been soft deleted.
+        public async Task<IEnumerable<CustomerViewModel>>
+            GetDeletedCustomersAsync()
+        {
+            var customers =
+                await _customerRepository.GetDeletedAsync();
+
+            return customers.Select(
+                c => MapToViewModel(c));
+        }
+
         // Retrieves a customer using their unique customer ID.
         public async Task<CustomerViewModel?> GetCustomerByIdAsync(int id)
         {
@@ -102,6 +113,12 @@ namespace FMCGEnterpriseManagementSystem.Services
         {
             // Removes the customer through the repository.
             await _customerRepository.DeleteAsync(id);
+        }
+
+        // Restores a previously deleted customer.
+        public async Task RestoreCustomerAsync(int id)
+        {
+            await _customerRepository.RestoreAsync(id);
         }
 
         // Converts a Customer entity into a CustomerViewModel for use by the application interface.

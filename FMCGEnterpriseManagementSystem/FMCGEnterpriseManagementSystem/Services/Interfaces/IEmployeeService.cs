@@ -46,5 +46,6 @@ namespace FMCGEnterpriseManagementSystem.Services.Interfaces
         // Deactivates an employee using their employee ID.
         // Returns whether the operation was successful.
         Task<bool> DeactivateEmployeeAsync(string id);
+        Task<bool> ReactivateEmployeeAsync(string id);
     }
 }

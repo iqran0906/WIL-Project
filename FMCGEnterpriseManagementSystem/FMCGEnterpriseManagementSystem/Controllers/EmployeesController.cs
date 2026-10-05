@@ -26,19 +26,57 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             _employeeService = employeeService;
         }
 
-        // Displays all employees or filters the list using a search keyword.
+        // Displays active employees or filters the active employee list
+        // using a search keyword.
+        [HttpGet]
         public async Task<IActionResult> Index(string? keyword)
         {
             IEnumerable<Employee> employees;
 
             if (string.IsNullOrWhiteSpace(keyword))
             {
-                employees = await _employeeService.GetAllEmployeesAsync();
+                employees =
+                    await _employeeService.GetAllEmployeesAsync();
             }
             else
             {
-                employees = await _employeeService.SearchEmployeesAsync(keyword);
+                employees =
+                    await _employeeService.SearchEmployeesAsync(keyword);
             }
+
+            // The main employee screen only displays
+            // employees who are currently active.
+            employees = employees
+                .Where(e => e.IsActive)
+                .OrderBy(e => e.EmployeeNumber)
+                .ToList();
+
+            ViewBag.Keyword = keyword;
+
+            return View(employees);
+        }
+
+        // Displays employees who are no longer active.
+        [HttpGet]
+        public async Task<IActionResult> FormerEmployees(string? keyword)
+        {
+            IEnumerable<Employee> employees;
+
+            if (string.IsNullOrWhiteSpace(keyword))
+            {
+                employees =
+                    await _employeeService.GetAllEmployeesAsync();
+            }
+            else
+            {
+                employees =
+                    await _employeeService.SearchEmployeesAsync(keyword);
+            }
+
+            employees = employees
+                .Where(e => !e.IsActive)
+                .OrderBy(e => e.EmployeeNumber)
+                .ToList();
 
             ViewBag.Keyword = keyword;
 
@@ -247,6 +285,30 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             TempData["SuccessMessage"] = "Employee deactivated successfully.";
 
             return RedirectToAction(nameof(Index));
+        }
+
+        // Reactivates a former employee.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Reactivate(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return BadRequest();
+            }
+
+            var reactivated =
+                await _employeeService.ReactivateEmployeeAsync(id);
+
+            if (!reactivated)
+            {
+                return NotFound();
+            }
+
+            TempData["SuccessMessage"] =
+                "Employee reactivated successfully.";
+
+            return RedirectToAction(nameof(FormerEmployees));
         }
     }
 }

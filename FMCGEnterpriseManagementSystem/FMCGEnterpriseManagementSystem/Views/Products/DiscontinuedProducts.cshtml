@@ -1,0 +1,192 @@
+﻿@model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.ProductViewModel>
+
+@{
+    ViewData["Title"] = "Discontinued Products";
+}
+
+<div class="content-card">
+
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
+
+        <div>
+
+            <h2 class="fw-bold mb-1" style="color:#1c323d;">
+                Discontinued Products
+            </h2>
+
+            <p class="text-muted mb-0">
+                Products that are no longer part of the active product catalogue.
+            </p>
+
+        </div>
+
+
+        <a asp-action="Index"
+           class="btn btn-outline-secondary px-4">
+
+            <i class="bi bi-arrow-left me-1"></i>
+            Back to Products
+
+        </a>
+
+    </div>
+
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show"
+             role="alert">
+
+            <i class="bi bi-check-circle me-2"></i>
+            @TempData["SuccessMessage"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+    }
+
+
+    <div class="table-responsive">
+
+        <table class="custom-data-table align-middle">
+
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Supplier</th>
+                    <th>Cost Price</th>
+                    <th>Selling Price</th>
+                    <th>Status</th>
+                    <th class="text-center">Action</th>
+                </tr>
+            </thead>
+
+
+            <tbody>
+
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>
+                                <span class="fw-semibold">
+                                    @item.ProductCode
+                                </span>
+                            </td>
+
+
+                            <td>
+
+                                <div class="fw-semibold">
+                                    @item.ProductName
+                                </div>
+
+                                @if (!string.IsNullOrWhiteSpace(item.Description))
+                                {
+                                    <div class="small text-muted mt-1">
+                                        @item.Description
+                                    </div>
+                                }
+
+                            </td>
+
+
+                            <td>
+                                @item.Category
+                            </td>
+
+
+                            <td>
+                                @(string.IsNullOrWhiteSpace(item.SupplierName)
+                                    ? "Not Available"
+                                    : item.SupplierName)
+                            </td>
+
+
+                            <td>
+
+                                <div class="fw-semibold">
+                                    R @item.CostExVat.ToString("N2")
+                                </div>
+
+                                <div class="small text-muted">
+                                    R @item.CostIncVat.ToString("N2") incl. VAT
+                                </div>
+
+                            </td>
+
+
+                            <td>
+                                <span class="fw-semibold">
+                                    R @item.SellingPrice.ToString("N2")
+                                </span>
+                            </td>
+
+
+                            <td>
+                                <span class="badge bg-secondary px-3 py-2">
+                                    Discontinued
+                                </span>
+                            </td>
+
+
+                            <td class="text-center">
+
+                                <form asp-action="Activate"
+                                      asp-route-id="@item.ProductId"
+                                      method="post"
+                                      class="d-inline">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <button type="submit"
+                                            class="btn btn-success btn-sm">
+
+                                        <i class="bi bi-arrow-counterclockwise me-1"></i>
+                                        Reactivate
+
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+
+                        <td colspan="8"
+                            class="text-center py-5">
+
+                            <i class="bi bi-archive fs-2 d-block mb-2 text-muted"></i>
+
+                            <div class="fw-semibold mb-1">
+                                No Discontinued Products
+                            </div>
+
+                            <div class="text-muted small">
+                                Products you discontinue will appear here.
+                            </div>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>

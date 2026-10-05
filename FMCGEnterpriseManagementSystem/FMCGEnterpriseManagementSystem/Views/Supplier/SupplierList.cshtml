@@ -1,8 +1,4 @@
-﻿@*
-    Purpose: Supplier List page (Supplier).
-    Authors: iqran0906, Maseeha17 (from git history)
-*@
-@model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.SupplierViewModel>
+﻿@model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.SupplierViewModel>
 
 @{
     ViewData["Title"] = "Suppliers";
@@ -19,17 +15,46 @@
             </h2>
 
             <p class="text-muted mb-0">
-                Manage supplier relationships, contact information and credit terms.
+                Manage active supplier relationships, contact information and credit terms.
             </p>
         </div>
 
-        <a asp-controller="Supplier"
-           asp-action="AddSupplier"
-           class="btn btn-action-primary px-4">
-            + New Supplier
-        </a>
+        <div class="d-flex gap-2 flex-wrap">
+
+            <a asp-controller="Supplier"
+               asp-action="DeactivatedSuppliers"
+               class="btn btn-outline-secondary px-4">
+                <i class="bi bi-archive me-1"></i>
+                Deactivated Suppliers
+            </a>
+
+            <a asp-controller="Supplier"
+               asp-action="AddSupplier"
+               class="btn btn-action-primary px-4">
+                <i class="bi bi-plus-lg me-1"></i>
+                New Supplier
+            </a>
+
+        </div>
 
     </div>
+
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show"
+             role="alert">
+
+            <i class="bi bi-check-circle me-2"></i>
+            @TempData["SuccessMessage"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+    }
 
 
     <!-- Summary Cards -->
@@ -37,6 +62,7 @@
 
         <div class="col-lg-3 col-md-6">
             <div class="border rounded-3 p-3 h-100 bg-white">
+
                 <div class="text-muted small mb-1">
                     Total Suppliers
                 </div>
@@ -44,12 +70,14 @@
                 <div class="fs-3 fw-bold" style="color:#1c323d;">
                     @ViewBag.TotalSuppliers
                 </div>
+
             </div>
         </div>
 
 
         <div class="col-lg-3 col-md-6">
             <div class="border rounded-3 p-3 h-100 bg-white">
+
                 <div class="text-muted small mb-1">
                     Active Suppliers
                 </div>
@@ -57,32 +85,37 @@
                 <div class="fs-3 fw-bold" style="color:#1c323d;">
                     @ViewBag.ActiveSuppliers
                 </div>
+
             </div>
         </div>
 
 
         <div class="col-lg-3 col-md-6">
             <div class="border rounded-3 p-3 h-100 bg-white">
+
                 <div class="text-muted small mb-1">
-                    Inactive Suppliers
+                    Deactivated Suppliers
                 </div>
 
                 <div class="fs-3 fw-bold" style="color:#1c323d;">
                     @ViewBag.InactiveSuppliers
                 </div>
+
             </div>
         </div>
 
 
         <div class="col-lg-3 col-md-6">
             <div class="border rounded-3 p-3 h-100 bg-white">
+
                 <div class="text-muted small mb-1">
-                    Total Credit Limit
+                    Active Credit Limit
                 </div>
 
                 <div class="fs-4 fw-bold" style="color:#1c323d;">
                     R @(((decimal)ViewBag.TotalCreditLimit).ToString("N2"))
                 </div>
+
             </div>
         </div>
 
@@ -100,7 +133,7 @@
             <div class="col-lg-8">
 
                 <label class="form-label fw-semibold">
-                    Search
+                    Search Active Suppliers
                 </label>
 
                 <input type="text"
@@ -160,7 +193,6 @@
                     {
                         <tr>
 
-                            <!-- Supplier -->
                             <td>
                                 <div class="fw-semibold">
                                     @supplier.CompanyName
@@ -175,7 +207,6 @@
                             </td>
 
 
-                            <!-- Contact -->
                             <td>
                                 <div class="fw-semibold">
                                     @supplier.ContactPerson
@@ -191,7 +222,6 @@
                             </td>
 
 
-                            <!-- Credit -->
                             <td>
                                 <div class="fw-semibold">
                                     R @supplier.CreditLimit.ToString("N2")
@@ -203,7 +233,6 @@
                             </td>
 
 
-                            <!-- VAT -->
                             <td>
                                 @if (!string.IsNullOrWhiteSpace(supplier.VATNumber))
                                 {
@@ -211,87 +240,54 @@
                                 }
                                 else
                                 {
-                                    <span class="text-muted">Not provided</span>
-                                }
-                            </td>
-
-
-                            <!-- Status -->
-                            <td>
-                                @if (supplier.IsActive)
-                                {
-                                    <span class="badge bg-success px-3 py-2">
-                                        Active
-                                    </span>
-                                }
-                                else
-                                {
-                                    <span class="badge bg-danger px-3 py-2">
-                                        Inactive
+                                    <span class="text-muted">
+                                        Not provided
                                     </span>
                                 }
                             </td>
 
 
-                            <!-- Actions -->
                             <td>
-                                <div class="d-flex justify-content-center gap-2">
+                                <span class="badge bg-success px-3 py-2">
+                                    Active
+                                </span>
+                            </td>
 
-                                <a asp-controller="Supplier"
-   asp-action="Products"
-   asp-route-id="@supplier.SupplierId"
-   class="btn btn-primary btn-sm">
-    View Products
-</a>
-                                <div class="d-flex justify-content-center gap-2">
 
-                                <div class="d-flex justify-content-center gap-2">
+                            <td>
+                                <div class="d-flex justify-content-center gap-2 flex-wrap">
+
+                                    <a asp-controller="Supplier"
+                                       asp-action="Products"
+                                       asp-route-id="@supplier.SupplierId"
+                                       class="btn btn-primary btn-sm">
+                                        View Products
+                                    </a>
 
                                     <a asp-controller="Supplier"
                                        asp-action="EditSupplier"
                                        asp-route-id="@supplier.SupplierId"
                                        class="btn btn-warning btn-sm">
-                                        ✎ Edit
+                                        <i class="bi bi-pencil-square me-1"></i>
+                                        Edit
                                     </a>
 
+                                    <form asp-controller="Supplier"
+                                          asp-action="DeactivateSupplier"
+                                          asp-route-id="@supplier.SupplierId"
+                                          method="post"
+                                          class="d-inline">
 
-                                    @if (supplier.IsActive)
-                                    {
-                                        <form asp-controller="Supplier"
-                                              asp-action="DeactivateSupplier"
-                                              asp-route-id="@supplier.SupplierId"
-                                              method="post"
-                                              class="d-inline">
+                                        @Html.AntiForgeryToken()
 
-                                            @Html.AntiForgeryToken()
+                                        <button type="submit"
+                                                class="btn btn-danger btn-sm">
+                                            Deactivate
+                                        </button>
 
-                                            <button type="submit"
-                                                    class="btn btn-danger btn-sm">
-                                                Deactivate
-                                            </button>
-
-                                        </form>
-                                    }
-                                    else
-                                    {
-                                        <form asp-controller="Supplier"
-                                              asp-action="ActivateSupplier"
-                                              asp-route-id="@supplier.SupplierId"
-                                              method="post"
-                                              class="d-inline">
-
-                                            @Html.AntiForgeryToken()
-
-                                            <button type="submit"
-                                                    class="btn btn-success btn-sm">
-                                                Activate
-                                            </button>
-
-                                        </form>
-                                    }
+                                    </form>
 
                                 </div>
-
                             </td>
 
                         </tr>
@@ -300,20 +296,20 @@
                 else
                 {
                     <tr>
-
                         <td colspan="6"
                             class="text-center py-5">
 
+                            <i class="bi bi-truck fs-2 d-block mb-2 text-muted"></i>
+
                             <div class="fw-semibold mb-1">
-                                No suppliers found
+                                No active suppliers found
                             </div>
 
                             <div class="text-muted small">
-                                Try changing your search.
+                                Try changing your search or add a new supplier.
                             </div>
 
                         </td>
-
                     </tr>
                 }
 

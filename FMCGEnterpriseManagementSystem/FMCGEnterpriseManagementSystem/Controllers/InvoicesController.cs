@@ -65,7 +65,8 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         // Availability: https://learn.microsoft.com/en-us/ef/core/performance/efficient-querying
 
         // GET: Invoices
-        // Displays invoices using optional customer, date and keyword filters.
+        // Displays invoices that still require operational attention.
+        [HttpGet]
         public async Task<IActionResult> Index(
             int? customerId,
             DateTime? startDate,
@@ -74,7 +75,7 @@ namespace FMCGEnterpriseManagementSystem.Controllers
         {
             IEnumerable<InvoiceViewModel> invoices;
 
-            // Prevent an invalid date range from being used for the search.
+            // Prevent an invalid date range.
             if (startDate.HasValue &&
                 endDate.HasValue &&
                 startDate.Value.Date > endDate.Value.Date)
@@ -91,31 +92,73 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                     startDate,
                     endDate,
                     keyword);
+
+                // The main invoice screen contains only invoices
+                // that are not yet fully paid.
+                invoices = invoices
+                    .Where(i =>
+                        !(string.Equals(
+                            i.Status,
+                            "Approved",
+                            StringComparison.OrdinalIgnoreCase)
+                          && i.AmountDue <= 0))
+                    .ToList();
             }
 
-            // Load customer filter options and the values currently applied.
-            var customers = await _context.Customers
-                .AsNoTracking()
-                .OrderBy(c => c.Name)
-                .ThenBy(c => c.Surname)
-                .Select(c => new
-                {
-                    c.CustomerId,
-                    Display =
-                        c.Name + " " +
-                        c.Surname +
-                        " (No. " +
-                        c.CustomerId +
-                        ")"
-                })
-                .ToListAsync();
+            await LoadInvoiceCustomerFilterAsync(customerId);
 
-            ViewBag.CustomerFilter =
-                new SelectList(
-                    customers,
-                    "CustomerId",
-                    "Display",
-                    customerId);
+            ViewBag.StartDate =
+                startDate?.ToString("yyyy-MM-dd");
+
+            ViewBag.EndDate =
+                endDate?.ToString("yyyy-MM-dd");
+
+            ViewBag.Keyword = keyword;
+
+            return View(invoices);
+        }
+
+        // GET: Invoices/History
+        // Displays fully paid invoices retained as financial records.
+        [HttpGet]
+        public async Task<IActionResult> History(
+            int? customerId,
+            DateTime? startDate,
+            DateTime? endDate,
+            string? keyword)
+        {
+            IEnumerable<InvoiceViewModel> invoices;
+
+            if (startDate.HasValue &&
+                endDate.HasValue &&
+                startDate.Value.Date > endDate.Value.Date)
+            {
+                ViewBag.DateError =
+                    "The end date cannot be before the start date.";
+
+                invoices = Enumerable.Empty<InvoiceViewModel>();
+            }
+            else
+            {
+                invoices = await _invoiceService.SearchAsync(
+                    customerId,
+                    startDate,
+                    endDate,
+                    keyword);
+
+                // A paid invoice is an approved invoice
+                // with no remaining balance.
+                invoices = invoices
+                    .Where(i =>
+                        string.Equals(
+                            i.Status,
+                            "Approved",
+                            StringComparison.OrdinalIgnoreCase)
+                        && i.AmountDue <= 0)
+                    .ToList();
+            }
+
+            await LoadInvoiceCustomerFilterAsync(customerId);
 
             ViewBag.StartDate =
                 startDate?.ToString("yyyy-MM-dd");
@@ -252,6 +295,34 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                         SellingPrice = p.SellingPrice
                     })
                     .ToListAsync();
+        }
+
+        // Loads customers used by invoice search filters.
+        private async Task LoadInvoiceCustomerFilterAsync(
+            int? selectedCustomerId = null)
+        {
+            var customers = await _context.Customers
+                .AsNoTracking()
+                .OrderBy(c => c.Name)
+                .ThenBy(c => c.Surname)
+                .Select(c => new
+                {
+                    c.CustomerId,
+                    Display =
+                        c.Name + " " +
+                        c.Surname +
+                        " (No. " +
+                        c.CustomerId +
+                        ")"
+                })
+                .ToListAsync();
+
+            ViewBag.CustomerFilter =
+                new SelectList(
+                    customers,
+                    "CustomerId",
+                    "Display",
+                    selectedCustomerId);
         }
 
         // Checks that the products submitted with the invoice are valid and active.

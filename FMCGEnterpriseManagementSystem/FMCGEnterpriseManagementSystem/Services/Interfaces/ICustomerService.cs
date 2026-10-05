@@ -27,5 +27,9 @@ namespace FMCGEnterpriseManagementSystem.Services.Interfaces
 
         // Deletes a customer using their ID.
         Task DeleteCustomerAsync(int id);
+
+        Task<IEnumerable<CustomerViewModel>> GetDeletedCustomersAsync();
+
+        Task RestoreCustomerAsync(int id);
     }
 }
