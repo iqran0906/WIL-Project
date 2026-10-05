@@ -18,6 +18,8 @@ using FMCGEnterpriseManagementSystem.Strategies.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
+using System.Security.Claims;
 using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -198,7 +200,7 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 // ==========================================================
-// SEED ROLES / INITIAL USERS
+// SEED ROLES & COMPLETE ADMIN ACCESS
 // ==========================================================
 
 using (var scope = app.Services.CreateScope())
@@ -212,10 +214,14 @@ using (var scope = app.Services.CreateScope())
         var userManager = services.GetRequiredService<UserManager<User>>();
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
-        // Ensure Admin Role Exists
-        if (!await roleManager.RoleExistsAsync("Admin"))
+        // Create all standard application roles
+        string[] allRoles = { "Admin", "Administrator", "Manager", "Employee", "SalesRepresentative" };
+        foreach (var role in allRoles)
         {
-            await roleManager.CreateAsync(new IdentityRole("Admin"));
+            if (!await roleManager.RoleExistsAsync(role))
+            {
+                await roleManager.CreateAsync(new IdentityRole(role));
+            }
         }
 
         var adminEmail = "admin@fmcg.com";
@@ -223,7 +229,6 @@ using (var scope = app.Services.CreateScope())
 
         if (adminUser == null)
         {
-            // Create user if it does not exist
             adminUser = new User
             {
                 UserName = adminEmail,
@@ -235,7 +240,10 @@ using (var scope = app.Services.CreateScope())
             var createResult = await userManager.CreateAsync(adminUser, "Wholesale101@");
             if (createResult.Succeeded)
             {
-                await userManager.AddToRoleAsync(adminUser, "Admin");
+                foreach (var role in allRoles)
+                {
+                    await userManager.AddToRoleAsync(adminUser, role);
+                }
             }
         }
         else
@@ -244,21 +252,35 @@ using (var scope = app.Services.CreateScope())
             var token = await userManager.GeneratePasswordResetTokenAsync(adminUser);
             await userManager.ResetPasswordAsync(adminUser, token, "Wholesale101@");
 
-            // Ensure requirements are fulfilled
+            // Guarantee account active and verified status
             adminUser.EmailConfirmed = true;
             adminUser.IsActive = true;
             await userManager.UpdateAsync(adminUser);
 
-            if (!await userManager.IsInRoleAsync(adminUser, "Admin"))
+            // Grant ALL roles to guarantee complete access to all protected routes
+            foreach (var role in allRoles)
             {
-                await userManager.AddToRoleAsync(adminUser, "Admin");
+                if (!await userManager.IsInRoleAsync(adminUser, role))
+                {
+                    await userManager.AddToRoleAsync(adminUser, role);
+                }
+            }
+        }
+
+        // Grant explicit admin claims if policy-based authorization is used
+        if (adminUser != null)
+        {
+            var existingClaims = await userManager.GetClaimsAsync(adminUser);
+            if (!existingClaims.Any(c => c.Type == "Permission" && c.Value == "FullAccess"))
+            {
+                await userManager.AddClaimAsync(adminUser, new Claim("Permission", "FullAccess"));
             }
         }
     }
     catch (Exception ex)
     {
         var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred while seeding initial roles and admin user.");
+        logger.LogError(ex, "An error occurred while seeding full admin permissions.");
     }
 }
 
