@@ -1,8 +1,10 @@
-﻿// Title: Implement CRUD - ASP.NET Core MVC with Entity Framework Core
+// Title: Implement CRUD - ASP.NET Core MVC with Entity Framework Core
 // Author: Microsoft
 // Date: 10-04-2024
 // Code version: ASP.NET Core 10.0
 // Availability: https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/crud
+
+#pragma warning disable CS8600, CS8601, CS8602, CS8603, CS8604, CS8613, CS8618
 
 using FMCGEnterpriseManagementSystem.Data;
 using FMCGEnterpriseManagementSystem.Models;
