@@ -1,0 +1,188 @@
+﻿@model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.SupplierViewModel>
+
+@{
+    ViewData["Title"] = "Deactivated Suppliers";
+}
+
+<div class="content-card">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
+
+        <div>
+            <h2 class="fw-bold mb-1" style="color:#1c323d;">
+                Deactivated Suppliers
+            </h2>
+
+            <p class="text-muted mb-0">
+                View and reactivate suppliers that are no longer currently active.
+            </p>
+        </div>
+
+        <a asp-controller="Supplier"
+           asp-action="SupplierList"
+           class="btn btn-outline-secondary px-4">
+
+            <i class="bi bi-arrow-left me-1"></i>
+            Back to Suppliers
+
+        </a>
+
+    </div>
+
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show"
+             role="alert">
+
+            <i class="bi bi-check-circle me-2"></i>
+            @TempData["SuccessMessage"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+    }
+
+
+    <!-- Deactivated Supplier Table -->
+    <div class="table-responsive">
+
+        <table class="custom-data-table align-middle">
+
+            <thead>
+                <tr>
+                    <th>Supplier</th>
+                    <th>Contact</th>
+                    <th>Credit</th>
+                    <th>VAT Number</th>
+                    <th>Status</th>
+                    <th class="text-center">Action</th>
+                </tr>
+            </thead>
+
+
+            <tbody>
+
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var supplier in Model)
+                    {
+                        <tr>
+
+                            <td>
+                                <div class="fw-semibold">
+                                    @supplier.CompanyName
+                                </div>
+
+                                @if (!string.IsNullOrWhiteSpace(supplier.PhysicalAddress))
+                                {
+                                    <div class="small text-muted mt-1">
+                                        @supplier.PhysicalAddress
+                                    </div>
+                                }
+                            </td>
+
+
+                            <td>
+                                <div class="fw-semibold">
+                                    @supplier.ContactPerson
+                                </div>
+
+                                <div class="small text-muted">
+                                    @supplier.Email
+                                </div>
+
+                                <div class="small text-muted">
+                                    @supplier.ContactNumber
+                                </div>
+                            </td>
+
+
+                            <td>
+                                <div class="fw-semibold">
+                                    R @supplier.CreditLimit.ToString("N2")
+                                </div>
+
+                                <div class="small text-muted">
+                                    @supplier.CreditTerms
+                                </div>
+                            </td>
+
+
+                            <td>
+                                @if (!string.IsNullOrWhiteSpace(supplier.VATNumber))
+                                {
+                                    @supplier.VATNumber
+                                }
+                                else
+                                {
+                                    <span class="text-muted">
+                                        Not provided
+                                    </span>
+                                }
+                            </td>
+
+
+                            <td>
+                                <span class="badge bg-secondary px-3 py-2">
+                                    Deactivated
+                                </span>
+                            </td>
+
+
+                            <td class="text-center">
+
+                                <form asp-controller="Supplier"
+                                      asp-action="ActivateSupplier"
+                                      asp-route-id="@supplier.SupplierId"
+                                      method="post"
+                                      class="d-inline">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <button type="submit"
+                                            class="btn btn-success btn-sm">
+
+                                        <i class="bi bi-arrow-counterclockwise me-1"></i>
+                                        Activate
+
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6"
+                            class="text-center py-5">
+
+                            <i class="bi bi-archive fs-2 d-block mb-2 text-muted"></i>
+
+                            <div class="fw-semibold mb-1">
+                                No Deactivated Suppliers
+                            </div>
+
+                            <div class="text-muted small">
+                                Deactivated suppliers will appear here.
+                            </div>
+
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>

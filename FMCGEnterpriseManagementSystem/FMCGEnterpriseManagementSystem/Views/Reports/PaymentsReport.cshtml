@@ -1,0 +1,87 @@
+﻿@*
+    Purpose: Payments report page.
+    Authors: iqran0906 (from git history)
+*@
+@model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.Reports.PaymentReportViewModel>
+
+@{
+    ViewData["Title"] = "Payments Report";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="text-white fw-bold">Payments Report</h2>
+            <p class="text-light opacity-75 mb-0">Payments received against customer invoices.</p>
+        </div>
+
+        <partial name="_ReportToolbar" model="@("PaymentsReport")" />
+    </div>
+
+    <form method="get" class="row g-3 mb-4 no-print">
+        <div class="col-md-4">
+            <label class="form-label text-light fw-semibold">Start Date</label>
+            <input type="date" name="startDate"
+                   value="@ViewBag.StartDate" class="form-control" />
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label text-light fw-semibold">End Date</label>
+            <input type="date" name="endDate"
+                   value="@ViewBag.EndDate" class="form-control" />
+        </div>
+
+        <div class="col-md-4 d-flex align-items-end gap-2">
+            <button class="btn btn-primary">Filter</button>
+            <a asp-action="PaymentsReport" class="btn btn-outline-light">Clear</a>
+        </div>
+    </form>
+
+    @if (ViewBag.DateError != null)
+    {
+        <div class="alert alert-danger"><i class="bi bi-exclamation-triangle me-1"></i>@ViewBag.DateError</div>
+    }
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            @if (!Model.Any())
+            {
+                <p class="text-muted mb-0">No payments found.</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Invoice</th>
+                                <th>Customer</th>
+                                <th>Method</th>
+                                <th>Amount Paid</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.PaymentDate.ToString("dd MMM yyyy")</td>
+                                    <td>@item.InvoiceNumber</td>
+                                    <td>@item.CustomerName</td>
+                                    <td>@item.PaymentMethod</td>
+                                    <td>R @item.AmountPaid.ToString("N2")</td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr class="fw-bold">
+                                <td colspan="4">Total Payments</td>
+                                <td>R @Model.Sum(x => x.AmountPaid).ToString("N2")</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>

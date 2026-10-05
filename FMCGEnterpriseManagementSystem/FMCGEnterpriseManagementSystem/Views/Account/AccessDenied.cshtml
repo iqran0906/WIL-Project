@@ -1,0 +1,25 @@
+﻿@*
+    Purpose: Shown when a user opens a page their role cannot access.
+    Authors: iqran0906 (from git history)
+*@
+@{
+    ViewData["Title"] = "Access Denied";
+}
+
+<div class="content-card text-center">
+
+    <i class="bi bi-shield-lock fs-1 mb-3"></i>
+
+    <h2 class="fw-bold">Access Denied</h2>
+
+    <p class="text-muted">
+        You do not have permission to access this section.
+    </p>
+
+    <a asp-controller="Home"
+       asp-action="Dashboard"
+       class="btn btn-action-primary">
+        Return to Dashboard
+    </a>
+
+</div>

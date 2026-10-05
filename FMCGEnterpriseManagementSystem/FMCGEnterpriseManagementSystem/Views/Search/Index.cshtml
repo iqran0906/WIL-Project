@@ -1,0 +1,167 @@
+@*
+    Purpose: Global search results grouped by record type.
+    Authors: ST10068525 (new file, not yet committed)
+*@
+@model FMCGEnterpriseManagementSystem.ViewModels.GlobalSearchViewModel
+
+@{
+    ViewData["Title"] = "Search Results";
+}
+
+<style>
+    .search-result-card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 10px;
+        border: none;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .search-result-row + .search-result-row {
+        border-top: 1px solid #e9ecef;
+    }
+
+    .search-result-icon {
+        width: 40px;
+        height: 40px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        background-color: #357383;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+    }
+
+    .search-result-details {
+        font-size: 0.85rem;
+    }
+
+    .btn-search-open {
+        background-color: #357383;
+        color: #ffffff;
+        border: none;
+        white-space: nowrap;
+    }
+
+        .btn-search-open:hover {
+            background-color: #275662;
+            color: #ffffff;
+        }
+</style>
+
+<div class="px-2 py-3">
+
+    <h2 class="text-white fw-bold mb-3">Search Results</h2>
+
+    <!-- SEARCH AGAIN -->
+    <form asp-controller="Search"
+          asp-action="Index"
+          method="get"
+          class="mb-4"
+          role="search">
+
+        <div class="input-group" style="max-width: 500px;">
+            <span class="input-group-text bg-light border-end-0">
+                <i class="bi bi-search"></i>
+            </span>
+            <input type="search"
+                   name="q"
+                   value="@Model.Query"
+                   class="form-control bg-light border-start-0"
+                   placeholder="Customer no., item code, invoice no., name..."
+                   aria-label="Search" />
+            <button type="submit" class="btn btn-light">Search</button>
+        </div>
+
+    </form>
+
+    @if (Model.TotalResults == 0)
+    {
+        <div class="card search-result-card p-4 text-center">
+            <i class="bi bi-search fs-1 text-muted mb-2"></i>
+            <h5 class="fw-bold" style="color: #1c323d;">
+                No results found for "@Model.Query"
+            </h5>
+            <p class="text-muted mb-0">
+                Try a customer number, item code, invoice number, quote number,
+                or part of a name, email or phone number.
+            </p>
+        </div>
+    }
+    else
+    {
+        <p class="text-white-50 mb-4">
+            @Model.TotalResults result@(Model.TotalResults == 1 ? "" : "s")
+            found for "<span class="text-white">@Model.Query</span>"
+        </p>
+
+        @foreach (var group in Model.Results.GroupBy(r => r.Category))
+        {
+            <h5 class="text-white fw-bold mb-2">
+                @group.Key
+                <span class="badge bg-light text-dark ms-1">@group.Count()</span>
+            </h5>
+
+            <div class="card search-result-card mb-4">
+
+                @foreach (var result in group
+                    .OrderByDescending(r => r.IsExactMatch))
+                {
+                    <div class="search-result-row d-flex flex-column flex-sm-row
+                        align-items-sm-center gap-3 p-3">
+
+                        <div class="search-result-icon">
+                            <i class="bi @result.Icon"></i>
+                        </div>
+
+                        <div class="flex-grow-1">
+
+                            <div class="fw-bold" style="color: #1c323d;">
+                                @result.Title
+
+                                @if (result.IsExactMatch)
+                                {
+                                    <span class="badge ms-1"
+                                          style="background-color: #357383;">
+                                        Exact match
+                                    </span>
+                                }
+                            </div>
+
+                            @if (!string.IsNullOrWhiteSpace(result.Subtitle))
+                            {
+                                <div class="text-muted small">@result.Subtitle</div>
+                            }
+
+                            @if (result.Details.Any())
+                            {
+                                <div class="search-result-details row g-1 mt-2">
+                                    @foreach (var detail in result.Details)
+                                    {
+                                        <div class="col-12 col-md-6 col-xl-4">
+                                            <span class="text-muted">@detail.Key:</span>
+                                            <span class="text-dark">@detail.Value</span>
+                                        </div>
+                                    }
+                                </div>
+                            }
+
+                        </div>
+
+                        <a asp-controller="@result.Controller"
+                           asp-action="@result.Action"
+                           asp-all-route-data="@result.RouteValues"
+                           class="btn btn-sm btn-search-open">
+                            @result.LinkText
+                            <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+
+                    </div>
+                }
+
+            </div>
+        }
+    }
+
+</div>

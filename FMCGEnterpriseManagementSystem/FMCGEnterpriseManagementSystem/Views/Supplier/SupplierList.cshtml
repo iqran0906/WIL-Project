@@ -1,0 +1,322 @@
+﻿@model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.SupplierViewModel>
+
+@{
+    ViewData["Title"] = "Suppliers";
+}
+
+<div class="content-card">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
+
+        <div>
+            <h2 class="fw-bold mb-1" style="color:#1c323d;">
+                Suppliers
+            </h2>
+
+            <p class="text-muted mb-0">
+                Manage active supplier relationships, contact information and credit terms.
+            </p>
+        </div>
+
+        <div class="d-flex gap-2 flex-wrap">
+
+            <a asp-controller="Supplier"
+               asp-action="DeactivatedSuppliers"
+               class="btn btn-outline-secondary px-4">
+                <i class="bi bi-archive me-1"></i>
+                Deactivated Suppliers
+            </a>
+
+            <a asp-controller="Supplier"
+               asp-action="AddSupplier"
+               class="btn btn-action-primary px-4">
+                <i class="bi bi-plus-lg me-1"></i>
+                New Supplier
+            </a>
+
+        </div>
+
+    </div>
+
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show"
+             role="alert">
+
+            <i class="bi bi-check-circle me-2"></i>
+            @TempData["SuccessMessage"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+    }
+
+
+    <!-- Summary Cards -->
+    <div class="row g-3 mb-4">
+
+        <div class="col-lg-3 col-md-6">
+            <div class="border rounded-3 p-3 h-100 bg-white">
+
+                <div class="text-muted small mb-1">
+                    Total Suppliers
+                </div>
+
+                <div class="fs-3 fw-bold" style="color:#1c323d;">
+                    @ViewBag.TotalSuppliers
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="col-lg-3 col-md-6">
+            <div class="border rounded-3 p-3 h-100 bg-white">
+
+                <div class="text-muted small mb-1">
+                    Active Suppliers
+                </div>
+
+                <div class="fs-3 fw-bold" style="color:#1c323d;">
+                    @ViewBag.ActiveSuppliers
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="col-lg-3 col-md-6">
+            <div class="border rounded-3 p-3 h-100 bg-white">
+
+                <div class="text-muted small mb-1">
+                    Deactivated Suppliers
+                </div>
+
+                <div class="fs-3 fw-bold" style="color:#1c323d;">
+                    @ViewBag.InactiveSuppliers
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="col-lg-3 col-md-6">
+            <div class="border rounded-3 p-3 h-100 bg-white">
+
+                <div class="text-muted small mb-1">
+                    Active Credit Limit
+                </div>
+
+                <div class="fs-4 fw-bold" style="color:#1c323d;">
+                    R @(((decimal)ViewBag.TotalCreditLimit).ToString("N2"))
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Search -->
+    <form asp-controller="Supplier"
+          asp-action="SupplierList"
+          method="get"
+          class="border rounded-3 p-3 mb-4 bg-white">
+
+        <div class="row g-3 align-items-end">
+
+            <div class="col-lg-8">
+
+                <label class="form-label fw-semibold">
+                    Search Active Suppliers
+                </label>
+
+                <input type="text"
+                       name="search"
+                       value="@ViewBag.Search"
+                       class="form-control"
+                       placeholder="Company, contact, email, VAT number..." />
+
+            </div>
+
+
+            <div class="col-lg-4">
+
+                <div class="d-flex gap-2">
+
+                    <button type="submit"
+                            class="btn btn-action-primary flex-fill">
+                        Search
+                    </button>
+
+                    <a asp-controller="Supplier"
+                       asp-action="SupplierList"
+                       class="btn btn-outline-secondary">
+                        Clear
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+
+    <!-- Suppliers Table -->
+    <div class="table-responsive">
+
+        <table class="custom-data-table align-middle">
+
+            <thead>
+                <tr>
+                    <th>Supplier</th>
+                    <th>Contact</th>
+                    <th>Credit</th>
+                    <th>VAT Number</th>
+                    <th>Status</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var supplier in Model)
+                    {
+                        <tr>
+
+                            <td>
+                                <div class="fw-semibold">
+                                    @supplier.CompanyName
+                                </div>
+
+                                @if (!string.IsNullOrWhiteSpace(supplier.PhysicalAddress))
+                                {
+                                    <div class="small text-muted mt-1">
+                                        @supplier.PhysicalAddress
+                                    </div>
+                                }
+                            </td>
+
+
+                            <td>
+                                <div class="fw-semibold">
+                                    @supplier.ContactPerson
+                                </div>
+
+                                <div class="small text-muted">
+                                    @supplier.Email
+                                </div>
+
+                                <div class="small text-muted">
+                                    @supplier.ContactNumber
+                                </div>
+                            </td>
+
+
+                            <td>
+                                <div class="fw-semibold">
+                                    R @supplier.CreditLimit.ToString("N2")
+                                </div>
+
+                                <div class="small text-muted">
+                                    @supplier.CreditTerms
+                                </div>
+                            </td>
+
+
+                            <td>
+                                @if (!string.IsNullOrWhiteSpace(supplier.VATNumber))
+                                {
+                                    @supplier.VATNumber
+                                }
+                                else
+                                {
+                                    <span class="text-muted">
+                                        Not provided
+                                    </span>
+                                }
+                            </td>
+
+
+                            <td>
+                                <span class="badge bg-success px-3 py-2">
+                                    Active
+                                </span>
+                            </td>
+
+
+                            <td>
+                                <div class="d-flex justify-content-center gap-2 flex-wrap">
+
+                                    <a asp-controller="Supplier"
+                                       asp-action="Products"
+                                       asp-route-id="@supplier.SupplierId"
+                                       class="btn btn-primary btn-sm">
+                                        View Products
+                                    </a>
+
+                                    <a asp-controller="Supplier"
+                                       asp-action="EditSupplier"
+                                       asp-route-id="@supplier.SupplierId"
+                                       class="btn btn-warning btn-sm">
+                                        <i class="bi bi-pencil-square me-1"></i>
+                                        Edit
+                                    </a>
+
+                                    <form asp-controller="Supplier"
+                                          asp-action="DeactivateSupplier"
+                                          asp-route-id="@supplier.SupplierId"
+                                          method="post"
+                                          class="d-inline">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <button type="submit"
+                                                class="btn btn-danger btn-sm">
+                                            Deactivate
+                                        </button>
+
+                                    </form>
+
+                                </div>
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6"
+                            class="text-center py-5">
+
+                            <i class="bi bi-truck fs-2 d-block mb-2 text-muted"></i>
+
+                            <div class="fw-semibold mb-1">
+                                No active suppliers found
+                            </div>
+
+                            <div class="text-muted small">
+                                Try changing your search or add a new supplier.
+                            </div>
+
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>

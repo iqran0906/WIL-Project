@@ -1,0 +1,33 @@
+@*
+    Purpose: Friendly error page (not found, access denied, unexpected error).
+    Authors: Naseeha27 (from git history)
+*@
+@model ErrorViewModel
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="content-card text-center py-5" style="max-width: 640px; margin: 40px auto;">
+
+    <i class="bi @Model.Icon" style="font-size: 3.5rem; color: #357383;"></i>
+
+    <h2 class="fw-bold mt-3" style="color: #1c323d;">@Model.Title</h2>
+
+    <p class="text-muted mb-4">@Model.Message</p>
+
+    <div class="d-flex flex-column flex-sm-row justify-content-center gap-2">
+        <a href="javascript:history.back()" class="btn btn-outline-secondary px-4">
+            <i class="bi bi-arrow-left me-1"></i> Go Back
+        </a>
+        <a asp-controller="Home" asp-action="Dashboard" class="btn btn-custom-save px-4">
+            <i class="bi bi-house me-1"></i> Dashboard
+        </a>
+    </div>
+
+    @if (Model.ShowRequestId)
+    {
+        <p class="text-muted small mt-4 mb-0">
+            Error reference: <code>@Model.RequestId</code>
+        </p>
+    }
+</div>

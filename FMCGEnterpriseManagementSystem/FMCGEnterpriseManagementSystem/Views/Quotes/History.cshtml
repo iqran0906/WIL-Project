@@ -1,0 +1,355 @@
+﻿@model IEnumerable<FMCGEnterpriseManagementSystem.Models.Quote>
+
+@{
+    ViewData["Title"] = "Quote History";
+
+    var quotes = Model?.ToList()
+        ?? new List<FMCGEnterpriseManagementSystem.Models.Quote>();
+
+    var totalValue = quotes.Sum(q => q.Total);
+}
+
+<div class="content-card">
+
+    <!-- HEADER -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+
+        <div>
+
+            <h2 class="fw-bold mb-1" style="color:#1c323d;">
+                Quote History
+            </h2>
+
+            <p class="text-muted mb-0">
+                Quotations that have already been converted into invoices.
+            </p>
+
+        </div>
+
+
+        <a asp-controller="Quotes"
+           asp-action="Index"
+           class="btn btn-outline-secondary">
+
+            <i class="bi bi-arrow-left me-1"></i>
+            Back to Quotes
+
+        </a>
+
+    </div>
+
+
+    <!-- SUMMARY -->
+    <div class="row g-3 mb-4">
+
+        <div class="col-md-6">
+
+            <div class="border rounded p-3 h-100">
+
+                <small class="text-muted d-block mb-1">
+                    Converted Quotes
+                </small>
+
+                <div class="fs-4 fw-bold"
+                     style="color:#1c323d;">
+                    @quotes.Count
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-6">
+
+            <div class="border rounded p-3 h-100">
+
+                <small class="text-muted d-block mb-1">
+                    Historical Quote Value
+                </small>
+
+                <div class="fs-4 fw-bold"
+                     style="color:#1c323d;">
+                    R @totalValue.ToString("N2")
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SEARCH -->
+    <div class="border rounded p-3 mb-4 bg-light">
+
+        <div class="row g-3 align-items-end">
+
+            <div class="col-md-6">
+
+                <label class="form-label small fw-semibold">
+                    Search History
+                </label>
+
+                <input type="text"
+                       id="historySearch"
+                       class="form-control"
+                       placeholder="Quote number or customer..." />
+
+            </div>
+
+
+            <div class="col-md-2">
+
+                <label class="form-label small fw-semibold">
+                    Start Date
+                </label>
+
+                <input type="date"
+                       id="startDate"
+                       class="form-control" />
+
+            </div>
+
+
+            <div class="col-md-2">
+
+                <label class="form-label small fw-semibold">
+                    End Date
+                </label>
+
+                <input type="date"
+                       id="endDate"
+                       class="form-control" />
+
+            </div>
+
+
+            <div class="col-md-2">
+
+                <button type="button"
+                        id="clearFilters"
+                        class="btn btn-outline-secondary w-100">
+                    Clear
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- HISTORY TABLE -->
+    <div class="table-responsive">
+
+        <table class="table align-middle mb-0">
+
+            <thead class="table-light">
+
+                <tr>
+                    <th>Date</th>
+                    <th>Quote No.</th>
+                    <th>Customer</th>
+                    <th>Sales Rep</th>
+                    <th class="text-end">Total</th>
+                    <th>Status</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                @if (quotes.Any())
+                {
+                    foreach (var quote in quotes)
+                    {
+                        var customerName =
+                            quote.Customer != null
+                                ? $"{quote.Customer.Name} {quote.Customer.Surname}"
+                                : "Unknown Customer";
+
+                        var salesRepName =
+                            quote.SalesRepresentative?.Employee != null
+                                ? $"{quote.SalesRepresentative.Employee.FirstName} {quote.SalesRepresentative.Employee.LastName}"
+                                : "Unassigned";
+
+                        <tr class="history-row"
+                            data-date="@quote.QuoteDate.ToString("yyyy-MM-dd")">
+
+                            <td>
+                                @quote.QuoteDate.ToString("dd MMM yyyy")
+                            </td>
+
+
+                            <td>
+                                <span class="fw-semibold">
+                                    @quote.QuoteNumber
+                                </span>
+                            </td>
+
+
+                            <td>
+                                @customerName
+                            </td>
+
+
+                            <td>
+                                @salesRepName
+                            </td>
+
+
+                            <td class="text-end fw-semibold">
+                                R @quote.Total.ToString("N2")
+                            </td>
+
+
+                            <td>
+
+                                <span class="badge bg-success">
+                                    Invoiced
+                                </span>
+
+                            </td>
+
+
+                            <td class="text-end text-nowrap">
+
+                                <a asp-controller="Quotes"
+                                   asp-action="Details"
+                                   asp-route-id="@quote.QuoteId"
+                                   class="btn btn-sm btn-outline-secondary">
+                                    View
+                                </a>
+
+
+                                <a asp-controller="Quotes"
+                                   asp-action="DownloadPdf"
+                                   asp-route-id="@quote.QuoteId"
+                                   class="btn btn-sm btn-outline-primary">
+                                    PDF
+                                </a>
+
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+
+                        <td colspan="7"
+                            class="text-center text-muted py-5">
+
+                            <div class="fw-semibold mb-1">
+                                No quote history yet
+                            </div>
+
+                            <div class="small">
+                                Quotes will appear here after they are converted into invoices.
+                            </div>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <script>
+
+        const searchInput =
+            document.getElementById('historySearch');
+
+        const startDate =
+            document.getElementById('startDate');
+
+        const endDate =
+            document.getElementById('endDate');
+
+        const clearButton =
+            document.getElementById('clearFilters');
+
+
+        function filterHistory() {
+
+            const search =
+                searchInput.value.toLowerCase().trim();
+
+            const start =
+                startDate.value;
+
+            const end =
+                endDate.value;
+
+
+            document.querySelectorAll('.history-row')
+                .forEach(function (row) {
+
+                    const text =
+                        row.innerText.toLowerCase();
+
+                    const rowDate =
+                        row.dataset.date;
+
+                    const matchesSearch =
+                        !search || text.includes(search);
+
+                    const matchesStart =
+                        !start || rowDate >= start;
+
+                    const matchesEnd =
+                        !end || rowDate <= end;
+
+                    row.style.display =
+                        matchesSearch &&
+                        matchesStart &&
+                        matchesEnd
+                            ? ''
+                            : 'none';
+                });
+        }
+
+
+        searchInput.addEventListener(
+            'input',
+            filterHistory
+        );
+
+        startDate.addEventListener(
+            'change',
+            filterHistory
+        );
+
+        endDate.addEventListener(
+            'change',
+            filterHistory
+        );
+
+
+        clearButton.addEventListener(
+            'click',
+            function () {
+
+                searchInput.value = '';
+                startDate.value = '';
+                endDate.value = '';
+
+                filterHistory();
+            }
+        );
+
+    </script>
+}

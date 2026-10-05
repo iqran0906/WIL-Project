@@ -1,0 +1,202 @@
+﻿@model IEnumerable<FMCGEnterpriseManagementSystem.Models.Employee>
+
+@{
+    ViewData["Title"] = "Former Employees";
+}
+
+<div class="px-2 py-3">
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show"
+             role="alert">
+
+            <i class="bi bi-check-circle me-1"></i>
+            @TempData["SuccessMessage"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+    }
+
+
+    <!-- HEADER -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-start gap-3 mb-4">
+
+        <div>
+
+            <h2 class="text-white fw-bold mb-1">
+                Former Employees
+            </h2>
+
+            <p class="text-white-50 mb-0">
+                Employees who are no longer active in the business.
+            </p>
+
+        </div>
+
+
+        <a asp-controller="Employees"
+           asp-action="Index"
+           class="btn btn-outline-light">
+
+            <i class="bi bi-arrow-left me-1"></i>
+            Back to Employees
+
+        </a>
+
+    </div>
+
+
+    <!-- SEARCH -->
+    <div class="d-flex align-items-center gap-2 mb-4">
+
+        <span class="text-white fw-bold">
+            Keyword:
+        </span>
+
+        <form asp-controller="Employees"
+              asp-action="FormerEmployees"
+              method="get"
+              class="d-flex gap-2">
+
+            <input type="text"
+                   name="keyword"
+                   value="@ViewBag.Keyword"
+                   class="form-control form-control-sm search-field"
+                   placeholder="Employee number, name, email, job title" />
+
+
+            <button type="submit"
+                    class="btn btn-sm btn-light">
+                Search
+            </button>
+
+
+            <a asp-controller="Employees"
+               asp-action="FormerEmployees"
+               class="btn btn-sm btn-outline-light">
+                Clear
+            </a>
+
+        </form>
+
+    </div>
+
+
+    <!-- TABLE -->
+    <div class="table-responsive">
+
+        <table class="custom-data-table">
+
+            <thead>
+
+                <tr>
+                    <th>Employee Number</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Contact Number</th>
+                    <th>Job Title</th>
+                    <th>Date Employed</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var employee in Model)
+                    {
+                        <tr>
+
+                            <td>
+                                @employee.EmployeeNumber
+                            </td>
+
+                            <td>
+                                @employee.FirstName @employee.LastName
+                            </td>
+
+                            <td>
+                                @employee.Email
+                            </td>
+
+                            <td>
+                                @employee.ContactNumber
+                            </td>
+
+                            <td>
+                                @employee.JobTitle
+                            </td>
+
+                            <td>
+                                @employee.DateOfEmployment.ToString("dd/MM/yyyy")
+                            </td>
+
+                            <td>
+
+                                <span class="badge bg-secondary">
+                                    Inactive
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <form asp-controller="Employees"
+                                      asp-action="Reactivate"
+                                      asp-route-id="@employee.EmployeeID"
+                                      method="post"
+                                      class="d-inline">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <button type="submit"
+                                            class="btn btn-sm btn-success">
+
+                                        <i class="bi bi-person-check me-1"></i>
+                                        Reactivate
+
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+
+                        <td colspan="8"
+                            class="text-center py-5">
+
+                            <div class="fw-semibold mb-1">
+                                No former employees
+                            </div>
+
+                            <div class="text-muted small">
+                                Deactivated employees will appear here.
+                            </div>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>

@@ -1,0 +1,154 @@
+@*
+    Purpose: Form to add a new invoice.
+    Authors: Sayali-St10458649 (from git history)
+*@
+@model FMCGEnterpriseManagementSystem.ViewModels.InvoiceViewModel
+@inject FMCGEnterpriseManagementSystem.Services.Interfaces.ISettingsService SettingsService
+
+@{
+    ViewData["Title"] = "New Invoice";
+    var company = await SettingsService.GetAsync();
+    var vatRate = (company.VatRatePercent / 100m).ToString(System.Globalization.CultureInfo.InvariantCulture);
+}
+
+<div class="content-card">
+    <form asp-action="Create" method="post" id="invoiceForm" data-line-items-form data-vat-rate="@vatRate" data-default-terms="@company.DefaultPaymentTerms" novalidate>
+
+        <div class="row align-items-center mb-4 g-3">
+            <div class="col-sm-6">
+                <partial name="_CompanyHeader" model="company" />
+            </div>
+            <div class="col-sm-6 text-sm-end">
+                <div class="d-inline-block text-start">
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                        <label asp-for="InvoiceDate" class="small text-secondary fw-bold text-nowrap m-0">Date:</label>
+                        <input asp-for="InvoiceDate" type="date" class="form-control form-control-sm" style="width:160px;">
+                    </div>
+                    <span asp-validation-for="InvoiceDate" class="text-danger small d-block mb-1"></span>
+                    <div class="d-flex align-items-center gap-2">
+                        <label class="small text-secondary fw-bold text-nowrap m-0">Invoice Number:</label>
+                        <input type="text" class="form-control form-control-sm text-center fw-bold" value="Auto-generated" readonly style="width:160px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="fw-bold mb-4" style="color: #1c323d;">New Invoice</h2>
+
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="row g-3 mb-4">
+            <div class="col-md-6">
+                <div class="row align-items-start mb-3">
+                    <label asp-for="CustomerId" class="col-sm-3 col-form-label fw-bold text-secondary">Customer</label>
+                    <div class="col-sm-9">
+                        <select asp-for="CustomerId" id="customerSelect" class="form-select">
+                            <option value="">-- Select Customer --</option>
+                            @foreach (var customer in Model.AvailableCustomers)
+                            {
+                                <option value="@customer.CustomerId"
+                                        selected="@(customer.CustomerId == Model.CustomerId)"
+                                        data-address="@customer.DeliveryAddress"
+                                        data-terms="@customer.PaymentTerms"
+                                        data-salesrep="@customer.SalesRepresentativeId"
+                                        data-salesrepname="@(customer.SalesRepresentative?.Employee != null ? $"{customer.SalesRepresentative.Employee.FirstName} {customer.SalesRepresentative.Employee.LastName}" : "")">
+                                    @customer.Name @customer.Surname
+                                </option>
+                            }
+                        </select>
+                        <span asp-validation-for="CustomerId" class="text-danger small"></span>
+                    </div>
+                </div>
+                <div class="row align-items-start mb-3">
+                    <label asp-for="BillingAddress" class="col-sm-3 col-form-label fw-bold text-secondary">Billing Address:</label>
+                    <div class="col-sm-9">
+                        <textarea asp-for="BillingAddress" id="billingAddress" class="form-control" rows="3" readonly></textarea>
+                        <span asp-validation-for="BillingAddress" class="text-danger small"></span>
+                    </div>
+                </div>
+                <div class="row align-items-start">
+                    <label asp-for="BusinessName" class="col-sm-3 col-form-label fw-bold text-secondary">Business Name:</label>
+                    <div class="col-sm-9">
+                        <input asp-for="BusinessName" class="form-control" placeholder="Optional" />
+                        <span asp-validation-for="BusinessName" class="text-danger small"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row align-items-start mb-3">
+                    <label asp-for="PaymentTerms" class="col-sm-4 col-form-label fw-bold text-secondary text-sm-end">Payment Terms:</label>
+                    <div class="col-sm-8">
+                        <input asp-for="PaymentTerms" id="paymentTerms" class="form-control" readonly />
+                        <span asp-validation-for="PaymentTerms" class="text-danger small"></span>
+                    </div>
+                </div>
+                <div class="row align-items-start">
+                    <label class="col-sm-4 col-form-label fw-bold text-secondary text-sm-end">Sales Person:</label>
+                    <div class="col-sm-8">
+                        <input asp-for="SalesRepresentativeName" id="salesRepName" class="form-control" readonly />
+                        <input type="hidden" asp-for="SalesRepresentativeId" id="salesRepId" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <partial name="_LineItemsEditor"
+                 model="@(new FMCGEnterpriseManagementSystem.ViewModels.LineItemsEditorViewModel { Products = Model.AvailableProducts, Items = Model.Items })" />
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="border rounded p-3 bg-light">
+                    <h6 class="fw-bold text-secondary mb-2">Banking Details</h6>
+                    @* Maintained under Settings > Banking Details - only the lines that have been filled in are shown *@
+                    @{
+                        var bankingLines = new (string Label, string? Value)[]
+                        {
+                            ("Bank", company.BankName),
+                            ("Branch Code", company.BranchCode),
+                            ("Account Name", company.BankAccountName),
+                            ("Account Number", company.BankAccountNumber),
+                            ("Reference", company.PaymentReference),
+                            ("Proof of Payment", company.ProofOfPaymentEmail)
+                        }.Where(line => !string.IsNullOrWhiteSpace(line.Value)).ToList();
+                    }
+
+                    @if (bankingLines.Any())
+                    {
+                        foreach (var line in bankingLines)
+                        {
+                            <p class="small mb-1"><strong>@line.Label:</strong> @line.Value</p>
+                        }
+                    }
+                    else
+                    {
+                        <p class="small text-muted mb-1">
+                            Banking details have not been added yet. Add them under
+                            <a asp-controller="Settings" asp-action="Index">Settings</a>.
+                        </p>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(company.InvoiceFooterNote))
+                    {
+                        <p class="small fst-italic mt-2 mb-0">@company.InvoiceFooterNote</p>
+                    }
+                </div>
+            </div>
+            <div class="col-md-6 text-end fw-bold text-secondary">
+                <div class="d-inline-block text-start" style="min-width: 250px;">
+                    <div class="d-flex justify-content-between py-1"><span>Subtotal (excl. VAT)</span><span id="subtotalDisplay">R0.00</span></div>
+                    <div class="d-flex justify-content-between py-1"><span>VAT (@company.VatRatePercent.ToString("0.##")%)</span><span id="vatDisplay">R0.00</span></div>
+                    <div class="d-flex justify-content-between py-1 border-top border-dark mt-2 text-dark fs-5"><span>Grand Total</span><span id="totalDisplay">R0.00</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-3">
+            <a asp-action="Index" class="btn btn-link text-decoration-none text-secondary align-self-center">Cancel</a>
+            <button type="submit" class="btn btn-custom-save">Save Invoice</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/line-items.js" asp-append-version="true"></script>
+}

@@ -1,0 +1,425 @@
+﻿using FMCGEnterpriseManagementSystem.Data;
+using FMCGEnterpriseManagementSystem.Enums;
+using FMCGEnterpriseManagementSystem.Models;
+using FMCGEnterpriseManagementSystem.Services;
+using FMCGEnterpriseManagementSystem.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+
+namespace FMCGEnterpriseManagementSystem.Controllers
+{
+
+    // Title: Role-based authorization in ASP.NET Core
+    // Author: Microsoft
+    // Date: 2026
+    // Code version: ASP.NET Core 10.0
+    // Availability: https://learn.microsoft.com/en-us/aspnet/core/security/authorization/roles?view=aspnetcore-10.0
+
+
+    // Restricts quote functionality to authorized business users.
+    [Authorize(Roles = "Administrator,Employee,SalesRepresentative")]
+    public class QuotesController : Controller
+    {
+        // Quote service handles quote-related business operations.
+        private readonly IQuoteService _quoteService;
+
+        // Database context is used to load products, customers and sales representatives.
+
+        private readonly IEmailApiClientService _emailApiClientService;
+        private readonly ApplicationDbContext _context;
+
+
+        // Title: Dependency injection in ASP.NET Core
+        // Author: Microsoft
+        // Date: 2026
+        // Code version: ASP.NET Core 10.0
+        // Availability: https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection
+
+        // Dependencies are supplied through dependency injection.
+        public QuotesController(IQuoteService quoteService, IEmailApiClientService emailApiClientService, ApplicationDbContext context)
+       
+          
+        {
+            _quoteService = quoteService;
+            _emailApiClientService = emailApiClientService;
+            _context = context;
+        }
+
+        // Title: Querying Data - EF Core
+        // Author: Microsoft
+        // Date: 2026
+        // Code version: Entity Framework Core 10.0
+        // Availability: https://learn.microsoft.com/en-us/ef/core/querying/
+
+        // Loads the dropdown data required by the create and edit quote forms.
+        private async Task PopulateQuoteDropdownsAsync(
+            int? selectedSalesRepId = null,
+            string? selectedPaymentTerms = null)
+        {
+            // Provides the available payment-term options.
+            ViewBag.PaymentTermsList = new SelectList(
+                new[]
+                {
+                    "COD",
+                    "7 Days",
+                    "14 Days",
+                    "21 Days",
+                    "28 Days",
+                    "30 Days"
+                },
+                selectedPaymentTerms);
+
+            // Loads active products for quote line items.
+            ViewBag.ProductList = await _context.Products
+                .Where(p => p.IsActive)
+                .OrderBy(p => p.ProductName)
+                .ToListAsync();
+
+            // Loads active customers for the quote customer selection.
+            ViewBag.CustomerList = await _context.Customers
+                .Where(c => c.IsActive)
+                .OrderBy(c => c.Name)
+                .ThenBy(c => c.Surname)
+                .ToListAsync();
+
+            // Title: Loading Related Data - EF Core
+            // Author: Microsoft
+            // Date: 2026
+            // Code version: Entity Framework Core 10.0
+            // Availability: https://learn.microsoft.com/en-us/ef/core/querying/related-data/
+
+            // Loads active sales representatives for the sales representative dropdown.
+            var salesReps = await _context.SalesRepresentatives
+                .Include(sr => sr.Employee)
+                .Where(sr => sr.IsActive)
+                .OrderBy(sr => sr.Employee.FirstName)
+                .ThenBy(sr => sr.Employee.LastName)
+                .Select(sr => new
+                {
+                    sr.SalesRepresentativeId,
+                    DisplayName =
+                        sr.Employee.FirstName + " " +
+                        sr.Employee.LastName + " (" +
+                        sr.SalesRepCode + ")"
+                })
+                .ToListAsync();
+
+            ViewBag.SalesRepList = new SelectList(
+                salesReps,
+                "SalesRepresentativeId",
+                "DisplayName",
+                selectedSalesRepId);
+        }
+
+        // GET: Quotes
+        // Displays quotations that have not yet been converted to invoices.
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var allQuotes =
+                (await _quoteService.GetAllQuotesAsync()).ToList();
+
+            // The main quotation screen is the working quotation list.
+            var currentQuotes = allQuotes
+                .Where(q => q.Status != QuoteStatus.Invoiced)
+                .OrderByDescending(q => q.QuoteDate)
+                .ToList();
+
+            // Statistics are calculated using all quotations.
+            ViewBag.TotalQuotes = allQuotes.Count;
+
+            ViewBag.PendingQuotes =
+                allQuotes.Count(q => q.Status == QuoteStatus.Pending);
+
+            ViewBag.InvoicedQuotes =
+                allQuotes.Count(q => q.Status == QuoteStatus.Invoiced);
+
+            ViewBag.TotalQuoteValue =
+                allQuotes.Sum(q => q.Total);
+
+            return View(currentQuotes);
+        }
+
+        // GET: Quotes/History
+        // Displays quotations that have already been converted to invoices.
+        [HttpGet]
+        public async Task<IActionResult> History()
+        {
+            var quotes =
+                (await _quoteService.GetAllQuotesAsync())
+                .Where(q => q.Status == QuoteStatus.Invoiced)
+                .OrderByDescending(q => q.QuoteDate)
+                .ToList();
+
+            return View(quotes);
+        }
+
+        // Title: Asynchronous Programming - EF Core
+        // Author: Microsoft
+        // Date: 2026
+        // Code version: Entity Framework Core 10.0
+        // Availability: https://learn.microsoft.com/en-us/ef/core/querying/async
+
+
+        // GET: Quotes/Create
+        // Displays the form for creating a new quote.
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
+            await PopulateQuoteDropdownsAsync();
+
+            var quote = new Quote
+            {
+                QuoteDate = DateTime.Today
+            };
+
+            return View(quote);
+        }
+
+        // Title: Prevent Cross-Site Request Forgery (XSRF/CSRF) attacks in ASP.NET Core
+        // Author: Microsoft
+        // Date: 2026
+        // Code version: ASP.NET Core 10.0
+        // Availability: https://learn.microsoft.com/en-us/aspnet/core/security/anti-request-forgery?view=aspnetcore-10.0
+
+        // POST: Quotes/Create
+        // Validates and creates a new quote.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Quote quote)
+        {
+            // Navigation properties are not submitted as part of the quote form,
+            // so they are removed from MVC validation.
+            ModelState.Remove(nameof(Quote.QuoteNumber));
+            ModelState.Remove(nameof(Quote.Customer));
+            ModelState.Remove(nameof(Quote.SalesRepresentative));
+
+            if (quote.QuoteItems != null)
+            {
+                for (int i = 0; i < quote.QuoteItems.Count; i++)
+                {
+                    ModelState.Remove($"QuoteItems[{i}].Quote");
+                    ModelState.Remove($"QuoteItems[{i}].Product");
+                }
+            }
+
+            // A quote must contain at least one product.
+            if (quote.QuoteItems == null || !quote.QuoteItems.Any())
+            {
+                ModelState.AddModelError(
+                    string.Empty,
+                    "Please add at least one product to the quote.");
+            }
+
+            // Every quote item must have a valid product selected.
+            if (quote.QuoteItems != null &&
+                quote.QuoteItems.Any(item => item.ProductId <= 0))
+            {
+                ModelState.AddModelError(
+                    string.Empty,
+                    "Please select a product for every quote item.");
+            }
+
+            // Reload dropdowns when validation fails so the form can be displayed again.
+            if (!ModelState.IsValid)
+            {
+                await PopulateQuoteDropdownsAsync(
+                    quote.SalesRepresentativeId,
+                    quote.PaymentTerms);
+
+                return View(quote);
+            }
+
+            await _quoteService.CreateQuoteAsync(quote);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Quotes/Edit/5
+        // Loads an existing quote for editing.
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var quote = await _quoteService.GetQuoteByIdAsync(id);
+
+            if (quote == null)
+            {
+                return NotFound();
+            }
+
+            await PopulateQuoteDropdownsAsync(
+                quote.SalesRepresentativeId,
+                quote.PaymentTerms);
+
+            return View(quote);
+        }
+
+        // POST: Quotes/Edit/5
+        // Validates and saves changes to an existing quote.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Quote quote)
+        {
+            // Ensures the route ID matches the quote being edited.
+            if (id != quote.QuoteId)
+            {
+                return BadRequest();
+            }
+
+            // Navigation and generated properties are not submitted by the form.
+            ModelState.Remove(nameof(Quote.QuoteNumber));
+            ModelState.Remove(nameof(Quote.Customer));
+            ModelState.Remove(nameof(Quote.SalesRepresentative));
+
+            if (quote.QuoteItems != null)
+            {
+                for (int i = 0; i < quote.QuoteItems.Count; i++)
+                {
+                    ModelState.Remove($"QuoteItems[{i}].Quote");
+                    ModelState.Remove($"QuoteItems[{i}].Product");
+                }
+            }
+
+            // A quote must contain at least one product.
+            if (quote.QuoteItems == null || !quote.QuoteItems.Any())
+            {
+                ModelState.AddModelError(
+                    string.Empty,
+                    "Please add at least one product to the quote.");
+            }
+
+            // Every quote item must have a valid product selected.
+            if (quote.QuoteItems != null &&
+                quote.QuoteItems.Any(item => item.ProductId <= 0))
+            {
+                ModelState.AddModelError(
+                    string.Empty,
+                    "Please select a product for every quote item.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                await PopulateQuoteDropdownsAsync(
+                    quote.SalesRepresentativeId,
+                    quote.PaymentTerms);
+
+                return View(quote);
+            }
+
+            quote.QuoteId = id;
+
+            await _quoteService.UpdateQuoteAsync(quote);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // POST: Quotes/ConvertToInvoice/5
+        // Converts a quotation into an invoice.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConvertToInvoice(int id)
+        {
+            if (id <= 0)
+            {
+                return NotFound();
+            }
+
+            var success =
+                await _quoteService.ConvertToInvoiceAsync(id);
+
+            if (!success)
+            {
+                TempData["ErrorMessage"] =
+                    "The quote could not be converted to an invoice.";
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            TempData["SuccessMessage"] =
+                "Quote converted to invoice successfully.";
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Quotes/DownloadPdf/5
+        // Generates and downloads a PDF copy of the selected quote.
+        [HttpGet]
+        public async Task<IActionResult> DownloadPdf(int id)
+        {
+            var quote = await _quoteService.GetQuoteByIdAsync(id);
+
+            if (quote == null)
+            {
+                return NotFound();
+            }
+
+
+            // Title: Integration with ASP.NET
+            // Author: QuestPDF
+            // Date: 2026
+            // Code version: QuestPDF
+            // Availability: https://www.questpdf.com/examples/aspnet-integration.html
+
+            var pdfBytes = QuotePdfGenerator.Generate(quote);
+
+            return File(
+                pdfBytes,
+                "application/pdf",
+                $"Quote-{quote.QuoteNumber}.pdf");
+        }
+
+        // GET: Quotes/Details/5
+        // Displays the details of a selected quote.
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var quote = await _quoteService.GetQuoteByIdAsync(id);
+
+            if (quote == null)
+            {
+                return NotFound();
+            }
+
+            return View(quote);
+        }
+
+        // POST: Quotes/EmailQuote/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+       
+        public async Task<IActionResult> EmailQuote(int id, string recipientEmail)
+        {
+            var quote = await _quoteService.GetQuoteByIdAsync(id);
+            if (quote == null) return NotFound();
+
+            var fileName = $"Quote-{quote.QuoteNumber}.pdf";
+            var pdfBytes = QuotePdfGenerator.Generate(quote);
+
+            var result = await _emailApiClientService.EmailQuoteAsync(id, recipientEmail, pdfBytes, fileName);
+
+            if (result.Success)
+            {
+                TempData["SuccessMessage"] = result.Message;
+            }
+            else
+            {
+                TempData["ErrorMessage"] = result.Message;
+            }
+
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        // POST: Quotes/Delete/5
+        // Deletes the selected quote through the quote service.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _quoteService.DeleteQuoteAsync(id);
+
+            return RedirectToAction(nameof(Index));
+        }
+    }
+}
