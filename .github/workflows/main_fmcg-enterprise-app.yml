@@ -1,4 +1,4 @@
-name: Build and deploy C# app to Azure Web App - fmcg-enterprise-app
+name: Build and deploy ASP.NET Core app to Azure Web App - fmcg-enterprise-app
 
 on:
   push:
@@ -16,19 +16,19 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.x'
+          dotnet-version: '8.0.x'
 
       - name: Build with dotnet
-        run: dotnet build FMCGEnterpriseManagementSystem/FMCGEnterpriseManagementSystem.sln --configuration Release -p:TreatWarningsAsErrors=false -p:WarningsAsErrors=""
+        run: dotnet build FMCGEnterpriseManagementSystem/FMCGEnterpriseManagementSystem.sln --configuration Release -p:TreatWarningsAsErrors=false
 
       - name: dotnet publish
-        run: dotnet publish FMCGEnterpriseManagementSystem/FMCGEnterpriseManagementSystem.sln -c Release -o ${{env.DOTNET_ROOT}}/myapp -p:TreatWarningsAsErrors=false -p:WarningsAsErrors=""
+        run: dotnet publish FMCGEnterpriseManagementSystem/FMCGEnterpriseManagementSystem.sln -c Release -o ./publish -p:TreatWarningsAsErrors=false
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: ./publish
 
   deploy:
     runs-on: windows-latest
@@ -36,7 +36,7 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    
+
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
@@ -49,4 +49,5 @@ jobs:
         with:
           app-name: 'fmcg-enterprise-app'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_48A7BCA6D7EA48288BDC82FCA6CE02EB }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_313D4C49E1044A5D93B4E3802958D705 }}
+          package: .
