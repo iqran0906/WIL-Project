@@ -61,11 +61,17 @@ builder.Services.AddScoped<IReportService, ReportService>();
 
 builder.Services.AddScoped<IUserAccountService, UserAccountService>();
 
+// ==========================================================
+// API HTTP CLIENT CONFIGURATION
+// ==========================================================
+var apiBaseUrl = builder.Configuration["ApiSettings:BaseUrl"];
+
 builder.Services.AddHttpClient<FMCGEnterpriseManagementSystem.Services.Interfaces.IEmailApiClientService,
                                 FMCGEnterpriseManagementSystem.Services.EmailApiClientService>(client =>
                                 {
-                                    client.BaseAddress = new Uri("https://localhost:7194/");
+                                    client.BaseAddress = new Uri(apiBaseUrl!);
                                 });
+
 builder.Services.AddScoped<IExportStrategy, PdfExportStrategy>();
 builder.Services.AddScoped<IExportStrategy, ExcelExportStrategy>();
 builder.Services.AddScoped<ExportFactory>();
