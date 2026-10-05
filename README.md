@@ -1472,8 +1472,8 @@ The project was developed collaboratively, with each team member taking responsi
 | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Iqra**    | Authentication and Identity, roles and authorisation, employee and Sales Representative administration, reports, security and final integration |
 | **Sayali**  | Backend/API work, application-to-API communication, notification/email integration and supporting backend services                              |
-| **Naseeha** | ApplicationDbContext, EF Core migrations, database integration, Product, Inventory, Supplier and stock/batch data                               |
-| **Maseeha** | Customer-facing CRUD/UI, employee and Sales Representative UI and model work, notifications and user-facing interactions                        |
+| **Naseeha** | ApplicationDbContext, EF Core migrations, database integration, and stock/batch data                               |
+| **Maseeha** | Customer-facing CRUD/UI, employee and Sales Representative UI and model work, notifications and user-facing interactions, Product, Inventory, Supplier                        |
 | **Imran**   | Quotation, Invoice and Payment workflows, related ViewModels/UI and financial/report presentation components                                    |
 
 Although each member had primary ownership of particular modules, the final application depends on these modules working together.
