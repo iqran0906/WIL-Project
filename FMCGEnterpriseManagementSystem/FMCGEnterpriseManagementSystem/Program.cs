@@ -49,33 +49,13 @@ builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 // Dashboard & Analytics Services
 builder.Services.AddScoped<IDashboardService, DashboardService>();
-builder.Services.AddScoped<IAnalyticsService, AnalyticsService>(); // <-- Added here
+builder.Services.AddScoped<IAnalyticsService, AnalyticsService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-
-builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
-builder.Services.AddScoped<ISupplierService, SupplierService>();
-
-builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
-builder.Services.AddScoped<ICustomerService, CustomerService>();
-
-builder.Services.AddScoped<IQuoteRepository, QuoteRepository>();
-builder.Services.AddScoped<IQuoteService, QuoteService>();
-
-builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-builder.Services.AddScoped<IEmployeeService, EmployeeService>();
-
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
-builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IReportService, ReportService>();
-
-builder.Services.AddScoped<IAuthService, AuthService>();
-
 
 builder.Services.AddScoped<IUserAccountService, UserAccountService>();
 
@@ -88,10 +68,9 @@ builder.Services.AddScoped<IExportStrategy, PdfExportStrategy>();
 builder.Services.AddScoped<IExportStrategy, ExcelExportStrategy>();
 builder.Services.AddScoped<ExportFactory>();
 
-builder.Services.AddScoped<IUserAccountService, UserAccountService>();
-
 builder.Services.AddScoped<ISalesRepresentativeRepository, SalesRepresentativeRepository>();
 builder.Services.AddScoped<ISalesRepresentativeService, SalesRepresentativeService>();
+
 // ==========================================================
 // DATABASE
 // ==========================================================
@@ -105,7 +84,6 @@ builder.Services.AddScoped<IForecastingService, ForecastingService>();
 
 builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
 builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IInvoiceService, InvoiceService>();
 
 // ==========================================================
@@ -129,108 +107,17 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Account/AccessDenied";
 });
 
-
-// ==========================================================
-// AUTHENTICATION / USER ACCOUNTS
-// ==========================================================
-
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IUserAccountService, UserAccountService>();
-
-
-// ==========================================================
-// EMPLOYEE MANAGEMENT
-// ==========================================================
-
-builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-builder.Services.AddScoped<IEmployeeService, EmployeeService>();
-
-
-// ==========================================================
-// SALES REPRESENTATIVE MANAGEMENT
-// ==========================================================
-
-builder.Services.AddScoped<ISalesRepresentativeRepository, SalesRepresentativeRepository>();
-builder.Services.AddScoped<ISalesRepresentativeService, SalesRepresentativeService>();
-
-
-// ==========================================================
-// CUSTOMER MANAGEMENT
-// ==========================================================
-
-builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
-builder.Services.AddScoped<ICustomerService, CustomerService>();
-
-
-// ==========================================================
-// SUPPLIER MANAGEMENT
-// ==========================================================
-
-builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
-builder.Services.AddScoped<ISupplierService, SupplierService>();
-
-
-// ==========================================================
-// PRODUCT MANAGEMENT
-// ==========================================================
-
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<IProductService, ProductService>();
-
-
 // ==========================================================
 // INVENTORY MANAGEMENT
 // ==========================================================
 
-builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
 builder.Services.AddScoped<IInventoryService, InventoryService>();
-
-
-// ==========================================================
-// FORECASTING
-// ==========================================================
-
-builder.Services.AddScoped<IForecastingService, ForecastingService>();
-
-
-// ==========================================================
-// QUOTE MANAGEMENT
-// ==========================================================
-
-builder.Services.AddScoped<IQuoteRepository, QuoteRepository>();
-builder.Services.AddScoped<IQuoteService, QuoteService>();
-
-
-// ==========================================================
-// INVOICE MANAGEMENT
-// ==========================================================
-
-builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
-builder.Services.AddScoped<IInvoiceService, InvoiceService>();
-
-
-// ==========================================================
-// PAYMENT MANAGEMENT
-// ==========================================================
-
-builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
-builder.Services.AddScoped<IPaymentService, PaymentService>();
-
-
-// ==========================================================
-// REPORTING
-// ==========================================================
-
-builder.Services.AddScoped<IReportRepository, ReportRepository>();
-builder.Services.AddScoped<IReportService, ReportService>();
-
 
 // ==========================================================
 // GLOBAL SEARCH
 // ==========================================================
 
 builder.Services.AddScoped<ISearchService, SearchService>();
-
 
 // ==========================================================
 // SYSTEM SETTINGS
@@ -239,23 +126,17 @@ builder.Services.AddScoped<ISearchService, SearchService>();
 builder.Services.AddMemoryCache();
 builder.Services.AddScoped<ISettingsService, SettingsService>();
 
-
 // ==========================================================
 // RECENT ACTIVITY
 // ==========================================================
 
 builder.Services.AddScoped<IActivityService, ActivityService>();
 
-
 // ==========================================================
 // EXPORTS
 // ==========================================================
 
-builder.Services.AddScoped<IExportStrategy, PdfExportStrategy>();
-builder.Services.AddScoped<IExportStrategy, ExcelExportStrategy>();
-builder.Services.AddScoped<ExportFactory>();
 builder.Services.AddScoped<IInvoiceExportService, InvoiceExportService>();
-
 
 // ==========================================================
 // NOTIFICATIONS
@@ -273,7 +154,6 @@ builder.Services.AddScoped<PaymentNotificationSubject>();
 builder.Services.AddScoped<EmailNotificationObserver>();
 builder.Services.AddScoped<SystemAlertObserver>();
 
-
 // ==========================================================
 // BUILD APPLICATION
 // ==========================================================
@@ -287,28 +167,23 @@ Rotativa.AspNetCore.RotativaConfiguration.Setup(app.Environment.WebRootPath, "Ro
 
 if (!app.Environment.IsDevelopment())
 {
-    // Friendly error page for unexpected errors (developers see full details locally)
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
 
-// Friendly pages for "not found", "bad request", etc. instead of a blank screen
 app.UseStatusCodePagesWithReExecute("/Home/StatusCodePage", "?code={0}");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
-
 app.UseAuthentication();
 app.UseAuthorization();
-
 
 // ==========================================================
 // ROUTING
 // ==========================================================
 
-// Application root opens Login
 app.MapControllerRoute(
     name: "login",
     pattern: "",
@@ -318,11 +193,9 @@ app.MapControllerRoute(
         action = "Login"
     });
 
-// Standard MVC routing
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
 
 // ==========================================================
 // SEED ROLES / INITIAL USERS
@@ -330,11 +203,47 @@ app.MapControllerRoute(
 
 using (var scope = app.Services.CreateScope())
 {
-    await SeedData.InitializeAsync(
-        scope.ServiceProvider,
-        builder.Configuration);
-}
+    var services = scope.ServiceProvider;
+    try
+    {
+        // Execute existing SeedData
+        await SeedData.InitializeAsync(services, builder.Configuration);
 
+        // Explicit Admin Account Fallback Seeding
+        var userManager = services.GetRequiredService<UserManager<User>>();
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+        if (!await roleManager.RoleExistsAsync("Admin"))
+        {
+            await roleManager.CreateAsync(new IdentityRole("Admin"));
+        }
+
+        var adminEmail = "admin@fmcg.com";
+        var adminUser = await userManager.FindByEmailAsync(adminEmail);
+
+        if (adminUser == null)
+        {
+            var newAdmin = new User
+            {
+                UserName = adminEmail,
+                Email = adminEmail,
+                EmailConfirmed = true,
+                IsActive = true
+            };
+
+            var result = await userManager.CreateAsync(newAdmin, "Wholesale101@");
+            if (result.Succeeded)
+            {
+                await userManager.AddToRoleAsync(newAdmin, "Admin");
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while seeding initial roles and admin user.");
+    }
+}
 
 // ==========================================================
 // RUN APPLICATION
