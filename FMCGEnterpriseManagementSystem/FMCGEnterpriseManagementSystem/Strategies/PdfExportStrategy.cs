@@ -32,6 +32,16 @@ namespace FMCGEnterpriseManagementSystem.Strategies
             // Creates a QuestPDF document and defines its page layout and content.
             var document = Document.Create(container =>
             {
+
+ /*****************************
+*    Title: Page Settings
+*    Author: Marcin Ziąbek (QuestPDF)
+*    Date: 2026
+*    Code version: QuestPDF 2026.9.1
+*    Availability: https://questpdf.com/api-reference/page/settings.html
+*****************************/
+
+
                 container.Page(page =>
                 {
                     // Uses landscape A4 format so reports with multiple columns have more space.
@@ -68,6 +78,14 @@ namespace FMCGEnterpriseManagementSystem.Strategies
                     // Creates the main report content using a table layout.
                     page.Content().Table(table =>
                     {
+  /*****************************
+*    Title: Table: Basics
+*    Author: Marcin Ziąbek (QuestPDF)
+*    Date: 2026
+*    Code version: QuestPDF 2026.9.1
+*    Availability: https://questpdf.com/api-reference/table/basics.html
+*****************************/
+
                         // Defines the columns in the PDF table.
                         // Each column is given an equal relative width.
                         table.ColumnsDefinition(definition =>
@@ -75,6 +93,18 @@ namespace FMCGEnterpriseManagementSystem.Strategies
                             foreach (var _ in columns)
                                 definition.RelativeColumn();
                         });
+
+
+                        /*****************************
+*    Title: Dynamic composition: configurable tables
+*    Author: Marcin Ziąbek (QuestPDF)
+*    Date: 2026
+*    Code version: QuestPDF 2026.9.1
+*    Availability: https://questpdf.com/concepts/dynamic-composition/configurable-tables.html
+*****************************/
+
+
+
 
                         // Defines the table header row.
                         table.Header(headerRow =>

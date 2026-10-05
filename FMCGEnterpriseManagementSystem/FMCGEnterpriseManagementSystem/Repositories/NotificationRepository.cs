@@ -63,6 +63,17 @@ namespace FMCGEnterpriseManagementSystem.Repositories
             return await _context.Notifications.CountAsync(n => !n.IsRead);
         }
 
+        //marks notification page as red once its viewed
+        public async Task MarkAllAsReadAsync()
+        {
+            var unread = await _context.Notifications.Where(n => !n.IsRead).ToListAsync();
+            foreach (var notification in unread)
+            {
+                notification.IsRead = true;
+            }
+            await _context.SaveChangesAsync();
+        }
+
         // Retrieves notifications matching the specified notification type.
         public async Task<List<Notification>> GetByTypeAsync(NotificationType type)
         {

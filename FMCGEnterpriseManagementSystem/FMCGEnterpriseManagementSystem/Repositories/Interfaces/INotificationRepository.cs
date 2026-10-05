@@ -26,6 +26,9 @@ namespace FMCGEnterpriseManagementSystem.Repositories.Interfaces
         // Gets the number of unread notifications.
         Task<int> GetUnreadCountAsync();
 
+        //Mark as read once its opened
+        Task MarkAllAsReadAsync();
+
         // Retrieves notifications by their notification type.
         Task<List<Notification>> GetByTypeAsync(NotificationType type);
 
