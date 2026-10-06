@@ -1,5 +1,10 @@
 # FMCG Enterprise Management System
 
+Youtube link for the system demo: https://youtu.be/z4K8Ormzkzg
+
+Youtube link for the API demo: https://youtu.be/PoC4ct0u0bs
+
+
 ## Exclusive Distributors
 
 The **FMCG Enterprise Management System** is an ASP.NET Core MVC web application developed for **Exclusive Distributors (Pty) Ltd**, a Fast-Moving Consumer Goods (FMCG) business.
@@ -2583,6 +2588,14 @@ The solution also includes automated unit testing and continuous-integration pra
 Most importantly, the project demonstrates the practical application of software-engineering principles within a realistic business scenario and reflects the collaborative development, integration, testing and deployment experience gained through the Work Integrated Learning project.
 
 ---
+
+AI usuage: 
+
+https://chatgpt.com/share/6ac4fe98-ec1c-83e9-9753-ac7dd924eb31
+https://chatgpt.com/share/6ac4fee5-5adc-83e9-9239-c5de55974afc
+https://chatgpt.com/share/6aa86ad3-77e4-83ea-abe8-32cb54747dd0
+https://chatgpt.com/share/6ac4ff33-bc08-83e9-bba9-e17ae8cece5a
+https://chatgpt.com/share/6ac4ff54-b40c-83ea-ae55-01d25101d505
 
 # Demo Login Credentials
 
