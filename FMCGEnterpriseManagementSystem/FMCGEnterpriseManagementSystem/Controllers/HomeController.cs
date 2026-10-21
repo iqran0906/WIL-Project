@@ -359,5 +359,34 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                     StatusCode = code
                 });
         }
+
+        /*
+ * Code Attribution
+ *
+ * Purpose:
+ * Displays the public welcome page for unauthenticated visitors.
+ * Redirects authenticated users to their dashboard.
+ *
+ * Reference:
+ * Microsoft (n.d.) ASP.NET Core MVC overview.
+ * Available at:
+ * https://learn.microsoft.com/en-us/aspnet/core/mvc/overview
+ *
+ * Implementation:
+ * Original implementation developed for the Exclusive Distributors FMCG Enterprise Management System.
+ 
+ */
+
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult Welcome()
+        {
+            if (User.Identity?.IsAuthenticated == true)
+            {
+                return RedirectToAction("Dashboard", "Home");
+            }
+
+            return View();
+        }
     }
 }
