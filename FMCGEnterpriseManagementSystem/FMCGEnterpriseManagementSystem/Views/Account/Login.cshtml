@@ -40,696 +40,682 @@ Uses: jQuery Validation + Unobtrusive (MIT) https://jqueryvalidation.org
 
 
     <style>
+    /*
+       Purpose:
+       Provide a consistent visual experience between the
+       Welcome page and the secure login portal.
 
-        :root {
-            --navy: #102b35;
-            --dark-navy: #0b2028;
-            --teal: #357383;
-            --light-teal: #4f9aaa;
-            --page-bg: #eef2f4;
-            --border: #dce4e7;
-            --text: #263940;
-            --muted: #718187;
-            --white: #ffffff;
+       References 
+       Mozilla (n.d.) CSS: Cascading Style Sheets.
+       MDN Web Docs. Available at:
+       https://developer.mozilla.org/en-US/docs/Web/CSS
+
+       Bootstrap (n.d.) Forms.
+       Available at:
+       https://getbootstrap.com/docs/5.3/forms/overview/
+
+    */
+
+    :root {
+        --navy: #091827;
+        --dark-navy: #06111f;
+        --navy-light: #122b3c;
+        --teal: #20d5c4;
+        --teal-dark: #0da99f;
+        --white: #ffffff;
+        --text: #eaf5f6;
+        --muted: #9db4c1;
+        --border: rgba(32, 213, 196, 0.18);
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    html,
+    body {
+        width: 100%;
+        min-height: 100%;
+    }
+
+    body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, sans-serif;
+        background: var(--dark-navy);
+        color: var(--text);
+        overflow-x: hidden;
+    }
+
+    /* HEADER */
+
+    .erp-header {
+        height: 80px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 7%;
+        background: rgba(6, 17, 31, 0.92);
+        border-bottom: 1px solid rgba(32, 213, 196, 0.12);
+        position: relative;
+        z-index: 10;
+    }
+
+    .erp-brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .erp-logo {
+        width: 46px;
+        height: 46px;
+        padding: 5px;
+        background: white;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 20px rgba(32, 213, 196, 0.15);
+    }
+
+    .erp-logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    .erp-brand-name {
+        font-size: 17px;
+        font-weight: 800;
+        color: white;
+    }
+
+    .erp-brand-subtitle {
+        display: block;
+        color: var(--teal);
+        font-size: 10px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        margin-top: 4px;
+    }
+
+    .secure-access {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        color: var(--muted);
+        font-size: 12px;
+    }
+
+    .secure-access i {
+        color: var(--teal);
+    }
+
+    /* PAGE BACKGROUND */
+
+    .erp-page {
+        min-height: calc(100vh - 80px);
+        display: flex;
+        position: relative;
+        overflow: hidden;
+
+        background:
+            radial-gradient(
+                circle at 15% 30%,
+                rgba(32, 213, 196, 0.12),
+                transparent 35%
+            ),
+            radial-gradient(
+                circle at 85% 70%,
+                rgba(32, 213, 196, 0.08),
+                transparent 35%
+            ),
+            linear-gradient(
+                135deg,
+                #091827,
+                #10263a,
+                #071522
+            );
+    }
+
+    .erp-background {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+
+        background-image:
+            linear-gradient(
+                rgba(32, 213, 196, 0.035) 1px,
+                transparent 1px
+            ),
+            linear-gradient(
+                90deg,
+                rgba(32, 213, 196, 0.035) 1px,
+                transparent 1px
+            );
+
+        background-size: 55px 55px;
+    }
+
+    .background-circle {
+        position: absolute;
+        border-radius: 50%;
+        border: 1px solid rgba(32, 213, 196, 0.12);
+        pointer-events: none;
+        animation: floatCircle 10s ease-in-out infinite alternate;
+    }
+
+    .circle-one {
+        width: 600px;
+        height: 600px;
+        right: -250px;
+        top: -180px;
+    }
+
+    .circle-two {
+        width: 420px;
+        height: 420px;
+        left: -220px;
+        bottom: -180px;
+        animation-delay: 2s;
+    }
+
+    /* CONTENT */
+
+    .erp-content {
+        width: 100%;
+        max-width: 1250px;
+        margin: auto;
+        padding: 65px 35px 85px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 2;
+    }
+
+    /* LOGIN CONTAINER */
+
+    .login-container {
+        width: 100%;
+        max-width: 1050px;
+        min-height: 560px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+
+        background: rgba(13, 34, 50, 0.9);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        overflow: hidden;
+
+        box-shadow:
+            0 30px 80px rgba(0, 0, 0, 0.35),
+            0 0 45px rgba(32, 213, 196, 0.05);
+
+        backdrop-filter: blur(20px);
+        animation: fadeUp 0.8s ease;
+    }
+
+    /* LEFT PANEL */
+
+    .login-info {
+        position: relative;
+        padding: 65px 55px;
+
+        background:
+            radial-gradient(
+                circle at 10% 90%,
+                rgba(32, 213, 196, 0.15),
+                transparent 45%
+            ),
+            linear-gradient(
+                150deg,
+                #0c2635,
+                #123647,
+                #0a202f
+            );
+
+        color: white;
+        overflow: hidden;
+    }
+
+    .login-info::after {
+        content: "";
+        position: absolute;
+        width: 350px;
+        height: 350px;
+        right: -180px;
+        bottom: -180px;
+        border: 1px solid rgba(32, 213, 196, 0.18);
+        border-radius: 50%;
+    }
+
+    .info-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .module-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        padding: 9px 14px;
+        border-radius: 30px;
+
+        background: rgba(32, 213, 196, 0.08);
+        border: 1px solid rgba(32, 213, 196, 0.2);
+
+        color: var(--teal);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        margin-bottom: 35px;
+    }
+
+    .module-label i {
+        color: var(--teal);
+    }
+
+    .login-info h1 {
+        font-size: clamp(30px, 3vw, 43px);
+        line-height: 1.15;
+        font-weight: 800;
+        letter-spacing: -1px;
+        margin-bottom: 22px;
+    }
+
+    .login-info h1 span {
+        color: var(--teal);
+    }
+
+    .login-info-description {
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.85;
+        max-width: 410px;
+        margin-bottom: 40px;
+    }
+
+    /* MODULES */
+
+    .module-list {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        max-width: 420px;
+    }
+
+    .module-item {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        padding: 14px;
+        border-radius: 12px;
+
+        background: rgba(255, 255, 255, 0.035);
+        border: 1px solid rgba(32, 213, 196, 0.1);
+
+        color: #d7e8ec;
+        font-size: 12px;
+
+        transition: all 0.3s ease;
+    }
+
+    .module-item:hover {
+        background: rgba(32, 213, 196, 0.1);
+        border-color: rgba(32, 213, 196, 0.3);
+        transform: translateY(-3px);
+    }
+
+    .module-item i {
+        color: var(--teal);
+        font-size: 17px;
+    }
+
+    /* RIGHT PANEL */
+
+    .login-panel {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 65px 60px;
+
+        background: rgba(7, 22, 35, 0.85);
+        border-left: 1px solid rgba(32, 213, 196, 0.1);
+    }
+
+    .login-form {
+        width: 100%;
+        max-width: 365px;
+    }
+
+    .login-heading {
+        margin-bottom: 35px;
+    }
+
+    .login-heading h2 {
+        font-size: 31px;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 10px;
+    }
+
+    .login-heading p {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.7;
+        margin: 0;
+    }
+
+    /* FORM */
+
+    .form-label {
+        color: #c7dce3;
+        font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 9px;
+    }
+
+    .input-group {
+        height: 50px;
+    }
+
+    .input-group-text {
+        width: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #112b3c;
+        border-color: rgba(32, 213, 196, 0.18);
+        color: var(--teal);
+        font-size: 16px;
+    }
+
+    .form-control {
+        height: 50px;
+        border-color: rgba(32, 213, 196, 0.18);
+        color: white;
+        font-size: 13px;
+        background: #112b3c;
+    }
+
+    .form-control::placeholder {
+        color: #819aa7;
+    }
+
+    .form-control:focus {
+        background: #143348;
+        color: white;
+        border-color: var(--teal);
+        box-shadow: 0 0 0 3px rgba(32, 213, 196, 0.12);
+        z-index: 3;
+    }
+
+    .password-toggle {
+        border-color: rgba(32, 213, 196, 0.18);
+        background: #112b3c;
+        color: #a6c0ca;
+        width: 48px;
+    }
+
+    .password-toggle:hover {
+        background: #17394c;
+        color: var(--teal);
+    }
+
+    .field-validation-error {
+        display: block;
+        margin-top: 6px;
+    }
+
+    /* LOGIN OPTIONS */
+
+    .login-options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 18px;
+        margin-bottom: 30px;
+    }
+
+    .form-check-label {
+        color: var(--muted);
+        font-size: 12px;
+        cursor: pointer;
+    }
+
+    .form-check-input {
+        background-color: #112b3c;
+        border-color: #54717e;
+    }
+
+    .form-check-input:checked {
+        background-color: var(--teal);
+        border-color: var(--teal);
+    }
+
+    .forgot-password {
+        color: var(--teal);
+        font-size: 12px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .forgot-password:hover {
+        color: white;
+        text-decoration: underline;
+    }
+
+    /* BUTTON */
+
+    .btn-login {
+        width: 100%;
+        height: 52px;
+        border: none;
+        border-radius: 10px;
+
+        background: linear-gradient(
+            135deg,
+            #20d5c4,
+            #12b8b0
+        );
+
+        color: #061827;
+        font-size: 14px;
+        font-weight: 800;
+
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 25px rgba(32, 213, 196, 0.12);
+    }
+
+    .btn-login:hover {
+        background: white;
+        color: #061827;
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(32, 213, 196, 0.2);
+    }
+
+    .btn-login:active {
+        transform: translateY(0);
+    }
+
+    /* SECURITY MESSAGE */
+
+    .security-message {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin-top: 30px;
+        padding: 14px;
+
+        background: rgba(32, 213, 196, 0.045);
+        border: 1px solid rgba(32, 213, 196, 0.12);
+        border-radius: 10px;
+
+        color: var(--muted);
+        font-size: 11px;
+        line-height: 1.65;
+    }
+
+    .security-message i {
+        color: var(--teal);
+        font-size: 16px;
+    }
+
+    /* FOOTER */
+
+    .erp-footer {
+        position: absolute;
+        bottom: 20px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        color: #7794a2;
+        font-size: 11px;
+        z-index: 3;
+    }
+
+    /* VALIDATION */
+
+    .validation-summary-errors {
+        margin-bottom: 20px;
+        padding: 12px;
+        border-radius: 9px;
+        background: rgba(194, 57, 57, 0.1);
+        border: 1px solid rgba(235, 98, 98, 0.3);
+        color: #ffb0aa;
+        font-size: 12px;
+    }
+
+    .validation-summary-valid {
+        display: none;
+    }
+
+    .text-danger {
+        color: #ffaaa4 !important;
+        font-size: 11px;
+    }
+
+    /* ANIMATIONS */
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(25px);
         }
 
-
-        * {
-            box-sizing: border-box;
+        to {
+            opacity: 1;
+            transform: translateY(0);
         }
+    }
 
-
-        html,
-        body {
-            width: 100%;
-            min-height: 100%;
-        }
-
-
-        body {
-            margin: 0;
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--page-bg);
-            color: var(--text);
-            overflow-x: hidden;
-        }
-
-
-        /* =====================================================
-           ERP HEADER
-           ===================================================== */
-
-        .erp-header {
-            height: 72px;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 42px;
-            background: var(--navy);
-            color: white;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-            position: relative;
-            z-index: 10;
-        }
-
-
-        .erp-brand {
-            display: flex;
-            align-items: center;
-            gap: 13px;
-        }
-
-
-        .erp-logo {
-            width: 43px;
-            height: 43px;
-            padding: 4px;
-            background: white;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.18);
-        }
-
-
-        .erp-logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            border-radius: 5px;
-        }
-
-
-        .erp-brand-name {
-            font-size: 16px;
-            font-weight: 700;
-            line-height: 1.2;
-        }
-
-
-        .erp-brand-subtitle {
-            display: block;
-            color: #9fb2b8;
-            font-size: 10px;
-            letter-spacing: 1.2px;
-            text-transform: uppercase;
-            margin-top: 3px;
-        }
-
-
-        .secure-access {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #b8c9ce;
-            font-size: 12px;
-        }
-
-
-        .secure-access i {
-            color: #67aebe;
-            font-size: 14px;
-        }
-
-
-        /* =====================================================
-           PAGE
-           ===================================================== */
-
-        .erp-page {
-            min-height: calc(100vh - 72px);
-            display: flex;
-            position: relative;
-            overflow: hidden;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #eef2f4 0%,
-                    #f7f9fa 50%,
-                    #e9eff1 100%);
-        }
-
-
-        /* =====================================================
-           SUBTLE ERP BACKGROUND
-           ===================================================== */
-
-        .erp-background {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            opacity: 0.55;
-
-            background-image:
-                linear-gradient(
-                    rgba(53,115,131,0.035) 1px,
-                    transparent 1px),
-                linear-gradient(
-                    90deg,
-                    rgba(53,115,131,0.035) 1px,
-                    transparent 1px);
-
-            background-size: 45px 45px;
-        }
-
-
-        .background-circle {
-            position: absolute;
-            border-radius: 50%;
-            border: 1px solid rgba(53,115,131,0.08);
-            pointer-events: none;
-        }
-
-
-        .circle-one {
-            width: 520px;
-            height: 520px;
-            right: -220px;
-            top: -150px;
-        }
-
-
-        .circle-two {
-            width: 350px;
-            height: 350px;
-            left: -190px;
-            bottom: -160px;
-        }
-
-
-        /* =====================================================
-           MAIN CONTENT
-           ===================================================== */
-
-        .erp-content {
-            width: 100%;
-            max-width: 1180px;
-            margin: auto;
-            padding: 55px 35px 75px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            z-index: 2;
-        }
-
-
-        /* =====================================================
-           LOGIN CONTAINER
-           ===================================================== */
-
-        .login-container {
-            width: 100%;
-            max-width: 950px;
-            min-height: 520px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 18px 45px rgba(16,43,53,0.10);
-        }
-
-
-        /* =====================================================
-           LEFT ERP INFORMATION PANEL
-           ===================================================== */
-
-        .login-info {
-            position: relative;
-            padding: 52px 48px;
-
-            background:
-                linear-gradient(
-                    150deg,
-                    #102b35 0%,
-                    #163b47 60%,
-                    #1c4a58 100%);
-
-            color: white;
-            overflow: hidden;
-        }
-
-
-        .login-info::after {
-            content: "";
-            position: absolute;
-            width: 280px;
-            height: 280px;
-            right: -145px;
-            bottom: -140px;
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 50%;
-        }
-
-
-        .info-content {
-            position: relative;
-            z-index: 2;
-        }
-
-
-        .module-label {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 7px 11px;
-            border-radius: 5px;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.10);
-            color: #a9cbd2;
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-bottom: 30px;
-        }
-
-
-        .module-label i {
-            color: #67aebe;
-        }
-
-
-        .login-info h1 {
-            font-size: 32px;
-            line-height: 1.2;
-            font-weight: 700;
-            margin-bottom: 16px;
-        }
-
-
-        .login-info h1 span {
-            color: #67aebe;
-        }
-
-
-        .login-info-description {
-            color: #b6c7cc;
-            font-size: 14px;
-            line-height: 1.75;
-            max-width: 390px;
-            margin-bottom: 38px;
-        }
-
-
-        /* =====================================================
-           ERP MODULE LIST
-           ===================================================== */
-
-        .module-list {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            max-width: 400px;
-        }
-
-
-        .module-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 11px 12px;
-            border-radius: 6px;
-            background: rgba(255,255,255,0.045);
-            border: 1px solid rgba(255,255,255,0.07);
-            color: #d6e2e5;
-            font-size: 12px;
-        }
-
-
-        .module-item i {
-            color: #67aebe;
-            font-size: 15px;
-        }
-
-
-        /* =====================================================
-           RIGHT LOGIN PANEL
-           ===================================================== */
-
-        .login-panel {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 52px 55px;
-            background: white;
-        }
-
-
-        .login-form {
-            width: 100%;
-            max-width: 350px;
-        }
-
-
-        /* =====================================================
-           LOGIN HEADING
-           ===================================================== */
-
-        .login-heading {
-            margin-bottom: 30px;
-        }
-
-
-        .login-heading h2 {
-            font-size: 25px;
-            font-weight: 700;
-            color: var(--navy);
-            margin-bottom: 7px;
-        }
-
-
-        .login-heading p {
-            color: var(--muted);
-            font-size: 13px;
-            margin: 0;
-        }
-
-
-        /* =====================================================
-           FORM
-           ===================================================== */
-
-        .form-label {
-            color: #43545a;
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 7px;
-        }
-
-
-        .input-group {
-            height: 46px;
-        }
-
-
-        .input-group-text {
-            width: 43px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #f7f9fa;
-            border-color: #d5dfe2;
-            color: #7c8d93;
-            font-size: 15px;
-        }
-
-
-        .form-control {
-            height: 46px;
-            border-color: #d5dfe2;
-            color: #263940;
-            font-size: 13px;
-            background: white;
-        }
-
-
-        .form-control::placeholder {
-            color: #a0adb1;
-        }
-
-
-        .form-control:focus {
-            border-color: var(--teal);
-            box-shadow: 0 0 0 3px rgba(53,115,131,0.10);
-            z-index: 3;
-        }
-
-
-        .password-toggle {
-            border-color: #d5dfe2;
-            background: #f7f9fa;
-            color: #718187;
-            width: 45px;
-        }
-
-
-        .password-toggle:hover {
-            background: #eef3f4;
-            color: var(--teal);
-        }
-
-
-        .field-validation-error {
-            display: block;
-            margin-top: 5px;
-        }
-
-
-        /* =====================================================
-           LOGIN OPTIONS
-           ===================================================== */
-
-        .login-options {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 15px;
-            margin-bottom: 25px;
-        }
-
-
-        .form-check-label {
-            color: #718187;
-            font-size: 12px;
-            cursor: pointer;
-        }
-
-
-        .form-check-input {
-            border-color: #c6d1d5;
-        }
-
-
-        .form-check-input:checked {
-            background-color: var(--teal);
-            border-color: var(--teal);
-        }
-
-
-        .forgot-password {
-            color: var(--teal);
-            font-size: 12px;
-            font-weight: 600;
-            text-decoration: none;
-        }
-
-
-        .forgot-password:hover {
-            color: #275662;
-            text-decoration: underline;
-        }
-
-
-        /* =====================================================
-           LOGIN BUTTON
-           ===================================================== */
-
-        .btn-login {
-            width: 100%;
-            height: 46px;
-            border: none;
-            border-radius: 5px;
-            background: var(--teal);
-            color: white;
-            font-size: 13px;
-            font-weight: 600;
-
-            transition:
-                background 0.2s ease,
-                transform 0.2s ease,
-                box-shadow 0.2s ease;
-        }
-
-
-        .btn-login:hover {
-            background: #2b6373;
-            color: white;
-            transform: translateY(-1px);
-            box-shadow: 0 7px 18px rgba(53,115,131,0.22);
-        }
-
-
-        .btn-login:active {
+    @@keyframes floatCircle {
+        from {
             transform: translateY(0);
         }
 
+        to {
+            transform: translateY(25px);
+        }
+    }
 
-        /* =====================================================
-           SECURITY MESSAGE
-           ===================================================== */
+    /* RESPONSIVE */
 
-        .security-message {
-            display: flex;
-            align-items: flex-start;
-            gap: 9px;
-            margin-top: 25px;
-            padding: 11px 12px;
-            background: #f5f8f9;
-            border: 1px solid #e2eaec;
-            border-radius: 5px;
-            color: #718187;
-            font-size: 10px;
-            line-height: 1.5;
+    @@media (max-width: 850px) {
+        .erp-header {
+            padding: 0 22px;
         }
 
-
-        .security-message i {
-            color: var(--teal);
-            font-size: 14px;
-            margin-top: 1px;
-        }
-
-
-        /* =====================================================
-           FOOTER
-           ===================================================== */
-
-        .erp-footer {
-            position: absolute;
-            bottom: 18px;
-            left: 0;
-            right: 0;
-            text-align: center;
-            color: #89999e;
-            font-size: 10px;
-            z-index: 3;
-        }
-
-
-        /* =====================================================
-           VALIDATION
-           ===================================================== */
-
-        .validation-summary-errors {
-            margin-bottom: 20px;
-            padding: 10px 12px;
-            border-radius: 5px;
-            background: #fff4f3;
-            border: 1px solid #f3d0cd;
-            color: #a33a32;
-            font-size: 12px;
-        }
-
-
-        .validation-summary-valid {
+        .secure-access {
             display: none;
         }
 
-
-        .text-danger {
-            font-size: 11px;
+        .login-container {
+            grid-template-columns: 1fr;
+            max-width: 520px;
         }
 
-
-        /* =====================================================
-           RESPONSIVE
-           ===================================================== */
-
-        @@media (max-width: 850px) {
-
-            .erp-header {
-                padding: 0 22px;
-            }
-
-
-            .secure-access {
-                display: none;
-            }
-
-
-            .login-container {
-                grid-template-columns: 1fr;
-                max-width: 500px;
-            }
-
-
-            .login-info {
-                padding: 35px;
-            }
-
-
-            .login-info h1 {
-                font-size: 27px;
-            }
-
-
-            .login-info-description {
-                margin-bottom: 25px;
-            }
-
-
-            .module-list {
-                display: none;
-            }
-
-
-            .login-panel {
-                padding: 40px 35px;
-            }
+        .login-info {
+            padding: 40px;
         }
 
-
-        @@media (max-width: 576px) {
-
-            .erp-header {
-                height: 65px;
-                padding: 0 18px;
-            }
-
-
-            .erp-page {
-                min-height: calc(100vh - 65px);
-            }
-
-
-            .erp-brand-subtitle {
-                display: none;
-            }
-
-
-            .erp-content {
-                padding: 25px 15px 60px;
-            }
-
-
-            .login-container {
-                border-radius: 9px;
-            }
-
-
-            .login-info {
-                padding: 30px 25px;
-            }
-
-
-            .login-info h1 {
-                font-size: 24px;
-            }
-
-
-            .login-panel {
-                padding: 35px 25px;
-            }
-
-
-            .login-options {
-                align-items: flex-start;
-                gap: 10px;
-            }
-
-
-            .erp-footer {
-                bottom: 10px;
-            }
+        .login-info h1 {
+            font-size: 30px;
         }
 
-    </style>
+        .login-info-description {
+            margin-bottom: 25px;
+        }
+
+        .module-list {
+            display: none;
+        }
+
+        .login-panel {
+            padding: 45px 40px;
+            border-left: none;
+            border-top: 1px solid var(--border);
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .erp-header {
+            height: 70px;
+            padding: 0 18px;
+        }
+
+        .erp-page {
+            min-height: calc(100vh - 70px);
+        }
+
+        .erp-brand-subtitle {
+            display: none;
+        }
+
+        .erp-content {
+            padding: 25px 15px 65px;
+        }
+
+        .login-container {
+            border-radius: 16px;
+        }
+
+        .login-info {
+            padding: 30px 25px;
+        }
+
+        .login-info h1 {
+            font-size: 26px;
+        }
+
+        .login-panel {
+            padding: 40px 25px;
+        }
+
+        .login-options {
+            gap: 10px;
+        }
+
+        .erp-footer {
+            bottom: 10px;
+        }
+    }
+
+    @@media (prefers-reduced-motion: reduce) {
+        .login-container,
+        .background-circle {
+            animation: none;
+        }
+
+        .module-item,
+        .btn-login {
+            transition: none;
+        }
+    }
+</style>
 
 </head>
 
