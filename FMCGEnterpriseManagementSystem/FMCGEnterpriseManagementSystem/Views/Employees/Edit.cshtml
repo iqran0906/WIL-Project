@@ -1,167 +1,547 @@
 ﻿@*
-    Purpose: Form to update an existing employee.
-    Authors: iqran0906 (from git history)
+    Purpose:
+    Edit existing employee and next-of-kin information
+  
+
+    Original author: iqran0906 (from Git history).
+
+    References:
+
+    Bootstrap (n.d.) Forms.
+    Available at:
+    https://getbootstrap.com/docs/5.3/forms/overview/
+
+    Bootstrap (n.d.) Grid System.
+    Available at:
+    https://getbootstrap.com/docs/5.3/layout/grid/
+
+    Microsoft (n.d.) Tag Helpers in forms in ASP.NET Core.
+    Available at:
+    https://learn.microsoft.com/en-us/aspnet/core/mvc/views/working-with-forms
 *@
+
 @model FMCGEnterpriseManagementSystem.ViewModels.EmployeeViewModel
 
 @{
     ViewData["Title"] = "Edit Employee";
 }
 
-<div class="content-card">
-    <h2 class="fw-bold mb-4" style="color: #1c323d;">Edit Employee</h2>
+<style>
+    /* =========================================================
+       EDIT EMPLOYEE 
+       ========================================================= */
 
-    <form asp-controller="Employees" asp-action="Edit" method="post">
+    .employee-edit-page {
+        background: #e6edf1;
+        border: 1px solid rgba(53, 127, 145, 0.18);
+        border-radius: 15px;
+        padding: 30px;
+        margin-bottom: 30px;
+        color: #183244;
+    }
+
+    /* PAGE HEADER */
+
+    .employee-edit-header {
+        margin-bottom: 26px;
+    }
+
+    .employee-edit-title {
+        color: #183244;
+        font-size: 30px;
+        font-weight: 800;
+        margin-bottom: 5px;
+    }
+
+    .employee-edit-subtitle {
+        color: #667988;
+        font-size: 15px;
+        margin-bottom: 0;
+    }
+
+    /* FORM SECTIONS */
+
+    .employee-edit-section {
+        background: #f8fafb;
+        border: 1px solid #c9d9df;
+        border-top: 3px solid #357f91;
+        border-radius: 8px;
+        padding: 25px;
+        height: 100%;
+        box-shadow: 0 3px 12px rgba(15, 40, 55, 0.05);
+    }
+
+    .employee-edit-section-title {
+        font-size: 19px;
+        font-weight: 800;
+        color: #183244;
+        margin-bottom: 6px;
+    }
+
+    .employee-edit-section-subtitle {
+        color: #788592;
+        font-size: 13px;
+        margin-bottom: 22px;
+    }
+
+    /* FORM LABELS */
+
+    .employee-edit-page .form-label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #465768;
+        margin-bottom: 7px;
+    }
+
+    /* FORM INPUTS */
+
+    .employee-edit-page .form-control {
+        background: #f7f9fa;
+        border: 1px solid #d3dbe2;
+        border-radius: 6px;
+        min-height: 44px;
+        color: #263b4b;
+    }
+
+    .employee-edit-page .form-control:focus {
+        border-color: #357f91;
+        box-shadow: 0 0 0 3px rgba(53, 127, 145, 0.12);
+    }
+
+    .employee-edit-page .form-control[readonly] {
+        background: #e9eff2;
+        color: #657988;
+        cursor: not-allowed;
+    }
+
+    .employee-edit-help {
+        color: #788592;
+        font-size: 12px;
+        margin-top: 6px;
+    }
+
+    /* VALIDATION */
+
+    .employee-edit-page .field-validation-error {
+        color: #bd303b;
+        font-size: 12px;
+        display: block;
+        margin-top: 5px;
+    }
+
+    .employee-edit-page .input-validation-error {
+        border-color: #dc3545;
+    }
+
+    /* ACTION BUTTONS */
+
+    .employee-edit-actions {
+        display: flex;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 25px;
+    }
+
+    .employee-edit-save {
+        background: #357f91;
+        border: 1px solid #357f91;
+        color: #ffffff;
+        border-radius: 6px;
+        padding: 11px 22px;
+        font-weight: 600;
+    }
+
+    .employee-edit-save:hover {
+        background: #286675;
+        color: #ffffff;
+    }
+
+    .employee-edit-cancel {
+        background: transparent;
+        border: 1px solid #a8b1bb;
+        color: #536475;
+        border-radius: 6px;
+        padding: 11px 22px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .employee-edit-cancel:hover {
+        background: #dce6eb;
+        color: #183244;
+    }
+
+    /* RESPONSIVE DESIGN */
+
+    @@media (max-width: 768px) {
+
+        .employee-edit-page {
+            padding: 18px;
+        }
+
+        .employee-edit-title {
+            font-size: 25px;
+        }
+
+        .employee-edit-section {
+            padding: 18px;
+        }
+
+        .employee-edit-actions a,
+        .employee-edit-actions button {
+            flex: 1;
+            text-align: center;
+        }
+    }
+</style>
+
+
+<div class="employee-edit-page">
+
+    <!-- =====================================================
+         PAGE HEADER
+         ===================================================== -->
+
+    <div class="employee-edit-header">
+
+        <h2 class="employee-edit-title">
+            Edit Employee
+        </h2>
+
+        <p class="employee-edit-subtitle">
+            Update employee details and next-of-kin information.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         EDIT EMPLOYEE FORM
+         ===================================================== -->
+
+    <form asp-controller="Employees"
+          asp-action="Edit"
+          method="post">
 
         @Html.AntiForgeryToken()
 
+        <!-- Preserve existing record identifiers. -->
+
         <input asp-for="EmployeeID" type="hidden" />
+
         <input asp-for="NextOfKinID" type="hidden" />
 
-        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <!-- MODEL VALIDATION -->
+
+        <div asp-validation-summary="ModelOnly"
+             class="text-danger mb-3">
+        </div>
+
 
         <div class="row g-4">
 
-            <div class="col-md-6 border-end pe-md-4">
+            <!-- =================================================
+                 EMPLOYEE INFORMATION
+                 ================================================= -->
 
-               <div class="mb-3">
-    <label asp-for="EmployeeNumber" class="form-label"></label>
+            <div class="col-12 col-xl-6">
 
-    <input asp-for="EmployeeNumber"
-           type="hidden" />
+                <div class="employee-edit-section">
 
-    <input type="text"
-           class="form-control"
-           value="@Model.EmployeeNumber"
-           readonly />
+                    <h5 class="employee-edit-section-title">
 
-    <div class="form-text">
-        Employee numbers are generated automatically and cannot be changed.
-    </div>
-</div>
+                        <i class="bi bi-person-badge me-2"></i>
 
-                <div class="mb-3">
-                    <label asp-for="FirstName" class="form-label"></label>
-                    <input asp-for="FirstName"
-                           class="form-control"
-                           placeholder="Enter First Name" />
-                    <span asp-validation-for="FirstName"
-                          class="text-danger"></span>
-                </div>
+                        Employee Information
 
-                <div class="mb-3">
-                    <label asp-for="LastName" class="form-label"></label>
-                    <input asp-for="LastName"
-                           class="form-control"
-                           placeholder="Enter Last Name" />
-                    <span asp-validation-for="LastName"
-                          class="text-danger"></span>
-                </div>
+                    </h5>
 
-                <div class="mb-3">
-                    <label asp-for="ContactNumber" class="form-label"></label>
-                    <input asp-for="ContactNumber"
-                           class="form-control"
-                           placeholder="Enter Contact Number" />
-                    <span asp-validation-for="ContactNumber"
-                          class="text-danger"></span>
-                </div>
+                    <p class="employee-edit-section-subtitle">
+                        Update the employee's personal and employment details.
+                    </p>
 
-                <div class="mb-3">
-                    <label asp-for="Email" class="form-label"></label>
-                    <input asp-for="Email"
-                           class="form-control"
-                           placeholder="Enter Email Address" />
-                    <span asp-validation-for="Email"
-                          class="text-danger"></span>
-                </div>
 
-                <div class="mb-3">
-                    <label asp-for="JobTitle" class="form-label"></label>
-                    <input asp-for="JobTitle"
-                           class="form-control"
-                           placeholder="Enter Job Title" />
-                    <span asp-validation-for="JobTitle"
-                          class="text-danger"></span>
-                </div>
+                    <!-- EMPLOYEE NUMBER -->
 
-                <div class="mb-3">
-                    <label asp-for="DateOfEmployment" class="form-label"></label>
-                    <input asp-for="DateOfEmployment"
-                           class="form-control" />
-                    <span asp-validation-for="DateOfEmployment"
-                          class="text-danger"></span>
+                    <div class="mb-3">
+
+                        <label asp-for="EmployeeNumber"
+                               class="form-label">
+                        </label>
+
+                        <!-- Preserve the employee number during POST. -->
+
+                        <input asp-for="EmployeeNumber"
+                               type="hidden" />
+
+                        <!-- Display the employee number as read-only. -->
+
+                        <input type="text"
+                               class="form-control"
+                               value="@Model.EmployeeNumber"
+                               readonly />
+
+                        <div class="employee-edit-help">
+                            Employee numbers are generated automatically
+                            and cannot be changed.
+                        </div>
+
+                    </div>
+
+
+                    <!-- FIRST NAME -->
+
+                    <div class="mb-3">
+
+                        <label asp-for="FirstName"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="FirstName"
+                               class="form-control"
+                               placeholder="Enter first name" />
+
+                        <span asp-validation-for="FirstName"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+
+                    <!-- LAST NAME -->
+
+                    <div class="mb-3">
+
+                        <label asp-for="LastName"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="LastName"
+                               class="form-control"
+                               placeholder="Enter last name" />
+
+                        <span asp-validation-for="LastName"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+
+                    <!-- CONTACT NUMBER -->
+
+                    <div class="mb-3">
+
+                        <label asp-for="ContactNumber"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="ContactNumber"
+                               class="form-control"
+                               placeholder="Enter contact number" />
+
+                        <span asp-validation-for="ContactNumber"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="mb-3">
+
+                        <label asp-for="Email"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="Email"
+                               class="form-control"
+                               placeholder="Enter email address" />
+
+                        <span asp-validation-for="Email"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+
+                    <!-- JOB TITLE -->
+
+                    <div class="mb-3">
+
+                        <label asp-for="JobTitle"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="JobTitle"
+                               class="form-control"
+                               placeholder="Enter job title" />
+
+                        <span asp-validation-for="JobTitle"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+
+                    <!-- DATE OF EMPLOYMENT -->
+
+                    <div class="mb-3">
+
+                        <label asp-for="DateOfEmployment"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="DateOfEmployment"
+                               class="form-control" />
+
+                        <span asp-validation-for="DateOfEmployment"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
                 </div>
 
             </div>
 
-            <div class="col-md-6 ps-md-4">
 
-                <h5 class="fw-bold text-muted mb-3 text-end">
-                    Next Of Kin
-                </h5>
+            <!-- =================================================
+                 NEXT OF KIN INFORMATION
+                 ================================================= -->
 
-                <div class="mb-3">
-                    <label asp-for="NextOfKinFullName"
-                           class="form-label"></label>
-                    <input asp-for="NextOfKinFullName"
-                           class="form-control"
-                           placeholder="Enter Full Name" />
-                    <span asp-validation-for="NextOfKinFullName"
-                          class="text-danger"></span>
-                </div>
+            <div class="col-12 col-xl-6">
 
-                <div class="mb-3">
-                    <label asp-for="NextOfKinRelationship"
-                           class="form-label"></label>
-                    <input asp-for="NextOfKinRelationship"
-                           class="form-control"
-                           placeholder="Enter Relationship" />
-                    <span asp-validation-for="NextOfKinRelationship"
-                          class="text-danger"></span>
-                </div>
+                <div class="employee-edit-section">
 
-                <div class="mb-3">
-                    <label asp-for="NextOfKinContactNumber"
-                           class="form-label"></label>
-                    <input asp-for="NextOfKinContactNumber"
-                           class="form-control"
-                           placeholder="Enter Contact Number" />
-                    <span asp-validation-for="NextOfKinContactNumber"
-                          class="text-danger"></span>
-                </div>
+                    <h5 class="employee-edit-section-title">
 
-                <div class="mb-3">
-                    <label asp-for="NextOfKinEmail"
-                           class="form-label"></label>
-                    <input asp-for="NextOfKinEmail"
-                           class="form-control"
-                           placeholder="Enter Email Address" />
-                    <span asp-validation-for="NextOfKinEmail"
-                          class="text-danger"></span>
+                        <i class="bi bi-people me-2"></i>
+
+                        Next of Kin
+
+                    </h5>
+
+                    <p class="employee-edit-section-subtitle">
+                        Update the employee's emergency contact information.
+                    </p>
+
+
+                    <!-- NEXT OF KIN FULL NAME -->
+
+                    <div class="mb-3">
+
+                        <label asp-for="NextOfKinFullName"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="NextOfKinFullName"
+                               class="form-control"
+                               placeholder="Enter full name" />
+
+                        <span asp-validation-for="NextOfKinFullName"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+
+                    <!-- NEXT OF KIN RELATIONSHIP -->
+
+                    <div class="mb-3">
+
+                        <label asp-for="NextOfKinRelationship"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="NextOfKinRelationship"
+                               class="form-control"
+                               placeholder="Enter relationship" />
+
+                        <span asp-validation-for="NextOfKinRelationship"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+
+                    <!-- NEXT OF KIN CONTACT NUMBER -->
+
+                    <div class="mb-3">
+
+                        <label asp-for="NextOfKinContactNumber"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="NextOfKinContactNumber"
+                               class="form-control"
+                               placeholder="Enter contact number" />
+
+                        <span asp-validation-for="NextOfKinContactNumber"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+
+                    <!-- NEXT OF KIN EMAIL -->
+
+                    <div class="mb-3">
+
+                        <label asp-for="NextOfKinEmail"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="NextOfKinEmail"
+                               class="form-control"
+                               placeholder="Enter email address" />
+
+                        <span asp-validation-for="NextOfKinEmail"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
                 </div>
 
             </div>
 
         </div>
 
-        <div class="d-flex justify-content-end gap-3 mt-2">
+
+        <!-- =====================================================
+             ACTION BUTTONS
+             ===================================================== -->
+
+        <div class="employee-edit-actions">
 
             <a asp-controller="Employees"
                asp-action="Index"
-               class="btn btn-link text-decoration-none text-secondary align-self-center">
+               class="employee-edit-cancel">
+
+                <i class="bi bi-arrow-left me-1"></i>
+
                 Cancel
+
             </a>
 
             <button type="submit"
-                    class="btn btn-custom-save">
+                    class="employee-edit-save">
+
+                <i class="bi bi-check-lg me-1"></i>
+
                 Save Changes
+
             </button>
 
         </div>
 
     </form>
+
 </div>
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

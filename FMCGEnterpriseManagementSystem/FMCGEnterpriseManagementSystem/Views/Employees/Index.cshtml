@@ -1,66 +1,358 @@
 ﻿@*
-    Purpose: Active employees list page.
-    Authors: iqran0906 (from git history)
+    Purpose:
+    Display and manage active employees
+
+    References:
+    Bootstrap (n.d.) Cards.
+    Available at: https://getbootstrap.com/docs/5.3/components/card/
+
+    Bootstrap (n.d.) Modal.
+    Available at: https://getbootstrap.com/docs/5.3/components/modal/
+
+    Microsoft (n.d.) Tag Helpers in forms in ASP.NET Core.
+    Available at: https://learn.microsoft.com/en-us/aspnet/core/mvc/views/working-with-forms
 *@
 
 @model IEnumerable<FMCGEnterpriseManagementSystem.Models.Employee>
 
 @{
     ViewData["Title"] = "Employees";
+
+    var employees = Model?.ToList()
+        ?? new List<FMCGEnterpriseManagementSystem.Models.Employee>();
+
+    var totalEmployees = employees.Count;
+
+    var keyword = ViewBag.Keyword?.ToString() ?? "";
 }
 
-<div class="px-2 py-3">
+<style>
+    .employees-page {
+        background: #e6edf1;
+        border: 1px solid rgba(53, 127, 145, 0.18);
+        border-radius: 15px;
+        padding: 30px;
+        margin-bottom: 30px;
+        min-height: 80vh;
+        color: #183244;
+    }
+
+    .employees-page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 18px;
+        margin-bottom: 26px;
+    }
+
+    .employees-page-title {
+        font-size: 30px;
+        font-weight: 800;
+        color: #183244;
+        margin-bottom: 5px;
+    }
+
+    .employees-page-subtitle {
+        color: #667988;
+        font-size: 15px;
+        margin-bottom: 0;
+    }
+
+    .employees-header-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .employees-btn-primary {
+        background: #357f91;
+        border: 1px solid #357f91;
+        color: white;
+        border-radius: 6px;
+        padding: 10px 18px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+        .employees-btn-primary:hover {
+            background: #286675;
+            color: white;
+        }
+
+    .employees-btn-outline {
+        background: transparent;
+        border: 1px solid #a8b1bb;
+        color: #536475;
+        border-radius: 6px;
+        padding: 10px 18px;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+        .employees-btn-outline:hover {
+            background: #dce6eb;
+            color: #183244;
+        }
+
+    /* SUMMARY */
+
+    .employees-stat-card {
+        background: #f8fafb;
+        border: 1px solid #c9d9df;
+        border-top: 3px solid #357f91;
+        border-radius: 7px;
+        padding: 20px;
+        min-height: 112px;
+        height: 100%;
+        box-shadow: 0 3px 12px rgba(15, 40, 55, 0.05);
+    }
+
+    .employees-stat-label {
+        color: #667988;
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+
+    .employees-stat-value {
+        color: #142d40;
+        font-size: 28px;
+        font-weight: 800;
+    }
+
+    /* SEARCH */
+
+    .employees-filter-panel {
+        background: #edf3f5;
+        border: 1px solid #c9d9df;
+        border-radius: 7px;
+        padding: 20px;
+        margin: 25px 0;
+    }
+
+    .employees-filter-label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #465768;
+        margin-bottom: 7px;
+    }
+
+    .employees-filter-panel .form-control {
+        background: #f7f8fa;
+        border: 1px solid #d3dbe2;
+        min-height: 43px;
+        color: #263b4b;
+    }
+
+    /* TABLE */
+
+    .employees-table-container {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .employees-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 8px;
+        font-size: 16px;
+    }
+
+        .employees-table thead th {
+            background: #dce9ee;
+            color: #17384a;
+            padding: 18px 12px;
+            border-top: 1px solid #c9d9df;
+            border-bottom: 1px solid #c9d9df;
+            font-weight: 700;
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        .employees-table tbody td {
+            background: #f8fafb;
+            padding: 17px 12px;
+            border-top: 1px solid #e0e5ea;
+            border-bottom: 1px solid #e0e5ea;
+            color: #344657;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .employees-table tbody tr td:first-child {
+            border-left: 1px solid #e0e5ea;
+        }
+
+        .employees-table tbody tr td:last-child {
+            border-right: 1px solid #e0e5ea;
+        }
+
+        .employees-table tbody tr:hover td {
+            background: #edf4f6;
+        }
+
+    .employees-name {
+        color: #183244;
+        font-weight: 700;
+    }
+
+    .employees-number {
+        color: #357f91;
+        font-weight: 700;
+    }
+
+    .employees-status-active {
+        display: inline-block;
+        background: #dff5e8;
+        color: #187544;
+        border-radius: 5px;
+        padding: 6px 11px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    /* ACTIONS */
+
+    .employees-actions {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 7px;
+    }
+
+    .employees-edit-btn {
+        background: #ffc107;
+        color: #212529;
+        border: 1px solid #ffc107;
+        border-radius: 5px;
+        padding: 7px 12px;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+        .employees-edit-btn:hover {
+            background: #e6ad00;
+            color: #212529;
+        }
+
+    .employees-deactivate-btn {
+        background: #dc3545;
+        color: white;
+        border: 1px solid #dc3545;
+        border-radius: 5px;
+        padding: 7px 12px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+        .employees-deactivate-btn:hover {
+            background: #bd2635;
+            color: white;
+        }
+
+    .employees-empty-state {
+        background: #f8fafb;
+        border: 1px solid #c9d9df;
+        border-radius: 8px;
+        padding: 45px 20px;
+        text-align: center;
+        color: #667988;
+    }
+
+    /* MODAL */
+
+    .employees-modal .modal-content {
+        border: none;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .employees-modal .modal-header {
+        background: #17384a;
+        color: white;
+        padding: 18px 22px;
+    }
+
+    .employees-modal .modal-body {
+        color: #344657;
+        padding: 25px 22px;
+    }
+
+    .employees-modal .modal-footer {
+        background: #f4f7f9;
+        padding: 15px 22px;
+    }
+
+    @@media (max-width: 768px) {
+        .employees-page {
+            padding: 18px;
+        }
+
+        .employees-page-title {
+            font-size: 25px;
+        }
+
+        .employees-header-actions {
+            width: 100%;
+        }
+
+            .employees-header-actions a {
+                flex: 1;
+                text-align: center;
+            }
+    }
+</style>
+
+<div class="employees-page">
 
     @if (TempData["SuccessMessage"] != null)
     {
         <div class="alert alert-success alert-dismissible fade show"
              role="alert">
 
-            <i class="bi bi-check-circle me-1"></i>
+            <i class="bi bi-check-circle me-2"></i>
             @TempData["SuccessMessage"]
 
             <button type="button"
                     class="btn-close"
-                    data-bs-dismiss="alert">
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
             </button>
 
         </div>
     }
 
-
     <!-- HEADER -->
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-start gap-3 mb-4">
+
+    <div class="employees-page-header">
 
         <div>
-
-            <h2 class="text-white fw-bold mb-1">
-                Employees
+            <h2 class="employees-page-title">
+                Employee Management
             </h2>
 
-            <p class="text-white-50 mb-0">
-                Manage current employees and their employment information.
+            <p class="employees-page-subtitle">
+                Manage active employees and their employment information.
             </p>
-
         </div>
 
-
-        <div class="d-flex gap-2 flex-wrap">
+        <div class="employees-header-actions">
 
             <a asp-controller="Employees"
                asp-action="FormerEmployees"
-               class="btn btn-outline-light text-decoration-none">
+               class="employees-btn-outline">
 
-                <i class="bi bi-person-dash me-1"></i>
+                <i class="bi bi-person-dash me-2"></i>
                 Former Employees
 
             </a>
 
-
             <a asp-controller="Employees"
                asp-action="Create"
-               class="btn btn-action-primary text-decoration-none">
+               class="employees-btn-primary">
 
-                <i class="bi bi-person-plus me-1"></i>
+                <i class="bi bi-person-plus me-2"></i>
                 New Employee
 
             </a>
@@ -69,50 +361,109 @@
 
     </div>
 
+    <!-- SUMMARY -->
+
+    <div class="row g-3">
+
+        <div class="col-12 col-sm-6 col-xl-4">
+            <div class="employees-stat-card">
+                <div class="employees-stat-label">
+                    Active Employees Displayed
+                </div>
+
+                <div class="employees-stat-value">
+                    @totalEmployees
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-4">
+            <div class="employees-stat-card">
+                <div class="employees-stat-label">
+                    Employment Status
+                </div>
+
+                <div class="mt-2">
+                    <span class="employees-status-active">
+                        Active Employees
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-4">
+            <div class="employees-stat-card">
+                <div class="employees-stat-label">
+                    Employee Records
+                </div>
+
+                <div class="employees-stat-value">
+                    @totalEmployees
+                </div>
+            </div>
+        </div>
+
+    </div>
 
     <!-- SEARCH -->
-    <div class="d-flex align-items-center gap-2 mb-4">
 
-        <span class="text-white fw-bold">
-            Keyword:
-        </span>
+    <div class="employees-filter-panel">
 
         <form asp-controller="Employees"
               asp-action="Index"
-              method="get"
-              class="d-flex gap-2">
+              method="get">
 
-            <input type="text"
-                   name="keyword"
-                   value="@ViewBag.Keyword"
-                   class="form-control form-control-sm search-field"
-                   placeholder="Employee number, name, email, job title" />
+            <div class="row g-3 align-items-end">
 
+                <div class="col-12 col-lg-8">
 
-            <button type="submit"
-                    class="btn btn-sm btn-light">
-                Search
-            </button>
+                    <label for="employeeKeyword"
+                           class="employees-filter-label">
+                        Search Employees
+                    </label>
 
+                    <input type="search"
+                           id="employeeKeyword"
+                           name="keyword"
+                           value="@keyword"
+                           class="form-control"
+                           placeholder="Employee number, name, email or job title..." />
 
-            <a asp-controller="Employees"
-               asp-action="Index"
-               class="btn btn-sm btn-outline-light">
-                Clear
-            </a>
+                </div>
+
+                <div class="col-6 col-lg-2">
+
+                    <button type="submit"
+                            class="btn employees-btn-primary w-100">
+                        <i class="bi bi-search me-1"></i>
+                        Search
+                    </button>
+
+                </div>
+
+                <div class="col-6 col-lg-2">
+
+                    <a asp-controller="Employees"
+                       asp-action="Index"
+                       class="btn employees-btn-outline w-100">
+                        Clear
+                    </a>
+
+                </div>
+
+            </div>
 
         </form>
 
     </div>
 
-
     <!-- TABLE -->
-    <div class="table-responsive">
 
-        <table class="custom-data-table">
+    <div class="employees-table-container">
+
+        <table class="employees-table">
 
             <thead>
-
                 <tr>
                     <th>Employee Number</th>
                     <th>Name</th>
@@ -123,103 +474,72 @@
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
-
             </thead>
-
 
             <tbody>
 
-                @if (Model != null && Model.Any())
-                {
-                    foreach (var employee in Model)
-                    {
-                        <tr>
-
-                            <td>
-                                @employee.EmployeeNumber
-                            </td>
-
-                            <td>
-                                @employee.FirstName @employee.LastName
-                            </td>
-
-                            <td>
-                                @employee.Email
-                            </td>
-
-                            <td>
-                                @employee.ContactNumber
-                            </td>
-
-                            <td>
-                                @employee.JobTitle
-                            </td>
-
-                            <td>
-                                @employee.DateOfEmployment.ToString("dd/MM/yyyy")
-                            </td>
-
-                            <td>
-
-                                <span class="badge bg-success">
-                                    Active
-                                </span>
-
-                            </td>
-
-                            <td>
-
-                                <div class="d-flex gap-2 flex-wrap">
-
-                                    <a asp-controller="Employees"
-                                       asp-action="Edit"
-                                       asp-route-id="@employee.EmployeeID"
-                                       class="btn btn-sm btn-warning">
-
-                                        <i class="bi bi-pencil-square me-1"></i>
-                                        Edit
-
-                                    </a>
-
-
-                                    <form asp-controller="Employees"
-                                          asp-action="Deactivate"
-                                          asp-route-id="@employee.EmployeeID"
-                                          method="post"
-                                          class="d-inline">
-
-                                        @Html.AntiForgeryToken()
-
-                                        <button type="submit"
-                                                class="btn btn-sm btn-danger">
-
-                                            <i class="bi bi-person-x me-1"></i>
-                                            Deactivate
-
-                                        </button>
-
-                                    </form>
-
-                                </div>
-
-                            </td>
-
-                        </tr>
-                    }
-                }
-                else
+                @foreach (var employee in employees)
                 {
                     <tr>
 
-                        <td colspan="8"
-                            class="text-center py-5">
+                        <td class="employees-number">
+                            @employee.EmployeeNumber
+                        </td>
 
-                            <div class="fw-semibold mb-1">
-                                No active employees found.
-                            </div>
+                        <td>
+                            <span class="employees-name">
+                                @employee.FirstName @employee.LastName
+                            </span>
+                        </td>
 
-                            <div class="text-muted small">
-                                Try changing your search criteria.
+                        <td>
+                            @employee.Email
+                        </td>
+
+                        <td>
+                            @employee.ContactNumber
+                        </td>
+
+                        <td>
+                            @employee.JobTitle
+                        </td>
+
+                        <td>
+                            @employee.DateOfEmployment.ToString("dd/MM/yyyy")
+                        </td>
+
+                        <td>
+                            <span class="employees-status-active">
+                                Active
+                            </span>
+                        </td>
+
+                        <td>
+
+                            <div class="employees-actions">
+
+                                <a asp-controller="Employees"
+                                   asp-action="Edit"
+                                   asp-route-id="@employee.EmployeeID"
+                                   class="employees-edit-btn">
+
+                                    <i class="bi bi-pencil-square me-1"></i>
+                                    Edit
+
+                                </a>
+
+                                <button type="button"
+                                        class="employees-deactivate-btn"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#deactivateEmployeeModal"
+                                        data-employee-id="@employee.EmployeeID"
+                                        data-employee-name="@($"{employee.FirstName} {employee.LastName}")">
+
+                                    <i class="bi bi-person-x me-1"></i>
+                                    Deactivate
+
+                                </button>
+
                             </div>
 
                         </td>
@@ -233,4 +553,131 @@
 
     </div>
 
+    @if (!employees.Any())
+    {
+        <div class="employees-empty-state">
+
+            <i class="bi bi-people fs-1 d-block mb-3"></i>
+
+            <h5 class="fw-bold">
+                No active employees found
+            </h5>
+
+            <p class="mb-0">
+                Try changing your search criteria or add a new employee.
+            </p>
+
+        </div>
+    }
+
 </div>
+
+<!-- DEACTIVATION CONFIRMATION MODAL -->
+
+<div class="modal fade employees-modal"
+     id="deactivateEmployeeModal"
+     tabindex="-1"
+     aria-labelledby="deactivateEmployeeModalLabel"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title fw-bold"
+                    id="deactivateEmployeeModalLabel">
+
+                    Confirm Employee Deactivation
+
+                </h5>
+
+                <button type="button"
+                        class="btn-close btn-close-white"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <p>
+                    Are you sure you want to deactivate
+                    <strong id="deactivateEmployeeName"></strong>?
+                </p>
+
+                <p class="text-muted small mb-0">
+                    This employee will be removed from the active employees
+                    list and should appear under Former Employees.
+                </p>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    Cancel
+                </button>
+
+                <form id="deactivateEmployeeForm"
+                      asp-controller="Employees"
+                      asp-action="Deactivate"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <button type="submit"
+                            class="btn btn-danger">
+
+                        <i class="bi bi-person-x me-1"></i>
+                        Deactivate Employee
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <script>
+        // Populate the confirmation modal with the selected employee.
+        // The form submits to the existing Employees/Deactivate action.
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const modal = document.getElementById("deactivateEmployeeModal");
+            const nameElement = document.getElementById("deactivateEmployeeName");
+            const form = document.getElementById("deactivateEmployeeForm");
+
+            modal.addEventListener("show.bs.modal", function (event) {
+
+                const button = event.relatedTarget;
+
+                if (!button) {
+                    return;
+                }
+
+                const employeeId = button.getAttribute("data-employee-id");
+                const employeeName = button.getAttribute("data-employee-name");
+
+                nameElement.textContent = employeeName || "this employee";
+
+                const baseUrl = '@Url.Action("Deactivate", "Employees")';
+
+                form.action = baseUrl + "?id=" + encodeURIComponent(employeeId);
+
+            });
+
+        });
+    </script>
+}

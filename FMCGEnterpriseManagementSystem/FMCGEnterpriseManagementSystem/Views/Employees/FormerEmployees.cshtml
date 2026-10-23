@@ -1,49 +1,347 @@
-﻿@model IEnumerable<FMCGEnterpriseManagementSystem.Models.Employee>
+﻿@*
+    Purpose:
+    Display former employees and provide a controlled
+    reactivation workflow.
+
+    References:
+
+    Bootstrap (n.d.) Cards.
+    Available at:
+    https://getbootstrap.com/docs/5.3/components/card/
+
+    Bootstrap (n.d.) Modal.
+    Available at:
+    https://getbootstrap.com/docs/5.3/components/modal/
+
+    Microsoft (n.d.) Tag Helpers in forms in ASP.NET Core.
+    Available at:
+    https://learn.microsoft.com/en-us/aspnet/core/mvc/views/working-with-forms
+*@
+
+@model IEnumerable<FMCGEnterpriseManagementSystem.Models.Employee>
 
 @{
     ViewData["Title"] = "Former Employees";
+
+    var employees = Model?.ToList()
+        ?? new List<FMCGEnterpriseManagementSystem.Models.Employee>();
+
+    var formerEmployeeCount = employees.Count;
+
+    var keyword = ViewBag.Keyword?.ToString() ?? "";
 }
 
-<div class="px-2 py-3">
+<style>
+    /* =========================================================
+           FORMER EMPLOYEES
+           ========================================================= */
 
+    .former-employees-page {
+        background: #e6edf1;
+        border: 1px solid rgba(53, 127, 145, 0.18);
+        border-radius: 15px;
+        padding: 30px;
+        margin-bottom: 30px;
+        min-height: 80vh;
+        color: #183244;
+    }
+
+    /* PAGE HEADER */
+
+    .former-page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 18px;
+        margin-bottom: 26px;
+    }
+
+    .former-page-title {
+        font-size: 30px;
+        font-weight: 800;
+        color: #183244;
+        margin-bottom: 5px;
+    }
+
+    .former-page-subtitle {
+        color: #667988;
+        font-size: 15px;
+        margin-bottom: 0;
+    }
+
+    .former-btn-outline {
+        background: transparent;
+        border: 1px solid #a8b1bb;
+        color: #536475;
+        border-radius: 6px;
+        padding: 10px 18px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+        .former-btn-outline:hover {
+            background: #dce6eb;
+            color: #183244;
+        }
+
+    .former-btn-primary {
+        background: #357f91;
+        border: 1px solid #357f91;
+        color: #ffffff;
+        border-radius: 6px;
+        padding: 10px 18px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+        .former-btn-primary:hover {
+            background: #286675;
+            color: #ffffff;
+        }
+
+    /* SUMMARY CARDS */
+
+    .former-stat-card {
+        background: #f8fafb;
+        border: 1px solid #c9d9df;
+        border-top: 3px solid #357f91;
+        border-radius: 7px;
+        padding: 20px;
+        min-height: 112px;
+        height: 100%;
+        box-shadow: 0 3px 12px rgba(15, 40, 55, 0.05);
+    }
+
+        .former-stat-card.inactive {
+            border-top-color: #8293a1;
+        }
+
+    .former-stat-label {
+        color: #667988;
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+
+    .former-stat-value {
+        color: #142d40;
+        font-size: 28px;
+        font-weight: 800;
+    }
+
+    /* SEARCH PANEL */
+
+    .former-filter-panel {
+        background: #edf3f5;
+        border: 1px solid #c9d9df;
+        border-radius: 7px;
+        padding: 20px;
+        margin: 25px 0;
+    }
+
+    .former-filter-label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #465768;
+        margin-bottom: 7px;
+    }
+
+    .former-filter-panel .form-control {
+        background: #f7f8fa;
+        border: 1px solid #d3dbe2;
+        min-height: 43px;
+        color: #263b4b;
+    }
+
+    /* TABLE */
+
+    .former-table-container {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .former-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 8px;
+        font-size: 15px;
+    }
+
+        .former-table thead th {
+            background: #dce9ee;
+            color: #17384a;
+            padding: 18px 12px;
+            border-top: 1px solid #c9d9df;
+            border-bottom: 1px solid #c9d9df;
+            font-weight: 700;
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        .former-table tbody td {
+            background: #f8fafb;
+            padding: 17px 12px;
+            border-top: 1px solid #e0e5ea;
+            border-bottom: 1px solid #e0e5ea;
+            color: #344657;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .former-table tbody tr td:first-child {
+            border-left: 1px solid #e0e5ea;
+        }
+
+        .former-table tbody tr td:last-child {
+            border-right: 1px solid #e0e5ea;
+        }
+
+        .former-table tbody tr:hover td {
+            background: #edf4f6;
+        }
+
+    .former-employee-name {
+        color: #183244;
+        font-weight: 700;
+    }
+
+    .former-employee-number {
+        color: #357f91;
+        font-weight: 700;
+    }
+
+    /* STATUS BADGE */
+
+    .former-status-inactive {
+        display: inline-block;
+        background: #e4e8ed;
+        color: #566675;
+        border-radius: 5px;
+        padding: 6px 11px;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    /* REACTIVATE BUTTON */
+
+    .former-reactivate-btn {
+        background: #27815b;
+        color: #ffffff;
+        border: 1px solid #27815b;
+        border-radius: 5px;
+        padding: 8px 13px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+        .former-reactivate-btn:hover {
+            background: #1d6748;
+            color: #ffffff;
+        }
+
+    /* EMPTY STATE */
+
+    .former-empty-state {
+        background: #f8fafb;
+        border: 1px solid #c9d9df;
+        border-radius: 8px;
+        padding: 45px 20px;
+        text-align: center;
+        color: #667988;
+    }
+
+    /* CONFIRMATION MODAL */
+
+    .former-modal .modal-content {
+        border: none;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .former-modal .modal-header {
+        background: #17384a;
+        color: #ffffff;
+        padding: 18px 22px;
+    }
+
+    .former-modal .modal-body {
+        color: #344657;
+        padding: 25px 22px;
+    }
+
+    .former-modal .modal-footer {
+        background: #f4f7f9;
+        padding: 15px 22px;
+    }
+
+    /* RESPONSIVE */
+
+    @@media (max-width: 768px) {
+
+        .former-employees-page {
+            padding: 18px;
+        }
+
+        .former-page-title {
+            font-size: 25px;
+        }
+
+        .former-page-header .former-btn-outline {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
+
+
+<div class="former-employees-page">
+
+    <!-- SUCCESS MESSAGE -->
     @if (TempData["SuccessMessage"] != null)
     {
         <div class="alert alert-success alert-dismissible fade show"
              role="alert">
 
-            <i class="bi bi-check-circle me-1"></i>
+            <i class="bi bi-check-circle me-2"></i>
+
             @TempData["SuccessMessage"]
 
             <button type="button"
                     class="btn-close"
-                    data-bs-dismiss="alert">
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
             </button>
 
         </div>
     }
 
 
-    <!-- HEADER -->
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-start gap-3 mb-4">
+    <!-- =====================================================
+         PAGE HEADER
+         ===================================================== -->
+
+    <div class="former-page-header">
 
         <div>
 
-            <h2 class="text-white fw-bold mb-1">
+            <h2 class="former-page-title">
                 Former Employees
             </h2>
 
-            <p class="text-white-50 mb-0">
-                Employees who are no longer active in the business.
+            <p class="former-page-subtitle">
+                View and manage employees who are no longer active
+                in the business.
             </p>
 
         </div>
 
-
         <a asp-controller="Employees"
            asp-action="Index"
-           class="btn btn-outline-light">
+           class="former-btn-outline">
 
-            <i class="bi bi-arrow-left me-1"></i>
+            <i class="bi bi-arrow-left me-2"></i>
             Back to Employees
 
         </a>
@@ -51,46 +349,126 @@
     </div>
 
 
-    <!-- SEARCH -->
-    <div class="d-flex align-items-center gap-2 mb-4">
+    <!-- =====================================================
+         SUMMARY CARDS
+         ===================================================== -->
 
-        <span class="text-white fw-bold">
-            Keyword:
-        </span>
+    <div class="row g-3">
+
+        <!-- FORMER EMPLOYEE COUNT -->
+
+        <div class="col-12 col-sm-6 col-xl-6">
+
+            <div class="former-stat-card">
+
+                <div class="former-stat-label">
+                    Former Employees Displayed
+                </div>
+
+                <div class="former-stat-value">
+                    @formerEmployeeCount
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- STATUS -->
+
+        <div class="col-12 col-sm-6 col-xl-6">
+
+            <div class="former-stat-card inactive">
+
+                <div class="former-stat-label">
+                    Employment Status
+                </div>
+
+                <div class="mt-2">
+
+                    <span class="former-status-inactive">
+                        Inactive Employees
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SEARCH
+         ===================================================== -->
+
+    <div class="former-filter-panel">
 
         <form asp-controller="Employees"
               asp-action="FormerEmployees"
-              method="get"
-              class="d-flex gap-2">
+              method="get">
 
-            <input type="text"
-                   name="keyword"
-                   value="@ViewBag.Keyword"
-                   class="form-control form-control-sm search-field"
-                   placeholder="Employee number, name, email, job title" />
+            <div class="row g-3 align-items-end">
+
+                <div class="col-12 col-lg-8">
+
+                    <label for="formerEmployeeKeyword"
+                           class="former-filter-label">
+
+                        Search Former Employees
+
+                    </label>
+
+                    <input type="search"
+                           id="formerEmployeeKeyword"
+                           name="keyword"
+                           value="@keyword"
+                           class="form-control"
+                           placeholder="Employee number, name, email or job title..." />
+
+                </div>
 
 
-            <button type="submit"
-                    class="btn btn-sm btn-light">
-                Search
-            </button>
+                <div class="col-6 col-lg-2">
+
+                    <button type="submit"
+                            class="btn former-btn-primary w-100">
+
+                        <i class="bi bi-search me-1"></i>
+                        Search
+
+                    </button>
+
+                </div>
 
 
-            <a asp-controller="Employees"
-               asp-action="FormerEmployees"
-               class="btn btn-sm btn-outline-light">
-                Clear
-            </a>
+                <div class="col-6 col-lg-2">
+
+                    <a asp-controller="Employees"
+                       asp-action="FormerEmployees"
+                       class="btn former-btn-outline w-100">
+
+                        Clear
+
+                    </a>
+
+                </div>
+
+            </div>
 
         </form>
 
     </div>
 
 
-    <!-- TABLE -->
-    <div class="table-responsive">
+    <!-- =====================================================
+         FORMER EMPLOYEES TABLE
+         ===================================================== -->
 
-        <table class="custom-data-table">
+    <div class="former-table-container">
+
+        <table class="former-table">
 
             <thead>
 
@@ -110,83 +488,82 @@
 
             <tbody>
 
-                @if (Model != null && Model.Any())
-                {
-                    foreach (var employee in Model)
-                    {
-                        <tr>
-
-                            <td>
-                                @employee.EmployeeNumber
-                            </td>
-
-                            <td>
-                                @employee.FirstName @employee.LastName
-                            </td>
-
-                            <td>
-                                @employee.Email
-                            </td>
-
-                            <td>
-                                @employee.ContactNumber
-                            </td>
-
-                            <td>
-                                @employee.JobTitle
-                            </td>
-
-                            <td>
-                                @employee.DateOfEmployment.ToString("dd/MM/yyyy")
-                            </td>
-
-                            <td>
-
-                                <span class="badge bg-secondary">
-                                    Inactive
-                                </span>
-
-                            </td>
-
-                            <td>
-
-                                <form asp-controller="Employees"
-                                      asp-action="Reactivate"
-                                      asp-route-id="@employee.EmployeeID"
-                                      method="post"
-                                      class="d-inline">
-
-                                    @Html.AntiForgeryToken()
-
-                                    <button type="submit"
-                                            class="btn btn-sm btn-success">
-
-                                        <i class="bi bi-person-check me-1"></i>
-                                        Reactivate
-
-                                    </button>
-
-                                </form>
-
-                            </td>
-
-                        </tr>
-                    }
-                }
-                else
+                @foreach (var employee in employees)
                 {
                     <tr>
 
-                        <td colspan="8"
-                            class="text-center py-5">
+                        <!-- EMPLOYEE NUMBER -->
 
-                            <div class="fw-semibold mb-1">
-                                No former employees
-                            </div>
+                        <td class="former-employee-number">
+                            @employee.EmployeeNumber
+                        </td>
 
-                            <div class="text-muted small">
-                                Deactivated employees will appear here.
-                            </div>
+
+                        <!-- NAME -->
+
+                        <td>
+
+                            <span class="former-employee-name">
+                                @employee.FirstName @employee.LastName
+                            </span>
+
+                        </td>
+
+
+                        <!-- EMAIL -->
+
+                        <td>
+                            @employee.Email
+                        </td>
+
+
+                        <!-- CONTACT -->
+
+                        <td>
+                            @employee.ContactNumber
+                        </td>
+
+
+                        <!-- JOB TITLE -->
+
+                        <td>
+                            @employee.JobTitle
+                        </td>
+
+
+                        <!-- DATE EMPLOYED -->
+
+                        <td>
+                            @employee.DateOfEmployment.ToString("dd/MM/yyyy")
+                        </td>
+
+
+                        <!-- STATUS -->
+
+                        <td>
+
+                            <span class="former-status-inactive">
+                                Inactive
+                            </span>
+
+                        </td>
+
+
+                        <!-- ACTIONS -->
+
+                        <td>
+
+                            <button type="button"
+                                    class="former-reactivate-btn"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#reactivateEmployeeModal"
+                                    data-employee-id="@employee.EmployeeID"
+                                    data-employee-name="@($"{employee.FirstName} {employee.LastName}")">
+
+                                <i class="bi bi-person-check me-1"></i>
+                                Reactivate
+
+                            </button>
 
                         </td>
 
@@ -199,4 +576,162 @@
 
     </div>
 
+
+    <!-- EMPTY STATE -->
+    @if (!employees.Any())
+    {
+        <div class="former-empty-state">
+
+            <i class="bi bi-person-dash fs-1 d-block mb-3"></i>
+
+            <h5 class="fw-bold">
+                No former employees found
+            </h5>
+
+            <p class="mb-0">
+                Deactivated employees will appear here.
+                Try changing your search if a filter is active.
+            </p>
+
+        </div>
+    }
+
 </div>
+
+
+<!-- =========================================================
+     REACTIVATION CONFIRMATION MODAL
+     ========================================================= -->
+
+<div class="modal fade former-modal"
+     id="reactivateEmployeeModal"
+     tabindex="-1"
+     aria-labelledby="reactivateEmployeeModalLabel"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title fw-bold"
+                    id="reactivateEmployeeModalLabel">
+
+                    Confirm Employee Reactivation
+
+                </h5>
+
+                <button type="button"
+                        class="btn-close btn-close-white"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <p>
+                    Are you sure you want to reactivate
+                    <strong id="reactivateEmployeeName"></strong>?
+                </p>
+
+                <p class="text-muted small mb-0">
+                    This employee will be returned to the active employees
+                    list and can be managed from Employee Management.
+                </p>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+
+                    Cancel
+
+                </button>
+
+
+                <form id="reactivateEmployeeForm"
+                      asp-controller="Employees"
+                      asp-action="Reactivate"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <button type="submit"
+                            class="btn btn-success">
+
+                        <i class="bi bi-person-check me-1"></i>
+                        Reactivate Employee
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <script>
+        // ======================================================
+        // REACTIVATION CONFIRMATION
+        //
+        // Populates the confirmation modal with the selected employee's details and submits to the existing
+        // Employees/Reactivate controller action.
+        // ======================================================
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const modal =
+                document.getElementById("reactivateEmployeeModal");
+
+            const nameElement =
+                document.getElementById("reactivateEmployeeName");
+
+            const form =
+                document.getElementById("reactivateEmployeeForm");
+
+
+            modal.addEventListener("show.bs.modal", function (event) {
+
+                const button = event.relatedTarget;
+
+                if (!button) {
+                    return;
+                }
+
+                const employeeId =
+                    button.getAttribute("data-employee-id");
+
+                const employeeName =
+                    button.getAttribute("data-employee-name");
+
+
+                nameElement.textContent =
+                    employeeName || "this employee";
+
+
+                const baseUrl =
+                    '@Url.Action("Reactivate", "Employees")';
+
+                form.action =
+                    baseUrl + "?id=" + encodeURIComponent(employeeId);
+
+            });
+
+        });
+    </script>
+}
