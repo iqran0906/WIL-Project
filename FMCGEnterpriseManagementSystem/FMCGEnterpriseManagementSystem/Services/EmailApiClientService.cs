@@ -3,6 +3,7 @@ using System;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace FMCGEnterpriseManagementSystem.Services
 {
@@ -10,13 +11,27 @@ namespace FMCGEnterpriseManagementSystem.Services
     {
         private readonly HttpClient _httpClient;
 
-        public EmailApiClientService(HttpClient httpClient)
+        public EmailApiClientService(
+            HttpClient httpClient,
+            IConfiguration configuration)
         {
             _httpClient = httpClient;
+
+            var apiKey = configuration["EmailApi:ApiKey"];
+
+            if (string.IsNullOrWhiteSpace(apiKey))
+            {
+                throw new InvalidOperationException(
+                    "The email API key has not been configured.");
+            }
+
+            _httpClient.DefaultRequestHeaders.Add(
+                "X-Email-Api-Key",
+                apiKey);
         }
 
         // INVOICE EMAIL
-       
+
         public Task<(bool Success, string Message)> EmailInvoiceAsync( 
             int invoiceId,
             string recipientEmail,

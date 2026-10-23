@@ -1,11 +1,13 @@
 ﻿using FMCGEnterpriseManagementSystem.Api.DTOs;
 using FMCGEnterpriseManagementSystem.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using FMCGEnterpriseManagementSystem.Api.Filters;
 
 namespace FMCGEnterpriseManagementSystem.Api.Controllers
 {
     [ApiController]
     [Route("api/account")]
+    [ServiceFilter(typeof(EmailApiKeyFilter))]
     public class AccountController : ControllerBase
     {
         private readonly IEmailService _emailService;

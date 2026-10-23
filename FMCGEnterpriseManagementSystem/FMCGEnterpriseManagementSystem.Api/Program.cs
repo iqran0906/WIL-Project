@@ -32,6 +32,16 @@ namespace FMCGEnterpriseManagementSystem.Api
 
             // Add services to the container.
             builder.Services.AddControllers();
+            // Limit incoming API request bodies to 15 MB.
+            // Protects against excessively large JSON/PDF uploads.
+            builder.WebHost.ConfigureKestrel(options =>
+            {
+                options.Limits.MaxRequestBodySize = 15 * 1024 * 1024;
+            });
+
+            builder.Services.AddScoped<
+    FMCGEnterpriseManagementSystem.Api.Filters.EmailApiKeyFilter>();
+
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
