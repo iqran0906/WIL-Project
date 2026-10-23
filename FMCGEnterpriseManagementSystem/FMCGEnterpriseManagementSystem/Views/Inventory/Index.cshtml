@@ -1,202 +1,1118 @@
 ﻿@model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.InventoryViewModel>
 
+@using System.Globalization
+
+@*
+    Purpose:
+    Inventory management dashboard with summary cards,
+    search, category filtering, stock indicators,
+    expiry monitoring and inventory actions.
+
+    Updated:
+    Uses the existing InventoryViewModel.StockStatus property
+    and each inventory item's configured ReorderLevel.
+
+    References:
+
+    Microsoft (n.d.) Razor syntax reference for ASP.NET Core.
+    Available at:
+    https://learn.microsoft.com/en-us/aspnet/core/mvc/views/razor
+
+    Bootstrap (n.d.) Cards.
+    Available at:
+    https://getbootstrap.com/docs/5.3/components/card/
+
+    Bootstrap (n.d.) Tables.
+    Available at:
+    https://getbootstrap.com/docs/5.3/content/tables/
+
+    Mozilla (n.d.) Array.prototype.filter().
+    MDN Web Docs.
+    Available at:
+    https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
+*@
+
 @{
     ViewData["Title"] = "Inventory";
+
+    // Convert the supplied inventory records into a list.
+    var inventory = Model?.ToList()
+        ?? new List<FMCGEnterpriseManagementSystem.ViewModels.InventoryViewModel>();
+
+    // Use the actual inventory records for the summary cards.
+    var totalProducts = inventory.Count;
+
+    var totalStockUnits = inventory.Sum(item => item.QuantityOnHand);
+
+    // Uses each product's configured reorder level.
+    // Out-of-stock products are also included because they require attention.
+    var productsRequiringReorder = inventory.Count(item =>
+        item.StockStatus == "Low Stock" ||
+        item.StockStatus == "Out of Stock");
+
+    // Calculate expiry dates using the current application date.
+    var today = DateTime.Today;
+    var expiryLimit = today.AddDays(30);
+
+    // Count products expiring within the next 30 days.
+    // Already-expired products are not included in this count.
+    var expiringSoon = inventory.Count(item =>
+        item.ExpiryDate.HasValue &&
+        item.ExpiryDate.Value.Date >= today &&
+        item.ExpiryDate.Value.Date <= expiryLimit);
+
+    // Build category filter options from the actual inventory data.
+    var categories = inventory
+        .Where(item => !string.IsNullOrWhiteSpace(item.CategoryName))
+        .Select(item => item.CategoryName!)
+        .Distinct(StringComparer.OrdinalIgnoreCase)
+        .OrderBy(category => category)
+        .ToList();
 }
 
-<div class="px-2 py-3">
-    <h2 class="text-white fw-bold mb-3">Inventory</h2>
+<style>
+    /* =========================================================
+       INVENTORY MANAGEMENT
+       Navy, teal and blue-grey design
+       ========================================================= */
 
-    <div class="d-flex flex-column gap-2 mb-4" style="max-width: 220px;">
-        <a asp-controller="Inventory" asp-action="AddItem" class="btn btn-action-primary text-decoration-none text-center">
-            New Item
-        </a>
-        <button type="button" class="btn btn-action-primary text-center" data-bs-toggle="modal" data-bs-target="#manageCategoriesModal">
-            Manage Categories
-        </button>
-    </div>
+    .inventory-page {
+        background: #e6edf1;
+        border: 1px solid rgba(53, 127, 145, 0.18);
+        border-radius: 15px;
+        padding: 30px;
+        margin-bottom: 30px;
+        min-height: 80vh;
+        color: #183244;
+    }
 
-    <div class="d-flex align-items-center gap-2 mb-4">
-        <span class="text-white fw-bold">Keyword:</span>
-        <div class="position-relative">
-            <!-- Added id="searchKeyword" -->
-            <input type="text" id="searchKeyword" class="form-control form-control-sm search-field" placeholder="Item Code, Category, etc">
-            <i class="bi bi-search position-absolute end-0 top-50 translate-middle-y me-2 text-white-50 small"></i>
+    /* PAGE HEADER */
+
+    .inventory-page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 18px;
+        margin-bottom: 26px;
+    }
+
+    .inventory-page-title {
+        font-size: 30px;
+        font-weight: 800;
+        color: #183244;
+        margin-bottom: 5px;
+    }
+
+    .inventory-page-subtitle {
+        color: #667988;
+        font-size: 15px;
+        margin-bottom: 0;
+    }
+
+    .inventory-header-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .inventory-btn-primary {
+        background: #357f91;
+        color: #ffffff;
+        border: 1px solid #357f91;
+        border-radius: 6px;
+        padding: 10px 18px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .inventory-btn-primary:hover {
+        background: #286675;
+        color: #ffffff;
+    }
+
+    .inventory-btn-outline {
+        background: transparent;
+        color: #536475;
+        border: 1px solid #a8b1bb;
+        border-radius: 6px;
+        padding: 10px 18px;
+        font-weight: 500;
+    }
+
+    .inventory-btn-outline:hover {
+        background: #dce6eb;
+        color: #183244;
+    }
+
+    /* =========================================================
+       SUMMARY CARDS
+       ========================================================= */
+
+    .inventory-stat-card {
+        background: #f8fafb;
+        border: 1px solid #c9d9df;
+        border-top: 3px solid #357f91;
+        border-radius: 7px;
+        padding: 20px;
+        height: 100%;
+        min-height: 112px;
+        box-shadow: 0 3px 12px rgba(15, 40, 55, 0.05);
+    }
+
+    .inventory-stat-card.attention {
+        border-top-color: #e0a32b;
+    }
+
+    .inventory-stat-card.expiry {
+        border-top-color: #657c91;
+    }
+
+    .inventory-stat-label {
+        color: #667988;
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+
+    .inventory-stat-value {
+        color: #142d40;
+        font-size: 28px;
+        font-weight: 800;
+        line-height: 1.2;
+    }
+
+    .inventory-stat-card.attention .inventory-stat-value {
+        color: #9b6200;
+    }
+
+    /* =========================================================
+       SEARCH AND FILTERS
+       ========================================================= */
+
+    .inventory-filter-panel {
+        background: #edf3f5;
+        border: 1px solid #c9d9df;
+        border-radius: 7px;
+        padding: 20px;
+        margin: 25px 0;
+    }
+
+    .inventory-filter-label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #465768;
+        margin-bottom: 7px;
+    }
+
+    .inventory-filter-panel .form-control,
+    .inventory-filter-panel .form-select {
+        background: #f7f8fa;
+        border: 1px solid #d3dbe2;
+        min-height: 43px;
+        color: #263b4b;
+    }
+
+    /* =========================================================
+       INVENTORY TABLE
+       ========================================================= */
+
+    .inventory-table-container {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .inventory-modern-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 8px;
+        font-size: 15px;
+    }
+
+    .inventory-modern-table thead th {
+        background: #dce9ee;
+        color: #17384a;
+        padding: 18px 12px;
+        border-top: 1px solid #c9d9df;
+        border-bottom: 1px solid #c9d9df;
+        font-weight: 700;
+        white-space: nowrap;
+        text-align: center;
+    }
+
+    .inventory-modern-table tbody td {
+        background: #f8fafb;
+        padding: 17px 12px;
+        border-top: 1px solid #e0e5ea;
+        border-bottom: 1px solid #e0e5ea;
+        color: #344657;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .inventory-modern-table tbody tr td:first-child {
+        border-left: 1px solid #e0e5ea;
+    }
+
+    .inventory-modern-table tbody tr td:last-child {
+        border-right: 1px solid #e0e5ea;
+    }
+
+    /* Highlight products requiring replenishment. */
+
+    .inventory-modern-table tbody tr.inventory-low-stock td {
+        background: #fff0d4;
+    }
+
+    .inventory-modern-table tbody tr.inventory-out-stock td {
+        background: #ffe4e4;
+    }
+
+    .inventory-modern-table tbody tr:hover td {
+        filter: brightness(0.97);
+    }
+
+    .inventory-product-name {
+        color: #183244;
+        font-weight: 700;
+    }
+
+    .inventory-product-description {
+        color: #7b8793;
+        font-size: 12px;
+        margin-top: 5px;
+    }
+
+    .inventory-reorder-note {
+        color: #966000;
+        font-size: 12px;
+        font-weight: 600;
+        margin-top: 5px;
+    }
+
+    .inventory-out-stock .inventory-reorder-note {
+        color: #ad2f37;
+    }
+
+    /* =========================================================
+       STOCK STATUS BADGES
+       ========================================================= */
+
+    .inventory-status {
+        display: inline-block;
+        border-radius: 5px;
+        padding: 6px 10px;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .inventory-status-good {
+        background: #dff5e8;
+        color: #187544;
+    }
+
+    .inventory-status-low {
+        background: #fff0c9;
+        color: #946100;
+    }
+
+    .inventory-status-out {
+        background: #fce0e0;
+        color: #ad2f37;
+    }
+
+    /* EXPIRY INDICATORS */
+
+    .inventory-expiry-warning {
+        color: #a56c00;
+        font-weight: 700;
+    }
+
+    .inventory-expired {
+        color: #bd303b;
+        font-weight: 700;
+    }
+
+    /* =========================================================
+       ACTION BUTTONS
+       ========================================================= */
+
+    .inventory-action-buttons {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 7px;
+    }
+
+    .inventory-edit-btn {
+        background: #ffc107;
+        color: #212529;
+        border: 1px solid #ffc107;
+        border-radius: 5px;
+        padding: 7px 12px;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .inventory-edit-btn:hover {
+        background: #e6ad00;
+        color: #212529;
+    }
+
+    .inventory-delete-btn {
+        background: #dc3545;
+        color: #ffffff;
+        border: 1px solid #dc3545;
+        border-radius: 5px;
+        padding: 7px 12px;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .inventory-delete-btn:hover {
+        background: #bd2635;
+        color: #ffffff;
+    }
+
+    /* EMPTY STATE */
+
+    .inventory-empty-state {
+        background: #f8fafb;
+        padding: 45px 20px;
+        text-align: center;
+        color: #667988;
+        border: 1px solid #c9d9df;
+        border-radius: 8px;
+    }
+
+    /* RESPONSIVE LAYOUT */
+
+    @@media (max-width: 768px) {
+
+        .inventory-page {
+            padding: 18px;
+        }
+
+        .inventory-page-title {
+            font-size: 25px;
+        }
+
+        .inventory-header-actions {
+            width: 100%;
+        }
+
+        .inventory-header-actions .btn,
+        .inventory-header-actions a {
+            flex: 1;
+            text-align: center;
+        }
+    }
+
+    /* PRINT STYLES */
+
+    @@media print {
+
+        .inventory-page {
+            background: #ffffff;
+            padding: 0;
+        }
+
+        .inventory-header-actions,
+        .inventory-filter-panel,
+        .inventory-action-buttons {
+            display: none !important;
+        }
+
+        .inventory-modern-table tbody tr td {
+            background: #ffffff !important;
+        }
+    }
+</style>
+
+
+<div class="inventory-page">
+
+    <!-- =====================================================
+         PAGE HEADER
+         ===================================================== -->
+
+    <div class="inventory-page-header">
+
+        <div>
+            <h2 class="inventory-page-title">
+                Inventory Management
+            </h2>
+
+            <p class="inventory-page-subtitle">
+                Monitor stock availability, product quantities and expiry dates.
+            </p>
         </div>
+
+        <div class="inventory-header-actions">
+
+            <button type="button"
+                    class="btn inventory-btn-outline"
+                    data-bs-toggle="modal"
+                    data-bs-target="#manageCategoriesModal">
+
+                <i class="bi bi-tags me-2"></i>
+                Manage Categories
+
+            </button>
+
+            <a asp-controller="Inventory"
+               asp-action="AddItem"
+               class="btn inventory-btn-primary">
+
+                <i class="bi bi-plus-lg me-2"></i>
+                New Item
+
+            </a>
+
+        </div>
+
     </div>
 
-    <div class="table-responsive">
-        <table class="custom-data-table">
-           <thead>
-    <tr>
-        <th>Product Code</th>
-        <th>Product</th>
-        <th>Description</th>
-        <th>Quantity</th>
-        <th>Category</th>
-        <th>Unit Price Incl VAT</th>
-        <th>Expiry Date</th>
-        <th>Notes</th>
-        <th class="text-end">Actions</th>
-    </tr>
-</thead>
-            <tbody id="inventoryTableBody">
-                @if (Model != null && Model.Any())
-                {
-                    @foreach (var item in Model)
+
+    <!-- =====================================================
+         SUMMARY CARDS
+         ===================================================== -->
+
+    <div class="row g-3">
+
+        <!-- TOTAL PRODUCTS -->
+
+        <div class="col-12 col-sm-6 col-xl-3">
+
+            <div class="inventory-stat-card">
+
+                <div class="inventory-stat-label">
+                    Total Inventory Products
+                </div>
+
+                <div class="inventory-stat-value">
+                    @totalProducts
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- TOTAL STOCK UNITS -->
+
+        <div class="col-12 col-sm-6 col-xl-3">
+
+            <div class="inventory-stat-card">
+
+                <div class="inventory-stat-label">
+                    Total Stock Units
+                </div>
+
+                <div class="inventory-stat-value">
+                    @totalStockUnits.ToString("N0")
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PRODUCTS REQUIRING REORDER -->
+
+        <div class="col-12 col-sm-6 col-xl-3">
+
+            <div class="inventory-stat-card @(productsRequiringReorder > 0 ? "attention" : "")">
+
+                <div class="inventory-stat-label">
+                    Products Requiring Reorder
+                </div>
+
+                <div class="inventory-stat-value">
+                    @productsRequiringReorder
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- EXPIRING PRODUCTS -->
+
+        <div class="col-12 col-sm-6 col-xl-3">
+
+            <div class="inventory-stat-card expiry">
+
+                <div class="inventory-stat-label">
+                    Expiring Within 30 Days
+                </div>
+
+                <div class="inventory-stat-value">
+                    @expiringSoon
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SEARCH AND FILTERS
+         ===================================================== -->
+
+    <div class="inventory-filter-panel">
+
+        <div class="row g-3 align-items-end">
+
+            <!-- SEARCH -->
+
+            <div class="col-12 col-lg-5">
+
+                <label for="searchKeyword"
+                       class="inventory-filter-label">
+                    Search Inventory
+                </label>
+
+                <input type="search"
+                       id="searchKeyword"
+                       class="form-control"
+                       placeholder="Product code, name or description..." />
+
+            </div>
+
+
+            <!-- CATEGORY FILTER -->
+
+            <div class="col-12 col-md-5 col-lg-3">
+
+                <label for="categoryFilter"
+                       class="inventory-filter-label">
+                    Category
+                </label>
+
+                <select id="categoryFilter"
+                        class="form-select">
+
+                    <option value="">
+                        All Categories
+                    </option>
+
+                    @foreach (var category in categories)
                     {
-                        <tr class="inventory-row">
-                           <td class="item-code">@item.ProductCode</td>
-<td class="item-name">@item.ProductName</td>
-<td class="item-description">@item.Description</td>
-<td>@item.QuantityOnHand</td>
-                            <td class="item-category">@item.CategoryName</td>
-                            <td>R @decimal.Parse(item.SellingPrice, System.Globalization.CultureInfo.InvariantCulture).ToString("N2")</td>
-                            <td>@(item.ExpiryDate.HasValue ? item.ExpiryDate.Value.ToString("yyyy-MM-dd") : "N/A")</td>
-                           <td>@item.Notes</td>
-                           <td>
-    <div class="d-flex justify-content-center gap-2">
+                        <option value="@category">
+                            @category
+                        </option>
+                    }
 
-        <!-- Edit -->
-        <a asp-action="Edit"
-           asp-route-id="@item.InventoryId"
-           class="btn btn-warning btn-sm">
-            ✎ Edit
-        </a>
+                </select>
 
-        <!-- Delete -->
-        <a asp-action="Delete"
-           asp-route-id="@item.InventoryId"
-           class="btn btn-danger btn-sm">
-            Delete
-        </a>
+            </div>
+
+
+            <!-- STOCK STATUS FILTER -->
+
+            <div class="col-12 col-md-4 col-lg-2">
+
+                <label for="stockFilter"
+                       class="inventory-filter-label">
+                    Stock Status
+                </label>
+
+                <select id="stockFilter"
+                        class="form-select">
+
+                    <option value="">
+                        All Statuses
+                    </option>
+
+                    <option value="good">
+                        In Stock
+                    </option>
+
+                    <option value="low">
+                        Low Stock
+                    </option>
+
+                    <option value="out">
+                        Out of Stock
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- CLEAR FILTERS -->
+
+            <div class="col-12 col-md-3 col-lg-2">
+
+                <button type="button"
+                        id="clearInventoryFilters"
+                        class="btn inventory-btn-outline w-100">
+
+                    Clear
+
+                </button>
+
+            </div>
+
+        </div>
 
     </div>
-</td>
-                        </tr>
-                    }
-                }
-                else
+
+
+    <!-- =====================================================
+         INVENTORY TABLE
+         ===================================================== -->
+
+    <div class="inventory-table-container">
+
+        <table class="inventory-modern-table">
+
+            <thead>
+                <tr>
+                    <th>Product Code</th>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Quantity</th>
+                    <th>Unit Price Incl. VAT</th>
+                    <th>Expiry Date</th>
+                    <th>Stock Status</th>
+                    <th>Notes</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody id="inventoryTableBody">
+
+                @foreach (var item in inventory)
                 {
-                    <tr>
-                        <td colspan="9" class="text-center text-white py-3">No inventory items found.</td>
+                    // Use the existing business rule in InventoryViewModel.
+                    var stockLabel = item.StockStatus;
+
+                    // Map the business status to a UI filter value.
+                    var stockStatus = stockLabel switch
+                    {
+                        "Out of Stock" => "out",
+                        "Low Stock" => "low",
+                        _ => "good"
+                    };
+
+                    // Choose the badge appearance.
+                    var stockBadgeClass = stockStatus switch
+                    {
+                        "out" => "inventory-status-out",
+                        "low" => "inventory-status-low",
+                        _ => "inventory-status-good"
+                    };
+
+                    // Highlight products requiring replenishment.
+                    var rowClass = stockStatus switch
+                    {
+                        "out" => "inventory-out-stock",
+                        "low" => "inventory-low-stock",
+                        _ => ""
+                    };
+
+                    // Determine whether the product has expired.
+                    var isExpired =
+                        item.ExpiryDate.HasValue &&
+                        item.ExpiryDate.Value.Date < today;
+
+                    // Determine whether the product expires within 30 days.
+                    var isExpiringSoon =
+                        item.ExpiryDate.HasValue &&
+                        item.ExpiryDate.Value.Date >= today &&
+                        item.ExpiryDate.Value.Date <= expiryLimit;
+
+                    <tr class="inventory-row @rowClass"
+                        data-category="@item.CategoryName"
+                        data-stock="@stockStatus">
+
+                        <!-- PRODUCT CODE -->
+
+                        <td class="item-code fw-semibold">
+                            @item.ProductCode
+                        </td>
+
+
+                        <!-- PRODUCT NAME AND DESCRIPTION -->
+
+                        <td>
+
+                            <div class="inventory-product-name item-name">
+                                @item.ProductName
+                            </div>
+
+                            <div class="inventory-product-description item-description">
+                                @item.Description
+                            </div>
+
+                        </td>
+
+
+                        <!-- CATEGORY -->
+
+                        <td class="item-category">
+                            @item.CategoryName
+                        </td>
+
+
+                        <!-- QUANTITY -->
+
+                        <td class="fw-bold">
+
+                            @item.QuantityOnHand
+
+                            @if (stockStatus == "low" || stockStatus == "out")
+                            {
+                                <div class="inventory-reorder-note">
+                                    Reorder at @item.ReorderLevel
+                                </div>
+                            }
+
+                        </td>
+
+
+                        <!-- UNIT PRICE -->
+
+                        <td>
+                            @{
+                                var price = decimal.TryParse(
+                                    item.SellingPrice,
+                                    NumberStyles.Any,
+                                    CultureInfo.InvariantCulture,
+                                    out var parsedPrice)
+                                    ? parsedPrice
+                                    : 0m;
+                            }
+
+                            R @price.ToString("N2")
+                        </td>
+
+
+                        <!-- EXPIRY DATE -->
+
+                        <td>
+
+                            @if (item.ExpiryDate.HasValue)
+                            {
+                                <span class="@(isExpired ? "inventory-expired" : isExpiringSoon ? "inventory-expiry-warning" : "")">
+
+                                    @item.ExpiryDate.Value.ToString("dd MMM yyyy")
+
+                                </span>
+
+                                @if (isExpired)
+                                {
+                                    <div class="small inventory-expired">
+                                        Expired
+                                    </div>
+                                }
+                                else if (isExpiringSoon)
+                                {
+                                    <div class="small inventory-expiry-warning">
+                                        Expiring Soon
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <span class="text-muted">
+                                    N/A
+                                </span>
+                            }
+
+                        </td>
+
+
+                        <!-- STOCK STATUS -->
+
+                        <td>
+
+                            <span class="inventory-status @stockBadgeClass">
+                                @stockLabel
+                            </span>
+
+                        </td>
+
+
+                        <!-- NOTES -->
+
+                        <td>
+
+                            @(string.IsNullOrWhiteSpace(item.Notes)
+                                ? "—"
+                                : item.Notes)
+
+                        </td>
+
+
+                        <!-- ACTIONS -->
+
+                        <td>
+
+                            <div class="inventory-action-buttons">
+
+                                <a asp-controller="Inventory"
+                                   asp-action="Edit"
+                                   asp-route-id="@item.InventoryId"
+                                   class="inventory-edit-btn">
+
+                                    <i class="bi bi-pencil-square me-1"></i>
+                                    Edit
+
+                                </a>
+
+                                <a asp-controller="Inventory"
+                                   asp-action="Delete"
+                                   asp-route-id="@item.InventoryId"
+                                   class="inventory-delete-btn">
+
+                                    <i class="bi bi-trash me-1"></i>
+                                    Delete
+
+                                </a>
+
+                            </div>
+
+                        </td>
+
                     </tr>
                 }
+
             </tbody>
+
         </table>
+
     </div>
+
+
+    <!-- =====================================================
+         EMPTY STATE
+         ===================================================== -->
+
+    <div id="inventoryEmptyState"
+         class="inventory-empty-state @(inventory.Any() ? "d-none" : "")">
+
+        <i class="bi bi-box-seam fs-1 d-block mb-3"></i>
+
+        <h5 class="fw-bold">
+            No inventory items found
+        </h5>
+
+        <p class="mb-0">
+            Try adjusting your search or filters,
+            or add a new inventory item.
+        </p>
+
+    </div>
+
 </div>
 
-<!-- MANAGE CATEGORIES MODAL -->
-<div class="modal fade" id="manageCategoriesModal" tabindex="-1" aria-labelledby="manageCategoriesModalLabel" aria-hidden="true">
+
+<!-- =========================================================
+     CATEGORY MANAGEMENT MODAL
+     ========================================================= -->
+
+<div class="modal fade"
+     id="manageCategoriesModal"
+     tabindex="-1"
+     aria-labelledby="manageCategoriesModalLabel"
+     aria-hidden="true">
+
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" style="background-color: var(--card-bg, #ffffff); border-radius: 12px;">
-            <div class="modal-header border-bottom-0 pb-0">
-                <h5 class="modal-title fw-bold" id="manageCategoriesModalLabel" style="color: #1c323d;">Manage Categories</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title fw-bold"
+                    id="manageCategoriesModalLabel">
+                    Manage Categories
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
+
             </div>
+
             <div class="modal-body">
-                <p class="text-muted small mb-3">Select a category below to edit its name or delete it.</p>
-                <div class="table-responsive" style="max-height: 280px; overflow-y: auto;">
-                    <table class="table table-hover align-middle">
-                        <thead class="table-light sticky-top">
-                            <tr>
-                                <th>Category Name</th>
-                                <th class="text-end" style="width: 140px;">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="categoryListTableBody">
-                            <tr>
-                                <td>
-                                    <span class="category-name-text">Sweets & Confectionery</span>
-                                    <input type="text" class="form-control form-control-sm d-none category-edit-input" value="Sweets & Confectionery" />
-                                </td>
-                                <td class="text-end">
-                                    <button type="button" class="btn btn-sm btn-outline-primary btn-edit-cat me-1" title="Edit"><i class="bi bi-pencil"></i></button>
-                                    <button type="button" class="btn btn-sm btn-outline-success btn-save-cat me-1 d-none" title="Save"><i class="bi bi-check-lg"></i></button>
-                                    <button type="button" class="btn btn-sm btn-outline-danger btn-delete-cat" title="Delete"><i class="bi bi-trash"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <span class="category-name-text">Beverages</span>
-                                    <input type="text" class="form-control form-control-sm d-none category-edit-input" value="Beverages" />
-                                </td>
-                                <td class="text-end">
-                                    <button type="button" class="btn btn-sm btn-outline-primary btn-edit-cat me-1" title="Edit"><i class="bi bi-pencil"></i></button>
-                                    <button type="button" class="btn btn-sm btn-outline-success btn-save-cat me-1 d-none" title="Save"><i class="bi bi-check-lg"></i></button>
-                                    <button type="button" class="btn btn-sm btn-outline-danger btn-delete-cat" title="Delete"><i class="bi bi-trash"></i></button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+
+                <div class="alert alert-info small">
+
+                    <i class="bi bi-info-circle me-1"></i>
+
+                    Categories shown below are currently used by
+                    inventory products. Category editing and deletion
+                    are not connected to the database from this modal.
+
                 </div>
+
+                <div class="list-group">
+
+                    @foreach (var category in categories)
+                    {
+                        <div class="list-group-item">
+
+                            <i class="bi bi-tag me-2 text-secondary"></i>
+
+                            @category
+
+                        </div>
+                    }
+
+                    @if (!categories.Any())
+                    {
+                        <div class="text-muted small">
+                            No categories are currently available.
+                        </div>
+                    }
+
+                </div>
+
             </div>
-            <div class="modal-footer border-top-0 pt-0">
-                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+
+            <div class="modal-footer">
+
+                <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+
+                    Close
+
+                </button>
+
             </div>
+
         </div>
+
     </div>
+
 </div>
+
 
 @section Scripts {
+
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Live Search Filter Logic
-            const searchInput = document.getElementById("searchKeyword");
-            const inventoryRows = document.querySelectorAll(".inventory-row");
+        // ======================================================
+        // INVENTORY SEARCH AND FILTERING
+        //
+        // Filters existing rows without changing database data.
+        // ======================================================
 
-            if (searchInput) {
-                searchInput.addEventListener("input", function() {
-                    const query = this.value.toLowerCase().trim();
+        document.addEventListener("DOMContentLoaded", function () {
 
-   inventoryRows.forEach(row => {
-    const code = row.querySelector(".item-code").textContent.toLowerCase();
-    const name = row.querySelector(".item-name").textContent.toLowerCase();
-    const description = row.querySelector(".item-description").textContent.toLowerCase();
-    const category = row.querySelector(".item-category").textContent.toLowerCase();
+            const searchInput =
+                document.getElementById("searchKeyword");
 
-    if (code.includes(query) || name.includes(query) || description.includes(query) || category.includes(query)) {
-                            row.style.display = "";
-                        } else {
-                            row.style.display = "none";
-                        }
-                    });
+            const categoryFilter =
+                document.getElementById("categoryFilter");
+
+            const stockFilter =
+                document.getElementById("stockFilter");
+
+            const clearButton =
+                document.getElementById("clearInventoryFilters");
+
+            const rows =
+                document.querySelectorAll(".inventory-row");
+
+            const emptyState =
+                document.getElementById("inventoryEmptyState");
+
+
+            function applyFilters() {
+
+                const search =
+                    searchInput.value.toLowerCase().trim();
+
+                const category =
+                    categoryFilter.value.toLowerCase();
+
+                const stock =
+                    stockFilter.value;
+
+                let visibleCount = 0;
+
+
+                rows.forEach(function (row) {
+
+                    const rowText =
+                        row.textContent.toLowerCase();
+
+                    const rowCategory =
+                        (row.dataset.category || "").toLowerCase();
+
+                    const rowStock =
+                        row.dataset.stock || "";
+
+
+                    const matchesSearch =
+                        !search || rowText.includes(search);
+
+                    const matchesCategory =
+                        !category || rowCategory === category;
+
+                    const matchesStock =
+                        !stock || rowStock === stock;
+
+
+                    const visible =
+                        matchesSearch &&
+                        matchesCategory &&
+                        matchesStock;
+
+
+                    row.style.display = visible ? "" : "none";
+
+                    if (visible) {
+                        visibleCount++;
+                    }
+
                 });
+
+
+                emptyState.classList.toggle(
+                    "d-none",
+                    visibleCount > 0
+                );
             }
 
-            // Category Management Modal Logic
-            const tableBody = document.getElementById("categoryListTableBody");
-            if (tableBody) {
-                tableBody.addEventListener("click", function(e) {
-                    const editBtn = e.target.closest(".btn-edit-cat");
-                    const saveBtn = e.target.closest(".btn-save-cat");
-                    const deleteBtn = e.target.closest(".btn-delete-cat");
 
-                    if (editBtn) {
-                        const row = editBtn.closest("tr");
-                        row.querySelector(".category-name-text").classList.add("d-none");
-                        row.querySelector(".category-edit-input").classList.remove("d-none");
-                        editBtn.classList.add("d-none");
-                        row.querySelector(".btn-save-cat").classList.remove("d-none");
-                    }
-                    if (saveBtn) {
-                        const row = saveBtn.closest("tr");
-                        const inputVal = row.querySelector(".category-edit-input").value.trim();
-                        if (!inputVal) { alert("Category name cannot be empty."); return; }
-                        row.querySelector(".category-name-text").innerText = inputVal;
-                        row.querySelector(".category-name-text").classList.remove("d-none");
-                        row.querySelector(".category-edit-input").classList.add("d-none");
-                        saveBtn.classList.add("d-none");
-                        row.querySelector(".btn-edit-cat").classList.remove("d-none");
-                    }
-                    if (deleteBtn) {
-                        if (confirm("Are you sure you want to delete this category?")) {
-                            deleteBtn.closest("tr").remove();
-                        }
-                    }
-                });
-            }
+            searchInput.addEventListener(
+                "input",
+                applyFilters
+            );
+
+            categoryFilter.addEventListener(
+                "change",
+                applyFilters
+            );
+
+            stockFilter.addEventListener(
+                "change",
+                applyFilters
+            );
+
+
+            clearButton.addEventListener("click", function () {
+
+                searchInput.value = "";
+                categoryFilter.value = "";
+                stockFilter.value = "";
+
+                applyFilters();
+
+            });
+
         });
     </script>
 }

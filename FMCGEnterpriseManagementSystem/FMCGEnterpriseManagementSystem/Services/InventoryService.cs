@@ -159,7 +159,50 @@ namespace FMCGEnterpriseManagementSystem.Services
             // Persists the inventory changes through the repository.
             await _repository.UpdateAsync(entity);
 
-            // Saves related product changes tracked by the DbContext.
+            // ----------------------------------------------------------
+            // UPDATE INVENTORY EXPIRY DATE
+            //
+            // Reference:
+            // Microsoft (2026) Saving Related Data.
+            // Available at:
+            // https://learn.microsoft.com/en-us/ef/core/saving/related-data
+            //
+            // Expiry dates are stored in the StockBatches table.
+            // ----------------------------------------------------------
+
+            // Find the earliest-expiring batch for this inventory item.
+            var existingBatch = await _context.StockBatches
+                .Where(b => b.InventoryId == entity.InventoryId)
+                .OrderBy(b => b.ExpiryDate)
+                .FirstOrDefaultAsync();
+
+            // Only update the expiry date when the user has supplied one.
+            if (model.ExpiryDate.HasValue)
+            {
+                if (existingBatch != null)
+                {
+                    // Update the existing batch.
+                    existingBatch.ExpiryDate = model.ExpiryDate.Value;
+                    existingBatch.UpdatedAt = DateTime.UtcNow;
+                }
+                else
+                {
+                    // Create a batch if this inventory item has none.
+                    var newBatch = new StockBatch
+                    {
+                        InventoryId = entity.InventoryId,
+                        BatchNumber = $"BATCH-{Guid.NewGuid():N}",
+                        Quantity = entity.QuantityOnHand,
+                        ReceivedDate = DateTime.UtcNow,
+                        ExpiryDate = model.ExpiryDate.Value,
+                        CreatedAt = DateTime.UtcNow
+                    };
+
+                    _context.StockBatches.Add(newBatch);
+                }
+            }
+
+            // Save all tracked changes.
             await _context.SaveChangesAsync();
         }
 
