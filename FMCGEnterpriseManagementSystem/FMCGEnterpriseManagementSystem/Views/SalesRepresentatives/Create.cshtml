@@ -1,19 +1,34 @@
 ﻿@*
-    Purpose: Form to add a new sales representative.
-    Authors: iqran0906 (from git history)
+    Purpose: Create a sales representative linked to an eligible employee.
+    Original author: iqran0906 (from Git history).
+
+    References:
+    Bootstrap (n.d.) Forms and Grid.
+    https://getbootstrap.com/docs/5.3/
 *@
+
 @model FMCGEnterpriseManagementSystem.ViewModels.SalesRepresentativeViewModel
 
 @{
     ViewData["Title"] = "New Sales Representative";
 }
 
-<div class="content-card">
+<link rel="stylesheet" href="~/css/sales-representatives.css" asp-append-version="true" />
 
-    <h2 class="fw-bold mb-4"
-        style="color: #1c323d;">
-        New Sales Representative
-    </h2>
+<div class="sales-page">
+
+    <div class="sales-page-header">
+
+        <div>
+            <h2 class="sales-page-title">New Sales Representative</h2>
+
+            <p class="sales-page-subtitle">
+                Assign an eligible employee as a sales representative
+                and configure their sales information.
+            </p>
+        </div>
+
+    </div>
 
     <form asp-controller="SalesRepresentatives"
           asp-action="Create"
@@ -27,148 +42,168 @@
 
         <div class="row g-4">
 
-            <div class="col-md-6">
+            <!-- REPRESENTATIVE INFORMATION -->
 
-                <div class="mb-3">
+            <div class="col-12 col-xl-6">
 
-                    <label asp-for="EmployeeID"
-                           class="form-label">
-                    </label>
+                <div class="sales-form-section">
 
-                    <select asp-for="EmployeeID"
-                            asp-items="ViewBag.Employees"
-                            class="form-select">
+                    <h5 class="sales-section-title">
+                        <i class="bi bi-person-badge me-2"></i>
+                        Representative Information
+                    </h5>
 
-                        <option value="">
-                            -- Select Employee --
-                        </option>
+                    <p class="sales-section-subtitle">
+                        Select an employee and specify their assigned sales area.
+                    </p>
 
-                    </select>
+                    <!-- EMPLOYEE -->
 
-                    <span asp-validation-for="EmployeeID"
-                          class="text-danger">
-                    </span>
+                    <div class="mb-3">
 
-                    <div class="form-text">
-                        Only active employees who are not already
-                        sales representatives are available.
+                        <label asp-for="EmployeeID" class="form-label"></label>
+
+                        <select asp-for="EmployeeID"
+                                asp-items="ViewBag.Employees"
+                                class="form-select">
+
+                            <option value="">-- Select Employee --</option>
+
+                        </select>
+
+                        <span asp-validation-for="EmployeeID"
+                              class="text-danger small"></span>
+
+                        <div class="sales-form-help">
+                            Only active employees who are not already
+                            sales representatives are available.
+                        </div>
+
                     </div>
 
-                </div>
+                    <!-- GENERATED CODE -->
 
-                <div class="mb-3">
+                    <div class="mb-3">
 
-    <label class="form-label">
-        Sales Rep Code
-    </label>
+                        <label class="form-label">
+                            Sales Rep Code
+                        </label>
 
-    <input class="form-control"
-           value="Generated automatically when saved"
-           readonly />
+                        <input type="text"
+                               class="form-control"
+                               value="Generated automatically when saved"
+                               readonly />
 
-    <div class="form-text">
-        The next available code will be assigned automatically,
-        for example SR-001, SR-002 or SR-003.
-    </div>
+                        <div class="sales-form-help">
+                            The next available code will be assigned automatically,
+                            for example SR-001, SR-002 or SR-003.
+                        </div>
 
-</div>
+                    </div>
 
-                <div class="mb-3">
+                    <!-- AREA -->
 
-                    <label asp-for="Area"
-                           class="form-label">
-                    </label>
+                    <div class="mb-3">
 
-                    <input asp-for="Area"
-                           class="form-control"
-                           placeholder="e.g. Durban North" />
+                        <label asp-for="Area" class="form-label"></label>
 
-                    <span asp-validation-for="Area"
-                          class="text-danger">
-                    </span>
+                        <input asp-for="Area"
+                               class="form-control"
+                               placeholder="e.g. Durban North" />
+
+                        <span asp-validation-for="Area"
+                              class="text-danger small"></span>
+
+                    </div>
 
                 </div>
 
             </div>
 
-            <div class="col-md-6">
+            <!-- SALES INFORMATION -->
 
-                <div class="mb-3">
+            <div class="col-12 col-xl-6">
 
-                    <label asp-for="Salary"
-                           class="form-label">
-                    </label>
+                <div class="sales-form-section">
 
-                    <div class="input-group">
+                    <h5 class="sales-section-title">
+                        <i class="bi bi-graph-up-arrow me-2"></i>
+                        Sales & Compensation
+                    </h5>
 
-                        <span class="input-group-text">
-                            R
-                        </span>
+                    <p class="sales-section-subtitle">
+                        Configure salary, commission and sales targets.
+                    </p>
 
-                        <input asp-for="Salary"
-                               class="form-control"
-                               type="number"
-                               min="0"
-                               step="0.01" />
+                    <!-- SALARY -->
 
-                    </div>
+                    <div class="mb-3">
 
-                    <span asp-validation-for="Salary"
-                          class="text-danger">
-                    </span>
+                        <label asp-for="Salary" class="form-label"></label>
 
-                </div>
+                        <div class="input-group">
 
-                <div class="mb-3">
+                            <span class="input-group-text">R</span>
 
-                    <label asp-for="CommissionRate"
-                           class="form-label">
-                    </label>
+                            <input asp-for="Salary"
+                                   class="form-control"
+                                   type="number"
+                                   min="0"
+                                   step="0.01" />
 
-                    <div class="input-group">
+                        </div>
 
-                        <input asp-for="CommissionRate"
-                               class="form-control"
-                               type="number"
-                               min="0"
-                               max="100"
-                               step="0.01" />
-
-                        <span class="input-group-text">
-                            %
-                        </span>
+                        <span asp-validation-for="Salary"
+                              class="text-danger small"></span>
 
                     </div>
 
-                    <span asp-validation-for="CommissionRate"
-                          class="text-danger">
-                    </span>
+                    <!-- COMMISSION -->
 
-                </div>
+                    <div class="mb-3">
 
-                <div class="mb-3">
+                        <label asp-for="CommissionRate" class="form-label"></label>
 
-                    <label asp-for="SalesTarget"
-                           class="form-label">
-                    </label>
+                        <div class="input-group">
 
-                    <div class="input-group">
+                            <input asp-for="CommissionRate"
+                                   class="form-control"
+                                   type="number"
+                                   min="0"
+                                   max="100"
+                                   step="0.01" />
 
-                        <span class="input-group-text">
-                            R
-                        </span>
+                            <span class="input-group-text">%</span>
 
-                        <input asp-for="SalesTarget"
-                               class="form-control"
-                               type="number"
-                               min="0"
-                               step="0.01" />
+                        </div>
+
+                        <span asp-validation-for="CommissionRate"
+                              class="text-danger small"></span>
 
                     </div>
 
-                    <span asp-validation-for="SalesTarget"
-                          class="text-danger">
-                    </span>
+                    <!-- SALES TARGET -->
+
+                    <div class="mb-3">
+
+                        <label asp-for="SalesTarget" class="form-label"></label>
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">R</span>
+
+                            <input asp-for="SalesTarget"
+                                   class="form-control"
+                                   type="number"
+                                   min="0"
+                                   step="0.01" />
+
+                        </div>
+
+                        <span asp-validation-for="SalesTarget"
+                              class="text-danger small"></span>
+
+                    </div>
 
                 </div>
 
@@ -176,17 +211,24 @@
 
         </div>
 
-        <div class="d-flex justify-content-end gap-3 mt-3">
+        <!-- ACTIONS -->
+
+        <div class="sales-form-actions">
 
             <a asp-controller="SalesRepresentatives"
                asp-action="Index"
-               class="btn btn-link text-decoration-none text-secondary align-self-center">
+               class="sales-btn-outline">
+
+                <i class="bi bi-arrow-left me-1"></i>
                 Cancel
+
             </a>
 
-            <button type="submit"
-                    class="btn btn-custom-save">
+            <button type="submit" class="sales-btn-primary">
+
+                <i class="bi bi-check-lg me-1"></i>
                 Save Sales Representative
+
             </button>
 
         </div>
@@ -196,7 +238,5 @@
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <partial name="_ValidationScriptsPartial" />
 }

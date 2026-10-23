@@ -1,0 +1,399 @@
+﻿/* ==========================================================
+   SALES REPRESENTATIVES MANAGEMENT
+   Purpose: Shared navy, teal and blue-grey styling.
+   ========================================================== */
+
+.sales-page {
+    background: #e6edf1;
+    border: 1px solid rgba(53, 127, 145, 0.18);
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 30px;
+    min-height: 75vh;
+    color: #183244;
+}
+
+.sales-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin-bottom: 26px;
+}
+
+.sales-page-title {
+    color: #183244;
+    font-size: 30px;
+    font-weight: 800;
+    margin-bottom: 5px;
+}
+
+.sales-page-subtitle {
+    color: #667988;
+    font-size: 15px;
+    margin-bottom: 0;
+}
+
+.sales-header-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.sales-btn-primary {
+    background: #357f91;
+    border: 1px solid #357f91;
+    color: white;
+    border-radius: 6px;
+    padding: 10px 18px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+}
+
+    .sales-btn-primary:hover {
+        background: #286675;
+        color: white;
+    }
+
+.sales-btn-outline {
+    background: transparent;
+    border: 1px solid #a8b1bb;
+    color: #536475;
+    border-radius: 6px;
+    padding: 10px 18px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+}
+
+    .sales-btn-outline:hover {
+        background: #dce6eb;
+        color: #183244;
+    }
+
+/* SUMMARY CARDS */
+
+.sales-stat-card {
+    background: #f8fafb;
+    border: 1px solid #c9d9df;
+    border-top: 3px solid #357f91;
+    border-radius: 8px;
+    padding: 20px;
+    min-height: 112px;
+    height: 100%;
+    box-shadow: 0 3px 12px rgba(15, 40, 55, 0.05);
+}
+
+    .sales-stat-card.inactive {
+        border-top-color: #8293a1;
+    }
+
+.sales-stat-label {
+    color: #667988;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.sales-stat-value {
+    color: #142d40;
+    font-size: 28px;
+    font-weight: 800;
+}
+
+/* SEARCH */
+
+.sales-filter-panel {
+    background: #edf3f5;
+    border: 1px solid #c9d9df;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 25px 0;
+}
+
+.sales-filter-label {
+    color: #465768;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 7px;
+}
+
+.sales-filter-panel .form-control {
+    background: #f7f9fa;
+    border: 1px solid #d3dbe2;
+    min-height: 43px;
+}
+
+/* TABLE */
+
+.sales-table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.sales-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+    font-size: 14px;
+}
+
+    .sales-table thead th {
+        background: #dce9ee;
+        color: #17384a;
+        padding: 16px 12px;
+        border-top: 1px solid #c9d9df;
+        border-bottom: 1px solid #c9d9df;
+        font-weight: 700;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    .sales-table tbody td {
+        background: #f8fafb;
+        color: #344657;
+        padding: 16px 12px;
+        border-top: 1px solid #e0e5ea;
+        border-bottom: 1px solid #e0e5ea;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .sales-table tbody tr td:first-child {
+        border-left: 1px solid #e0e5ea;
+    }
+
+    .sales-table tbody tr td:last-child {
+        border-right: 1px solid #e0e5ea;
+    }
+
+    .sales-table tbody tr:hover td {
+        background: #edf4f6;
+    }
+
+.sales-rep-code {
+    color: #357f91;
+    font-weight: 700;
+}
+
+.sales-rep-name {
+    color: #183244;
+    font-weight: 700;
+}
+
+/* STATUS */
+
+.sales-status-active,
+.sales-status-inactive {
+    display: inline-block;
+    border-radius: 5px;
+    padding: 6px 11px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.sales-status-active {
+    background: #dff5e8;
+    color: #187544;
+}
+
+.sales-status-inactive {
+    background: #e4e8ed;
+    color: #566675;
+}
+
+/* ACTION BUTTONS */
+
+.sales-actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.sales-edit-btn {
+    background: #ffc107;
+    border: 1px solid #ffc107;
+    color: #212529;
+    border-radius: 5px;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+    .sales-edit-btn:hover {
+        background: #e6ad00;
+        color: #212529;
+    }
+
+.sales-deactivate-btn {
+    background: #dc3545;
+    border: 1px solid #dc3545;
+    color: white;
+    border-radius: 5px;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+    .sales-deactivate-btn:hover {
+        background: #bd2635;
+        color: white;
+    }
+
+.sales-reactivate-btn {
+    background: #27815b;
+    border: 1px solid #27815b;
+    color: white;
+    border-radius: 5px;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+    .sales-reactivate-btn:hover {
+        background: #1d6748;
+        color: white;
+    }
+
+/* FORMS */
+
+.sales-form-section {
+    background: #f8fafb;
+    border: 1px solid #c9d9df;
+    border-top: 3px solid #357f91;
+    border-radius: 8px;
+    padding: 25px;
+    height: 100%;
+    box-shadow: 0 3px 12px rgba(15, 40, 55, 0.05);
+}
+
+.sales-section-title {
+    color: #183244;
+    font-size: 19px;
+    font-weight: 800;
+    margin-bottom: 6px;
+}
+
+.sales-section-subtitle {
+    color: #788592;
+    font-size: 13px;
+    margin-bottom: 22px;
+}
+
+.sales-page .form-label {
+    color: #465768;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 7px;
+}
+
+.sales-page .form-control,
+.sales-page .form-select {
+    background: #f7f9fa;
+    border: 1px solid #d3dbe2;
+    border-radius: 6px;
+    min-height: 44px;
+    color: #263b4b;
+}
+
+    .sales-page .form-control:focus,
+    .sales-page .form-select:focus {
+        border-color: #357f91;
+        box-shadow: 0 0 0 3px rgba(53, 127, 145, 0.12);
+    }
+
+    .sales-page .form-control[readonly] {
+        background: #e9eff2;
+        color: #657988;
+    }
+
+.sales-page .input-group-text {
+    background: #e5edf1;
+    border-color: #d3dbe2;
+    color: #465768;
+    font-weight: 600;
+}
+
+.sales-form-help {
+    color: #788592;
+    font-size: 12px;
+    margin-top: 6px;
+}
+
+.sales-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+/* EMPTY STATE */
+
+.sales-empty-state {
+    background: #f8fafb;
+    border: 1px solid #c9d9df;
+    border-radius: 8px;
+    padding: 45px 20px;
+    text-align: center;
+    color: #667988;
+}
+
+/* MODALS */
+
+.sales-modal .modal-content {
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.sales-modal .modal-header {
+    background: #17384a;
+    color: white;
+    padding: 18px 22px;
+}
+
+.sales-modal .modal-body {
+    color: #344657;
+    padding: 25px 22px;
+}
+
+.sales-modal .modal-footer {
+    background: #f4f7f9;
+    padding: 15px 22px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+    .sales-page {
+        padding: 18px;
+    }
+
+    .sales-page-title {
+        font-size: 25px;
+    }
+
+    .sales-form-section {
+        padding: 18px;
+    }
+
+    .sales-header-actions {
+        width: 100%;
+    }
+
+        .sales-header-actions a {
+            flex: 1;
+            text-align: center;
+        }
+
+    .sales-form-actions a,
+    .sales-form-actions button {
+        flex: 1;
+        text-align: center;
+    }
+}

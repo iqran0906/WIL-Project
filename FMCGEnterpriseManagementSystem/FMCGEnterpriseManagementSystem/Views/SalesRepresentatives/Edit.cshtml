@@ -1,19 +1,33 @@
 ﻿@*
-    Purpose: Form to update an existing sales representative.
-    Authors: iqran0906 (from git history)
+    Purpose: Edit an existing sales representative.
+    Original author: iqran0906 (from Git history).
+
+    References:
+    Bootstrap (n.d.) Forms and Grid.
+    https://getbootstrap.com/docs/5.3/
 *@
+
 @model FMCGEnterpriseManagementSystem.ViewModels.SalesRepresentativeViewModel
 
 @{
     ViewData["Title"] = "Edit Sales Representative";
 }
 
-<div class="content-card">
+<link rel="stylesheet" href="~/css/sales-representatives.css" asp-append-version="true" />
 
-    <h2 class="fw-bold mb-4"
-        style="color: #1c323d;">
-        Edit Sales Representative
-    </h2>
+<div class="sales-page">
+
+    <div class="sales-page-header">
+
+        <div>
+            <h2 class="sales-page-title">Edit Sales Representative</h2>
+
+            <p class="sales-page-subtitle">
+                Update representative information, compensation and sales targets.
+            </p>
+        </div>
+
+    </div>
 
     <form asp-controller="SalesRepresentatives"
           asp-action="Edit"
@@ -21,191 +35,210 @@
 
         @Html.AntiForgeryToken()
 
+        <input asp-for="SalesRepresentativeId" type="hidden" />
+        <input asp-for="EmployeeID" type="hidden" />
+
         <div asp-validation-summary="ModelOnly"
              class="text-danger mb-3">
         </div>
 
-        <input asp-for="SalesRepresentativeId"
-               type="hidden" />
-
-        <input asp-for="EmployeeID"
-               type="hidden" />
-
         <div class="row g-4">
 
-            <div class="col-md-6">
+            <!-- REPRESENTATIVE INFORMATION -->
 
-                <div class="mb-3">
+            <div class="col-12 col-xl-6">
 
-                    <label class="form-label">
-                        Employee
-                    </label>
+                <div class="sales-form-section">
 
-                    <input type="text"
-                           class="form-control"
-                           value="@Model.EmployeeName"
-                           readonly />
+                    <h5 class="sales-section-title">
+                        <i class="bi bi-person-badge me-2"></i>
+                        Representative Information
+                    </h5>
 
-                </div>
+                    <p class="sales-section-subtitle">
+                        Review the linked employee and update representative details.
+                    </p>
 
-                <div class="mb-3">
+                    <!-- EMPLOYEE -->
 
-                    <label class="form-label">
-                        Employee Number
-                    </label>
+                    <div class="mb-3">
 
-                    <input type="text"
-                           class="form-control"
-                           value="@Model.EmployeeNumber"
-                           readonly />
+                        <label class="form-label">Employee</label>
 
-                </div>
+                        <input type="text"
+                               class="form-control"
+                               value="@Model.EmployeeName"
+                               readonly />
 
-                <div class="mb-3">
+                    </div>
 
-                    <label class="form-label">
-                        Email
-                    </label>
+                    <!-- EMPLOYEE NUMBER -->
 
-                    <input type="text"
-                           class="form-control"
-                           value="@Model.Email"
-                           readonly />
+                    <div class="mb-3">
 
-                </div>
+                        <label class="form-label">Employee Number</label>
 
-                <div class="mb-3">
+                        <input type="text"
+                               class="form-control"
+                               value="@Model.EmployeeNumber"
+                               readonly />
 
-                    <label asp-for="SalesRepCode"
-                           class="form-label">
-                    </label>
+                    </div>
 
-                    <input asp-for="SalesRepCode"
-                           class="form-control" />
+                    <!-- EMAIL -->
 
-                    <span asp-validation-for="SalesRepCode"
-                          class="text-danger">
-                    </span>
+                    <div class="mb-3">
 
-                </div>
+                        <label class="form-label">Email</label>
 
-                <div class="mb-3">
+                        <input type="text"
+                               class="form-control"
+                               value="@Model.Email"
+                               readonly />
 
-                    <label asp-for="Area"
-                           class="form-label">
-                    </label>
+                    </div>
 
-                    <input asp-for="Area"
-                           class="form-control" />
+                    <!-- SALES REP CODE -->
 
-                    <span asp-validation-for="Area"
-                          class="text-danger">
-                    </span>
+                    <div class="mb-3">
+
+                        <label asp-for="SalesRepCode"
+                               class="form-label"></label>
+
+                        <input asp-for="SalesRepCode"
+                               class="form-control" />
+
+                        <span asp-validation-for="SalesRepCode"
+                              class="text-danger small"></span>
+
+                    </div>
+
+                    <!-- AREA -->
+
+                    <div class="mb-3">
+
+                        <label asp-for="Area"
+                               class="form-label"></label>
+
+                        <input asp-for="Area"
+                               class="form-control"
+                               placeholder="Enter assigned area" />
+
+                        <span asp-validation-for="Area"
+                              class="text-danger small"></span>
+
+                    </div>
 
                 </div>
 
             </div>
 
-            <div class="col-md-6">
+            <!-- SALES INFORMATION -->
 
-                <div class="mb-3">
+            <div class="col-12 col-xl-6">
 
-                    <label asp-for="Salary"
-                           class="form-label">
-                    </label>
+                <div class="sales-form-section">
 
-                    <div class="input-group">
+                    <h5 class="sales-section-title">
+                        <i class="bi bi-graph-up-arrow me-2"></i>
+                        Sales & Compensation
+                    </h5>
 
-                        <span class="input-group-text">
-                            R
-                        </span>
+                    <p class="sales-section-subtitle">
+                        Update salary, commission and sales targets.
+                    </p>
 
-                        <input asp-for="Salary"
-                               class="form-control"
-                               type="number"
-                               min="0"
-                               step="0.01" />
+                    <!-- SALARY -->
 
-                    </div>
+                    <div class="mb-3">
 
-                    <span asp-validation-for="Salary"
-                          class="text-danger">
-                    </span>
+                        <label asp-for="Salary" class="form-label"></label>
 
-                </div>
+                        <div class="input-group">
 
-                <div class="mb-3">
+                            <span class="input-group-text">R</span>
 
-                    <label asp-for="CommissionRate"
-                           class="form-label">
-                    </label>
+                            <input asp-for="Salary"
+                                   class="form-control"
+                                   type="number"
+                                   min="0"
+                                   step="0.01" />
 
-                    <div class="input-group">
+                        </div>
 
-                        <input asp-for="CommissionRate"
-                               class="form-control"
-                               type="number"
-                               min="0"
-                               max="100"
-                               step="0.01" />
-
-                        <span class="input-group-text">
-                            %
-                        </span>
+                        <span asp-validation-for="Salary"
+                              class="text-danger small"></span>
 
                     </div>
 
-                    <span asp-validation-for="CommissionRate"
-                          class="text-danger">
-                    </span>
+                    <!-- COMMISSION -->
 
-                </div>
+                    <div class="mb-3">
 
-                <div class="mb-3">
+                        <label asp-for="CommissionRate"
+                               class="form-label"></label>
 
-                    <label asp-for="SalesTarget"
-                           class="form-label">
-                    </label>
+                        <div class="input-group">
 
-                    <div class="input-group">
+                            <input asp-for="CommissionRate"
+                                   class="form-control"
+                                   type="number"
+                                   min="0"
+                                   max="100"
+                                   step="0.01" />
 
-                        <span class="input-group-text">
-                            R
-                        </span>
+                            <span class="input-group-text">%</span>
 
-                        <input asp-for="SalesTarget"
-                               class="form-control"
-                               type="number"
-                               min="0"
-                               step="0.01" />
+                        </div>
+
+                        <span asp-validation-for="CommissionRate"
+                              class="text-danger small"></span>
 
                     </div>
 
-                    <span asp-validation-for="SalesTarget"
-                          class="text-danger">
-                    </span>
+                    <!-- SALES TARGET -->
 
-                </div>
+                    <div class="mb-3">
 
-                <div class="mb-3">
+                        <label asp-for="SalesTarget"
+                               class="form-label"></label>
 
-                    <label class="form-label">
-                        Status
-                    </label>
+                        <div class="input-group">
 
-                    <div>
-                        @if (Model.IsActive)
-                        {
-                            <span class="badge bg-success">
-                                Active
-                            </span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-danger">
-                                Inactive
-                            </span>
-                        }
+                            <span class="input-group-text">R</span>
+
+                            <input asp-for="SalesTarget"
+                                   class="form-control"
+                                   type="number"
+                                   min="0"
+                                   step="0.01" />
+
+                        </div>
+
+                        <span asp-validation-for="SalesTarget"
+                              class="text-danger small"></span>
+
+                    </div>
+
+                    <!-- STATUS -->
+
+                    <div class="mb-3">
+
+                        <label class="form-label">Status</label>
+
+                        <div class="mt-2">
+
+                            @if (Model.IsActive)
+                            {
+                                <span class="sales-status-active">Active</span>
+                            }
+                            else
+                            {
+                                <span class="sales-status-inactive">Inactive</span>
+                            }
+
+                        </div>
+
                     </div>
 
                 </div>
@@ -214,17 +247,24 @@
 
         </div>
 
-        <div class="d-flex justify-content-end gap-3 mt-3">
+        <!-- ACTIONS -->
+
+        <div class="sales-form-actions">
 
             <a asp-controller="SalesRepresentatives"
                asp-action="Index"
-               class="btn btn-link text-decoration-none text-secondary align-self-center">
+               class="sales-btn-outline">
+
+                <i class="bi bi-arrow-left me-1"></i>
                 Cancel
+
             </a>
 
-            <button type="submit"
-                    class="btn btn-custom-save">
+            <button type="submit" class="sales-btn-primary">
+
+                <i class="bi bi-check-lg me-1"></i>
                 Save Changes
+
             </button>
 
         </div>
@@ -234,7 +274,5 @@
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <partial name="_ValidationScriptsPartial" />
 }
