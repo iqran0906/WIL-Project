@@ -386,14 +386,7 @@
         <a asp-action="Index" class="btn btn-outline-secondary px-4">Back to Invoices</a>
     </div>
 
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="alert alert-success mt-3">@TempData["SuccessMessage"]</div>
-    }
-    @if (TempData["ErrorMessage"] != null)
-    {
-        <div class="alert alert-danger mt-3">@TempData["ErrorMessage"]</div>
-    }
+   
 
     <div class="modal fade" id="emailInvoiceModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
