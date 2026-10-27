@@ -4,162 +4,448 @@
     ViewData["Title"] = "New Customer";
 }
 
-<div class="content-card">
-    <h2 class="fw-bold mb-4" style="color: #1c323d;">New Customer</h2>
+<div class="customer-page">
 
-    <form asp-action="AddCustomer" method="post">
+    <!-- PAGE HEADER -->
+    <div class="customer-page-header">
+
+        <div>
+            <h2 class="customer-page-title">New Customer</h2>
+
+            <p class="customer-page-subtitle">
+                Register a new customer and configure their contact,
+                business and payment information.
+            </p>
+        </div>
+
+        <a asp-controller="Customers"
+           asp-action="CustomerList"
+           class="customer-btn-outline">
+
+            <i class="bi bi-arrow-left"></i>
+            Back to Customers
+
+        </a>
+
+    </div>
+
+    <!-- CUSTOMER FORM -->
+    <form asp-controller="Customers"
+          asp-action="AddCustomer"
+          method="post">
+
         @Html.AntiForgeryToken()
 
+        <div asp-validation-summary="ModelOnly"
+             class="text-danger mb-3"></div>
+
         <div class="row g-4">
-            <!-- Left Column -->
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label asp-for="Name" class="form-label">Name</label>
-                    <input asp-for="Name" class="form-control" placeholder="Enter Customer Name">
-                    <span asp-validation-for="Name" class="text-danger small"></span>
+
+            <!-- LEFT: PERSONAL INFORMATION -->
+            <div class="col-lg-6">
+
+                <div class="customer-form-section">
+
+                    <h5 class="customer-section-title">
+                        <i class="bi bi-person-lines-fill me-2"></i>
+                        Customer Information
+                    </h5>
+
+                    <p class="customer-section-subtitle">
+                        Enter the customer's personal and contact details.
+                    </p>
+
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label">
+                            Name
+                        </label>
+
+                        <input asp-for="Name"
+                               class="form-control"
+                               placeholder="Enter customer name" />
+
+                        <span asp-validation-for="Name"
+                              class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Surname" class="form-label">
+                            Surname
+                        </label>
+
+                        <input asp-for="Surname"
+                               class="form-control"
+                               placeholder="Enter customer surname" />
+
+                        <span asp-validation-for="Surname"
+                              class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="IdNumber" class="form-label">
+                            ID Number
+                        </label>
+
+                        <input asp-for="IdNumber"
+                               class="form-control"
+                               placeholder="Enter ID number" />
+
+                        <span asp-validation-for="IdNumber"
+                              class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="CellNumber" class="form-label">
+                            Cell Number
+                        </label>
+
+                        <input asp-for="CellNumber"
+                               class="form-control"
+                               placeholder="Enter cell number" />
+
+                        <span asp-validation-for="CellNumber"
+                              class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="TelephoneNumber" class="form-label">
+                            Telephone Number (Optional)
+                        </label>
+
+                        <input asp-for="TelephoneNumber"
+                               class="form-control"
+                               placeholder="Enter telephone number" />
+
+                        <span asp-validation-for="TelephoneNumber"
+                              class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label">
+                            Email Address (Optional)
+                        </label>
+
+                        <input asp-for="Email"
+                               type="email"
+                               class="form-control"
+                               placeholder="Enter email address" />
+
+                        <span asp-validation-for="Email"
+                              class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="VATNumber" class="form-label">
+                            VAT Number (Optional)
+                        </label>
+
+                        <input asp-for="VATNumber"
+                               class="form-control"
+                               placeholder="Enter VAT number" />
+
+                        <span asp-validation-for="VATNumber"
+                              class="text-danger small"></span>
+                    </div>
+
                 </div>
-                <div class="mb-3">
-                    <label asp-for="Surname" class="form-label">Surname</label>
-                    <input asp-for="Surname" class="form-control" placeholder="Enter Customer Surname">
-                    <span asp-validation-for="Surname" class="text-danger small"></span>
-                </div>
-                <div class="mb-3">
-                    <label asp-for="IdNumber" class="form-label">ID Number</label>
-                    <input asp-for="IdNumber" class="form-control" placeholder="Enter ID Number">
-                    <span asp-validation-for="IdNumber" class="text-danger small"></span>
-                </div>
-                <div class="mb-3">
-                    <label asp-for="CellNumber" class="form-label">Cell Number</label>
-                    <input asp-for="CellNumber" class="form-control" placeholder="Enter Cell Number">
-                    <span asp-validation-for="CellNumber" class="text-danger small"></span>
-                </div>
-                <div class="mb-3">
-                    <label asp-for="TelephoneNumber" class="form-label">Telephone Number (Optional)</label>
-                    <input asp-for="TelephoneNumber" class="form-control" placeholder="Enter Telephone Number">
-                </div>
-                <div class="mb-3">
-                    <label asp-for="Email" class="form-label">Email (Optional)</label>
-                    <input asp-for="Email" type="email" class="form-control" placeholder="Enter Email Address">
-                    <span asp-validation-for="Email" class="text-danger small"></span>
-                </div>
-                <div class="mb-3">
-                    <label asp-for="VATNumber" class="form-label">VAT Number (Optional)</label>
-                    <input asp-for="VATNumber" class="form-control" placeholder="Enter VAT Number">
-                </div>
+
             </div>
 
-            <!-- Right Column -->
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label asp-for="PhysicalAddress" class="form-label">Physical Address</label>
-                    <textarea asp-for="PhysicalAddress" class="form-control" rows="2" placeholder="Enter Physical Address"></textarea>
-                    <span asp-validation-for="PhysicalAddress" class="text-danger small"></span>
-                </div>
-                <div class="mb-3">
-                    <label asp-for="DeliveryAddress" class="form-label">Delivery Address (Optional)</label>
-                    <textarea asp-for="DeliveryAddress" class="form-control" rows="2" placeholder="Enter Delivery Address"></textarea>
+            <!-- RIGHT: BUSINESS INFORMATION -->
+            <div class="col-lg-6">
+
+                <div class="customer-form-section">
+
+                    <h5 class="customer-section-title">
+                        <i class="bi bi-building me-2"></i>
+                        Business Information
+                    </h5>
+
+                    <p class="customer-section-subtitle">
+                        Configure addresses, customer groups and payment preferences.
+                    </p>
+
+                    <div class="mb-3">
+                        <label asp-for="PhysicalAddress" class="form-label">
+                            Physical Address
+                        </label>
+
+                        <textarea asp-for="PhysicalAddress"
+                                  class="form-control"
+                                  rows="2"
+                                  placeholder="Enter physical address"></textarea>
+
+                        <span asp-validation-for="PhysicalAddress"
+                              class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="DeliveryAddress" class="form-label">
+                            Delivery Address (Optional)
+                        </label>
+
+                        <textarea asp-for="DeliveryAddress"
+                                  class="form-control"
+                                  rows="2"
+                                  placeholder="Enter delivery address"></textarea>
+
+                        <span asp-validation-for="DeliveryAddress"
+                              class="text-danger small"></span>
+                    </div>
+
+                    <!-- CUSTOMER GROUP -->
+                    <div class="mb-3">
+
+                        <label asp-for="CustomerGroup" class="form-label">
+                            Customer Group
+                        </label>
+
+                        <select asp-for="CustomerGroup"
+                                class="form-select"
+                                id="customerGroupSelect">
+
+                            <option value="">Select Group</option>
+                            <option value="Wholesale">Wholesale</option>
+                            <option value="Retail">Retail</option>
+                            <option value="Other">Other...</option>
+
+                        </select>
+
+                        <span asp-validation-for="CustomerGroup"
+                              class="text-danger small"></span>
+
+                    </div>
+
+                    <!-- CUSTOM CUSTOMER GROUP -->
+                    <div class="mb-3 d-none" id="otherGroupWrapper">
+
+                        <label for="customGroupInput" class="form-label">
+                            New Group Name
+                        </label>
+
+                        <input type="text"
+                               id="customGroupInput"
+                               class="form-control"
+                               placeholder="Enter new group name" />
+
+                    </div>
+
+                    <!-- PAYMENT TERMS -->
+                    <div class="mb-3">
+
+                        <label asp-for="PaymentTerms" class="form-label">
+                            Payment Terms
+                        </label>
+
+                        <select asp-for="PaymentTerms" class="form-select">
+
+                            <option value="">Select Payment Terms</option>
+                            <option value="COD">COD</option>
+                            <option value="7 Days">7 Days</option>
+                            <option value="14 Days">14 Days</option>
+                            <option value="21 Days">21 Days</option>
+                            <option value="28 Days">28 Days</option>
+                            <option value="30 Days">30 Days</option>
+
+                        </select>
+
+                        <span asp-validation-for="PaymentTerms"
+                              class="text-danger small"></span>
+
+                    </div>
+
+                    <!-- PAYMENT METHOD -->
+                    <div class="mb-3">
+
+                        <label asp-for="PaymentMethod" class="form-label">
+                            Payment Method
+                        </label>
+
+                        <select asp-for="PaymentMethod" class="form-select">
+
+                            <option value="">Select Payment Method</option>
+                            <option value="EFT">EFT</option>
+                            <option value="Cash">Cash</option>
+                            <option value="COD">COD</option>
+                            <option value="Up-Front Payment">
+                                Up-Front Payment
+                            </option>
+
+                        </select>
+
+                        <span asp-validation-for="PaymentMethod"
+                              class="text-danger small"></span>
+
+                    </div>
+
+                    <!-- SALES REPRESENTATIVE -->
+                    <div class="mb-3">
+
+                        <label asp-for="SalesRepresentativeId" class="form-label">
+                            Sales Representative
+                        </label>
+
+                        <select asp-for="SalesRepresentativeId"
+                                class="form-select"
+                                asp-items="ViewBag.SalesRepresentatives">
+
+                            <option value="">Unassigned</option>
+
+                        </select>
+
+                        <span asp-validation-for="SalesRepresentativeId"
+                              class="text-danger small"></span>
+
+                    </div>
+
                 </div>
 
-                <!-- Group Dropdown -->
-                <div class="mb-3">
-                    <label asp-for="CustomerGroup" class="form-label">Group</label>
-                    <select asp-for="CustomerGroup" class="form-select" id="customerGroupSelect">
-                        <option value="" selected disabled>Select Group</option>
-                        <option value="Wholesale">Wholesale</option>
-                        <option value="Retail">Retail</option>
-                        <option value="Other">Other...</option>
-                    </select>
-                    <span asp-validation-for="CustomerGroup" class="text-danger small"></span>
-                </div>
-
-                <!-- Hidden Input for Custom Group -->
-                <div class="mb-3 d-none" id="otherGroupWrapper">
-                    <label class="form-label">New Group Name</label>
-                    <input type="text" class="form-control" id="customGroupInput" placeholder="Enter new group name">
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="PaymentTerms" class="form-label">Payment Terms</label>
-                    <select asp-for="PaymentTerms" class="form-select">
-                        <option value="" selected disabled>Select Payment Terms</option>
-                        <option value="COD">COD</option>
-                        <option value="7 Days">7 Days</option>
-                        <option value="14 Days">14 Days</option>
-                        <option value="21 Days">21 Days</option>
-                        <option value="28 Days">28 Days</option>
-                        <option value="30 Days">30 Days</option>
-                    </select>
-                    <span asp-validation-for="PaymentTerms" class="text-danger small"></span>
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="PaymentMethod" class="form-label">Payment Method</label>
-                    <select asp-for="PaymentMethod" class="form-select">
-                        <option value="" selected disabled>Select Payment Method</option>
-                        <option value="EFT">EFT</option>
-                        <option value="Cash">Cash</option>
-                        <option value="COD">COD</option>
-                        <option value="Up-Front Payment">Up-Front Payment</option>
-
-                    </select>
-                    <span asp-validation-for="PaymentMethod" class="text-danger small"></span>
-                </div>
-
-                <!-- Sales Rep Dropdown -->
-                <div class="mb-3">
-                    <label asp-for="SalesRepresentativeId" class="form-label">Sales Rep</label>
-                    <select asp-for="SalesRepresentativeId" class="form-select" asp-items="ViewBag.SalesRepresentatives">
-                        <option value="">Unassigned</option>
-                    </select>
-                    <span asp-validation-for="SalesRepresentativeId" class="text-danger small"></span>
-                </div>
             </div>
 
-            <!-- Full Width Notes -->
+            <!-- NOTES -->
             <div class="col-12">
-                <div class="mb-4">
-                    <label asp-for="Notes" class="form-label">Notes</label>
-                    <textarea asp-for="Notes" class="form-control" rows="3" placeholder="Optional"></textarea>
+
+                <div class="customer-form-section">
+
+                    <h5 class="customer-section-title">
+                        <i class="bi bi-journal-text me-2"></i>
+                        Additional Information
+                    </h5>
+
+                    <p class="customer-section-subtitle">
+                        Add any additional information relevant to this customer.
+                    </p>
+
+                    <div class="mb-0">
+
+                        <label asp-for="Notes" class="form-label">
+                            Notes (Optional)
+                        </label>
+
+                        <textarea asp-for="Notes"
+                                  class="form-control"
+                                  rows="3"
+                                  placeholder="Enter additional customer notes"></textarea>
+
+                        <span asp-validation-for="Notes"
+                              class="text-danger small"></span>
+
+                    </div>
+
                 </div>
+
             </div>
+
         </div>
 
-        <div class="d-flex justify-content-end gap-3 mt-2">
-            <button type="button" class="btn btn-link text-decoration-none text-secondary align-self-center" onclick="window.location.href='@Url.Action("CustomerList", "Customers")'">Cancel</button>
-            <button type="submit" class="btn btn-custom-save">Save Customer</button>
+        <!-- FORM ACTIONS -->
+        <div class="customer-form-actions">
+
+            <a asp-controller="Customers"
+               asp-action="CustomerList"
+               class="customer-btn-outline">
+
+                Cancel
+
+            </a>
+
+            <button type="submit" class="customer-btn-primary">
+
+                <i class="bi bi-check-lg"></i>
+                Save Customer
+
+            </button>
+
         </div>
+
     </form>
+
 </div>
 
 @section Scripts {
+
     <partial name="_ValidationScriptsPartial" />
 
     <script>
+        // Handles the custom customer group option.
         document.addEventListener("DOMContentLoaded", function () {
+
             const groupSelect = document.getElementById("customerGroupSelect");
             const otherWrapper = document.getElementById("otherGroupWrapper");
             const customInput = document.getElementById("customGroupInput");
 
-            groupSelect.addEventListener("change", function () {
-                if (this.value === "Other") {
-                    otherWrapper.classList.remove("d-none");
-                    customInput.focus();
-                } else {
-                    otherWrapper.classList.add("d-none");
+            if (!groupSelect || !otherWrapper || !customInput) {
+                return;
+            }
+
+            function updateGroupField() {
+
+                const isOther = groupSelect.value === "Other";
+
+                otherWrapper.classList.toggle("d-none", !isOther);
+
+                customInput.required = isOther;
+
+                if (!isOther) {
                     customInput.value = "";
                 }
+            }
+
+            groupSelect.addEventListener("change", function () {
+
+                updateGroupField();
+
+                if (groupSelect.value === "Other") {
+                    customInput.focus();
+                }
+
             });
 
+            updateGroupField();
+
             const form = groupSelect.closest("form");
+
             if (form) {
-                form.addEventListener("submit", function () {
-                    if (groupSelect.value === "Other" && customInput.value.trim() !== "") {
-                        const customVal = customInput.value.trim();
-                        const newOption = new Option(customVal, customVal, true, true);
-                        groupSelect.add(newOption);
+
+                form.addEventListener("submit", function (event) {
+
+                    if (groupSelect.value !== "Other") {
+                        return;
                     }
+
+                    const customValue = customInput.value.trim();
+
+                    if (!customValue) {
+
+                        event.preventDefault();
+
+                        customInput.setCustomValidity(
+                            "Please enter a customer group name."
+                        );
+
+                        customInput.reportValidity();
+                        return;
+                    }
+
+                    customInput.setCustomValidity("");
+
+                    const newOption = new Option(
+                        customValue,
+                        customValue,
+                        true,
+                        true
+                    );
+
+                    groupSelect.add(newOption);
+
                 });
+
             }
+
+            customInput.addEventListener("input", function () {
+                customInput.setCustomValidity("");
+            });
+
         });
     </script>
 }

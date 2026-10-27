@@ -5,10 +5,13 @@
 
     var customers = Model?.ToList() ?? new List<FMCGEnterpriseManagementSystem.ViewModels.CustomerViewModel>();
     var totalCustomers = customers.Count;
+
     var assignedCustomers = customers.Count(c =>
         !string.IsNullOrWhiteSpace(c.SalesRep) &&
         !c.SalesRep.Equals("Unassigned", StringComparison.OrdinalIgnoreCase));
+
     var unassignedCustomers = totalCustomers - assignedCustomers;
+
     var customerGroups = customers
         .Where(c => !string.IsNullOrWhiteSpace(c.CustomerGroup))
         .Select(c => c.CustomerGroup)
@@ -18,349 +21,236 @@
     var isAdministrator = User.IsInRole("Administrator");
 }
 
-<div class="content-card">
+<div class="customer-page">
 
-    <!-- Header -->
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
-
+    <!-- PAGE HEADER -->
+    <div class="customer-page-header">
         <div>
-            <h2 class="fw-bold mb-1">Customers</h2>
-            <p class="text-muted mb-0">
+            <h2 class="customer-page-title">Customer Management</h2>
+            <p class="customer-page-subtitle">
                 Manage customer accounts, contact information and sales assignments.
             </p>
         </div>
 
-
-        <!-- Header Actions -->
-        <div class="d-flex flex-wrap gap-2">
-
+        <div class="customer-header-actions">
             @if (isAdministrator)
             {
                 <a asp-controller="Customers"
                    asp-action="RecentlyDeleted"
-                   class="btn btn-outline-secondary">
-
-                    <i class="bi bi-trash3 me-1"></i>
+                   class="customer-btn-outline">
+                    <i class="bi bi-trash3"></i>
                     Recently Deleted
-
                 </a>
             }
 
-
             <a asp-controller="Customers"
                asp-action="AddCustomer"
-               class="btn btn-action-primary">
-
-                <i class="bi bi-plus-lg me-1"></i>
+               class="customer-btn-primary">
+                <i class="bi bi-plus-lg"></i>
                 New Customer
-
             </a>
-
         </div>
-
     </div>
 
-
-    <!-- Summary Cards -->
+    <!-- SUMMARY CARDS -->
     <div class="row g-3 mb-4">
 
         <div class="col-6 col-xl-3">
-            <div class="border rounded-3 p-3 h-100 bg-light">
-                <div class="text-muted small mb-1">
-                    Total Customers
-                </div>
-
-                <div class="fs-3 fw-bold">
-                    @totalCustomers
-                </div>
+            <div class="customer-stat-card">
+                <div class="customer-stat-label">Total Customers</div>
+                <div class="customer-stat-value">@totalCustomers</div>
             </div>
         </div>
 
-
         <div class="col-6 col-xl-3">
-            <div class="border rounded-3 p-3 h-100 bg-light">
-                <div class="text-muted small mb-1">
-                    Assigned to Sales Rep
-                </div>
-
-                <div class="fs-3 fw-bold">
-                    @assignedCustomers
-                </div>
+            <div class="customer-stat-card assigned">
+                <div class="customer-stat-label">Assigned to Sales Rep</div>
+                <div class="customer-stat-value">@assignedCustomers</div>
             </div>
         </div>
 
-
         <div class="col-6 col-xl-3">
-            <div class="border rounded-3 p-3 h-100 bg-light">
-                <div class="text-muted small mb-1">
-                    Unassigned
-                </div>
-
-                <div class="fs-3 fw-bold">
-                    @unassignedCustomers
-                </div>
+            <div class="customer-stat-card unassigned">
+                <div class="customer-stat-label">Unassigned Customers</div>
+                <div class="customer-stat-value">@unassignedCustomers</div>
             </div>
         </div>
 
-
         <div class="col-6 col-xl-3">
-            <div class="border rounded-3 p-3 h-100 bg-light">
-                <div class="text-muted small mb-1">
-                    Customer Groups
-                </div>
-
-                <div class="fs-3 fw-bold">
-                    @customerGroups
-                </div>
+            <div class="customer-stat-card groups">
+                <div class="customer-stat-label">Customer Groups</div>
+                <div class="customer-stat-value">@customerGroups</div>
             </div>
         </div>
 
     </div>
 
+    <!-- SEARCH -->
+    <div class="customer-filter-panel">
+        <form method="get"
+              asp-controller="Customers"
+              asp-action="CustomerList">
 
-    <!-- Search -->
-    <form method="get"
-          asp-controller="Customers"
-          asp-action="CustomerList"
-          class="mb-4">
-
-        <div class="row g-2 align-items-end">
-
-            <div class="col-md-7 col-lg-5">
-
-                <label class="form-label fw-semibold">
-                    Search Customers
-                </label>
-
-                <div class="input-group">
-
-                    <span class="input-group-text bg-white">
-                        <i class="bi bi-search"></i>
-                    </span>
+            <div class="row g-3 align-items-end">
+                <div class="col-md-8">
+                    <label class="customer-filter-label">
+                        Search Customers
+                    </label>
 
                     <input type="text"
                            name="searchKeyword"
                            value="@Context.Request.Query["searchKeyword"]"
                            class="form-control"
-                           placeholder="Search name, email or contact number..." />
-
+                           placeholder="Search customer name, email or contact number..." />
                 </div>
 
+                <div class="col-md-2">
+                    <button type="submit"
+                            class="customer-btn-primary w-100">
+                        <i class="bi bi-search"></i>
+                        Search
+                    </button>
+                </div>
+
+                <div class="col-md-2">
+                    <a asp-controller="Customers"
+                       asp-action="CustomerList"
+                       class="customer-btn-outline w-100">
+                        Clear
+                    </a>
+                </div>
             </div>
+        </form>
+    </div>
 
+    <!-- CUSTOMER TABLE -->
+    <div class="customer-table-container">
+        <table class="customer-table">
 
-            <div class="col-auto">
-
-                <button type="submit"
-                        class="btn btn-action-primary px-4">
-
-                    Search
-
-                </button>
-
-            </div>
-
-
-            <div class="col-auto">
-
-                <a asp-controller="Customers"
-                   asp-action="CustomerList"
-                   class="btn btn-outline-secondary px-4">
-
-                    Clear
-
-                </a>
-
-            </div>
-
-        </div>
-
-    </form>
-
-
-    <!-- Customer Table -->
-    <div class="table-responsive">
-
-        <table class="table table-hover align-middle border mb-0">
-
-            <thead class="table-light">
-
+            <thead>
                 <tr>
-                    <th class="py-3">Customer</th>
-                    <th class="py-3">Contact</th>
-                    <th class="py-3">Address</th>
-                    <th class="py-3">Group</th>
-                    <th class="py-3">Payment Terms</th>
-                    <th class="py-3">Sales Rep</th>
-                    <th class="py-3 text-center">Actions</th>
+                    <th>Customer</th>
+                    <th>Contact</th>
+                    <th>Address</th>
+                    <th>Group</th>
+                    <th>Payment Terms</th>
+                    <th>Sales Rep</th>
+                    <th>Actions</th>
                 </tr>
-
             </thead>
 
-
             <tbody>
-
                 @if (customers.Any())
                 {
                     foreach (var customer in customers)
                     {
                         <tr>
-
-                            <!-- Customer -->
-                            <td class="py-3">
-
-                                <div class="fw-bold">
+                            <td>
+                                <div class="customer-name">
                                     @customer.Name @customer.Surname
                                 </div>
 
-                                <div class="small text-muted">
+                                <div class="customer-secondary-text">
                                     @customer.Email
                                 </div>
 
                                 @if (!string.IsNullOrWhiteSpace(customer.VATNumber))
                                 {
-                                    <div class="small text-muted">
+                                    <div class="customer-secondary-text">
                                         VAT: @customer.VATNumber
                                     </div>
                                 }
-
                             </td>
 
-
-                            <!-- Contact -->
-                            <td class="py-3">
-
-                                <div>
-                                    <i class="bi bi-phone me-1 text-muted"></i>
-                                    @customer.CellNumber
-                                </div>
+                            <td>
+                                <div>@customer.CellNumber</div>
 
                                 @if (!string.IsNullOrWhiteSpace(customer.TelephoneNumber))
                                 {
-                                    <div class="small text-muted mt-1">
-
-                                        <i class="bi bi-telephone me-1"></i>
+                                    <div class="customer-secondary-text">
                                         @customer.TelephoneNumber
-
                                     </div>
                                 }
-
                             </td>
 
-
-                            <!-- Address -->
-                            <td class="py-3"
-                                style="max-width: 220px;">
-
-                                <div>
-                                    @customer.PhysicalAddress
-                                </div>
+                            <td style="max-width: 220px;">
+                                @customer.PhysicalAddress
 
                                 @if (!string.IsNullOrWhiteSpace(customer.DeliveryAddress) &&
                                      customer.DeliveryAddress != customer.PhysicalAddress)
                                 {
-                                    <div class="small text-muted mt-1">
+                                    <div class="customer-secondary-text">
                                         Delivery: @customer.DeliveryAddress
                                     </div>
                                 }
-
                             </td>
 
-
-                            <!-- Group -->
-                            <td class="py-3">
-
-                                <span class="badge bg-secondary">
+                            <td>
+                                <span class="customer-badge customer-badge-group">
                                     @customer.CustomerGroup
                                 </span>
-
                             </td>
 
+                            <td>@customer.PaymentTerms</td>
 
-                            <!-- Payment Terms -->
-                            <td class="py-3">
-                                @customer.PaymentTerms
-                            </td>
-
-
-                            <!-- Sales Rep -->
-                            <td class="py-3">
-
+                            <td>
                                 @if (string.IsNullOrWhiteSpace(customer.SalesRep) ||
-                                     customer.SalesRep.Equals(
-                                         "Unassigned",
-                                         StringComparison.OrdinalIgnoreCase))
+                                     customer.SalesRep.Equals("Unassigned", StringComparison.OrdinalIgnoreCase))
                                 {
-                                    <span class="badge bg-warning text-dark">
+                                    <span class="customer-badge customer-badge-unassigned">
                                         Unassigned
                                     </span>
                                 }
                                 else
                                 {
-                                    <span class="fw-semibold">
+                                    <span class="customer-badge customer-badge-assigned">
                                         @customer.SalesRep
                                     </span>
                                 }
-
                             </td>
 
-
-                            <!-- Actions -->
-                            <td class="py-3 text-center">
-
-                                <div class="d-flex justify-content-center gap-2">
-
+                            <td>
+                                <div class="customer-actions">
                                     <a asp-controller="Customers"
                                        asp-action="Edit"
                                        asp-route-id="@customer.CustomerId"
-                                       class="btn btn-sm btn-warning">
-
-                                        <i class="bi bi-pencil-square me-1"></i>
+                                       class="customer-action-btn customer-action-edit">
+                                        <i class="bi bi-pencil-square"></i>
                                         Edit
-
                                     </a>
-
 
                                     @if (isAdministrator)
                                     {
                                         <a asp-controller="Customers"
                                            asp-action="Delete"
                                            asp-route-id="@customer.CustomerId"
-                                           class="btn btn-sm btn-danger">
-
-                                            <i class="bi bi-trash me-1"></i>
+                                           class="customer-action-btn customer-action-delete">
+                                            <i class="bi bi-trash"></i>
                                             Delete
-
                                         </a>
                                     }
-
                                 </div>
-
                             </td>
-
                         </tr>
                     }
                 }
                 else
                 {
                     <tr>
-
-                        <td colspan="7"
-                            class="text-center text-muted py-5">
-
-                            <i class="bi bi-people fs-2 d-block mb-2"></i>
-
-                            No customers found.
-
+                        <td colspan="7">
+                            <div class="customer-empty-state">
+                                <i class="bi bi-people fs-2 d-block mb-2"></i>
+                                <strong>No customers found.</strong>
+                                <p class="mb-0 mt-2">
+                                    Try a different search or add a new customer.
+                                </p>
+                            </div>
                         </td>
-
                     </tr>
                 }
-
             </tbody>
 
         </table>
-
     </div>
 
 </div>

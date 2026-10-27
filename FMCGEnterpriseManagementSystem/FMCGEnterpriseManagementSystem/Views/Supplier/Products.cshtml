@@ -1,75 +1,60 @@
 ﻿@*
-    Purpose: Products supplied by one supplier.
-    Authors: iqran0906 (from git history)
+    Purpose: Display products supplied by one supplier.
+    Original author: iqran0906 (from git history).
+    UI styling updated to match the final-fixes design.
 *@
 @model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.ProductViewModel>
 
 @{
     ViewData["Title"] = "Supplier Products";
+
+    var products = Model?.ToList()
+        ?? new List<FMCGEnterpriseManagementSystem.ViewModels.ProductViewModel>();
 }
 
-<div class="content-card">
+<div class="supplier-page">
 
-    <!-- Header -->
-    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
-
+    <div class="supplier-page-header">
         <div>
-            <h2 class="fw-bold mb-1" style="color:#1c323d;">
-                @ViewBag.SupplierName
-            </h2>
-
-            <p class="text-muted mb-0">
+            <h2 class="supplier-page-title">@ViewBag.SupplierName</h2>
+            <p class="supplier-page-subtitle">
                 Products supplied by this supplier.
             </p>
         </div>
 
         <a asp-controller="Supplier"
            asp-action="SupplierList"
-           class="btn btn-outline-secondary">
-            ← Back to Suppliers
+           class="supplier-btn-outline">
+            <i class="bi bi-arrow-left"></i>
+            Back to Suppliers
         </a>
-
     </div>
 
-    <!-- Summary -->
+    <!-- PRODUCT SUMMARY -->
     <div class="row g-3 mb-4">
 
-        <div class="col-lg-3 col-md-6">
-            <div class="border rounded-3 p-3 bg-white h-100">
-
-                <div class="text-muted small mb-1">
-                    Products Supplied
-                </div>
-
-                <div class="fs-3 fw-bold"
-                     style="color:#1c323d;">
-                    @Model.Count()
-                </div>
-
+        <div class="col-6 col-xl-3">
+            <div class="supplier-stat-card">
+                <div class="supplier-stat-label">Products Supplied</div>
+                <div class="supplier-stat-value">@products.Count</div>
             </div>
         </div>
 
-        <div class="col-lg-3 col-md-6">
-            <div class="border rounded-3 p-3 bg-white h-100">
-
-                <div class="text-muted small mb-1">
-                    Active Products
+        <div class="col-6 col-xl-3">
+            <div class="supplier-stat-card active">
+                <div class="supplier-stat-label">Active Products</div>
+                <div class="supplier-stat-value">
+                    @products.Count(p => p.IsActive)
                 </div>
-
-                <div class="fs-3 fw-bold"
-                     style="color:#1c323d;">
-                    @Model.Count(p => p.IsActive)
-                </div>
-
             </div>
         </div>
 
     </div>
 
-    <!-- Products -->
-    <div class="table-responsive">
+    <!-- PRODUCT TABLE -->
+    <div class="supplier-table-container">
 
-        <table class="custom-data-table align-middle">
+        <table class="supplier-table">
 
             <thead>
                 <tr>
@@ -79,45 +64,44 @@
                     <th>Cost Price</th>
                     <th>Selling Price</th>
                     <th>Status</th>
-                    <th class="text-center">Action</th>
+                    <th>Action</th>
                 </tr>
             </thead>
 
             <tbody>
 
-                @if (Model.Any())
+                @if (products.Any())
                 {
-                    foreach (var product in Model)
+                    foreach (var product in products)
                     {
                         <tr>
-
                             <td>
-                                <strong>@product.ProductCode</strong>
+                                <span class="supplier-name">
+                                    @product.ProductCode
+                                </span>
                             </td>
 
                             <td>
-                                <div class="fw-semibold">
+                                <div class="supplier-name">
                                     @product.ProductName
                                 </div>
 
                                 @if (!string.IsNullOrWhiteSpace(product.Description))
                                 {
-                                    <div class="small text-muted">
+                                    <div class="supplier-secondary-text">
                                         @product.Description
                                     </div>
                                 }
                             </td>
 
-                            <td>
-                                @product.Category
-                            </td>
+                            <td>@product.Category</td>
 
                             <td>
                                 <div class="fw-semibold">
                                     R @product.CostExVat.ToString("N2")
                                 </div>
 
-                                <div class="small text-muted">
+                                <div class="supplier-secondary-text">
                                     R @product.CostIncVat.ToString("N2") incl. VAT
                                 </div>
                             </td>
@@ -131,46 +115,43 @@
                             <td>
                                 @if (product.IsActive)
                                 {
-                                    <span class="badge bg-success px-3 py-2">
+                                    <span class="supplier-badge supplier-badge-active">
                                         Active
                                     </span>
                                 }
                                 else
                                 {
-                                    <span class="badge bg-danger px-3 py-2">
+                                    <span class="supplier-badge supplier-badge-inactive">
                                         Inactive
                                     </span>
                                 }
                             </td>
 
-                            <td class="text-center">
-
-                                <a asp-controller="Products"
-                                   asp-action="Edit"
-                                   asp-route-id="@product.ProductId"
-                                   class="btn btn-warning btn-sm">
-                                    ✎ Edit
-                                </a>
-
+                            <td>
+                                <div class="supplier-actions">
+                                    <a asp-controller="Products"
+                                       asp-action="Edit"
+                                       asp-route-id="@product.ProductId"
+                                       class="supplier-action-btn supplier-action-edit">
+                                        <i class="bi bi-pencil-square"></i>
+                                        Edit
+                                    </a>
+                                </div>
                             </td>
-
                         </tr>
                     }
                 }
                 else
                 {
                     <tr>
-                        <td colspan="7"
-                            class="text-center py-5">
-
-                            <div class="fw-semibold mb-1">
-                                No products linked to this supplier
+                        <td colspan="7">
+                            <div class="supplier-empty-state">
+                                <i class="bi bi-box-seam fs-2 d-block mb-2"></i>
+                                <strong>No products linked to this supplier</strong>
+                                <p class="mb-0 mt-2">
+                                    Products assigned to @ViewBag.SupplierName will appear here.
+                                </p>
                             </div>
-
-                            <div class="small text-muted">
-                                Products assigned to @ViewBag.SupplierName will appear here.
-                            </div>
-
                         </td>
                     </tr>
                 }

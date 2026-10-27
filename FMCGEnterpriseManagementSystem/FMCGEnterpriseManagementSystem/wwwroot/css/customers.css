@@ -1,0 +1,410 @@
+﻿/* ==========================================================
+   EXCLUSIVE DISTRIBUTORS - CUSTOMER MANAGEMENT
+  
+   References:
+   Bootstrap (n.d.) Tables, Forms and Cards.
+   https://getbootstrap.com/docs/5.3/
+   ========================================================== */
+
+/* MAIN PAGE */
+
+.customer-page {
+    background: #e6edf1;
+    border: 1px solid rgba(53, 127, 145, 0.18);
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 30px;
+    min-height: 75vh;
+    color: #183244;
+}
+
+/* PAGE HEADER */
+
+.customer-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 26px;
+}
+
+.customer-page-title {
+    color: #183244;
+    font-size: 30px;
+    font-weight: 800;
+    margin-bottom: 5px;
+}
+
+.customer-page-subtitle {
+    color: #667988;
+    font-size: 15px;
+    margin-bottom: 0;
+}
+
+.customer-header-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* BUTTONS */
+
+.customer-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    background: #357f91;
+    border: 1px solid #357f91;
+    color: #fff;
+    border-radius: 6px;
+    padding: 10px 18px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+    .customer-btn-primary:hover {
+        background: #286675;
+        color: #fff;
+    }
+
+.customer-btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    background: transparent;
+    border: 1px solid #a8b1bb;
+    color: #536475;
+    border-radius: 6px;
+    padding: 10px 18px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+    .customer-btn-outline:hover {
+        background: #dce6eb;
+        color: #183244;
+    }
+
+/* SUMMARY CARDS */
+
+.customer-stat-card {
+    background: #f8fafb;
+    border: 1px solid #c9d9df;
+    border-top: 3px solid #357f91;
+    border-radius: 8px;
+    padding: 20px;
+    min-height: 112px;
+    height: 100%;
+    box-shadow: 0 3px 12px rgba(15, 40, 55, 0.05);
+}
+
+    .customer-stat-card.assigned {
+        border-top-color: #27815b;
+    }
+
+    .customer-stat-card.unassigned {
+        border-top-color: #d4a017;
+    }
+
+    .customer-stat-card.groups {
+        border-top-color: #8293a1;
+    }
+
+.customer-stat-label {
+    color: #667988;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.customer-stat-value {
+    color: #142d40;
+    font-size: 28px;
+    font-weight: 800;
+}
+
+/* SEARCH AND FILTERS */
+
+.customer-filter-panel {
+    background: #edf3f5;
+    border: 1px solid #c9d9df;
+    border-radius: 8px;
+    padding: 22px;
+    margin: 25px 0;
+}
+
+.customer-filter-label {
+    color: #465768;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 7px;
+}
+
+.customer-page .form-control,
+.customer-page .form-select {
+    background: #f7f9fa;
+    border: 1px solid #d3dbe2;
+    border-radius: 6px;
+    min-height: 44px;
+    color: #263b4b;
+}
+
+    .customer-page .form-control:focus,
+    .customer-page .form-select:focus {
+        border-color: #357f91;
+        box-shadow: 0 0 0 3px rgba(53, 127, 145, 0.12);
+    }
+
+/* TABLE */
+
+.customer-table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.customer-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+    font-size: 16px;
+}
+
+    .customer-table thead th {
+        background: #dce9ee;
+        color: #17384a;
+        padding: 16px 12px;
+        border-top: 1px solid #c9d9df;
+        border-bottom: 1px solid #c9d9df;
+        font-weight: 700;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    .customer-table tbody td {
+        background: #f8fafb;
+        color: #344657;
+        padding: 16px 12px;
+        border-top: 1px solid #e0e5ea;
+        border-bottom: 1px solid #e0e5ea;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .customer-table tbody tr td:first-child {
+        border-left: 1px solid #e0e5ea;
+    }
+
+    .customer-table tbody tr td:last-child {
+        border-right: 1px solid #e0e5ea;
+    }
+
+    .customer-table tbody tr:hover td {
+        background: #edf4f6;
+    }
+
+.customer-name {
+    color: #183244;
+    font-weight: 700;
+}
+
+.customer-secondary-text {
+    color: #788592;
+    font-size: 12px;
+}
+
+/* BADGES */
+
+.customer-badge {
+    display: inline-block;
+    padding: 6px 11px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.customer-badge-group {
+    background: #dceff0;
+    color: #176b78;
+}
+
+.customer-badge-assigned {
+    background: #dff5e8;
+    color: #187544;
+}
+
+.customer-badge-unassigned {
+    background: #fff1c9;
+    color: #8a6400;
+}
+
+/* ACTION BUTTONS */
+
+.customer-actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.customer-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 5px;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.customer-action-edit {
+    background: #fff1c9;
+    border: 1px solid #e5c66a;
+    color: #805e00;
+}
+
+    .customer-action-edit:hover {
+        background: #ffe6a3;
+        color: #664b00;
+    }
+
+.customer-action-delete {
+    background: #fce7e9;
+    border: 1px solid #e8b7bd;
+    color: #b42334;
+}
+
+    .customer-action-delete:hover {
+        background: #f8d7da;
+        color: #92202d;
+    }
+
+.customer-action-restore {
+    background: #dff5e8;
+    border: 1px solid #b0ddc2;
+    color: #187544;
+}
+
+    .customer-action-restore:hover {
+        background: #c9ebd7;
+        color: #125a34;
+    }
+
+/* FORM SECTIONS */
+
+.customer-form-section {
+    background: #f8fafb;
+    border: 1px solid #c9d9df;
+    border-top: 3px solid #357f91;
+    border-radius: 8px;
+    padding: 25px;
+    height: 100%;
+    box-shadow: 0 3px 12px rgba(15, 40, 55, 0.05);
+}
+
+.customer-section-title {
+    color: #183244;
+    font-size: 19px;
+    font-weight: 800;
+    margin-bottom: 6px;
+}
+
+.customer-section-subtitle {
+    color: #788592;
+    font-size: 13px;
+    margin-bottom: 22px;
+}
+
+.customer-page .form-label {
+    color: #465768;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 7px;
+}
+
+.customer-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+/* EMPTY STATE */
+
+.customer-empty-state {
+    background: #f8fafb;
+    border: 1px solid #c9d9df;
+    border-radius: 8px;
+    padding: 45px 20px;
+    text-align: center;
+    color: #667988;
+}
+
+/* DELETE CONFIRMATION */
+
+.customer-delete-card {
+    background: #f8fafb;
+    border: 1px solid #e8b7bd;
+    border-top: 3px solid #dc3545;
+    border-radius: 8px;
+    padding: 25px;
+}
+
+.customer-btn-danger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    background: #dc3545;
+    border: 1px solid #dc3545;
+    color: #fff;
+    border-radius: 6px;
+    padding: 10px 18px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+    .customer-btn-danger:hover {
+        background: #bd2635;
+        color: #fff;
+    }
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+    .customer-page {
+        padding: 18px;
+    }
+
+    .customer-page-title {
+        font-size: 25px;
+    }
+
+    .customer-form-section {
+        padding: 18px;
+    }
+
+    .customer-header-actions {
+        width: 100%;
+    }
+
+        .customer-header-actions a {
+            flex: 1;
+            text-align: center;
+        }
+
+    .customer-form-actions a,
+    .customer-form-actions button {
+        flex: 1;
+        text-align: center;
+    }
+}

@@ -4,26 +4,171 @@
     ViewData["Title"] = "Delete Customer";
 }
 
-<div class="content-card">
-    <h2 class="fw-bold mb-3 text-danger">Delete Customer</h2>
-    <p class="text-muted mb-4">Are you sure you want to delete this customer? This action cannot be undone.</p>
+<div class="customer-page">
 
-    <div class="card border-danger mb-4">
-        <div class="card-body">
-            <h5 class="card-title fw-bold">@Model.Name @Model.Surname</h5>
-            <p class="card-text mb-1"><strong>Email:</strong> @Model.Email</p>
-            <p class="card-text mb-1"><strong>Cell:</strong> @Model.CellNumber</p>
-            <p class="card-text mb-0"><strong>Group:</strong> @Model.CustomerGroup</p>
+    <!-- PAGE HEADER -->
+    <div class="customer-page-header">
+
+        <div>
+            <h2 class="customer-page-title">
+                Delete Customer
+            </h2>
+
+            <p class="customer-page-subtitle">
+                Review the customer details before confirming deletion.
+            </p>
         </div>
+
+        <a asp-controller="Customers"
+           asp-action="CustomerList"
+           class="customer-btn-outline">
+
+            <i class="bi bi-arrow-left"></i>
+            Back to Customers
+
+        </a>
+
     </div>
 
-    <form asp-action="Delete" method="post">
-        @Html.AntiForgeryToken()
-        <input type="hidden" asp-for="CustomerId" />
+    <!-- DELETE CONFIRMATION -->
+    <div class="customer-delete-card">
 
-        <div class="d-flex justify-content-end gap-3">
-            <a asp-action="CustomerList" class="btn btn-secondary align-self-center">Cancel</a>
-            <button type="submit" class="btn btn-danger">Confirm Delete</button>
+        <div class="d-flex align-items-start gap-3 mb-4">
+
+            <div>
+                <i class="bi bi-exclamation-triangle-fill
+                          fs-2 text-danger"></i>
+            </div>
+
+            <div>
+
+                <h5 class="fw-bold mb-2" style="color: #183244;">
+                    Confirm Customer Deletion
+                </h5>
+
+                <p class="text-muted mb-0">
+                    Are you sure you want to delete this customer?
+                    Please review the information below before continuing.
+                </p>
+
+            </div>
+
         </div>
-    </form>
+
+        <!-- CUSTOMER DETAILS -->
+        <div class="row g-4 mb-4">
+
+            <div class="col-md-6">
+
+                <div class="customer-stat-label">
+                    Customer Name
+                </div>
+
+                <div class="customer-name">
+                    @Model.Name @Model.Surname
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="customer-stat-label">
+                    Customer ID
+                </div>
+
+                <div class="fw-semibold">
+                    #@Model.CustomerId
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="customer-stat-label">
+                    Email Address
+                </div>
+
+                <div>
+                    @(string.IsNullOrWhiteSpace(Model.Email)
+                        ? "Not provided"
+                        : Model.Email)
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="customer-stat-label">
+                    Cell Number
+                </div>
+
+                <div>
+                    @Model.CellNumber
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="customer-stat-label">
+                    Customer Group
+                </div>
+
+                <span class="customer-badge customer-badge-group">
+                    @Model.CustomerGroup
+                </span>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="customer-stat-label">
+                    Sales Representative
+                </div>
+
+                <div>
+                    @(string.IsNullOrWhiteSpace(Model.SalesRep)
+                        ? "Unassigned"
+                        : Model.SalesRep)
+                </div>
+
+            </div>
+
+        </div>
+
+        <hr class="my-4" />
+
+        <!-- DELETE FORM -->
+        <form asp-controller="Customers"
+              asp-action="Delete"
+              method="post">
+
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" asp-for="CustomerId" />
+
+            <div class="customer-form-actions">
+
+                <a asp-controller="Customers"
+                   asp-action="CustomerList"
+                   class="customer-btn-outline">
+
+                    Cancel
+
+                </a>
+
+                <button type="submit"
+                        class="customer-btn-danger">
+
+                    <i class="bi bi-trash3"></i>
+                    Confirm Delete
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
 </div>
