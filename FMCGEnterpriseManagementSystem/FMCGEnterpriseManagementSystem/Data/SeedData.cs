@@ -77,38 +77,39 @@ namespace FMCGEnterpriseManagementSystem.Data
                 return;
             }
 
-            // Checks whether the configured user already exists.
-            var user =
-                await userManager.FindByEmailAsync(email);
+            // Check whether the configured user already exists.
+            var user = await userManager.FindByEmailAsync(email);
 
-            if (user == null)
+            // Never change the password or permissions of an existing account.
+            if (user != null)
             {
-                user = new User
-                {
-                    UserName = email,
-                    Email = email,
-                    EmailConfirmed = true,
-                    IsActive = true
-                };
-
-                // Creates the user using ASP.NET Core Identity password handling.
-                var result =
-                    await userManager.CreateAsync(
-                        user,
-                        password);
-
-                if (!result.Succeeded)
-                {
-                    return;
-                }
+                return;
             }
 
-            // Ensures the seeded user has the required application role.
-            if (!await userManager.IsInRoleAsync(user, role))
+            // Create a new account only when it does not already exist.
+            user = new User
             {
-                await userManager.AddToRoleAsync(
-                    user,
-                    role);
+                UserName = email,
+                Email = email,
+                EmailConfirmed = true,
+                IsActive = true
+            };
+
+            // ASP.NET Core Identity securely hashes the password.
+            var result = await userManager.CreateAsync(user, password);
+
+            if (!result.Succeeded)
+            {
+                return;
+            }
+
+            // Assign the initial role only when the account is first created.
+            var roleResult = await userManager.AddToRoleAsync(user, role);
+
+            if (!roleResult.Succeeded)
+            {
+                throw new InvalidOperationException(
+                    $"Unable to assign the {role} role to the seeded account.");
             }
         }
     }

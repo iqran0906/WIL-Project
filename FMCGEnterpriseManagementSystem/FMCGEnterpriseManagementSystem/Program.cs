@@ -19,7 +19,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
-using System.Security.Claims;
 using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -206,87 +205,64 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 // ==========================================================
-// SEED ROLES & COMPLETE ADMIN ACCESS
+// SEED APPLICATION ROLES
 // ==========================================================
+
+// Creates missing application roles without modifying existing user accounts, passwords or permissions.
 
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
+
     try
     {
-        // Execute existing SeedData initialization
-        await SeedData.InitializeAsync(services, builder.Configuration);
+        
+        if (app.Environment.IsDevelopment()) // Seed demonstration accounts only in the Development environment
+        {
+            await SeedData.InitializeAsync(
+                services,
+                builder.Configuration);
+        }
 
-        var userManager = services.GetRequiredService<UserManager<User>>();
-        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+        var roleManager =
+            services.GetRequiredService<RoleManager<IdentityRole>>();
 
-        // Create all standard application roles
-        string[] allRoles = { "Admin", "Administrator", "Manager", "Employee", "SalesRepresentative" };
+        // Standard roles used throughout the application.
+        string[] allRoles =
+        {
+            "Admin",
+            "Administrator",
+            "Employee",
+            "SalesRepresentative"
+        };
+
         foreach (var role in allRoles)
         {
             if (!await roleManager.RoleExistsAsync(role))
             {
-                await roleManager.CreateAsync(new IdentityRole(role));
-            }
-        }
+                var result =
+                    await roleManager.CreateAsync(
+                        new IdentityRole(role));
 
-        var adminEmail = "admin@fmcg.com";
-        var adminUser = await userManager.FindByEmailAsync(adminEmail);
-
-        if (adminUser == null)
-        {
-            adminUser = new User
-            {
-                UserName = adminEmail,
-                Email = adminEmail,
-                EmailConfirmed = true,
-                IsActive = true
-            };
-
-            var createResult = await userManager.CreateAsync(adminUser, "Wholesale101@");
-            if (createResult.Succeeded)
-            {
-                foreach (var role in allRoles)
+                if (!result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(adminUser, role);
+                    throw new InvalidOperationException(
+                        $"Unable to create the role '{role}': " +
+                        string.Join(
+                            ", ",
+                            result.Errors.Select(e => e.Description)));
                 }
-            }
-        }
-        else
-        {
-            // Force reset password to ensure credentials match Wholesale101@
-            var token = await userManager.GeneratePasswordResetTokenAsync(adminUser);
-            await userManager.ResetPasswordAsync(adminUser, token, "Wholesale101@");
-
-            // Guarantee account active and verified status
-            adminUser.EmailConfirmed = true;
-            adminUser.IsActive = true;
-            await userManager.UpdateAsync(adminUser);
-
-            // Grant ALL roles to guarantee complete access to all protected routes
-            foreach (var role in allRoles)
-            {
-                if (!await userManager.IsInRoleAsync(adminUser, role))
-                {
-                    await userManager.AddToRoleAsync(adminUser, role);
-                }
-            }
-        }
-
-        // Grant explicit admin claims if policy-based authorization is used
-        if (adminUser != null)
-        {
-            var existingClaims = await userManager.GetClaimsAsync(adminUser);
-            if (!existingClaims.Any(c => c.Type == "Permission" && c.Value == "FullAccess"))
-            {
-                await userManager.AddClaimAsync(adminUser, new Claim("Permission", "FullAccess"));
             }
         }
     }
     catch (Exception ex)
     {
-        var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred while seeding full admin permissions.");
+        var logger =
+            services.GetRequiredService<ILogger<Program>>();
+
+        logger.LogError(
+            ex,
+            "An error occurred while initializing application roles.");
     }
 }
 
