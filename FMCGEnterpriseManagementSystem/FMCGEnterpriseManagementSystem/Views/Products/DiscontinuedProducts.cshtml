@@ -1,36 +1,47 @@
-﻿@model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.ProductViewModel>
+﻿@*
+    Purpose: Display discontinued products and allow reactivation.
+
+    Original authors:
+    iqran0906 and Maseeha17 (Git history).
+
+    UI update:
+    Adapted with assistance from OpenAI ChatGPT (2026).
+
+    References:
+    Bootstrap (n.d.) Tables and alerts.
+    https://getbootstrap.com/docs/5.3/content/tables/
+
+    Microsoft (n.d.) ASP.NET Core MVC views.
+    https://learn.microsoft.com/en-us/aspnet/core/mvc/views/overview
+*@
+
+@model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.ProductViewModel>
 
 @{
     ViewData["Title"] = "Discontinued Products";
 }
 
-<div class="content-card">
+<div class="product-page">
 
-    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
+    <div class="product-page-header">
 
         <div>
-
-            <h2 class="fw-bold mb-1" style="color:#1c323d;">
+            <h2 class="product-page-title">
                 Discontinued Products
             </h2>
 
-            <p class="text-muted mb-0">
+            <p class="product-page-subtitle">
                 Products that are no longer part of the active product catalogue.
             </p>
-
         </div>
 
-
         <a asp-action="Index"
-           class="btn btn-outline-secondary px-4">
-
-            <i class="bi bi-arrow-left me-1"></i>
+           class="product-btn-outline">
+            <i class="bi bi-arrow-left"></i>
             Back to Products
-
         </a>
 
     </div>
-
 
     @if (TempData["SuccessMessage"] != null)
     {
@@ -42,16 +53,16 @@
 
             <button type="button"
                     class="btn-close"
-                    data-bs-dismiss="alert">
-            </button>
+                    data-bs-dismiss="alert"
+                    aria-label="Close"></button>
 
         </div>
     }
 
+    <!-- DISCONTINUED PRODUCTS TABLE -->
+    <div class="product-table-container">
 
-    <div class="table-responsive">
-
-        <table class="custom-data-table align-middle">
+        <table class="product-table">
 
             <thead>
                 <tr>
@@ -62,10 +73,9 @@
                     <th>Cost Price</th>
                     <th>Selling Price</th>
                     <th>Status</th>
-                    <th class="text-center">Action</th>
+                    <th>Action</th>
                 </tr>
             </thead>
-
 
             <tbody>
 
@@ -76,32 +86,25 @@
                         <tr>
 
                             <td>
-                                <span class="fw-semibold">
+                                <span class="product-name">
                                     @item.ProductCode
                                 </span>
                             </td>
 
-
                             <td>
-
-                                <div class="fw-semibold">
+                                <div class="product-name">
                                     @item.ProductName
                                 </div>
 
                                 @if (!string.IsNullOrWhiteSpace(item.Description))
                                 {
-                                    <div class="small text-muted mt-1">
+                                    <div class="product-secondary-text">
                                         @item.Description
                                     </div>
                                 }
-
                             </td>
 
-
-                            <td>
-                                @item.Category
-                            </td>
-
+                            <td>@item.Category</td>
 
                             <td>
                                 @(string.IsNullOrWhiteSpace(item.SupplierName)
@@ -109,53 +112,48 @@
                                     : item.SupplierName)
                             </td>
 
-
                             <td>
-
                                 <div class="fw-semibold">
                                     R @item.CostExVat.ToString("N2")
                                 </div>
 
-                                <div class="small text-muted">
+                                <div class="product-secondary-text">
                                     R @item.CostIncVat.ToString("N2") incl. VAT
                                 </div>
-
                             </td>
 
-
                             <td>
-                                <span class="fw-semibold">
+                                <strong>
                                     R @item.SellingPrice.ToString("N2")
-                                </span>
+                                </strong>
                             </td>
 
-
                             <td>
-                                <span class="badge bg-secondary px-3 py-2">
+                                <span class="product-badge product-badge-inactive">
                                     Discontinued
                                 </span>
                             </td>
 
+                            <td>
+                                <div class="product-actions">
 
-                            <td class="text-center">
+                                    <form asp-action="Activate"
+                                          asp-route-id="@item.ProductId"
+                                          method="post">
 
-                                <form asp-action="Activate"
-                                      asp-route-id="@item.ProductId"
-                                      method="post"
-                                      class="d-inline">
+                                        @Html.AntiForgeryToken()
 
-                                    @Html.AntiForgeryToken()
+                                        <button type="submit"
+                                                class="product-action-btn product-action-activate">
 
-                                    <button type="submit"
-                                            class="btn btn-success btn-sm">
+                                            <i class="bi bi-arrow-counterclockwise"></i>
+                                            Reactivate
 
-                                        <i class="bi bi-arrow-counterclockwise me-1"></i>
-                                        Reactivate
+                                        </button>
 
-                                    </button>
+                                    </form>
 
-                                </form>
-
+                                </div>
                             </td>
 
                         </tr>
@@ -164,22 +162,21 @@
                 else
                 {
                     <tr>
+                        <td colspan="8">
 
-                        <td colspan="8"
-                            class="text-center py-5">
+                            <div class="product-empty-state">
 
-                            <i class="bi bi-archive fs-2 d-block mb-2 text-muted"></i>
+                                <i class="bi bi-archive fs-2 d-block mb-2"></i>
 
-                            <div class="fw-semibold mb-1">
-                                No Discontinued Products
-                            </div>
+                                <strong>No Discontinued Products</strong>
 
-                            <div class="text-muted small">
-                                Products you discontinue will appear here.
+                                <p class="mb-0 mt-2">
+                                    Products you discontinue will appear here.
+                                </p>
+
                             </div>
 
                         </td>
-
                     </tr>
                 }
 
