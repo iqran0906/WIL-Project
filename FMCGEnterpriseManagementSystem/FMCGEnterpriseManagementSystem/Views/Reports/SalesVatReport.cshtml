@@ -8,31 +8,34 @@
     ViewData["Title"] = "Sales VAT Report";
 }
 
-<div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+<div class="reports-page">
+    <div class="reports-page-header">
         <div>
-            <h2 class="text-white fw-bold">Sales VAT Report</h2>
-            <p class="text-light opacity-75 mb-0">Invoice sales values and recorded VAT amounts.</p>
+            <h2 class="reports-page-title">Sales VAT Report</h2>
+            <p class="reports-page-description">Invoice sales values and recorded VAT amounts.</p>
         </div>
         <partial name="_ReportToolbar" model="@("SalesVatReport")" />
     </div>
 
-    <form method="get" class="row g-3 mb-4 no-print">
+    <form method="get" class="row g-3 reports-filter-panel no-print">
         <div class="col-md-4">
-            <label class="form-label text-light fw-semibold">Start Date</label>
+            <label class="reports-filter-label">Start Date</label>
             <input type="date" name="startDate"
                    value="@ViewBag.StartDate" class="form-control" />
         </div>
 
         <div class="col-md-4">
-            <label class="form-label text-light fw-semibold">End Date</label>
+            <label class="reports-filter-label">End Date</label>
             <input type="date" name="endDate"
                    value="@ViewBag.EndDate" class="form-control" />
         </div>
 
         <div class="col-md-4 d-flex align-items-end gap-2">
-            <button class="btn btn-primary">Filter</button>
-            <a asp-action="SalesVatReport" class="btn btn-outline-light">Clear</a>
+            <button type="submit" class="reports-btn-primary">
+                <i class="bi bi-funnel"></i>
+                Apply Filter
+            </button>
+            <a asp-action="SalesVatReport" class="reports-btn-outline">Clear</a>
         </div>
     </form>
 
@@ -41,16 +44,16 @@
         <div class="alert alert-danger"><i class="bi bi-exclamation-triangle me-1"></i>@ViewBag.DateError</div>
     }
 
-    <div class="card shadow-sm">
-        <div class="card-body">
+    <div class="reports-content-card">
+        <div>
             @if (!Model.Any())
             {
                 <p class="text-muted mb-0">No VAT sales data found.</p>
             }
             else
             {
-                <div class="table-responsive">
-                    <table class="table table-hover">
+                <div class="reports-table-container">
+                    <table class="reports-table">
                         <thead>
                             <tr>
                                 <th>Invoice</th>
@@ -77,6 +80,7 @@
                         <tfoot>
                             <tr class="fw-bold">
                                 <td colspan="3">Totals</td>
+                                <div class="container-fluid">
                                 <td>R @Model.Sum(x => x.Subtotal).ToString("N2")</td>
                                 <td>R @Model.Sum(x => x.VatAmount).ToString("N2")</td>
                                 <td>R @Model.Sum(x => x.Total).ToString("N2")</td>

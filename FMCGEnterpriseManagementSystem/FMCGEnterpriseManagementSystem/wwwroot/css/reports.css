@@ -1,0 +1,515 @@
+﻿/*
+    Purpose:
+    Consistent styling for the Reports Dashboard,individual reports, report tables, filters,
+    and export toolbar.
+
+    Original Reports Module:
+    iqran0906 (2026), according to Git history.
+
+    UI Improvements:
+    Iqra Nazir (2026).
+
+    Development Assistance:
+    OpenAI ChatGPT (2026).
+
+    References:
+    Bootstrap (n.d.) Documentation.
+    Available at: https://getbootstrap.com/docs/5.3/
+
+    MDN Web Docs (n.d.) CSS.
+    Available at: https://developer.mozilla.org/en-US/docs/Web/CSS
+*/
+
+
+/* ==========================================
+   MAIN REPORT PAGE
+   ========================================== */
+
+.reports-page {
+    background: #e6edf1;
+    border: 1px solid rgba(53, 127, 145, 0.18);
+    border-radius: 15px;
+    padding: 30px;
+    min-height: 75vh;
+    color: #183244;
+    font-size: 16px;
+}
+
+.reports-page-title {
+    font-size: 30px;
+    font-weight: 800;
+    color: #183244;
+    margin-bottom: 8px;
+}
+
+.reports-page-description {
+    font-size: 16px;
+    color: #667988;
+    margin-bottom: 0;
+    line-height: 1.6;
+}
+
+.reports-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+}
+
+
+/* ==========================================
+   REPORT DASHBOARD
+   ========================================== */
+
+.reports-search-panel {
+    background: #edf3f5;
+    border: 1px solid #c9d9df;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 28px;
+}
+
+.reports-search-label {
+    font-size: 16px;
+    font-weight: 700;
+    color: #344f5e;
+    margin-bottom: 10px;
+}
+
+.reports-search-input {
+    background: #fff;
+    border: 1px solid #c5d5dc;
+    border-radius: 8px;
+    padding: 12px 15px;
+    font-size: 16px;
+    color: #183244;
+    width: 100%;
+}
+
+    .reports-search-input:focus {
+        outline: none;
+        border-color: #357f91;
+        box-shadow: 0 0 0 3px rgba(53, 127, 145, 0.13);
+    }
+
+.reports-navigation-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 12px;
+    min-height: 145px;
+    height: 100%;
+    padding: 24px;
+    background: #f8fafb;
+    border: 1px solid #c9d9df;
+    border-top: 3px solid #357f91;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: 0.2s ease;
+}
+
+    .reports-navigation-card:hover {
+        background: #edf5f7;
+        border-color: #9dbbc5;
+        transform: translateY(-2px);
+    }
+
+.reports-navigation-icon {
+    font-size: 26px;
+    color: #357f91;
+}
+
+.reports-navigation-title {
+    font-size: 19px;
+    font-weight: 800;
+    color: #183244;
+}
+
+.reports-navigation-description {
+    font-size: 14px;
+    color: #667988;
+    line-height: 1.5;
+}
+
+.reports-navigation-card:hover .reports-navigation-title {
+    color: #286675;
+}
+
+.reports-empty-message {
+    padding: 30px;
+    background: #f8fafb;
+    border: 1px dashed #c9d9df;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 16px;
+    color: #667988;
+}
+
+
+/* ==========================================
+   REPORT CONTENT CARD
+   ========================================== */
+
+.reports-content-card {
+    background: #f8fafb;
+    border: 1px solid #c9d9df;
+    border-top: 3px solid #357f91;
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 24px;
+}
+
+.reports-section-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #183244;
+    margin-bottom: 20px;
+}
+
+
+/* ==========================================
+   REPORT FILTERS
+   ========================================== */
+
+.reports-filter-panel {
+    background: #edf3f5;
+    border: 1px solid #c9d9df;
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 25px;
+}
+
+.reports-filter-label {
+    font-size: 15px;
+    font-weight: 700;
+    color: #344f5e;
+    margin-bottom: 8px;
+}
+
+.reports-page .form-control,
+.reports-page .form-select {
+    font-size: 16px;
+    border: 1px solid #c5d5dc;
+    border-radius: 8px;
+    padding: 10px 12px;
+    min-height: 45px;
+    color: #183244;
+}
+
+    .reports-page .form-control:focus,
+    .reports-page .form-select:focus {
+        border-color: #357f91;
+        box-shadow: 0 0 0 0.2rem rgba(53, 127, 145, 0.13);
+    }
+
+
+/* ==========================================
+   REPORT BUTTONS
+   ========================================== */
+
+.reports-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    background: #357f91;
+    border: 1px solid #357f91;
+    color: #fff;
+    padding: 10px 17px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+    .reports-btn-primary:hover {
+        background: #286675;
+        border-color: #286675;
+        color: #fff;
+    }
+
+.reports-btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    background: #f8fafb;
+    border: 1px solid #a9c4cc;
+    color: #357f91;
+    padding: 10px 17px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+    .reports-btn-outline:hover {
+        background: #dce9ee;
+        color: #286675;
+    }
+
+.reports-btn-pdf {
+    color: #a64040;
+    border-color: #e2bcbc;
+}
+
+    .reports-btn-pdf:hover {
+        background: #f8e5e5;
+        color: #a64040;
+    }
+
+.reports-btn-excel {
+    color: #26714e;
+    border-color: #b8dfcb;
+}
+
+    .reports-btn-excel:hover {
+        background: #dff2e8;
+        color: #26714e;
+    }
+
+.reports-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+}
+
+
+/* ==========================================
+   REPORT TABLES
+   ========================================== */
+
+.reports-table-container {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.reports-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 7px;
+    font-size: 15px;
+}
+
+    .reports-table thead th {
+        background: #dce9ee;
+        color: #344f5e;
+        font-size: 15px;
+        font-weight: 800;
+        padding: 14px 12px;
+        border: none;
+        white-space: normal;
+        vertical-align: middle;
+    }
+
+    .reports-table tbody td {
+        background: #fff;
+        color: #344f5e;
+        font-size: 15px;
+        padding: 14px 12px;
+        vertical-align: middle;
+        border-top: 1px solid #d9e4e9;
+        border-bottom: 1px solid #d9e4e9;
+        overflow-wrap: break-word;
+    }
+
+        .reports-table tbody td:first-child {
+            border-left: 1px solid #d9e4e9;
+            border-radius: 8px 0 0 8px;
+        }
+
+        .reports-table tbody td:last-child {
+            border-right: 1px solid #d9e4e9;
+            border-radius: 0 8px 8px 0;
+        }
+
+    .reports-table tbody tr:hover td {
+        background: #edf5f7;
+    }
+
+    .reports-table tfoot td {
+        background: #dce9ee;
+        color: #183244;
+        font-size: 15px;
+        font-weight: 800;
+        padding: 16px 12px;
+        border-top: 2px solid #357f91;
+    }
+
+
+/* ==========================================
+   STATUS BADGES
+   ========================================== */
+
+.reports-status {
+    display: inline-block;
+    padding: 7px 11px;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.reports-status-success {
+    background: #dff2e8;
+    color: #26714e;
+}
+
+.reports-status-danger {
+    background: #f8e5e5;
+    color: #a64040;
+}
+
+.reports-status-warning {
+    background: #fff1d8;
+    color: #946a20;
+}
+
+.reports-status-neutral {
+    background: #e6ebef;
+    color: #536b78;
+}
+
+
+/* ==========================================
+   EMPTY STATES
+   ========================================== */
+
+.reports-no-data {
+    background: #edf3f5;
+    border: 1px dashed #c9d9df;
+    border-radius: 10px;
+    padding: 35px;
+    text-align: center;
+    color: #667988;
+    font-size: 16px;
+}
+
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+
+@media (max-width: 768px) {
+    .reports-page {
+        padding: 18px;
+    }
+
+    .reports-page-title {
+        font-size: 26px;
+    }
+
+    .reports-content-card {
+        padding: 15px;
+    }
+
+    .reports-navigation-card {
+        min-height: 120px;
+    }
+}
+
+
+/* ==========================================
+   PRINT
+   ========================================== */
+
+@media print {
+    .no-print,
+    .reports-toolbar,
+    .reports-filter-panel {
+        display: none !important;
+    }
+
+    .reports-page {
+        background: white !important;
+        border: none !important;
+        padding: 0 !important;
+        min-height: auto;
+    }
+
+    .reports-content-card {
+        border: none !important;
+        padding: 0 !important;
+    }
+
+    .reports-table {
+        border-spacing: 0;
+    }
+
+        .reports-table thead th,
+        .reports-table tbody td,
+        .reports-table tfoot td {
+            border: 1px solid #ccc;
+        }
+
+        .reports-table thead {
+            display: table-header-group;
+        }
+
+        .reports-table tr {
+            break-inside: avoid;
+        }
+
+    /* ==========================================
+   REPORT PRINT IMPROVEMENTS
+
+   UI Integration: Iqra Nazir (2026)
+
+   Reference:
+   MDN Web Docs (n.d.) CSS @media print.
+   ========================================== */
+
+    @media print {
+
+        .reports-page {
+            background: #fff !important;
+            color: #000 !important;
+            padding: 0 !important;
+            border: none !important;
+        }
+
+        .reports-page-title {
+            color: #000 !important;
+            font-size: 24px;
+        }
+
+        .reports-page-description {
+            color: #444 !important;
+        }
+
+        .reports-table-container {
+            overflow: visible !important;
+        }
+
+        .reports-table {
+            width: 100%;
+            font-size: 11px;
+        }
+
+            .reports-table thead th,
+            .reports-table tbody td,
+            .reports-table tfoot td {
+                font-size: 11px;
+                padding: 7px 5px;
+            }
+
+            .reports-table thead {
+                display: table-header-group;
+            }
+
+            .reports-table tr {
+                break-inside: avoid;
+            }
+
+        .no-print {
+            display: none !important;
+        }
+    }
+}

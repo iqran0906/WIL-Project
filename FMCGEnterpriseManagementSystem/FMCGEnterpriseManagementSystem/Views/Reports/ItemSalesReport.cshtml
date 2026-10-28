@@ -1,55 +1,110 @@
 ﻿@*
-    Purpose: Item Sales report page.
-    Authors: iqran0906 (from git history)
+    File: Views/Reports/ItemSalesReport.cshtml
+
+    Purpose:
+    Displays sales performance by product,
+    including quantities sold and sales totals.
+
+    Original Author:
+    iqran0906 (from Git history).
+
+    UI Improvements:
+    Iqra Nazir (2026).
+
+    Development Assistance:
+    OpenAI ChatGPT (2026).
+
+    References:
+    Microsoft (n.d.) ASP.NET Core Razor syntax.
+    Bootstrap (n.d.) Layout and forms.
 *@
+
 @model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.Reports.ItemSalesReportViewModel>
 
 @{
     ViewData["Title"] = "Item Sales Report";
 }
 
-<div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+<div class="reports-page">
+
+    <div class="reports-page-header">
         <div>
-            <h2 class="text-white fw-bold">Item Sales Report</h2>
-            <p class="text-light opacity-75 mb-0">Sales performance by product.</p>
+            <h2 class="reports-page-title">Item Sales Report</h2>
+            <p class="reports-page-description">
+                Sales performance by product.
+            </p>
         </div>
+
         <partial name="_ReportToolbar" model="@("ItemSalesReport")" />
     </div>
 
-    <form method="get" class="row g-3 mb-4 no-print">
+    <form method="get"
+          asp-action="ItemSalesReport"
+          class="row g-3 reports-filter-panel no-print">
+
         <div class="col-md-4">
-            <label class="form-label text-light fw-semibold">Start Date</label>
-            <input type="date" name="startDate"
-                   value="@ViewBag.StartDate" class="form-control" />
+            <label for="startDate" class="reports-filter-label">
+                Start Date
+            </label>
+
+            <input type="date"
+                   id="startDate"
+                   name="startDate"
+                   value="@ViewBag.StartDate"
+                   class="form-control" />
         </div>
 
         <div class="col-md-4">
-            <label class="form-label text-light fw-semibold">End Date</label>
-            <input type="date" name="endDate"
-                   value="@ViewBag.EndDate" class="form-control" />
+            <label for="endDate" class="reports-filter-label">
+                End Date
+            </label>
+
+            <input type="date"
+                   id="endDate"
+                   name="endDate"
+                   value="@ViewBag.EndDate"
+                   class="form-control" />
         </div>
 
         <div class="col-md-4 d-flex align-items-end gap-2">
-            <button class="btn btn-primary">Filter</button>
-            <a asp-action="ItemSalesReport" class="btn btn-outline-light">Clear</a>
+
+            <button type="submit" class="reports-btn-primary">
+                <i class="bi bi-funnel"></i>
+                Apply Filter
+            </button>
+
+            <a asp-action="ItemSalesReport"
+               class="reports-btn-outline">
+                Clear
+            </a>
+
         </div>
+
     </form>
 
     @if (ViewBag.DateError != null)
     {
-        <div class="alert alert-danger"><i class="bi bi-exclamation-triangle me-1"></i>@ViewBag.DateError</div>
+        <div class="alert alert-danger" role="alert">
+            <i class="bi bi-exclamation-triangle me-1"></i>
+            @ViewBag.DateError
+        </div>
     }
 
-    <div class="card shadow-sm">
-        <div class="card-body">
-            @if (!Model.Any())
-            {
-                <p class="text-muted mb-0">No item sales found.</p>
-            }
-            else
-            {
-                <table class="table table-hover">
+    <div class="reports-content-card">
+
+        @if (!Model.Any())
+        {
+            <div class="reports-no-data">
+                <i class="bi bi-info-circle me-2"></i>
+                No item sales found.
+            </div>
+        }
+        else
+        {
+            <div class="reports-table-container">
+
+                <table class="reports-table">
+
                     <thead>
                         <tr>
                             <th>Product Code</th>
@@ -58,26 +113,49 @@
                             <th>Total Sales</th>
                         </tr>
                     </thead>
+
                     <tbody>
                         @foreach (var item in Model)
                         {
                             <tr>
                                 <td>@item.ProductCode</td>
+
                                 <td>@item.ProductName</td>
+
                                 <td>@item.QuantitySold</td>
-                                <td>R @item.TotalSales.ToString("N2")</td>
+
+                                <td>
+                                    R @item.TotalSales.ToString("N2")
+                                </td>
                             </tr>
                         }
                     </tbody>
+
                     <tfoot>
-                        <tr class="fw-bold">
-                            <td colspan="2">Totals</td>
-                            <td>@Model.Sum(x => x.QuantitySold)</td>
-                            <td>R @Model.Sum(x => x.TotalSales).ToString("N2")</td>
+                        <tr>
+                            <td colspan="2">
+                                <strong>Totals</strong>
+                            </td>
+
+                            <td>
+                                <strong>
+                                    @Model.Sum(x => x.QuantitySold)
+                                </strong>
+                            </td>
+
+                            <td>
+                                <strong>
+                                    R @Model.Sum(x => x.TotalSales).ToString("N2")
+                                </strong>
+                            </td>
                         </tr>
                     </tfoot>
+
                 </table>
-            }
-        </div>
+
+            </div>
+        }
+
     </div>
+
 </div>

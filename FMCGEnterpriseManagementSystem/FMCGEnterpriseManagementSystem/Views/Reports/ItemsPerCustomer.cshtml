@@ -1,55 +1,109 @@
 ﻿@*
-    Purpose: Items Per Customer report page.
-    Authors: iqran0906 (from git history)
+    File: Views/Reports/ItemsPerCustomer.cshtml
+
+    Purpose:
+    Displays product quantities purchased by each customer.
+
+    Original Author:
+    iqran0906 (from Git history).
+
+    UI Improvements:
+    Iqra Nazir (2026).
+
+    Development Assistance:
+    OpenAI ChatGPT (2026).
+
+    References:
+    Microsoft (n.d.) ASP.NET Core Razor syntax.
+    Bootstrap (n.d.) Layout and forms.
 *@
+
 @model IEnumerable<FMCGEnterpriseManagementSystem.ViewModels.Reports.ItemsPerCustomerReportViewModel>
 
 @{
     ViewData["Title"] = "Items Per Customer";
 }
 
-<div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+<div class="reports-page">
+
+    <div class="reports-page-header">
         <div>
-            <h2 class="text-white fw-bold">Items Per Customer</h2>
-            <p class="text-light opacity-75 mb-0">Product quantities purchased by each customer.</p>
+            <h2 class="reports-page-title">Items Per Customer</h2>
+            <p class="reports-page-description">
+                Product quantities purchased by each customer.
+            </p>
         </div>
+
         <partial name="_ReportToolbar" model="@("ItemsPerCustomer")" />
     </div>
 
-    <form method="get" class="row g-3 mb-4 no-print">
+    <form method="get"
+          asp-action="ItemsPerCustomer"
+          class="row g-3 reports-filter-panel no-print">
+
         <div class="col-md-4">
-            <label class="form-label text-light fw-semibold">Start Date</label>
-            <input type="date" name="startDate"
-                   value="@ViewBag.StartDate" class="form-control" />
+            <label for="startDate" class="reports-filter-label">
+                Start Date
+            </label>
+
+            <input type="date"
+                   id="startDate"
+                   name="startDate"
+                   value="@ViewBag.StartDate"
+                   class="form-control" />
         </div>
 
         <div class="col-md-4">
-            <label class="form-label text-light fw-semibold">End Date</label>
-            <input type="date" name="endDate"
-                   value="@ViewBag.EndDate" class="form-control" />
+            <label for="endDate" class="reports-filter-label">
+                End Date
+            </label>
+
+            <input type="date"
+                   id="endDate"
+                   name="endDate"
+                   value="@ViewBag.EndDate"
+                   class="form-control" />
         </div>
 
         <div class="col-md-4 d-flex align-items-end gap-2">
-            <button class="btn btn-primary">Filter</button>
-            <a asp-action="ItemsPerCustomer" class="btn btn-outline-light">Clear</a>
+
+            <button type="submit" class="reports-btn-primary">
+                <i class="bi bi-funnel"></i>
+                Apply Filter
+            </button>
+
+            <a asp-action="ItemsPerCustomer"
+               class="reports-btn-outline">
+                Clear
+            </a>
+
         </div>
+
     </form>
 
     @if (ViewBag.DateError != null)
     {
-        <div class="alert alert-danger"><i class="bi bi-exclamation-triangle me-1"></i>@ViewBag.DateError</div>
+        <div class="alert alert-danger" role="alert">
+            <i class="bi bi-exclamation-triangle me-1"></i>
+            @ViewBag.DateError
+        </div>
     }
 
-    <div class="card shadow-sm">
-        <div class="card-body">
-            @if (!Model.Any())
-            {
-                <p class="text-muted mb-0">No customer item sales found.</p>
-            }
-            else
-            {
-                <table class="table table-hover">
+    <div class="reports-content-card">
+
+        @if (!Model.Any())
+        {
+            <div class="reports-no-data">
+                <i class="bi bi-info-circle me-2"></i>
+                No customer item sales found.
+            </div>
+        }
+        else
+        {
+            <div class="reports-table-container">
+
+                <table class="reports-table">
+
                     <thead>
                         <tr>
                             <th>Customer</th>
@@ -57,18 +111,27 @@
                             <th>Total Sales</th>
                         </tr>
                     </thead>
+
                     <tbody>
                         @foreach (var item in Model)
                         {
                             <tr>
                                 <td>@item.CustomerName</td>
+
                                 <td>@item.TotalItemsPurchased</td>
-                                <td>R @item.TotalSales.ToString("N2")</td>
+
+                                <td>
+                                    R @item.TotalSales.ToString("N2")
+                                </td>
                             </tr>
                         }
                     </tbody>
+
                 </table>
-            }
-        </div>
+
+            </div>
+        }
+
     </div>
+
 </div>

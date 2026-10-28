@@ -8,26 +8,26 @@
     ViewData["Title"] = "Customer Report";
 }
 
-<div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+<div class="reports-page">
+    <div class="reports-page-header">
         <div>
-            <h2 class="text-white fw-bold">Customer Report</h2>
-            <p class="text-light opacity-75 mb-0">Customer account and payment information.</p>
+            <h2 class="reports-page-title">Customer Report</h2>
+            <p class="reports-page-description">Customer account and payment information.</p>
         </div>
 
         <partial name="_ReportToolbar" model="@("CustomerReport")" />
     </div>
 
-    <div class="card shadow-sm">
-        <div class="card-body">
+    <div class="reports-content-card">
+    <div>
             @if (!Model.Any())
             {
                 <p class="text-muted mb-0">No customers found.</p>
             }
             else
             {
-                <div class="table-responsive">
-                    <table class="table table-hover">
+                <div class="reports-table-container">
+                   <table class="reports-table">
                         <thead>
                             <tr>
                                 <th>Customer</th>
@@ -50,11 +50,11 @@
                                     <td>
                                         @if (item.IsActive)
                                         {
-                                            <span class="badge bg-success">Active</span>
+                                            <span class="reports-status reports-status-success">Active</span>
                                         }
                                         else
                                         {
-                                            <span class="badge bg-secondary">Inactive</span>
+                                            <span class="reports-status reports-status-neutral">Inactive</span>
                                         }
                                     </td>
                                 </tr>

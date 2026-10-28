@@ -1,9 +1,22 @@
 @*
-    Purpose: PDF / Excel export, print and back buttons shown on every report.
-    Authors: ST10068525 (new file, not yet committed)
+    
+    Purpose:
+    Shared PDF, Excel, Print and Back buttons used across all reports.
+
+    Original Author:
+    ST10068525 
+
+    UI Improvements:
+    Iqra Nazir (2026).
+
+    Development Assistance:
+    OpenAI ChatGPT (2026).
+
+    References:
+    Microsoft (n.d.) Partial views in ASP.NET Core.
+    Bootstrap (n.d.) Buttons and layout.
 *@
-@* Export / print buttons shown on every report.
-   Model = the report's action name, e.g. "SalesReport". *@
+
 @model string
 
 @{
@@ -11,34 +24,53 @@
     var endDate = ViewBag.EndDate as string;
 }
 
-<div class="d-flex flex-wrap gap-2 no-print">
-    <a asp-action="Export"
+<div class="reports-toolbar no-print">
+
+    <a asp-controller="Reports"
+       asp-action="Export"
        asp-route-report="@Model"
        asp-route-format="pdf"
        asp-route-startDate="@startDate"
        asp-route-endDate="@endDate"
-       class="btn btn-outline-danger"
-       title="Download this report as a PDF">
-        <i class="bi bi-file-earmark-pdf me-1"></i> PDF
+       class="reports-btn-outline reports-btn-pdf"
+       title="Download report as PDF">
+
+        <i class="bi bi-file-earmark-pdf"></i>
+        PDF
+
     </a>
 
-    <a asp-action="Export"
+    <a asp-controller="Reports"
+       asp-action="Export"
        asp-route-report="@Model"
        asp-route-format="excel"
        asp-route-startDate="@startDate"
        asp-route-endDate="@endDate"
-       class="btn btn-outline-success"
-       title="Download this report as an Excel spreadsheet">
-        <i class="bi bi-file-earmark-excel me-1"></i> Excel
+       class="reports-btn-outline reports-btn-excel"
+       title="Download report as Excel">
+
+        <i class="bi bi-file-earmark-excel"></i>
+        Excel
+
     </a>
 
     <button type="button"
-            class="btn btn-outline-light"
+            class="reports-btn-outline"
             onclick="window.print()"
             title="Print this report">
-        <i class="bi bi-printer me-1"></i> Print
+
+        <i class="bi bi-printer"></i>
+        Print
+
     </button>
 
-    <a asp-action="Index" class="btn btn-outline-light">Back to Reports</a>
-</div>
+    <a asp-controller="Reports"
+       asp-action="Index"
+       class="reports-btn-outline">
 
+        <i class="bi bi-arrow-left"></i>
+        Back to Reports
+
+    </a>
+
+</div>
