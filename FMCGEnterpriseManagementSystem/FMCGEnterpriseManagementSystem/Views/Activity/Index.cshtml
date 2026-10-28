@@ -1,7 +1,21 @@
 @*
-    Purpose: Recent Activity page: the user's actions grouped by day, newest first.
-    Authors: ST10068525 (new file, not yet committed)
+    File: Views/Activity/Index.cshtml
+
+    Purpose:
+    Displays recent system activity grouped by date.
+    Allows authorised users to switch between their own
+    activity and activity across all users.
+
+   
+    References :
+    Microsoft (n.d.) Razor syntax reference for ASP.NET Core.
+    Available at: https://learn.microsoft.com/en-us/aspnet/core/mvc/views/razor
+
+
+    MDN Web Docs (n.d.) CSS.
+    Available at: https://developer.mozilla.org/en-US/docs/Web/CSS
 *@
+
 @model IReadOnlyList<FMCGEnterpriseManagementSystem.Models.ActivityLog>
 
 @{
@@ -10,7 +24,7 @@
     var showEveryone = ViewBag.ShowEveryone == true;
     var canViewEveryone = ViewBag.CanViewEveryone == true;
 
-    // Icon per area of the system
+    // Retain the existing category-specific icons.
     string IconFor(string category) => category switch
     {
         "Account" => "bi-person-check",
@@ -30,6 +44,7 @@
         _ => "bi-clock-history"
     };
 
+    // Preserve the existing date-grouping labels.
     string DayHeading(DateTime localDate) =>
         localDate.Date == DateTime.Today ? "Today"
         : localDate.Date == DateTime.Today.AddDays(-1) ? "Yesterday"
@@ -37,110 +52,475 @@
 }
 
 <style>
-    .activity-day {
-        color: #c3c2b7;
-        font-size: 0.8rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-        margin: 1.5rem 0 0.5rem;
+    /* ==========================================
+       RECENT ACTIVITY PAGE
+       ========================================== */
+
+    .activity-page {
+        background: #e6edf1;
+        border: 1px solid rgba(53, 127, 145, 0.18);
+        border-radius: 15px;
+        padding: 30px;
+        min-height: 75vh;
+        color: #183244;
+        font-size: 16px;
     }
 
-    .activity-item {
+    /* PAGE HEADER */
+
+    .activity-page-header {
         display: flex;
-        gap: 14px;
-        align-items: flex-start;
-        padding: 12px 0;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-bottom: 30px;
     }
 
-        .activity-item + .activity-item {
-            border-top: 1px solid #e9ecef;
-        }
+    .activity-page-heading {
+        display: flex;
+        align-items: center;
+        gap: 17px;
+    }
 
-    .activity-icon {
-        width: 38px;
-        height: 38px;
+    .activity-page-icon {
+        width: 58px;
+        height: 58px;
         flex-shrink: 0;
-        border-radius: 50%;
-        background-color: #357383;
-        color: #ffffff;
         display: flex;
         align-items: center;
         justify-content: center;
+        background: #dce9ee;
+        border: 1px solid #c9d9df;
+        border-radius: 12px;
+        color: #357f91;
+        font-size: 26px;
     }
 
-    .activity-time {
-        color: #6c757d;
-        font-size: 0.8rem;
+    .activity-page-title {
+        color: #183244;
+        font-size: 30px;
+        font-weight: 800;
+        margin: 0 0 6px;
+    }
+
+    .activity-page-description {
+        color: #667988;
+        font-size: 16px;
+        line-height: 1.5;
+        margin: 0;
+    }
+
+    /* ACTIVITY SCOPE BUTTONS */
+
+    .activity-scope-buttons {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px;
+        background: #f8fafb;
+        border: 1px solid #c9d9df;
+        border-radius: 10px;
+    }
+
+    .activity-scope-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 11px 17px;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        background: transparent;
+        color: #536b78;
+        font-size: 15px;
+        font-weight: 700;
+        text-decoration: none;
         white-space: nowrap;
+        transition: 0.2s ease;
+    }
+
+    .activity-scope-btn:hover {
+        background: #edf3f5;
+        color: #286675;
+    }
+
+    .activity-scope-btn.active {
+        background: #357f91;
+        border-color: #357f91;
+        color: #fff;
+    }
+
+    .activity-scope-btn.active:hover {
+        background: #286675;
+        color: #fff;
+    }
+
+    /* DATE GROUPS */
+
+    .activity-date-group {
+        margin-bottom: 26px;
+    }
+
+    .activity-day-heading {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #183244;
+        font-size: 16px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        margin: 0 0 13px;
+    }
+
+    .activity-day-heading i {
+        color: #357f91;
+        font-size: 19px;
+    }
+
+    /* ACTIVITY CONTENT CARD */
+
+    .activity-content-card {
+        background: #f8fafb;
+        border: 1px solid #c9d9df;
+        border-top: 3px solid #357f91;
+        border-radius: 12px;
+        padding: 8px 24px;
+    }
+
+    /* INDIVIDUAL ACTIVITY */
+
+    .activity-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 17px;
+        padding: 20px 0;
+    }
+
+    .activity-item + .activity-item {
+        border-top: 1px solid #d9e4e9;
+    }
+
+    .activity-item-icon {
+        width: 46px;
+        height: 46px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #dce9ee;
+        color: #357f91;
+        border-radius: 10px;
+        font-size: 21px;
+    }
+
+    .activity-item-content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .activity-item-heading {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 9px;
+        margin-bottom: 8px;
+    }
+
+    .activity-item-description {
+        color: #183244;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+    }
+
+    .activity-category-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 10px;
+        background: #dce9ee;
+        border-radius: 6px;
+        color: #286675;
+        font-size: 14px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .activity-item-details {
+        color: #667988;
+        font-size: 15px;
+        line-height: 1.6;
+        margin-top: 5px;
+        overflow-wrap: anywhere;
+    }
+
+    .activity-item-user {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        color: #667988;
+        font-size: 15px;
+        margin-top: 9px;
+    }
+
+    .activity-item-user i {
+        color: #357f91;
+    }
+
+    /* TIMESTAMP */
+
+    .activity-item-time {
+        flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 7px 10px;
+        background: #edf3f5;
+        border-radius: 7px;
+        color: #536b78;
+        font-size: 14px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .activity-item-time i {
+        color: #357f91;
+    }
+
+    /* EMPTY STATE */
+
+    .activity-empty-card {
+        background: #f8fafb;
+        border: 1px solid #c9d9df;
+        border-top: 3px solid #357f91;
+        border-radius: 12px;
+        padding: 50px 25px;
+        text-align: center;
+    }
+
+    .activity-empty-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 72px;
+        height: 72px;
+        margin: 0 auto 20px;
+        background: #dce9ee;
+        border-radius: 50%;
+        color: #357f91;
+        font-size: 30px;
+    }
+
+    .activity-empty-title {
+        color: #183244;
+        font-size: 21px;
+        font-weight: 800;
+        margin: 0 0 10px;
+    }
+
+    .activity-empty-description {
+        color: #667988;
+        font-size: 15px;
+        line-height: 1.6;
+        max-width: 480px;
+        margin: 0 auto;
+    }
+
+    /* RESPONSIVE */
+
+    @@media (max-width: 768px) {
+        .activity-page {
+            padding: 18px;
+        }
+
+        .activity-page-title {
+            font-size: 26px;
+        }
+
+        .activity-page-heading {
+            align-items: flex-start;
+        }
+
+        .activity-page-header {
+            align-items: flex-start;
+        }
+
+        .activity-scope-buttons {
+            width: 100%;
+        }
+
+        .activity-scope-btn {
+            flex: 1;
+        }
+
+        .activity-content-card {
+            padding: 5px 16px;
+        }
+
+        .activity-item {
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .activity-item-time {
+            margin-left: 58px;
+        }
     }
 </style>
 
-<div class="px-2 py-3">
+<div class="activity-page">
 
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
-        <div>
-            <h2 class="text-white fw-bold mb-0">Recent Activity</h2>
-            <p class="text-white-50 mb-0 small">
-                @(showEveryone ? "Everything users have done in the system" : "Everything you have done in the system"),
-                newest first (last @ViewBag.MaxItems).
-            </p>
+    @* ==========================================
+       PAGE HEADER
+       ========================================== *@
+
+    <div class="activity-page-header">
+
+        <div class="activity-page-heading">
+
+            <div class="activity-page-icon">
+                <i class="bi bi-clock-history"></i>
+            </div>
+
+            <div>
+                <h1 class="activity-page-title">
+                    Recent Activity
+                </h1>
+
+                <p class="activity-page-description">
+                    @(showEveryone
+                        ? "Everything users have done in the system"
+                        : "Everything you have done in the system"),
+                    newest first (last @ViewBag.MaxItems).
+                </p>
+            </div>
+
         </div>
 
+        @* Only authorised users can view everyone's activity. *@
         @if (canViewEveryone)
         {
-            <div class="btn-group" role="group" aria-label="Whose activity">
-                <a asp-action="Index" class="btn btn-sm @(showEveryone ? "btn-outline-light" : "btn-light")">My activity</a>
-                <a asp-action="Index" asp-route-scope="all" class="btn btn-sm @(showEveryone ? "btn-light" : "btn-outline-light")">All users</a>
-            </div>
+            <nav class="activity-scope-buttons"
+                 aria-label="Whose activity">
+
+                <a asp-action="Index"
+                   class="activity-scope-btn @(!showEveryone ? "active" : "")"
+                   aria-current="@(!showEveryone ? "page" : null)">
+
+                    <i class="bi bi-person"></i>
+                    My Activity
+
+                </a>
+
+                <a asp-action="Index"
+                   asp-route-scope="all"
+                   class="activity-scope-btn @(showEveryone ? "active" : "")"
+                   aria-current="@(showEveryone ? "page" : null)">
+
+                    <i class="bi bi-people"></i>
+                    All Users
+
+                </a>
+
+            </nav>
         }
+
     </div>
+
+    @* ==========================================
+       ACTIVITY HISTORY
+       ========================================== *@
 
     @if (!Model.Any())
     {
-        <div class="content-card text-center py-5" style="min-height: 0;">
-            <i class="bi bi-clock-history fs-1 text-muted d-block mb-2"></i>
-            <h5 class="fw-bold" style="color: #1c323d;">No activity yet</h5>
-            <p class="text-muted mb-0">Things you do, such as creating invoices, recording payments or exporting reports, will appear here.</p>
+        <div class="activity-empty-card">
+
+            <div class="activity-empty-icon">
+                <i class="bi bi-clock-history"></i>
+            </div>
+
+            <h2 class="activity-empty-title">
+                No Activity Yet
+            </h2>
+
+            <p class="activity-empty-description">
+                Things you do, such as creating invoices,
+                recording payments or exporting reports,
+                will appear here.
+            </p>
+
         </div>
     }
     else
     {
+        @* Group activities by local calendar date. *@
         @foreach (var day in Model.GroupBy(a => a.Timestamp.ToLocalTime().Date))
         {
-            <div class="activity-day">@DayHeading(day.Key)</div>
+            <section class="activity-date-group">
 
-            <div class="content-card py-2" style="min-height: 0; margin-bottom: 0;">
-                @foreach (var activity in day)
-                {
-                    <div class="activity-item">
-                        <div class="activity-icon" aria-hidden="true">
-                            <i class="bi @IconFor(activity.Category)"></i>
-                        </div>
+                <h2 class="activity-day-heading">
+                    <i class="bi bi-calendar3"></i>
+                    @DayHeading(day.Key)
+                </h2>
 
-                        <div class="flex-grow-1">
-                            <div class="fw-semibold" style="color: #1c323d;">
-                                @activity.Description
-                                <span class="badge bg-light text-secondary border ms-1">@activity.Category</span>
+                <div class="activity-content-card">
+
+                    @foreach (var activity in day)
+                    {
+                        <div class="activity-item">
+
+                            <div class="activity-item-icon" aria-hidden="true">
+                                <i class="bi @IconFor(activity.Category)"></i>
                             </div>
 
-                            @if (!string.IsNullOrWhiteSpace(activity.Details))
-                            {
-                                <div class="text-muted small">@activity.Details</div>
-                            }
+                            <div class="activity-item-content">
 
-                            @if (showEveryone)
-                            {
-                                <div class="text-muted small"><i class="bi bi-person me-1"></i>@activity.UserName</div>
-                            }
-                        </div>
+                                <div class="activity-item-heading">
 
-                        <div class="activity-time" title="@activity.Timestamp.ToLocalTime().ToString("dd MMM yyyy HH:mm:ss")">
-                            @activity.Timestamp.ToLocalTime().ToString("HH:mm")
+                                    <div class="activity-item-description">
+                                        @activity.Description
+                                    </div>
+
+                                    <span class="activity-category-badge">
+                                        @activity.Category
+                                    </span>
+
+                                </div>
+
+                                @if (!string.IsNullOrWhiteSpace(activity.Details))
+                                {
+                                    <div class="activity-item-details">
+                                        @activity.Details
+                                    </div>
+                                }
+
+                                @if (showEveryone)
+                                {
+                                    <div class="activity-item-user">
+                                        <i class="bi bi-person"></i>
+                                        @activity.UserName
+                                    </div>
+                                }
+
+                            </div>
+
+                            <div class="activity-item-time"
+                                 title="@activity.Timestamp.ToLocalTime().ToString("dd MMM yyyy HH:mm:ss")">
+
+                                <i class="bi bi-clock"></i>
+                                @activity.Timestamp.ToLocalTime().ToString("HH:mm")
+
+                            </div>
+
                         </div>
-                    </div>
-                }
-            </div>
+                    }
+
+                </div>
+
+            </section>
         }
     }
+
 </div>
