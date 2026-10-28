@@ -1,52 +1,290 @@
 ﻿@*
-    Purpose: Notifications list page (table with search / filters and actions).
-    Authors: Sayali-St10458649 (from git history)
+    File: Views/Notifications/Index.cshtml
+
+    Purpose:
+    Displays system notifications, highlights unread
+    notifications and allows users to mark them as read.
+
+    Original Author:
+    Sayali-St10458649 (from Git history).
+
+    UI Improvements:
+    Iqra Nazir (2026).
+
+    References :
+    Microsoft (n.d.) ASP.NET Core MVC views.
+    Available at: https://learn.microsoft.com/en-us/aspnet/core/mvc/views/overview
+
+    MDN Web Docs (n.d.) CSS.
+    Available at: https://developer.mozilla.org/en-US/docs/Web/CSS
 *@
+
 @model List<FMCGEnterpriseManagementSystem.ViewModels.NotificationViewModel>
 
 @{
     ViewData["Title"] = "Notifications";
+
+    var totalNotifications = Model.Count;
+    var unreadNotifications = Model.Count(n => !n.IsRead);
+    var readNotifications = Model.Count(n => n.IsRead);
 }
 
-<div class="content-card">
-    <div class="d-flex align-items-center gap-3 mb-4 border-bottom pb-3">
-        <i class="bi bi-bell-fill fs-2" style="color: #357383;"></i>
-        <h2 class="fw-bold m-0" style="color: #1c323d;">Notifications</h2>
-    </div>
+<div class="notifications-page">
 
-    @if (!Model.Any())
-    {
-        <div class="d-flex flex-column align-items-center justify-content-center text-center p-4 p-sm-5 rounded border bg-light shadow-sm" style="min-height: 250px;">
-            <div class="rounded-circle bg-white p-3 mb-3 border shadow-sm">
-                <i class="bi bi-chat-left-dots fs-3" style="color: #357383;"></i>
+    @* ==========================================
+       PAGE HEADER
+       ========================================== *@
+
+    <div class="notifications-page-header">
+
+        <div class="notifications-heading">
+
+            <div class="notifications-heading-icon">
+                <i class="bi bi-bell-fill"></i>
             </div>
-            <h5 class="fw-bold text-dark mb-1">All Caught Up!</h5>
-            <p class="text-muted small mb-0" style="max-width: 320px;">No recent notifications found.</p>
-        </div>
-    }
-    else
-    {
-        <div class="list-group">
-            @foreach (var notification in Model)
-            {
-                <div class="list-group-item d-flex justify-content-between align-items-start @(notification.IsRead ? "" : "bg-light")">
-                    <div class="me-3">
-                        <div class="fw-bold" style="color: #1c323d;">@notification.Title</div>
-                        <div class="text-muted small">@notification.Message</div>
-                        <div class="text-muted small mt-1">@notification.CreatedDateDisplay</div>
-                    </div>
-                    @if (!notification.IsRead)
-                    {
-                        <form asp-action="MarkAsRead" asp-controller="Notifications" asp-route-id="@notification.NotificationId" method="post">
-                            <button type="submit" class="btn btn-sm btn-outline-primary">Mark as read</button>
-                        </form>
-                    }
-                </div>
-            }
-        </div>
-    }
 
-    <div class="d-flex justify-content-end gap-3 mt-4 border-top pt-3">
-        <a asp-controller="Home" asp-action="Dashboard" class="btn btn-outline-secondary px-4 w-100 w-sm-auto text-center">Back to Dashboard</a>
+            <div>
+                <h1 class="notifications-page-title">
+                    Notifications
+                </h1>
+
+                <p class="notifications-page-description">
+                    Stay informed about important system activities and updates.
+                </p>
+            </div>
+
+        </div>
+
+        <a asp-controller="Home"
+           asp-action="Dashboard"
+           class="notifications-btn-outline">
+
+            <i class="bi bi-arrow-left"></i>
+            Back to Dashboard
+
+        </a>
+
     </div>
+
+
+    @* ==========================================
+       NOTIFICATION SUMMARY
+       ========================================== *@
+
+    <div class="row g-3 mb-4">
+
+        <div class="col-md-4">
+
+            <div class="notifications-summary-card">
+
+                <div class="notifications-summary-icon total">
+                    <i class="bi bi-bell"></i>
+                </div>
+
+                <div>
+                    <div class="notifications-summary-label">
+                        Total Notifications
+                    </div>
+
+                    <div class="notifications-summary-value">
+                        @totalNotifications
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="notifications-summary-card">
+
+                <div class="notifications-summary-icon unread">
+                    <i class="bi bi-envelope"></i>
+                </div>
+
+                <div>
+                    <div class="notifications-summary-label">
+                        Unread Notifications
+                    </div>
+
+                    <div class="notifications-summary-value">
+                        @unreadNotifications
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="notifications-summary-card">
+
+                <div class="notifications-summary-icon read">
+                    <i class="bi bi-envelope-open"></i>
+                </div>
+
+                <div>
+                    <div class="notifications-summary-label">
+                        Read Notifications
+                    </div>
+
+                    <div class="notifications-summary-value">
+                        @readNotifications
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    @* ==========================================
+       NOTIFICATION LIST
+       ========================================== *@
+
+    <div class="notifications-content-card">
+
+        <div class="notifications-section-header">
+
+            <div>
+                <h2 class="notifications-section-title">
+                    Recent Notifications
+                </h2>
+
+                <p class="notifications-section-description">
+                    View your latest system notifications below.
+                </p>
+            </div>
+
+            @if (unreadNotifications > 0)
+            {
+                <span class="notifications-unread-count">
+                    @unreadNotifications Unread
+                </span>
+            }
+
+        </div>
+
+
+        @if (!Model.Any())
+        {
+            @* Empty state *@
+
+            <div class="notifications-empty-state">
+
+                <div class="notifications-empty-icon">
+                    <i class="bi bi-bell-slash"></i>
+                </div>
+
+                <h3>
+                    All Caught Up!
+                </h3>
+
+                <p>
+                    You have no recent notifications.
+                    New system updates will appear here.
+                </p>
+
+            </div>
+        }
+        else
+        {
+            <div class="notifications-list">
+
+                @foreach (var notification in Model)
+                {
+                    <div class="notifications-item @(notification.IsRead ? "is-read" : "is-unread")">
+
+                        <div class="notifications-item-icon">
+
+                            @if (notification.IsRead)
+                            {
+                                <i class="bi bi-envelope-open"></i>
+                            }
+                            else
+                            {
+                                <i class="bi bi-bell-fill"></i>
+                            }
+
+                        </div>
+
+
+                        <div class="notifications-item-content">
+
+                            <div class="notifications-item-heading">
+
+                                <h3 class="notifications-item-title">
+                                    @notification.Title
+                                </h3>
+
+                                @if (!notification.IsRead)
+                                {
+                                    <span class="notifications-status unread">
+                                        Unread
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="notifications-status read">
+                                        Read
+                                    </span>
+                                }
+
+                            </div>
+
+
+                            <p class="notifications-item-message">
+                                @notification.Message
+                            </p>
+
+
+                            <div class="notifications-item-date">
+
+                                <i class="bi bi-clock"></i>
+
+                                @notification.CreatedDateDisplay
+
+                            </div>
+
+                        </div>
+
+
+                        @if (!notification.IsRead)
+                        {
+                            <div class="notifications-item-actions">
+
+                                <form asp-controller="Notifications"
+                                      asp-action="MarkAsRead"
+                                      asp-route-id="@notification.NotificationId"
+                                      method="post">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <button type="submit"
+                                            class="notifications-btn-primary">
+
+                                        <i class="bi bi-check2"></i>
+                                        Mark as Read
+
+                                    </button>
+
+                                </form>
+
+                            </div>
+                        }
+
+                    </div>
+                }
+
+            </div>
+        }
+
+    </div>
+
 </div>
