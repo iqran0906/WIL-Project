@@ -1,0 +1,585 @@
+﻿/*
+ * File: quotes.css
+ * Purpose: Consistent styling for the Quotes Management module.
+ *
+ * Original application contributors:
+ * Naseeha27, Sayali-St10458649, ST10068525,
+ * iqran0906  
+ * UI styling and integration: Iqra Nazir (2026).
+ *
+ * References:
+ * Bootstrap (2026) Documentation. https://getbootstrap.com/docs/5.3/
+ * MDN Web Docs (2026) CSS. https://developer.mozilla.org/en-US/docs/Web/CSS
+ */
+
+/* ==========================================
+   QUOTES PAGE
+   ========================================== */
+
+.quotes-page {
+    background: #e6edf1;
+    border: 1px solid rgba(53, 127, 145, 0.18);
+    border-radius: 15px;
+    padding: 30px;
+    min-height: 75vh;
+    color: #183244;
+}
+
+/* ==========================================
+   PAGE HEADERS
+   ========================================== */
+
+.quotes-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 28px;
+}
+
+.quotes-page-title {
+    color: #183244;
+    font-size: 30px;
+    font-weight: 800;
+    margin: 0 0 7px;
+}
+
+.quotes-page-subtitle {
+    color: #667988;
+    font-size: 14px;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.quotes-header-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+/* ==========================================
+   BUTTONS
+   ========================================== */
+
+.quotes-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    background: #357f91;
+    color: #fff;
+    border: 1px solid #357f91;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.2s ease;
+}
+
+    .quotes-btn-primary:hover {
+        background: #286675;
+        border-color: #286675;
+        color: #fff;
+    }
+
+.quotes-btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    background: #f8fafb;
+    color: #357f91;
+    border: 1px solid #a9c4cc;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.2s ease;
+}
+
+    .quotes-btn-outline:hover {
+        background: #dce9ee;
+        color: #286675;
+    }
+
+.quotes-btn-danger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    background: #fff1f0;
+    color: #b94343;
+    border: 1px solid #e5b8b8;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+    .quotes-btn-danger:hover {
+        background: #b94343;
+        color: #fff;
+    }
+
+/* ==========================================
+   SUMMARY CARDS
+   ========================================== */
+
+.quotes-stat-card {
+    background: #f8fafb;
+    border: 1px solid #c9d9df;
+    border-top: 3px solid #357f91;
+    border-radius: 12px;
+    padding: 21px;
+    height: 100%;
+}
+
+    .quotes-stat-card.pending {
+        border-top-color: #d5a347;
+    }
+
+    .quotes-stat-card.invoiced {
+        border-top-color: #579b7c;
+    }
+
+    .quotes-stat-card.value {
+        border-top-color: #7189a3;
+    }
+
+.quotes-stat-label {
+    color: #667988;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.quotes-stat-value {
+    color: #183244;
+    font-size: 27px;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+/* ==========================================
+   SEARCH AND FILTERS
+   ========================================== */
+
+.quotes-filter-panel {
+    background: #edf3f5;
+    border: 1px solid #c9d9df;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.quotes-filter-label {
+    color: #344f5e;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 7px;
+}
+
+.quotes-page .form-control,
+.quotes-page .form-select {
+    border: 1px solid #c9d9df;
+    border-radius: 7px;
+    color: #183244;
+    background-color: #fff;
+}
+
+    .quotes-page .form-control:focus,
+    .quotes-page .form-select:focus {
+        border-color: #357f91;
+        box-shadow: 0 0 0 3px rgba(53, 127, 145, 0.12);
+    }
+
+    .quotes-page .form-control[readonly] {
+        background: #edf3f5;
+        color: #536b78;
+    }
+
+/* ==========================================
+   TABLES
+   ========================================== */
+
+.quotes-table-container {
+    overflow-x: auto;
+    width: 100%;
+}
+
+.quotes-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+    font-size: 16px;
+}
+
+    .quotes-table thead th {
+        background: #dce9ee;
+        color: #344f5e;
+        font-size: 14px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        padding: 14px 12px;
+        white-space: nowrap;
+        border: none;
+    }
+
+        .quotes-table thead th:first-child {
+            border-radius: 8px 0 0 8px;
+        }
+
+        .quotes-table thead th:last-child {
+            border-radius: 0 8px 8px 0;
+        }
+
+    .quotes-table tbody td {
+        background: #f8fafb;
+        padding: 15px 12px;
+        vertical-align: middle;
+        border-top: 1px solid #d9e4e9;
+        border-bottom: 1px solid #d9e4e9;
+    }
+
+        .quotes-table tbody td:first-child {
+            border-left: 1px solid #d9e4e9;
+            border-radius: 8px 0 0 8px;
+        }
+
+        .quotes-table tbody td:last-child {
+            border-right: 1px solid #d9e4e9;
+            border-radius: 0 8px 8px 0;
+        }
+
+    .quotes-table tbody tr:hover td {
+        background: #eef5f7;
+    }
+
+    .quotes-table .quotes-reference {
+        color: #183244;
+        font-weight: 800;
+    }
+
+    .quotes-table .quotes-secondary-text {
+        color: #667988;
+        font-size: 12px;
+    }
+
+/* ==========================================
+   STATUS BADGES
+   ========================================== */
+
+.quotes-status {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 20px;
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+    .quotes-status.pending {
+        background: #fff3d7;
+        color: #966c1d;
+    }
+
+    .quotes-status.cancelled {
+        background: #fbe6e6;
+        color: #a74444;
+    }
+
+    .quotes-status.invoiced {
+        background: #dff2e8;
+        color: #26714e;
+    }
+
+/* ==========================================
+   TABLE ACTIONS
+   ========================================== */
+
+.quotes-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.quotes-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 7px 11px;
+    border: 1px solid #c9d9df;
+    border-radius: 7px;
+    background: #fff;
+    color: #357f91;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+    .quotes-action-btn:hover {
+        background: #dce9ee;
+        color: #286675;
+    }
+
+.quotes-action-edit {
+    color: #906b24;
+    border-color: #e2d2a9;
+    background: #fff9ea;
+}
+
+    .quotes-action-edit:hover {
+        background: #f6ebcd;
+        color: #79591c;
+    }
+
+/* ==========================================
+   FORMS
+   ========================================== */
+
+.quotes-form-section {
+    background: #f8fafb;
+    border: 1px solid #c9d9df;
+    border-top: 3px solid #357f91;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 25px;
+}
+
+.quotes-section-title {
+    color: #183244;
+    font-size: 17px;
+    font-weight: 800;
+    margin-bottom: 7px;
+}
+
+.quotes-section-subtitle {
+    color: #667988;
+    font-size: 12px;
+    margin-bottom: 20px;
+}
+
+.quotes-page .form-label {
+    color: #344f5e;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.quotes-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-top: 12px;
+}
+
+/* ==========================================
+   QUOTE LINE ITEMS
+   ========================================== */
+
+.quotes-items-container {
+    overflow-x: auto;
+    background: #f8fafb;
+    border: 1px solid #c9d9df;
+    border-radius: 12px;
+    padding: 12px;
+}
+
+.quotes-items-table {
+    width: 100%;
+    min-width: 1100px;
+    border-collapse: separate;
+    border-spacing: 0 6px;
+    font-size: 16px;
+}
+
+    .quotes-items-table thead th {
+        background: #dce9ee;
+        color: #344f5e;
+        padding: 12px 10px;
+        font-size: 14px;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    .quotes-items-table tbody td {
+        background: #fff;
+        padding: 10px 7px;
+        vertical-align: middle;
+        border-top: 1px solid #d9e4e9;
+        border-bottom: 1px solid #d9e4e9;
+    }
+
+    .quotes-items-table .form-control,
+    .quotes-items-table .form-select {
+        font-size: 16px;
+        min-height: 34px;
+    }
+
+    .quotes-items-table .input-group-text {
+        background: #edf3f5;
+        border-color: #c9d9df;
+        color: #536b78;
+    }
+
+/* ==========================================
+   TOTALS
+   ========================================== */
+
+.quotes-totals-card {
+    background: #edf3f5;
+    border: 1px solid #c9d9df;
+    border-radius: 12px;
+    padding: 22px;
+}
+
+.quotes-totals-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 7px 0;
+    font-size: 13px;
+}
+
+    .quotes-totals-row span:first-child {
+        color: #667988;
+    }
+
+.quotes-totals-final {
+    border-top: 1px solid #c9d9df;
+    margin-top: 12px;
+    padding-top: 16px;
+    font-size: 20px;
+    font-weight: 800;
+    color: #183244;
+}
+
+/* ==========================================
+   DETAILS
+   ========================================== */
+
+.quotes-details-card {
+    background: #f8fafb;
+    border: 1px solid #c9d9df;
+    border-radius: 12px;
+    padding: 22px;
+    height: 100%;
+}
+
+.quotes-detail-label {
+    color: #667988;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.quotes-detail-value {
+    color: #183244;
+    font-size: 14px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.quotes-company-heading {
+    font-size: 18px;
+    font-weight: 800;
+    color: #183244;
+}
+
+.quotes-banking-card {
+    background: #edf3f5;
+    border: 1px solid #c9d9df;
+    border-radius: 12px;
+    padding: 22px;
+}
+
+/* ==========================================
+   EMPTY STATE
+   ========================================== */
+
+.quotes-empty-state {
+    text-align: center;
+    padding: 55px 20px;
+    color: #667988;
+}
+
+    .quotes-empty-state i {
+        font-size: 30px;
+        color: #8ba6b2;
+        display: block;
+        margin-bottom: 12px;
+    }
+
+    .quotes-empty-state strong {
+        display: block;
+        color: #183244;
+        font-size: 15px;
+        margin-bottom: 6px;
+    }
+
+/* ==========================================
+   MODALS
+   ========================================== */
+
+.quotes-page .modal-content {
+    border-radius: 13px;
+    border: 1px solid #c9d9df;
+    overflow: hidden;
+}
+
+.quotes-page .modal-header {
+    background: #edf3f5;
+    border-bottom: 1px solid #c9d9df;
+}
+
+.quotes-page .modal-title {
+    color: #183244;
+    font-weight: 800;
+}
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+
+@media (max-width: 768px) {
+    .quotes-page {
+        padding: 18px;
+    }
+
+    .quotes-page-title {
+        font-size: 25px;
+    }
+
+    .quotes-header-actions {
+        width: 100%;
+    }
+
+    .quotes-form-section {
+        padding: 17px;
+    }
+
+    .quotes-stat-value {
+        font-size: 23px;
+    }
+
+    .quotes-form-actions {
+        justify-content: stretch;
+    }
+
+        .quotes-form-actions .quotes-btn-primary,
+        .quotes-form-actions .quotes-btn-outline {
+            flex: 1;
+        }
+}
