@@ -1,0 +1,730 @@
+﻿@*
+    File: Views/UserAccounts/Create.cshtml
+
+    Purpose:
+    Allows administrators to create system user accounts
+    for existing employees and sales representatives.
+
+    Original Author:
+    iqran0906 (from Git history).
+
+    UI Improvements:
+    Iqra Nazir (2026).
+
+    References:
+    Microsoft (n.d.) ASP.NET Core MVC views.
+    Available at: https://learn.microsoft.com/en-us/aspnet/core/mvc/views/overview
+
+    Bootstrap (n.d.) Forms.
+    Available at: https://getbootstrap.com/docs/5.3/forms/overview/
+
+    MDN Web Docs (n.d.) HTML input element.
+    Available at: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input
+*@
+
+@model FMCGEnterpriseManagementSystem.ViewModels.CreateUserAccountViewModel
+
+@{
+    ViewData["Title"] = "Create User Account";
+}
+
+<div class="useraccounts-page">
+
+    @* ==========================================
+       PAGE HEADER
+       ========================================== *@
+
+    <div class="useraccounts-page-header">
+
+        <div class="useraccounts-heading">
+
+            <div class="useraccounts-heading-icon">
+                <i class="bi bi-person-plus-fill"></i>
+            </div>
+
+            <div>
+                <h1 class="useraccounts-page-title">
+                    Create User Account
+                </h1>
+
+                <p class="useraccounts-page-description">
+                    Set up secure system access for an employee
+                    or sales representative.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    @* ==========================================
+       EMPLOYEE INFORMATION
+       ========================================== *@
+
+    @if (ViewBag.EmployeeName != null)
+    {
+        <div class="useraccounts-employee-banner">
+
+            <div class="useraccounts-employee-banner-icon">
+                <i class="bi bi-person-badge"></i>
+            </div>
+
+            <div>
+                <div class="useraccounts-employee-banner-label">
+                    Creating an account for
+                </div>
+
+                <div class="useraccounts-employee-banner-name">
+                    @ViewBag.EmployeeName
+                </div>
+            </div>
+
+        </div>
+    }
+
+
+    @* ==========================================
+       CREATE ACCOUNT FORM
+       ========================================== *@
+
+    <div class="useraccounts-content-card useraccounts-create-card">
+
+        <div class="useraccounts-section-header">
+
+            <h2 class="useraccounts-section-title">
+                Account Information
+            </h2>
+
+            <p class="useraccounts-section-description">
+                Enter the employee's login credentials and assign
+                the appropriate system role.
+            </p>
+
+        </div>
+
+
+        <form asp-controller="UserAccounts"
+              asp-action="Create"
+              method="post">
+
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger mb-3">
+            </div>
+
+            <input asp-for="EmployeeID" type="hidden" />
+
+
+            @* ==========================================
+               EMAIL ADDRESS
+               ========================================== *@
+
+            <div class="useraccounts-form-group">
+
+                <label asp-for="Email"
+                       class="useraccounts-form-label">
+                </label>
+
+                <input asp-for="Email"
+                       class="form-control useraccounts-form-input"
+                       autocomplete="email"
+                       placeholder="Enter employee email address" />
+
+                <span asp-validation-for="Email"
+                      class="text-danger useraccounts-validation">
+                </span>
+
+                <div class="useraccounts-field-hint">
+                    This email address will be used to sign in.
+                </div>
+
+            </div>
+
+
+            @* ==========================================
+               SYSTEM ROLE
+               ========================================== *@
+
+            <div class="useraccounts-form-group">
+
+                <label asp-for="Role"
+                       class="useraccounts-form-label">
+                </label>
+
+                <select asp-for="Role"
+                        class="form-select useraccounts-form-input">
+
+                    <option value="">
+                        -- Select Role --
+                    </option>
+
+                    <option value="Employee">
+                        Employee
+                    </option>
+
+                    <option value="SalesRepresentative">
+                        Sales Representative
+                    </option>
+
+                </select>
+
+                <span asp-validation-for="Role"
+                      class="text-danger useraccounts-validation">
+                </span>
+
+                <div class="useraccounts-field-hint">
+                    The selected role determines the employee's
+                    access permissions within the system.
+                </div>
+
+            </div>
+
+
+            @* ==========================================
+               TEMPORARY PASSWORD
+               ========================================== *@
+
+            <div class="useraccounts-form-group">
+
+                <label asp-for="TemporaryPassword"
+                       class="useraccounts-form-label">
+                </label>
+
+                <div class="input-group">
+
+                    <input asp-for="TemporaryPassword"
+                           id="temporaryPassword"
+                           class="form-control useraccounts-form-input"
+                           autocomplete="new-password"
+                           placeholder="Enter a temporary password" />
+
+                    <button type="button"
+                            id="toggleTemporaryPassword"
+                            class="useraccounts-password-toggle"
+                            aria-label="Show temporary password">
+
+                        <i id="temporaryPasswordIcon"
+                           class="bi bi-eye"></i>
+
+                    </button>
+
+                </div>
+
+                <span asp-validation-for="TemporaryPassword"
+                      class="text-danger useraccounts-validation">
+                </span>
+
+
+                @* PASSWORD STRENGTH PANEL *@
+
+                <div class="useraccounts-password-panel">
+
+                    <div class="useraccounts-password-strength-header">
+
+                        <span class="useraccounts-password-strength-label">
+                            Password Strength
+                        </span>
+
+                        <span id="passwordStrength"
+                              class="badge bg-secondary">
+                            Not entered
+                        </span>
+
+                    </div>
+
+
+                    <div class="progress useraccounts-password-progress">
+
+                        <div id="passwordStrengthBar"
+                             class="progress-bar"
+                             role="progressbar"
+                             aria-label="Password strength"
+                             aria-valuemin="0"
+                             aria-valuemax="100"
+                             aria-valuenow="0"
+                             style="width: 0%">
+                        </div>
+
+                    </div>
+
+
+                    <div class="useraccounts-password-requirements">
+
+                        <div id="lengthRequirement"
+                             class="text-muted">
+                            <i class="bi bi-circle me-2"></i>
+                            At least 8 characters
+                        </div>
+
+                        <div id="uppercaseRequirement"
+                             class="text-muted">
+                            <i class="bi bi-circle me-2"></i>
+                            At least one uppercase letter
+                        </div>
+
+                        <div id="lowercaseRequirement"
+                             class="text-muted">
+                            <i class="bi bi-circle me-2"></i>
+                            At least one lowercase letter
+                        </div>
+
+                        <div id="numberRequirement"
+                             class="text-muted">
+                            <i class="bi bi-circle me-2"></i>
+                            At least one number
+                        </div>
+
+                        <div id="specialRequirement"
+                             class="text-muted">
+                            <i class="bi bi-circle me-2"></i>
+                            At least one special character
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            @* ==========================================
+               CONFIRM PASSWORD
+               ========================================== *@
+
+            <div class="useraccounts-form-group">
+
+                <label asp-for="ConfirmPassword"
+                       class="useraccounts-form-label">
+                </label>
+
+                <div class="input-group">
+
+                    <input asp-for="ConfirmPassword"
+                           id="confirmPassword"
+                           class="form-control useraccounts-form-input"
+                           autocomplete="new-password"
+                           placeholder="Re-enter the temporary password" />
+
+                    <button type="button"
+                            id="toggleConfirmPassword"
+                            class="useraccounts-password-toggle"
+                            aria-label="Show confirm password">
+
+                        <i id="confirmPasswordIcon"
+                           class="bi bi-eye"></i>
+
+                    </button>
+
+                </div>
+
+                <span asp-validation-for="ConfirmPassword"
+                      class="text-danger useraccounts-validation">
+                </span>
+
+                <div id="passwordMatchMessage"
+                     class="useraccounts-password-match"
+                     aria-live="polite">
+                </div>
+
+            </div>
+
+
+            @* ==========================================
+               FORM ACTIONS
+               ========================================== *@
+
+            <div class="useraccounts-form-actions">
+
+                <a asp-controller="UserAccounts"
+                   asp-action="Index"
+                   class="useraccounts-btn-outline">
+
+                    <i class="bi bi-arrow-left"></i>
+                    Cancel
+
+                </a>
+
+                <button type="submit"
+                        class="useraccounts-btn-primary">
+
+                    <i class="bi bi-person-plus"></i>
+                    Create Account
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        /*
+            Purpose:
+            Handles password visibility, strength indicators,
+            requirements and password confirmation feedback.
+
+            
+            Reference:
+            MDN Web Docs (n.d.) JavaScript event handling.
+        */
+
+        (function () {
+
+            const temporaryPassword =
+                document.getElementById("temporaryPassword");
+
+            const confirmPassword =
+                document.getElementById("confirmPassword");
+
+            const toggleTemporaryPassword =
+                document.getElementById("toggleTemporaryPassword");
+
+            const toggleConfirmPassword =
+                document.getElementById("toggleConfirmPassword");
+
+            const temporaryPasswordIcon =
+                document.getElementById("temporaryPasswordIcon");
+
+            const confirmPasswordIcon =
+                document.getElementById("confirmPasswordIcon");
+
+            const passwordStrength =
+                document.getElementById("passwordStrength");
+
+            const passwordStrengthBar =
+                document.getElementById("passwordStrengthBar");
+
+            const passwordMatchMessage =
+                document.getElementById("passwordMatchMessage");
+
+
+            // ==========================================
+            // SHOW / HIDE PASSWORD
+            // ==========================================
+
+            function togglePasswordVisibility(input, icon, button) {
+
+                const passwordIsHidden =
+                    input.type === "password";
+
+                input.type = passwordIsHidden
+                    ? "text"
+                    : "password";
+
+                icon.classList.toggle(
+                    "bi-eye",
+                    !passwordIsHidden
+                );
+
+                icon.classList.toggle(
+                    "bi-eye-slash",
+                    passwordIsHidden
+                );
+
+                button.setAttribute(
+                    "aria-label",
+                    passwordIsHidden
+                        ? "Hide password"
+                        : "Show password"
+                );
+            }
+
+
+            toggleTemporaryPassword.addEventListener(
+                "click",
+                function () {
+
+                    togglePasswordVisibility(
+                        temporaryPassword,
+                        temporaryPasswordIcon,
+                        toggleTemporaryPassword
+                    );
+
+                }
+            );
+
+
+            toggleConfirmPassword.addEventListener(
+                "click",
+                function () {
+
+                    togglePasswordVisibility(
+                        confirmPassword,
+                        confirmPasswordIcon,
+                        toggleConfirmPassword
+                    );
+
+                }
+            );
+
+
+            // ==========================================
+            // PASSWORD STRENGTH
+            // ==========================================
+
+            temporaryPassword.addEventListener(
+                "input",
+                function () {
+
+                    checkPasswordStrength();
+                    checkPasswordsMatch();
+
+                }
+            );
+
+
+            confirmPassword.addEventListener(
+                "input",
+                checkPasswordsMatch
+            );
+
+
+            function checkPasswordStrength() {
+
+                const password =
+                    temporaryPassword.value;
+
+                const requirements = {
+
+                    length:
+                        password.length >= 8,
+
+                    uppercase:
+                        /[A-Z]/.test(password),
+
+                    lowercase:
+                        /[a-z]/.test(password),
+
+                    number:
+                        /[0-9]/.test(password),
+
+                    special:
+                        /[^A-Za-z0-9]/.test(password)
+
+                };
+
+
+                updateRequirement(
+                    "lengthRequirement",
+                    requirements.length
+                );
+
+                updateRequirement(
+                    "uppercaseRequirement",
+                    requirements.uppercase
+                );
+
+                updateRequirement(
+                    "lowercaseRequirement",
+                    requirements.lowercase
+                );
+
+                updateRequirement(
+                    "numberRequirement",
+                    requirements.number
+                );
+
+                updateRequirement(
+                    "specialRequirement",
+                    requirements.special
+                );
+
+
+                const score =
+                    Object.values(requirements)
+                        .filter(Boolean)
+                        .length;
+
+
+                if (password.length === 0) {
+
+                    passwordStrength.textContent =
+                        "Not entered";
+
+                    passwordStrength.className =
+                        "badge bg-secondary";
+
+                    passwordStrengthBar.style.width =
+                        "0%";
+
+                    passwordStrengthBar.className =
+                        "progress-bar";
+
+                    passwordStrengthBar.setAttribute(
+                        "aria-valuenow",
+                        "0"
+                    );
+
+                    return;
+                }
+
+
+                if (score <= 2) {
+
+                    passwordStrength.textContent =
+                        "Weak";
+
+                    passwordStrength.className =
+                        "badge bg-danger";
+
+                    passwordStrengthBar.style.width =
+                        "33%";
+
+                    passwordStrengthBar.className =
+                        "progress-bar bg-danger";
+
+                    passwordStrengthBar.setAttribute(
+                        "aria-valuenow",
+                        "33"
+                    );
+
+                }
+                else if (score <= 4) {
+
+                    passwordStrength.textContent =
+                        "Medium";
+
+                    passwordStrength.className =
+                        "badge bg-warning text-dark";
+
+                    passwordStrengthBar.style.width =
+                        "66%";
+
+                    passwordStrengthBar.className =
+                        "progress-bar bg-warning";
+
+                    passwordStrengthBar.setAttribute(
+                        "aria-valuenow",
+                        "66"
+                    );
+
+                }
+                else {
+
+                    passwordStrength.textContent =
+                        "Strong";
+
+                    passwordStrength.className =
+                        "badge bg-success";
+
+                    passwordStrengthBar.style.width =
+                        "100%";
+
+                    passwordStrengthBar.className =
+                        "progress-bar bg-success";
+
+                    passwordStrengthBar.setAttribute(
+                        "aria-valuenow",
+                        "100"
+                    );
+
+                }
+            }
+
+
+            // ==========================================
+            // UPDATE PASSWORD REQUIREMENTS
+            // ==========================================
+
+            function updateRequirement(elementId, requirementMet) {
+
+                const element =
+                    document.getElementById(elementId);
+
+                const icon =
+                    element.querySelector("i");
+
+
+                if (requirementMet) {
+
+                    element.classList.remove(
+                        "text-muted"
+                    );
+
+                    element.classList.add(
+                        "text-success"
+                    );
+
+                    icon.className =
+                        "bi bi-check-circle-fill me-2";
+
+                }
+                else {
+
+                    element.classList.remove(
+                        "text-success"
+                    );
+
+                    element.classList.add(
+                        "text-muted"
+                    );
+
+                    icon.className =
+                        "bi bi-circle me-2";
+
+                }
+            }
+
+
+            // ==========================================
+            // PASSWORD CONFIRMATION
+            // ==========================================
+
+            function checkPasswordsMatch() {
+
+                const password =
+                    temporaryPassword.value;
+
+                const confirmation =
+                    confirmPassword.value;
+
+
+                if (confirmation.length === 0) {
+
+                    passwordMatchMessage.textContent =
+                        "";
+
+                    return;
+                }
+
+
+                if (password === confirmation) {
+
+                    passwordMatchMessage.textContent =
+                        "Passwords match.";
+
+                    passwordMatchMessage.className =
+                        "useraccounts-password-match text-success";
+
+                }
+                else {
+
+                    passwordMatchMessage.textContent =
+                        "Passwords do not match.";
+
+                    passwordMatchMessage.className =
+                        "useraccounts-password-match text-danger";
+
+                }
+            }
+
+
+            
+            checkPasswordStrength();
+            checkPasswordsMatch();
+
+        })();
+    </script>
+}

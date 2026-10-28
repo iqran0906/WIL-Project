@@ -1,288 +1,491 @@
 @*
-    Purpose: Settings page: company profile, banking details, personal preferences and account links.
-    Authors: ST10068525 (new file, not yet committed)
+    File: Views/Settings/Index.cshtml
+
+    Purpose:
+    Manages company profile information, banking details,
+    personal preferences and account navigation.
+
+    Original Author:
+    ST10068525 (from original file attribution).
+
+    UI Improvements:
+    Iqra Nazir (2026).
+
+    References :
+    Microsoft (n.d.) Razor syntax reference for ASP.NET Core.
+    Available at: https://learn.microsoft.com/en-us/aspnet/core/mvc/views/razor
+
+    MDN Web Docs (n.d.) Window: localStorage property.
+    Available at: https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
 *@
+
 @model FMCGEnterpriseManagementSystem.ViewModels.SettingsViewModel
 
 @{
     ViewData["Title"] = "Settings";
 }
 
-<style>
-    .settings-nav {
-        position: sticky;
-        top: 20px;
-    }
+<div class="settings-page">
 
-        .settings-nav .list-group-item {
-            border: none;
-            border-left: 3px solid transparent;
-            color: #1c323d;
-            font-weight: 600;
-        }
+    @* PAGE HEADER *@
+    <div class="settings-page-header">
+        <div class="settings-page-heading">
 
-            .settings-nav .list-group-item:hover {
-                border-left-color: #357383;
-                background-color: rgba(53, 115, 131, 0.08);
-            }
+            <div class="settings-page-icon">
+                <i class="bi bi-gear-fill"></i>
+            </div>
 
-    /* .content-card is a full-page card (min-height 80vh); these are stacked sections */
-    .content-card.settings-section,
-    .content-card.settings-nav {
-        min-height: 0;
-    }
+            <div>
+                <h1 class="settings-page-title">Settings</h1>
 
-    .settings-section {
-        scroll-margin-top: 20px;
-        margin-bottom: 1.5rem;
-    }
+                <p class="settings-page-description">
+                    Manage company information, banking details,
+                    personal preferences and account settings.
+                </p>
+            </div>
 
-        .settings-section h5 {
-            color: #1c323d;
-        }
+        </div>
+    </div>
 
-    .settings-hint {
-        font-size: 0.8rem;
-        color: #6c757d;
-    }
-</style>
-
-<div class="px-2 py-3">
-    <h2 class="text-white fw-bold mb-3">Settings</h2>
-
+    @* SUCCESS MESSAGE *@
     @if (TempData["SuccessMessage"] != null)
     {
         <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="bi bi-check-circle me-1"></i>@TempData["SuccessMessage"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <i class="bi bi-check-circle me-2"></i>
+            @TempData["SuccessMessage"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+            </button>
         </div>
     }
 
     <div class="row g-4">
 
-        <!-- SECTION MENU -->
+        @* SECTION NAVIGATION *@
         <div class="col-12 col-lg-3">
-            <div class="content-card p-2 settings-nav">
+
+            <div class="settings-nav">
                 <div class="list-group list-group-flush">
+
                     @if (Model.CanEditSystemSettings)
                     {
-                        <a href="#company" class="list-group-item list-group-item-action"><i class="bi bi-building me-2"></i>Company Profile</a>
-                        <a href="#banking" class="list-group-item list-group-item-action"><i class="bi bi-bank me-2"></i>Banking Details</a>
+                        <a href="#company"
+                           class="list-group-item list-group-item-action">
+                            <i class="bi bi-building me-2"></i>
+                            Company Profile
+                        </a>
+
+                        <a href="#banking"
+                           class="list-group-item list-group-item-action">
+                            <i class="bi bi-bank me-2"></i>
+                            Banking Details
+                        </a>
                     }
-                    <a href="#preferences" class="list-group-item list-group-item-action"><i class="bi bi-sliders me-2"></i>My Preferences</a>
-                    <a href="#account" class="list-group-item list-group-item-action"><i class="bi bi-person-gear me-2"></i>My Account</a>
+
+                    <a href="#preferences"
+                       class="list-group-item list-group-item-action">
+                        <i class="bi bi-sliders me-2"></i>
+                        My Preferences
+                    </a>
+
+                    <a href="#account"
+                       class="list-group-item list-group-item-action">
+                        <i class="bi bi-person-gear me-2"></i>
+                        My Account
+                    </a>
+
                 </div>
             </div>
+
         </div>
 
+        @* MAIN SETTINGS CONTENT *@
         <div class="col-12 col-lg-9">
 
             @if (Model.CanEditSystemSettings)
             {
-                <form asp-controller="Settings" asp-action="Index" method="post">
+                <form asp-controller="Settings"
+                      asp-action="Index"
+                      method="post">
 
-                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    @Html.AntiForgeryToken()
 
-                    <!-- COMPANY PROFILE -->
-                    <section id="company" class="content-card settings-section">
-                        <h5 class="fw-bold mb-1"><i class="bi bi-building me-2"></i>Company Profile
+                    <div asp-validation-summary="ModelOnly"
+                         class="text-danger mb-3">
+                    </div>
+
+                    @* COMPANY PROFILE *@
+                    <section id="company" class="settings-section">
+
+                        <h2 class="settings-section-title">
+                            <i class="bi bi-building me-2"></i>
+                            Company Profile
+
                             @if (!Model.HasCompanyDetails)
                             {
-                                <span class="badge bg-warning text-dark ms-2 align-middle small">Not added yet</span>
+                                <span class="badge bg-warning text-dark ms-2 align-middle">
+                                    Not added yet
+                                </span>
                             }
-                        </h5>
-                        <p class="settings-hint mb-3">Shown on quotes and invoices. Fill in what you have now - you can add the rest and save again later.</p>
+                        </h2>
+
+                        <p class="settings-hint mb-4">
+                            These details appear on quotes and invoices.
+                            You can update the information whenever necessary.
+                        </p>
 
                         <div class="row g-3">
+
                             <div class="col-md-8">
-                                <label asp-for="CompanyName" class="form-label fw-bold"></label>
+                                <label asp-for="CompanyName" class="form-label"></label>
                                 <input asp-for="CompanyName" class="form-control" />
-                                <span asp-validation-for="CompanyName" class="text-danger small"></span>
+                                <span asp-validation-for="CompanyName" class="text-danger"></span>
                             </div>
+
                             <div class="col-md-4">
-                                <label asp-for="RegistrationNumber" class="form-label fw-bold"></label>
-                                <input asp-for="RegistrationNumber" class="form-control" placeholder="e.g. 2015/123456/07" />
-                                <span asp-validation-for="RegistrationNumber" class="text-danger small"></span>
+                                <label asp-for="RegistrationNumber" class="form-label"></label>
+                                <input asp-for="RegistrationNumber"
+                                       class="form-control"
+                                       placeholder="e.g. 2015/123456/07" />
+                                <span asp-validation-for="RegistrationNumber" class="text-danger"></span>
                             </div>
+
                             <div class="col-md-4">
-                                <label asp-for="CompanyVatNumber" class="form-label fw-bold"></label>
-                                <input asp-for="CompanyVatNumber" class="form-control" placeholder="e.g. 4123456789" />
-                                <span asp-validation-for="CompanyVatNumber" class="text-danger small"></span>
+                                <label asp-for="CompanyVatNumber" class="form-label"></label>
+                                <input asp-for="CompanyVatNumber"
+                                       class="form-control"
+                                       placeholder="e.g. 4123456789" />
+                                <span asp-validation-for="CompanyVatNumber" class="text-danger"></span>
                             </div>
+
                             <div class="col-md-8">
-                                <label asp-for="PhysicalAddress" class="form-label fw-bold"></label>
+                                <label asp-for="PhysicalAddress" class="form-label"></label>
                                 <input asp-for="PhysicalAddress" class="form-control" />
-                                <span asp-validation-for="PhysicalAddress" class="text-danger small"></span>
+                                <span asp-validation-for="PhysicalAddress" class="text-danger"></span>
                             </div>
+
                             <div class="col-md-4">
-                                <label asp-for="City" class="form-label fw-bold"></label>
+                                <label asp-for="City" class="form-label"></label>
                                 <input asp-for="City" class="form-control" />
-                                <span asp-validation-for="City" class="text-danger small"></span>
+                                <span asp-validation-for="City" class="text-danger"></span>
                             </div>
+
                             <div class="col-md-2">
-                                <label asp-for="PostalCode" class="form-label fw-bold"></label>
-                                <input asp-for="PostalCode" class="form-control" placeholder="e.g. 4001" />
-                                <span asp-validation-for="PostalCode" class="text-danger small"></span>
+                                <label asp-for="PostalCode" class="form-label"></label>
+                                <input asp-for="PostalCode"
+                                       class="form-control"
+                                       placeholder="e.g. 4001" />
+                                <span asp-validation-for="PostalCode" class="text-danger"></span>
                             </div>
+
                             <div class="col-md-6">
-                                <label asp-for="PhoneNumber" class="form-label fw-bold"></label>
-                                <input asp-for="PhoneNumber" class="form-control" placeholder="e.g. 031 123 4567" />
-                                <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                                <label asp-for="PhoneNumber" class="form-label"></label>
+                                <input asp-for="PhoneNumber"
+                                       class="form-control"
+                                       placeholder="e.g. 031 123 4567" />
+                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                             </div>
+
                             <div class="col-md-6">
-                                <label asp-for="Email" class="form-label fw-bold"></label>
+                                <label asp-for="Email" class="form-label"></label>
                                 <input asp-for="Email" class="form-control" />
-                                <span asp-validation-for="Email" class="text-danger small"></span>
+                                <span asp-validation-for="Email" class="text-danger"></span>
                             </div>
+
                             <div class="col-md-6">
-                                <label asp-for="Website" class="form-label fw-bold"></label>
-                                <input asp-for="Website" class="form-control" placeholder="e.g. https://www.example.co.za" />
-                                <span asp-validation-for="Website" class="text-danger small"></span>
+                                <label asp-for="Website" class="form-label"></label>
+                                <input asp-for="Website"
+                                       class="form-control"
+                                       placeholder="e.g. https://www.example.co.za" />
+                                <span asp-validation-for="Website" class="text-danger"></span>
                             </div>
+
                         </div>
+
                     </section>
 
-                    <!-- BANKING -->
-                    <section id="banking" class="content-card settings-section">
-                        <h5 class="fw-bold mb-1"><i class="bi bi-bank me-2"></i>Banking Details
+                    @* BANKING DETAILS *@
+                    <section id="banking" class="settings-section">
+
+                        <h2 class="settings-section-title">
+                            <i class="bi bi-bank me-2"></i>
+                            Banking Details
+
                             @if (!Model.HasBankingDetails)
                             {
-                                <span class="badge bg-warning text-dark ms-2 align-middle small">Not added yet</span>
+                                <span class="badge bg-warning text-dark ms-2 align-middle">
+                                    Not added yet
+                                </span>
                             }
-                        </h5>
-                        <p class="settings-hint mb-3">Printed on invoices so customers know where to pay.</p>
+                        </h2>
+
+                        <p class="settings-hint mb-4">
+                            These details appear on invoices so customers
+                            know where to make payments.
+                        </p>
 
                         <div class="row g-3">
+
                             <div class="col-md-6">
-                                <label asp-for="BankName" class="form-label fw-bold"></label>
+                                <label asp-for="BankName" class="form-label"></label>
                                 <input asp-for="BankName" class="form-control" />
-                                <span asp-validation-for="BankName" class="text-danger small"></span>
+                                <span asp-validation-for="BankName" class="text-danger"></span>
                             </div>
+
                             <div class="col-md-6">
-                                <label asp-for="BankAccountName" class="form-label fw-bold"></label>
+                                <label asp-for="BankAccountName" class="form-label"></label>
                                 <input asp-for="BankAccountName" class="form-control" />
-                                <span asp-validation-for="BankAccountName" class="text-danger small"></span>
+                                <span asp-validation-for="BankAccountName" class="text-danger"></span>
                             </div>
+
                             <div class="col-md-6">
-                                <label asp-for="BankAccountNumber" class="form-label fw-bold"></label>
-                                <input asp-for="BankAccountNumber" class="form-control" inputmode="numeric" />
-                                <span asp-validation-for="BankAccountNumber" class="text-danger small"></span>
+                                <label asp-for="BankAccountNumber" class="form-label"></label>
+                                <input asp-for="BankAccountNumber"
+                                       class="form-control"
+                                       inputmode="numeric" />
+                                <span asp-validation-for="BankAccountNumber" class="text-danger"></span>
                             </div>
+
                             <div class="col-md-6">
-                                <label asp-for="BranchCode" class="form-label fw-bold"></label>
-                                <input asp-for="BranchCode" class="form-control" inputmode="numeric" />
-                                <span asp-validation-for="BranchCode" class="text-danger small"></span>
+                                <label asp-for="BranchCode" class="form-label"></label>
+                                <input asp-for="BranchCode"
+                                       class="form-control"
+                                       inputmode="numeric" />
+                                <span asp-validation-for="BranchCode" class="text-danger"></span>
                             </div>
+
                             <div class="col-md-6">
-                                <label asp-for="PaymentReference" class="form-label fw-bold"></label>
-                                <input asp-for="PaymentReference" class="form-control" placeholder="e.g. Your invoice number" />
-                                <span asp-validation-for="PaymentReference" class="text-danger small"></span>
+                                <label asp-for="PaymentReference" class="form-label"></label>
+                                <input asp-for="PaymentReference"
+                                       class="form-control"
+                                       placeholder="e.g. Your invoice number" />
+                                <span asp-validation-for="PaymentReference" class="text-danger"></span>
                             </div>
+
                             <div class="col-md-6">
-                                <label asp-for="ProofOfPaymentEmail" class="form-label fw-bold"></label>
+                                <label asp-for="ProofOfPaymentEmail" class="form-label"></label>
                                 <input asp-for="ProofOfPaymentEmail" class="form-control" />
-                                <span asp-validation-for="ProofOfPaymentEmail" class="text-danger small"></span>
+                                <span asp-validation-for="ProofOfPaymentEmail" class="text-danger"></span>
                             </div>
+
                         </div>
+
                     </section>
 
-                    <div class="content-card settings-section d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2">
-                        <span class="settings-hint">
+                    @* SAVE SETTINGS *@
+                    <div class="settings-section settings-save-section
+                                d-flex flex-column flex-sm-row
+                                justify-content-between
+                                align-items-sm-center gap-3">
+
+                        <div class="settings-hint">
+
                             @if (Model.UpdatedAt.HasValue)
                             {
-                                <text>Last saved @Model.UpdatedAt.Value.ToLocalTime().ToString("dd MMM yyyy HH:mm") by @(Model.UpdatedBy ?? "unknown")</text>
+                                <span>
+                                    <i class="bi bi-clock-history me-1"></i>
+                                    Last saved
+                                    @Model.UpdatedAt.Value.ToLocalTime().ToString("dd MMM yyyy HH:mm")
+                                    by @(Model.UpdatedBy ?? "unknown")
+                                </span>
                             }
                             else
                             {
-                                <text>Company and banking details have not been saved yet.</text>
+                                <span>
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Company and banking details have not been saved yet.
+                                </span>
                             }
-                        </span>
-                        <button type="submit" class="btn btn-custom-save px-4">
-                            <i class="bi bi-save me-1"></i> Save Settings
+
+                        </div>
+
+                        <button type="submit" class="settings-btn-primary">
+                            <i class="bi bi-save"></i>
+                            Save Settings
                         </button>
+
                     </div>
+
                 </form>
             }
             else
             {
-                <div class="alert alert-info">
-                    <i class="bi bi-info-circle me-1"></i>
+                <div class="alert alert-info" role="alert">
+                    <i class="bi bi-info-circle me-2"></i>
                     The company profile and banking details are managed by administrators.
                 </div>
             }
 
-            <!-- MY PREFERENCES (saved in this browser) -->
-            <section id="preferences" class="content-card settings-section">
-                <h5 class="fw-bold mb-1"><i class="bi bi-sliders me-2"></i>My Preferences</h5>
-                <p class="settings-hint mb-3">Saved on this device and applied straight away.</p>
+            @* MY PREFERENCES *@
+            <section id="preferences" class="settings-section">
 
-                <div class="form-check form-switch mb-3">
-                    <input class="form-check-input" type="checkbox" role="switch" id="prefPageTips" checked>
-                    <label class="form-check-label fw-bold" for="prefPageTips">Show a tip when each page opens</label>
+                <h2 class="settings-section-title">
+                    <i class="bi bi-sliders me-2"></i>
+                    My Preferences
+                </h2>
+
+                <p class="settings-hint mb-4">
+                    Your preferences are saved on this device and
+                    applied immediately.
+                </p>
+
+                <div class="form-check form-switch mb-4">
+
+                    <input class="form-check-input"
+                           type="checkbox"
+                           role="switch"
+                           id="prefPageTips"
+                           checked />
+
+                    <label class="form-check-label"
+                           for="prefPageTips">
+                        Show a tip when each page opens
+                    </label>
+
                 </div>
 
                 <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="prefSidebarCollapsed">
-                    <label class="form-check-label fw-bold" for="prefSidebarCollapsed">Keep the side menu collapsed</label>
+
+                    <input class="form-check-input"
+                           type="checkbox"
+                           role="switch"
+                           id="prefSidebarCollapsed" />
+
+                    <label class="form-check-label"
+                           for="prefSidebarCollapsed">
+                        Keep the side menu collapsed
+                    </label>
+
                 </div>
 
-                <div id="prefSaved" class="settings-hint mt-2 d-none" role="status">
-                    <i class="bi bi-check-circle text-success me-1"></i>Preference saved.
+                <div id="prefSaved"
+                     class="settings-hint mt-3 d-none"
+                     role="status">
+                    <i class="bi bi-check-circle text-success me-1"></i>
+                    Preference saved.
                 </div>
+
             </section>
 
-            <!-- MY ACCOUNT -->
-            <section id="account" class="content-card settings-section">
-                <h5 class="fw-bold mb-1"><i class="bi bi-person-gear me-2"></i>My Account</h5>
-                <p class="settings-hint mb-3">Signed in as <strong>@User.Identity?.Name</strong></p>
+            @* MY ACCOUNT *@
+            <section id="account" class="settings-section">
 
-                <div class="d-flex flex-column flex-sm-row gap-2">
-                    <a asp-controller="Home" asp-action="UserProfile" class="btn btn-outline-secondary">
-                        <i class="bi bi-person me-1"></i> View Profile
+                <h2 class="settings-section-title">
+                    <i class="bi bi-person-gear me-2"></i>
+                    My Account
+                </h2>
+
+                <p class="settings-hint mb-4">
+                    Signed in as
+                    <strong>@User.Identity?.Name</strong>
+                </p>
+
+                <div class="d-flex flex-column flex-sm-row flex-wrap gap-2">
+
+                    <a asp-controller="Home"
+                       asp-action="UserProfile"
+                       class="settings-btn-outline">
+                        <i class="bi bi-person"></i>
+                        View Profile
                     </a>
-                    <a asp-controller="Profile" asp-action="Edit" class="btn btn-outline-secondary">
-                        <i class="bi bi-pencil-square me-1"></i> Edit My Details
+
+                    <a asp-controller="Profile"
+                       asp-action="Edit"
+                       class="settings-btn-outline">
+                        <i class="bi bi-pencil-square"></i>
+                        Edit My Details
                     </a>
-                    <a asp-controller="Profile" asp-action="ChangePassword" class="btn btn-outline-secondary">
-                        <i class="bi bi-shield-lock me-1"></i> Change Password
+
+                    <a asp-controller="Profile"
+                       asp-action="ChangePassword"
+                       class="settings-btn-outline">
+                        <i class="bi bi-shield-lock"></i>
+                        Change Password
                     </a>
+
                 </div>
+
             </section>
 
         </div>
+
     </div>
+
 </div>
 
 @section Scripts {
+
     <partial name="_ValidationScriptsPartial" />
 
     <script>
-        (function () {
-            // ---- personal preferences (browser storage) ----
-            function read(key) { try { return localStorage.getItem(key); } catch (e) { return null; } }
-            function write(key, value) { try { localStorage.setItem(key, value); } catch (e) { } }
+        /*
+            Purpose:
+            Stores personal settings in the browser and
+            applies sidebar preferences immediately.
 
-            const saved = document.getElementById("prefSaved");
-            function showSaved() {
-                saved.classList.remove("d-none");
-                clearTimeout(showSaved.timer);
-                showSaved.timer = setTimeout(() => saved.classList.add("d-none"), 2000);
+            Reference:
+            MDN Web Docs (n.d.) Window: localStorage property.
+        */
+
+        (function () {
+
+            function read(key) {
+                try {
+                    return localStorage.getItem(key);
+                } catch (e) {
+                    return null;
+                }
             }
 
+            function write(key, value) {
+                try {
+                    localStorage.setItem(key, value);
+                } catch (e) {
+                    // Storage may be disabled by browser settings.
+                }
+            }
+
+            const saved = document.getElementById("prefSaved");
+
+            function showSaved() {
+                saved.classList.remove("d-none");
+
+                clearTimeout(showSaved.timer);
+
+                showSaved.timer = setTimeout(function () {
+                    saved.classList.add("d-none");
+                }, 2000);
+            }
+
+            // PAGE TIPS PREFERENCE
             const tips = document.getElementById("prefPageTips");
+
             tips.checked = read("pageTipsEnabled") !== "false";
+
             tips.addEventListener("change", function () {
                 write("pageTipsEnabled", String(this.checked));
                 showSaved();
             });
 
+            // SIDEBAR PREFERENCE
             const sidebar = document.getElementById("prefSidebarCollapsed");
+
             sidebar.checked = read("sidebarCollapsed") === "true";
+
             sidebar.addEventListener("change", function () {
                 write("sidebarCollapsed", String(this.checked));
-                document.body.classList.toggle("sidebar-collapsed", this.checked);
+
+                document.body.classList.toggle(
+                    "sidebar-collapsed",
+                    this.checked
+                );
+
                 showSaved();
             });
+
         })();
     </script>
 }

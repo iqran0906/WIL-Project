@@ -1,0 +1,573 @@
+﻿/*
+    File: wwwroot/css/useraccounts.css
+
+    Purpose:
+    Styles user account management, summary cards,
+    tables, action buttons and confirmation modals.
+
+    UI Improvements:
+    Iqra Nazir (2026).
+
+    
+    References (Harvard Anglia):
+   
+    MDN Web Docs (n.d.) CSS.
+    Available at: https://developer.mozilla.org/en-US/docs/Web/CSS
+*/
+
+.useraccounts-page {
+    background: #e6edf1;
+    border: 1px solid rgba(53, 127, 145, 0.18);
+    border-radius: 15px;
+    padding: 30px;
+    min-height: 75vh;
+    color: #183244;
+    font-size: 16px;
+}
+
+.useraccounts-page-header {
+    margin-bottom: 28px;
+}
+
+.useraccounts-heading {
+    display: flex;
+    align-items: center;
+    gap: 17px;
+}
+
+.useraccounts-heading-icon {
+    width: 58px;
+    height: 58px;
+    background: #dce9ee;
+    border: 1px solid #c9d9df;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #357f91;
+    font-size: 26px;
+}
+
+.useraccounts-page-title {
+    font-size: 30px;
+    font-weight: 800;
+    color: #183244;
+    margin: 0 0 6px;
+}
+
+.useraccounts-page-description {
+    font-size: 16px;
+    color: #667988;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* SUMMARY CARDS */
+
+.useraccounts-summary-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    height: 100%;
+    min-height: 110px;
+    padding: 20px;
+    background: #f8fafb;
+    border: 1px solid #c9d9df;
+    border-top: 3px solid #357f91;
+    border-radius: 12px;
+}
+
+.useraccounts-summary-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    background: #dce9ee;
+    border-radius: 10px;
+    color: #357f91;
+    font-size: 23px;
+}
+
+    .useraccounts-summary-icon.active {
+        background: #dff2e8;
+        color: #26714e;
+    }
+
+    .useraccounts-summary-icon.inactive {
+        background: #f8e5e5;
+        color: #a13e3e;
+    }
+
+    .useraccounts-summary-icon.pending {
+        background: #fff1d8;
+        color: #946a20;
+    }
+
+.useraccounts-summary-label {
+    color: #667988;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.useraccounts-summary-value {
+    color: #183244;
+    font-size: 26px;
+    font-weight: 800;
+}
+
+/* CONTENT SECTIONS */
+
+.useraccounts-content-card {
+    margin-bottom: 24px;
+    padding: 24px;
+    background: #f8fafb;
+    border: 1px solid #c9d9df;
+    border-top: 3px solid #357f91;
+    border-radius: 12px;
+}
+
+.useraccounts-section-header {
+    margin-bottom: 20px;
+    padding-bottom: 17px;
+    border-bottom: 1px solid #d9e4e9;
+}
+
+.useraccounts-section-title {
+    margin: 0 0 6px;
+    color: #183244;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.useraccounts-section-description {
+    margin: 0;
+    color: #667988;
+    font-size: 15px;
+}
+
+/* TABLES */
+
+.useraccounts-table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.useraccounts-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+}
+
+    .useraccounts-table th {
+        background: #dce9ee;
+        color: #183244;
+        font-weight: 800;
+        padding: 14px 12px;
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    .useraccounts-table td {
+        padding: 14px 12px;
+        border-bottom: 1px solid #e1e9ed;
+        color: #304c5a;
+        vertical-align: middle;
+    }
+
+    .useraccounts-table tbody tr:hover {
+        background: #edf3f5;
+    }
+
+    .useraccounts-table td:last-child {
+        min-width: 145px;
+    }
+
+    .useraccounts-table form {
+        margin: 0;
+    }
+
+/* STATUS BADGES */
+
+.useraccounts-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 11px;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+    .useraccounts-status.active {
+        background: #dff2e8;
+        color: #26714e;
+    }
+
+    .useraccounts-status.inactive {
+        background: #e6ebef;
+        color: #536b78;
+    }
+
+/* BUTTONS */
+
+.useraccounts-btn-primary,
+.useraccounts-btn-success,
+.useraccounts-btn-danger,
+.useraccounts-btn-danger-solid,
+.useraccounts-btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.3;
+    text-decoration: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.2s ease;
+}
+
+.useraccounts-btn-primary {
+    background: #357f91;
+    color: #fff;
+    border: 1px solid #357f91;
+}
+
+    .useraccounts-btn-primary:hover {
+        background: #286675;
+        color: #fff;
+    }
+
+.useraccounts-btn-success {
+    background: #e1f2e9;
+    color: #26714e;
+    border: 1px solid #8fc4a6;
+}
+
+    .useraccounts-btn-success:hover {
+        background: #cce8d9;
+    }
+
+.useraccounts-btn-danger {
+    background: #fff;
+    color: #a13e3e;
+    border: 1px solid #d6a0a0;
+}
+
+    .useraccounts-btn-danger:hover {
+        background: #f8e5e5;
+    }
+
+.useraccounts-btn-danger-solid {
+    background: #a13e3e;
+    color: #fff;
+    border: 1px solid #a13e3e;
+}
+
+    .useraccounts-btn-danger-solid:hover {
+        background: #842f2f;
+        color: #fff;
+    }
+
+.useraccounts-btn-outline {
+    background: #fff;
+    color: #357f91;
+    border: 1px solid #a9c4cc;
+}
+
+    .useraccounts-btn-outline:hover {
+        background: #dce9ee;
+        color: #286675;
+    }
+
+/* EMPTY STATES */
+
+.useraccounts-empty-state {
+    padding: 40px 20px;
+    text-align: center;
+    background: #edf3f5;
+    border: 1px dashed #c9d9df;
+    border-radius: 10px;
+}
+
+    .useraccounts-empty-state i {
+        display: block;
+        color: #357f91;
+        font-size: 30px;
+        margin-bottom: 12px;
+    }
+
+    .useraccounts-empty-state p {
+        color: #667988;
+        font-size: 16px;
+        margin: 0;
+    }
+
+/* CONFIRMATION MODAL */
+
+.useraccounts-modal {
+    border: 1px solid #c9d9df;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+    .useraccounts-modal .modal-header {
+        background: #edf3f5;
+        border-bottom: 1px solid #c9d9df;
+    }
+
+.useraccounts-modal-title {
+    color: #183244;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.useraccounts-modal .modal-body {
+    color: #304c5a;
+    font-size: 16px;
+}
+
+.useraccounts-modal-warning {
+    margin-bottom: 0;
+    padding: 12px;
+    background: #fff1d8;
+    border-radius: 8px;
+    color: #805b20;
+}
+
+.useraccounts-modal .modal-footer {
+    border-top: 1px solid #e1e9ed;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+    .useraccounts-page {
+        padding: 18px;
+    }
+
+    .useraccounts-page-title {
+        font-size: 26px;
+    }
+
+    .useraccounts-content-card {
+        padding: 16px;
+    }
+
+    .useraccounts-heading {
+        align-items: flex-start;
+    }
+
+    .useraccounts-modal .modal-footer {
+        flex-wrap: wrap;
+    }
+
+    /* ==========================================
+   CREATE USER ACCOUNT PAGE
+   ========================================== */
+
+    /* Employee information banner */
+
+    .useraccounts-employee-banner {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        background: #edf3f5;
+        border: 1px solid #c9d9df;
+        border-left: 4px solid #357f91;
+        border-radius: 10px;
+        padding: 18px 22px;
+        margin-bottom: 24px;
+    }
+
+    .useraccounts-employee-banner-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        flex-shrink: 0;
+        background: #dce9ee;
+        border-radius: 10px;
+        color: #357f91;
+        font-size: 23px;
+    }
+
+    .useraccounts-employee-banner-label {
+        color: #667988;
+        font-size: 15px;
+        margin-bottom: 5px;
+    }
+
+    .useraccounts-employee-banner-name {
+        color: #183244;
+        font-size: 20px;
+        font-weight: 800;
+    }
+
+    /* Main form card */
+
+    .useraccounts-create-card {
+        max-width: 850px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Form groups */
+
+    .useraccounts-form-group {
+        margin-bottom: 26px;
+    }
+
+    .useraccounts-form-label {
+        display: block;
+        color: #183244;
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 9px;
+    }
+
+    .useraccounts-form-input {
+        background: #fff;
+        border: 1px solid #c9d9df;
+        border-radius: 8px;
+        color: #183244;
+        font-size: 16px;
+        padding: 11px 13px;
+        min-height: 46px;
+    }
+
+        .useraccounts-form-input:focus {
+            border-color: #357f91;
+            box-shadow: 0 0 0 3px rgba(53, 127, 145, 0.12);
+        }
+
+    .useraccounts-field-hint {
+        color: #667988;
+        font-size: 15px;
+        margin-top: 7px;
+        line-height: 1.5;
+    }
+
+    .useraccounts-validation {
+        display: block;
+        font-size: 14px;
+        margin-top: 6px;
+    }
+
+    /* Password visibility buttons */
+
+    .useraccounts-password-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 52px;
+        background: #edf3f5;
+        color: #357f91;
+        border: 1px solid #c9d9df;
+        border-radius: 0 8px 8px 0;
+        cursor: pointer;
+        font-size: 20px;
+    }
+
+        .useraccounts-password-toggle:hover {
+            background: #dce9ee;
+            color: #286675;
+        }
+
+    /* Password strength panel */
+
+    .useraccounts-password-panel {
+        background: #edf3f5;
+        border: 1px solid #d9e4e9;
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 18px;
+    }
+
+    .useraccounts-password-strength-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 13px;
+    }
+
+    .useraccounts-password-strength-label {
+        color: #183244;
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .useraccounts-password-strength-header .badge {
+        font-size: 14px;
+        padding: 7px 12px;
+    }
+
+    .useraccounts-password-progress {
+        height: 9px;
+        background: #dce6eb;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+
+    .useraccounts-password-requirements {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px 20px;
+        font-size: 15px;
+        line-height: 1.5;
+    }
+
+    /* Password match message */
+
+    .useraccounts-password-match {
+        font-size: 15px;
+        font-weight: 600;
+        margin-top: 9px;
+    }
+
+    /* Form action buttons */
+
+    .useraccounts-form-actions {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        border-top: 1px solid #d9e4e9;
+        padding-top: 24px;
+        margin-top: 30px;
+    }
+
+    /* Responsive */
+
+    @media (max-width: 768px) {
+
+        .useraccounts-create-card {
+            max-width: 100%;
+        }
+
+        .useraccounts-password-requirements {
+            grid-template-columns: 1fr;
+        }
+
+        .useraccounts-form-actions {
+            flex-direction: column-reverse;
+            align-items: stretch;
+        }
+
+            .useraccounts-form-actions .useraccounts-btn-primary,
+            .useraccounts-form-actions .useraccounts-btn-outline {
+                width: 100%;
+            }
+    }
+}

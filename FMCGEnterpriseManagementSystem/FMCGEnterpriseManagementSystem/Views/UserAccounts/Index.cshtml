@@ -1,0 +1,450 @@
+﻿@*
+    File: Views/UserAccounts/Index.cshtml
+
+    Purpose:
+    Displays existing employee user accounts, allows administrators
+    to activate or deactivate accounts, and lists employees who
+    still need system access.
+
+    Original Author:
+    iqran0906 (from Git history).
+
+    UI Improvements:
+    Iqra Nazir (2026).
+
+    References:
+    Microsoft (n.d.) ASP.NET Core MVC views.
+    Available at: https://learn.microsoft.com/en-us/aspnet/core/mvc/views/overview
+
+    Bootstrap (n.d.) Modal.
+    Available at: https://getbootstrap.com/docs/5.3/components/modal/
+
+    MDN Web Docs (n.d.) HTML forms.
+    Available at: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form
+*@
+
+@model IEnumerable<FMCGEnterpriseManagementSystem.Models.Employee>
+
+@{
+    ViewData["Title"] = "User Account Management";
+
+    var employeesWithoutAccounts =
+        ViewBag.EmployeesWithoutAccounts
+        as IEnumerable<FMCGEnterpriseManagementSystem.Models.Employee>
+        ?? Enumerable.Empty<FMCGEnterpriseManagementSystem.Models.Employee>();
+
+    var existingAccounts = Model.ToList();
+    var pendingEmployees = employeesWithoutAccounts.ToList();
+
+    var activeAccounts = existingAccounts.Count(e => e.User?.IsActive == true);
+    var inactiveAccounts = existingAccounts.Count(e => e.User?.IsActive != true);
+}
+
+<div class="useraccounts-page">
+
+    @* PAGE HEADER *@
+    <div class="useraccounts-page-header">
+
+        <div class="useraccounts-heading">
+
+            <div class="useraccounts-heading-icon">
+                <i class="bi bi-people-fill"></i>
+            </div>
+
+            <div>
+                <h1 class="useraccounts-page-title">
+                    User Account Management
+                </h1>
+
+                <p class="useraccounts-page-description">
+                    Manage employee system access, account activation
+                    and new user registrations.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+    @* SUCCESS MESSAGE *@
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show"
+             role="alert">
+
+            <i class="bi bi-check-circle me-2"></i>
+            @TempData["SuccessMessage"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+            </button>
+
+        </div>
+    }
+
+    @* ACCOUNT SUMMARY *@
+    <div class="row g-3 mb-4">
+
+        <div class="col-md-3 col-sm-6">
+            <div class="useraccounts-summary-card">
+
+                <div class="useraccounts-summary-icon">
+                    <i class="bi bi-person-vcard"></i>
+                </div>
+
+                <div>
+                    <div class="useraccounts-summary-label">
+                        Total Accounts
+                    </div>
+
+                    <div class="useraccounts-summary-value">
+                        @existingAccounts.Count
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <div class="useraccounts-summary-card">
+
+                <div class="useraccounts-summary-icon active">
+                    <i class="bi bi-person-check"></i>
+                </div>
+
+                <div>
+                    <div class="useraccounts-summary-label">
+                        Active Accounts
+                    </div>
+
+                    <div class="useraccounts-summary-value">
+                        @activeAccounts
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <div class="useraccounts-summary-card">
+
+                <div class="useraccounts-summary-icon inactive">
+                    <i class="bi bi-person-dash"></i>
+                </div>
+
+                <div>
+                    <div class="useraccounts-summary-label">
+                        Inactive Accounts
+                    </div>
+
+                    <div class="useraccounts-summary-value">
+                        @inactiveAccounts
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <div class="useraccounts-summary-card">
+
+                <div class="useraccounts-summary-icon pending">
+                    <i class="bi bi-person-plus"></i>
+                </div>
+
+                <div>
+                    <div class="useraccounts-summary-label">
+                        Awaiting Accounts
+                    </div>
+
+                    <div class="useraccounts-summary-value">
+                        @pendingEmployees.Count
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    @* EXISTING USER ACCOUNTS *@
+    <section class="useraccounts-content-card">
+
+        <div class="useraccounts-section-header">
+
+            <div>
+                <h2 class="useraccounts-section-title">
+                    Existing User Accounts
+                </h2>
+
+                <p class="useraccounts-section-description">
+                    View employees with system access and manage their account status.
+                </p>
+            </div>
+
+        </div>
+
+        @if (!existingAccounts.Any())
+        {
+            <div class="useraccounts-empty-state">
+                <i class="bi bi-person-x"></i>
+                <p>No employee user accounts have been created yet.</p>
+            </div>
+        }
+        else
+        {
+            <div class="useraccounts-table-container">
+
+                <table class="useraccounts-table">
+
+                    <thead>
+                        <tr>
+                            <th>Employee Number</th>
+                            <th>Employee</th>
+                            <th>Email</th>
+                            <th>Account Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var employee in existingAccounts)
+                        {
+                            <tr>
+                                <td>@employee.EmployeeNumber</td>
+
+                                <td>
+                                    @employee.FirstName @employee.LastName
+                                </td>
+
+                                <td>@employee.User?.Email</td>
+
+                                <td>
+                                    @if (employee.User?.IsActive == true)
+                                    {
+                                        <span class="useraccounts-status active">
+                                            <i class="bi bi-check-circle-fill"></i>
+                                            Active
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="useraccounts-status inactive">
+                                            <i class="bi bi-dash-circle-fill"></i>
+                                            Inactive
+                                        </span>
+                                    }
+                                </td>
+
+                                <td>
+                                    @if (employee.User?.IsActive == true)
+                                    {
+                                        @* Opens a confirmation modal before submitting *@
+                                        <button type="button"
+                                                class="useraccounts-btn-danger"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#deactivateModal-@employee.EmployeeID">
+
+                                            <i class="bi bi-person-x"></i>
+                                            Deactivate
+
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <form asp-controller="UserAccounts"
+                                              asp-action="Activate"
+                                              method="post">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <input type="hidden"
+                                                   name="employeeId"
+                                                   value="@employee.EmployeeID" />
+
+                                            <button type="submit"
+                                                    class="useraccounts-btn-success">
+
+                                                <i class="bi bi-person-check"></i>
+                                                Activate
+
+                                            </button>
+
+                                        </form>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+
+    </section>
+
+    @* EMPLOYEES WITHOUT ACCOUNTS *@
+    <section class="useraccounts-content-card">
+
+        <div class="useraccounts-section-header">
+
+            <div>
+                <h2 class="useraccounts-section-title">
+                    Employees Without User Accounts
+                </h2>
+
+                <p class="useraccounts-section-description">
+                    Create login credentials for employees who do not yet have system access.
+                </p>
+            </div>
+
+        </div>
+
+        @if (!pendingEmployees.Any())
+        {
+            <div class="useraccounts-empty-state">
+                <i class="bi bi-check-circle"></i>
+                <p>All active employees currently have user accounts.</p>
+            </div>
+        }
+        else
+        {
+            <div class="useraccounts-table-container">
+
+                <table class="useraccounts-table">
+
+                    <thead>
+                        <tr>
+                            <th>Employee Number</th>
+                            <th>Employee</th>
+                            <th>Email</th>
+                            <th>Job Title</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var employee in pendingEmployees)
+                        {
+                            <tr>
+                                <td>@employee.EmployeeNumber</td>
+
+                                <td>
+                                    @employee.FirstName @employee.LastName
+                                </td>
+
+                                <td>@employee.Email</td>
+
+                                <td>@employee.JobTitle</td>
+
+                                <td>
+                                    <a asp-controller="UserAccounts"
+                                       asp-action="Create"
+                                       asp-route-employeeId="@employee.EmployeeID"
+                                       class="useraccounts-btn-primary">
+
+                                        <i class="bi bi-person-plus"></i>
+                                        Create Account
+
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+
+    </section>
+
+    @* DEACTIVATION CONFIRMATION MODALS
+       Rendered outside the table to maintain valid HTML. *@
+    @foreach (var employee in existingAccounts.Where(e => e.User?.IsActive == true))
+    {
+        <div class="modal fade"
+             id="deactivateModal-@employee.EmployeeID"
+             tabindex="-1"
+             aria-labelledby="deactivateModalLabel-@employee.EmployeeID"
+             aria-hidden="true">
+
+            <div class="modal-dialog modal-dialog-centered">
+
+                <div class="modal-content useraccounts-modal">
+
+                    <div class="modal-header">
+
+                        <h2 class="modal-title useraccounts-modal-title"
+                            id="deactivateModalLabel-@employee.EmployeeID">
+
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            Deactivate User Account
+
+                        </h2>
+
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close">
+                        </button>
+
+                    </div>
+
+                    <div class="modal-body">
+
+                        <p>
+                            Are you sure you want to deactivate the account for
+                            <strong>
+                                @employee.FirstName @employee.LastName
+                            </strong>?
+                        </p>
+
+                        <p class="useraccounts-modal-warning">
+                            This employee will no longer have active system access
+                            until their account is reactivated.
+                        </p>
+
+                    </div>
+
+                    <div class="modal-footer">
+
+                        <button type="button"
+                                class="useraccounts-btn-outline"
+                                data-bs-dismiss="modal">
+                            Cancel
+                        </button>
+
+                        <form asp-controller="UserAccounts"
+                              asp-action="Deactivate"
+                              method="post">
+
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden"
+                                   name="employeeId"
+                                   value="@employee.EmployeeID" />
+
+                            <button type="submit"
+                                    class="useraccounts-btn-danger-solid">
+
+                                <i class="bi bi-person-x"></i>
+                                Confirm Deactivation
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+
+</div>

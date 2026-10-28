@@ -1,0 +1,280 @@
+﻿/*
+    File: wwwroot/css/settings.css
+
+    Purpose:
+    Consistent styling for the Settings module.
+
+    Original Settings Module:
+    ST10068525 (2026).
+
+    UI Improvements:
+    Iqra Nazir (2026).
+
+    References:
+   
+    MDN Web Docs (n.d.) CSS.
+    Available at: https://developer.mozilla.org/en-US/docs/Web/CSS
+*/
+
+/* MAIN PAGE */
+
+.settings-page {
+    background: #e6edf1;
+    border: 1px solid rgba(53, 127, 145, 0.18);
+    border-radius: 15px;
+    padding: 30px;
+    min-height: 75vh;
+    color: #183244;
+    font-size: 16px;
+}
+
+/* PAGE HEADER */
+
+.settings-page-header {
+    margin-bottom: 28px;
+}
+
+.settings-page-heading {
+    display: flex;
+    align-items: center;
+    gap: 17px;
+}
+
+.settings-page-icon {
+    width: 58px;
+    height: 58px;
+    background: #dce9ee;
+    border: 1px solid #c9d9df;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #357f91;
+    font-size: 26px;
+}
+
+.settings-page-title {
+    font-size: 30px;
+    font-weight: 800;
+    color: #183244;
+    margin: 0 0 6px;
+}
+
+.settings-page-description {
+    font-size: 16px;
+    color: #667988;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* SECTION NAVIGATION */
+
+.settings-nav {
+    position: sticky;
+    top: 20px;
+    background: #f8fafb;
+    border: 1px solid #c9d9df;
+    border-top: 3px solid #357f91;
+    border-radius: 12px;
+    padding: 12px;
+}
+
+    .settings-nav .list-group-item {
+        border: none;
+        border-left: 3px solid transparent;
+        border-radius: 7px;
+        background: transparent;
+        color: #183244;
+        font-size: 15px;
+        font-weight: 700;
+        padding: 14px 12px;
+        margin-bottom: 4px;
+        transition: 0.2s ease;
+    }
+
+        .settings-nav .list-group-item:hover,
+        .settings-nav .list-group-item:focus {
+            background: #edf3f5;
+            border-left-color: #357f91;
+            color: #286675;
+        }
+
+        .settings-nav .list-group-item i {
+            color: #357f91;
+        }
+
+/* SETTINGS SECTIONS */
+
+.settings-section {
+    background: #f8fafb;
+    border: 1px solid #c9d9df;
+    border-top: 3px solid #357f91;
+    border-radius: 12px;
+    padding: 26px;
+    margin-bottom: 22px;
+    scroll-margin-top: 20px;
+}
+
+.settings-section-title {
+    color: #183244;
+    font-size: 20px;
+    font-weight: 800;
+    margin: 0 0 8px;
+}
+
+    .settings-section-title i {
+        color: #357f91;
+    }
+
+.settings-hint {
+    font-size: 15px;
+    color: #667988;
+    line-height: 1.6;
+}
+
+/* FORM FIELDS */
+
+.settings-section .form-label {
+    font-size: 15px;
+    font-weight: 700;
+    color: #183244;
+    margin-bottom: 7px;
+}
+
+.settings-section .form-control {
+    background: #fff;
+    border: 1px solid #c9d9df;
+    border-radius: 8px;
+    color: #183244;
+    font-size: 16px;
+    padding: 11px 13px;
+    min-height: 45px;
+}
+
+    .settings-section .form-control:focus {
+        border-color: #357f91;
+        box-shadow: 0 0 0 3px rgba(53, 127, 145, 0.12);
+    }
+
+/* VALIDATION */
+
+.settings-section .text-danger {
+    font-size: 14px;
+    display: block;
+    margin-top: 5px;
+}
+
+/* SAVE SETTINGS */
+
+.settings-save-section {
+    padding: 20px 24px;
+}
+
+.settings-btn-primary {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    background: #357f91;
+    border: 1px solid #357f91;
+    color: #fff;
+    border-radius: 8px;
+    padding: 11px 20px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.2s ease;
+}
+
+    .settings-btn-primary:hover {
+        background: #286675;
+        border-color: #286675;
+        color: #fff;
+    }
+
+.settings-btn-outline {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    border: 1px solid #a9c4cc;
+    color: #357f91;
+    border-radius: 8px;
+    padding: 11px 17px;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.2s ease;
+}
+
+    .settings-btn-outline:hover {
+        background: #dce9ee;
+        color: #286675;
+    }
+
+/* PERSONAL PREFERENCES */
+
+.settings-section .form-check-label {
+    color: #183244;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.settings-section .form-check-input {
+    width: 2.4em;
+    height: 1.25em;
+    cursor: pointer;
+}
+
+    .settings-section .form-check-input:checked {
+        background-color: #357f91;
+        border-color: #357f91;
+    }
+
+    .settings-section .form-check-input:focus {
+        box-shadow: 0 0 0 3px rgba(53, 127, 145, 0.12);
+    }
+
+/* STATUS BADGES */
+
+.settings-section .badge {
+    font-size: 13px;
+    padding: 7px 10px;
+    border-radius: 6px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 991px) {
+    .settings-nav {
+        position: static;
+    }
+}
+
+@media (max-width: 768px) {
+    .settings-page {
+        padding: 18px;
+    }
+
+    .settings-page-title {
+        font-size: 26px;
+    }
+
+    .settings-section {
+        padding: 18px;
+    }
+
+    .settings-save-section {
+        align-items: stretch;
+    }
+
+    .settings-btn-primary {
+        width: 100%;
+    }
+
+    .settings-page-heading {
+        align-items: flex-start;
+    }
+}
