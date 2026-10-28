@@ -1,79 +1,437 @@
 @*
-    Purpose: Edit My Details form.
-    Authors: ST10068525 (new file, not yet committed)
+    File: Views/Profile/Edit.cshtml
+
+    Purpose:
+    Allows authenticated users to update their personal
+    information and contact details.
+
+   
+    References :
+    Microsoft (n.d.) ASP.NET Core MVC views.
+    Available at: https://learn.microsoft.com/en-us/aspnet/core/mvc/views/overview
+
+    Bootstrap (n.d.) Forms.
+    Available at: https://getbootstrap.com/docs/5.3/forms/overview/
+
+    MDN Web Docs (n.d.) CSS.
+    Available at: https://developer.mozilla.org/en-US/docs/Web/CSS
 *@
+
 @model FMCGEnterpriseManagementSystem.ViewModels.EditProfileViewModel
 
 @{
     ViewData["Title"] = "Edit My Details";
 }
 
-<div class="content-card">
-    <div class="d-flex align-items-center gap-3 mb-4 border-bottom pb-3">
-        <i class="bi bi-pencil-square fs-2" style="color: #357383;"></i>
-        <h2 class="fw-bold m-0" style="color: #1c323d;">Edit My Details</h2>
-    </div>
+<style>
+    /* ==========================================
+       EDIT PROFILE PAGE
+       ========================================== */
 
-    <form asp-controller="Profile" asp-action="Edit" method="post">
+    .profile-edit-page {
+        background: #e6edf1;
+        border: 1px solid rgba(53, 127, 145, 0.18);
+        border-radius: 15px;
+        padding: 30px;
+        min-height: 75vh;
+        color: #183244;
+        font-size: 16px;
+    }
 
-        @Html.AntiForgeryToken()
+    /* PAGE HEADER */
 
-        <input asp-for="HasEmployeeRecord" type="hidden" />
+    .profile-edit-header {
+        display: flex;
+        align-items: center;
+        gap: 17px;
+        margin-bottom: 28px;
+    }
 
-        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    .profile-edit-header-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 58px;
+        height: 58px;
+        flex-shrink: 0;
+        background: #dce9ee;
+        border: 1px solid #c9d9df;
+        border-radius: 12px;
+        color: #357f91;
+        font-size: 26px;
+    }
 
-        @if (Model.HasEmployeeRecord)
-        {
-            <h5 class="fw-bold text-secondary mb-3">Personal Information</h5>
+    .profile-edit-title {
+        color: #183244;
+        font-size: 30px;
+        font-weight: 800;
+        margin: 0 0 6px;
+    }
 
-            <div class="row g-3 mb-4">
-                <div class="col-12 col-md-6">
-                    <label asp-for="FirstName" class="form-label fw-bold"></label>
-                    <input asp-for="FirstName" class="form-control" placeholder="Enter your name" />
-                    <span asp-validation-for="FirstName" class="text-danger small"></span>
-                </div>
-                <div class="col-12 col-md-6">
-                    <label asp-for="LastName" class="form-label fw-bold"></label>
-                    <input asp-for="LastName" class="form-control" placeholder="Enter your surname" />
-                    <span asp-validation-for="LastName" class="text-danger small"></span>
-                </div>
-            </div>
+    .profile-edit-description {
+        color: #667988;
+        font-size: 16px;
+        line-height: 1.5;
+        margin: 0;
+    }
+
+    /* CONTENT CARD */
+
+    .profile-edit-card {
+        background: #f8fafb;
+        border: 1px solid #c9d9df;
+        border-top: 3px solid #357f91;
+        border-radius: 12px;
+        padding: 28px;
+    }
+
+    .profile-edit-section {
+        margin-bottom: 30px;
+    }
+
+    .profile-edit-section-title {
+        color: #183244;
+        font-size: 20px;
+        font-weight: 800;
+        margin: 0 0 8px;
+    }
+
+    .profile-edit-section-description {
+        color: #667988;
+        font-size: 15px;
+        line-height: 1.5;
+        margin-bottom: 22px;
+    }
+
+    /* FORM FIELDS */
+
+    .profile-edit-form-label {
+        display: block;
+        color: #183244;
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .profile-edit-form-input {
+        background: #fff;
+        border: 1px solid #c9d9df;
+        border-radius: 8px;
+        color: #183244;
+        font-size: 16px;
+        padding: 11px 13px;
+        min-height: 46px;
+    }
+
+    .profile-edit-form-input:focus {
+        border-color: #357f91;
+        box-shadow: 0 0 0 3px rgba(53, 127, 145, 0.12);
+    }
+
+    .profile-edit-validation {
+        display: block;
+        color: #a13e3e;
+        font-size: 14px;
+        margin-top: 6px;
+    }
+
+    .profile-edit-field-hint {
+        color: #667988;
+        font-size: 15px;
+        margin-top: 7px;
+        line-height: 1.5;
+    }
+
+    /* INFORMATION NOTICE */
+
+    .profile-edit-notice {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        background: #edf3f5;
+        border: 1px solid #d9e4e9;
+        border-radius: 9px;
+        padding: 17px;
+        margin: 20px 0 26px;
+    }
+
+    .profile-edit-notice i {
+        color: #357f91;
+        font-size: 20px;
+        flex-shrink: 0;
+    }
+
+    .profile-edit-notice p {
+        color: #536b78;
+        font-size: 15px;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    /* BUTTONS */
+
+    .profile-edit-actions {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        gap: 12px;
+        border-top: 1px solid #d9e4e9;
+        padding-top: 24px;
+        margin-top: 25px;
+    }
+
+    .profile-edit-btn-primary,
+    .profile-edit-btn-outline {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border-radius: 8px;
+        padding: 11px 19px;
+        font-size: 15px;
+        font-weight: 700;
+        line-height: 1.4;
+        text-decoration: none;
+        cursor: pointer;
+        transition: 0.2s ease;
+    }
+
+    .profile-edit-btn-primary {
+        background: #357f91;
+        border: 1px solid #357f91;
+        color: #fff;
+    }
+
+    .profile-edit-btn-primary:hover {
+        background: #286675;
+        border-color: #286675;
+        color: #fff;
+    }
+
+    .profile-edit-btn-outline {
+        background: #fff;
+        border: 1px solid #a9c4cc;
+        color: #357f91;
+    }
+
+    .profile-edit-btn-outline:hover {
+        background: #dce9ee;
+        color: #286675;
+    }
+
+    /* RESPONSIVE */
+
+    @@media (max-width: 768px) {
+        .profile-edit-page {
+            padding: 18px;
         }
 
-        <h5 class="fw-bold text-secondary mb-3">Contact Details</h5>
+        .profile-edit-title {
+            font-size: 26px;
+        }
 
-        <div class="row g-3 mb-2">
-            <div class="col-12 col-md-6">
-                <label asp-for="Email" class="form-label fw-bold"></label>
-                <input asp-for="Email" class="form-control" placeholder="Enter your email address" autocomplete="email" />
-                <span asp-validation-for="Email" class="text-danger small"></span>
-                <div class="form-text">You use this email address to log in.</div>
-            </div>
-            <div class="col-12 col-md-6">
-                <label asp-for="ContactNumber" class="form-label fw-bold"></label>
-                <input asp-for="ContactNumber" class="form-control" placeholder="Enter your contact number" autocomplete="tel" />
-                <span asp-validation-for="ContactNumber" class="text-danger small"></span>
-            </div>
+        .profile-edit-card {
+            padding: 18px;
+        }
+
+        .profile-edit-actions {
+            flex-direction: column-reverse;
+            align-items: stretch;
+        }
+
+        .profile-edit-btn-primary,
+        .profile-edit-btn-outline {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="profile-edit-page">
+
+    @* PAGE HEADER *@
+    <div class="profile-edit-header">
+
+        <div class="profile-edit-header-icon">
+            <i class="bi bi-pencil-square"></i>
         </div>
 
-        <p class="text-muted small mt-3 mb-4">
-            <i class="bi bi-info-circle me-1"></i>
-            Your role, employee number, job title and employment date can only be changed by an administrator.
-        </p>
+        <div>
+            <h1 class="profile-edit-title">
+                Edit My Details
+            </h1>
 
-        <div class="d-flex flex-column flex-sm-row justify-content-end gap-2 border-top pt-3">
-            <a asp-controller="Home"
-               asp-action="UserProfile"
-               class="btn btn-link text-decoration-none text-secondary">
-                Cancel
-            </a>
-
-            <button type="submit" class="btn btn-custom-save">
-                Save Changes
-            </button>
+            <p class="profile-edit-description">
+                Update your personal information and contact details.
+            </p>
         </div>
 
-    </form>
+    </div>
+
+    @* EDIT PROFILE FORM *@
+    <div class="profile-edit-card">
+
+        <form asp-controller="Profile"
+              asp-action="Edit"
+              method="post">
+
+            @Html.AntiForgeryToken()
+
+            <input asp-for="HasEmployeeRecord" type="hidden" />
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger mb-3">
+            </div>
+
+            @* PERSONAL INFORMATION *@
+            @if (Model.HasEmployeeRecord)
+            {
+                <div class="profile-edit-section">
+
+                    <h2 class="profile-edit-section-title">
+                        <i class="bi bi-person me-2"></i>
+                        Personal Information
+                    </h2>
+
+                    <p class="profile-edit-section-description">
+                        Update your first name and surname.
+                    </p>
+
+                    <div class="row g-3">
+
+                        <div class="col-12 col-md-6">
+
+                            <label asp-for="FirstName"
+                                   class="profile-edit-form-label">
+                            </label>
+
+                            <input asp-for="FirstName"
+                                   class="form-control profile-edit-form-input"
+                                   placeholder="Enter your name" />
+
+                            <span asp-validation-for="FirstName"
+                                  class="profile-edit-validation">
+                            </span>
+
+                        </div>
+
+                        <div class="col-12 col-md-6">
+
+                            <label asp-for="LastName"
+                                   class="profile-edit-form-label">
+                            </label>
+
+                            <input asp-for="LastName"
+                                   class="form-control profile-edit-form-input"
+                                   placeholder="Enter your surname" />
+
+                            <span asp-validation-for="LastName"
+                                  class="profile-edit-validation">
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+
+            @* CONTACT DETAILS *@
+            <div class="profile-edit-section">
+
+                <h2 class="profile-edit-section-title">
+                    <i class="bi bi-telephone me-2"></i>
+                    Contact Details
+                </h2>
+
+                <p class="profile-edit-section-description">
+                    Manage the contact information associated
+                    with your account.
+                </p>
+
+                <div class="row g-3">
+
+                    <div class="col-12 col-md-6">
+
+                        <label asp-for="Email"
+                               class="profile-edit-form-label">
+                        </label>
+
+                        <input asp-for="Email"
+                               class="form-control profile-edit-form-input"
+                               placeholder="Enter your email address"
+                               autocomplete="email" />
+
+                        <span asp-validation-for="Email"
+                              class="profile-edit-validation">
+                        </span>
+
+                        <div class="profile-edit-field-hint">
+                            You use this email address to log in.
+                        </div>
+
+                    </div>
+
+                    <div class="col-12 col-md-6">
+
+                        <label asp-for="ContactNumber"
+                               class="profile-edit-form-label">
+                        </label>
+
+                        <input asp-for="ContactNumber"
+                               class="form-control profile-edit-form-input"
+                               placeholder="Enter your contact number"
+                               autocomplete="tel" />
+
+                        <span asp-validation-for="ContactNumber"
+                              class="profile-edit-validation">
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            @* INFORMATION NOTICE *@
+            <div class="profile-edit-notice">
+
+                <i class="bi bi-info-circle"></i>
+
+                <p>
+                    Your role, employee number, job title and
+                    employment date can only be changed by
+                    an administrator.
+                </p>
+
+            </div>
+
+            @* FORM ACTIONS *@
+            <div class="profile-edit-actions">
+
+                <a asp-controller="Home"
+                   asp-action="UserProfile"
+                   class="profile-edit-btn-outline">
+
+                    <i class="bi bi-arrow-left"></i>
+                    Cancel
+
+                </a>
+
+                <button type="submit"
+                        class="profile-edit-btn-primary">
+
+                    <i class="bi bi-check2-circle"></i>
+                    Save Changes
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
 </div>
 
 @section Scripts {
