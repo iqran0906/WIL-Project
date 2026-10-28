@@ -1,0 +1,341 @@
+﻿/*
+ * File: payments.css
+ * Purpose: Styling for Payments Management.
+ *
+ * Original system contributors: Exclusive Distributors WIL team.
+ * UI integration: Iqra Nazir (2026).
+ * UI adaptation assistance: OpenAI ChatGPT (2026).
+ *
+ * References:
+ * Bootstrap (n.d.) Documentation. https://getbootstrap.com/docs/5.3/
+ * MDN Web Docs (n.d.) CSS. https://developer.mozilla.org/en-US/docs/Web/CSS
+ */
+
+.payments-page {
+    background: #e6edf1;
+    border: 1px solid rgba(53, 127, 145, .18);
+    border-radius: 15px;
+    padding: 30px;
+    min-height: 75vh;
+    color: #183244;
+    font-size: 15px;
+}
+
+.payments-page-title {
+    font-size: 30px;
+    font-weight: 800;
+    color: #183244;
+    margin-bottom: 8px;
+}
+
+.payments-page-subtitle {
+    font-size: 15px;
+    color: #667988;
+    margin-bottom: 0;
+}
+
+.payments-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 28px;
+}
+
+.payments-header-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* BUTTONS */
+
+.payments-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 18px;
+    border-radius: 8px;
+    background: #357f91;
+    color: #fff;
+    border: 1px solid #357f91;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+    .payments-btn-primary:hover {
+        background: #286675;
+        border-color: #286675;
+        color: #fff;
+    }
+
+.payments-btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 18px;
+    border-radius: 8px;
+    background: #f8fafb;
+    color: #357f91;
+    border: 1px solid #a9c4cc;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+    .payments-btn-outline:hover {
+        background: #dce9ee;
+        color: #286675;
+    }
+
+/* CARDS */
+
+.payments-card {
+    background: #f8fafb;
+    border: 1px solid #c9d9df;
+    border-top: 3px solid #357f91;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.payments-section-title {
+    color: #183244;
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 18px;
+}
+
+.payments-company-name {
+    font-size: 19px;
+    font-weight: 800;
+    color: #183244;
+}
+
+/* FORMS */
+
+.payments-page .form-label {
+    color: #344f5e;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.payments-page .form-control,
+.payments-page .form-select {
+    border: 1px solid #c9d9df;
+    border-radius: 8px;
+    background: #fff;
+    color: #183244;
+    font-size: 15px;
+    padding: 11px 13px;
+}
+
+    .payments-page .form-control:focus,
+    .payments-page .form-select:focus {
+        border-color: #357f91;
+        box-shadow: 0 0 0 3px rgba(53,127,145,.12);
+    }
+
+    .payments-page .form-control[readonly] {
+        background: #edf3f5;
+        color: #536b78;
+    }
+
+/* TABLES */
+
+.payments-table-container {
+    overflow-x: auto;
+}
+
+.payments-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+    font-size: 15px;
+}
+
+    .payments-table thead th {
+        background: #dce9ee;
+        color: #344f5e;
+        padding: 15px 13px;
+        font-size: 15px;
+        font-weight: 800;
+        white-space: nowrap;
+        border: none;
+    }
+
+    .payments-table tbody td {
+        background: #f8fafb;
+        padding: 16px 13px;
+        vertical-align: middle;
+        border-top: 1px solid #d9e4e9;
+        border-bottom: 1px solid #d9e4e9;
+    }
+
+        .payments-table tbody td:first-child {
+            border-left: 1px solid #d9e4e9;
+            border-radius: 8px 0 0 8px;
+        }
+
+        .payments-table tbody td:last-child {
+            border-right: 1px solid #d9e4e9;
+            border-radius: 0 8px 8px 0;
+        }
+
+    .payments-table tbody tr:hover td {
+        background: #eef5f7;
+    }
+
+.payments-reference {
+    color: #183244;
+    font-weight: 800;
+}
+
+/* STATUS */
+
+.payments-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+    .payments-status.paid {
+        background: #dff2e8;
+        color: #26714e;
+    }
+
+    .payments-status.partial {
+        background: #fff3d7;
+        color: #966c1d;
+    }
+
+    .payments-status.unpaid {
+        background: #e6ebef;
+        color: #536b78;
+    }
+
+/* SUMMARY */
+
+.payments-summary-card {
+    background: #edf3f5;
+    border: 1px solid #c9d9df;
+    border-radius: 12px;
+    padding: 23px;
+}
+
+.payments-summary-label {
+    color: #667988;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.payments-summary-value {
+    color: #183244;
+    font-size: 25px;
+    font-weight: 800;
+}
+
+/* EMPTY STATE */
+
+.payments-empty {
+    text-align: center;
+    padding: 55px 20px;
+}
+
+    .payments-empty i {
+        font-size: 36px;
+        color: #8ba6b2;
+        display: block;
+        margin-bottom: 15px;
+    }
+
+    .payments-empty h3 {
+        font-size: 21px;
+        font-weight: 800;
+        color: #183244;
+    }
+
+    .payments-empty p {
+        color: #667988;
+        font-size: 15px;
+    }
+
+/* MODAL */
+
+.payments-page .modal-content {
+    border-radius: 13px;
+    border: 1px solid #c9d9df;
+}
+
+.payments-page .modal-header {
+    background: #edf3f5;
+}
+
+.payments-page .modal-title {
+    font-size: 19px;
+    font-weight: 800;
+    color: #183244;
+}
+
+/* PRINTING */
+
+@media print {
+    .payments-page {
+        background: #fff !important;
+        border: none !important;
+        padding: 0 !important;
+        min-height: auto !important;
+    }
+
+    .payments-no-print {
+        display: none !important;
+    }
+
+    .payments-card,
+    .payments-summary-card {
+        background: #fff !important;
+        box-shadow: none !important;
+        break-inside: avoid;
+    }
+
+    body {
+        background: #fff !important;
+    }
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+    .payments-page {
+        padding: 18px;
+    }
+
+    .payments-page-title {
+        font-size: 26px;
+    }
+
+    .payments-header-actions {
+        width: 100%;
+    }
+
+    .payments-card {
+        padding: 18px;
+    }
+
+    .payments-table {
+        font-size: 14px;
+    }
+}

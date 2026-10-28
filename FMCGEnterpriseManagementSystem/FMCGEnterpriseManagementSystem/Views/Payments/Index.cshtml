@@ -1,42 +1,71 @@
 ﻿@*
-    Purpose: Payments list page (table with search / filters and actions).
-    Authors: Sayali-St10458649, Naseeha27 (from git history)
+    Purpose: Payments list with export actions and payment statuses.
+    Original authors: Sayali-St10458649, Naseeha27 (Git history).
+    UI integration: Iqra Nazir (2026).
+ 
+
+    References:
+    Bootstrap (n.d.) Tables. https://getbootstrap.com/docs/5.3/content/tables/
+    Microsoft (n.d.) ASP.NET Core MVC views.
+    https://learn.microsoft.com/en-us/aspnet/core/mvc/views/overview
 *@
+
 @model List<FMCGEnterpriseManagementSystem.ViewModels.PaymentViewModel>
 
 @{
     ViewData["Title"] = "Payments";
 }
 
-<div class="container-fluid py-4">
+<div class="content-card payments-page">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="payments-page-header">
+
         <div>
-            <h1 class="fw-bold text-white">Payments</h1>
-            <p class="text-muted mb-0">View and manage customer payments.</p>
+            <h2 class="payments-page-title">
+                Payments
+            </h2>
+
+            <p class="payments-page-subtitle">
+                View and manage customer payments.
+            </p>
         </div>
 
-        <div>
-            <a asp-action="ExportPdf"
-               class="btn btn-outline-light me-2">
+        <div class="payments-header-actions">
+
+            <a asp-controller="Payments"
+               asp-action="ExportPdf"
+               class="payments-btn-outline">
+
+                <i class="bi bi-file-earmark-pdf"></i>
                 Export PDF
             </a>
 
-            <a asp-action="ExportExcel"
-               class="btn btn-outline-light me-2">
+            <a asp-controller="Payments"
+               asp-action="ExportExcel"
+               class="payments-btn-outline">
+
+                <i class="bi bi-file-earmark-excel"></i>
                 Export Excel
             </a>
 
-            <a asp-action="SelectInvoice"
-               class="btn-action-primary text-decoration-none">
-                + New Payment
+            <a asp-controller="Payments"
+               asp-action="SelectInvoice"
+               class="payments-btn-primary">
+
+                <i class="bi bi-plus-lg"></i>
+                New Payment
             </a>
+
         </div>
+
     </div>
 
     @if (TempData["SuccessMessage"] != null)
     {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="alert alert-success alert-dismissible fade show"
+             role="alert">
+
+            <i class="bi bi-check-circle me-2"></i>
             @TempData["SuccessMessage"]
 
             <button type="button"
@@ -46,117 +75,139 @@
         </div>
     }
 
-    <div class="card shadow-sm">
-        <div class="card-body">
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show"
+             role="alert">
 
-            @if (Model != null && Model.Any())
-            {
-                <div class="table-responsive">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            @TempData["ErrorMessage"]
 
-                    <table class="table table-hover align-middle">
-
-                        <thead class="table-dark">
-                            <tr>
-                                <th>Date</th>
-                                <th>Invoice</th>
-                                <th>Customer</th>
-                                <th>Payment Method</th>
-                                <th>Invoice Total</th>
-                                <th>Amount Paid</th>
-                                <th>Outstanding</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-
-                            @foreach (var payment in Model)
-                            {
-                                <tr>
-
-                                    <td>
-                                        @payment.PaymentDate.ToString("dd/MM/yyyy")
-                                    </td>
-
-                                    <td>
-                                        @payment.InvoiceNumber
-                                    </td>
-
-                                    <td>
-                                        @(string.IsNullOrWhiteSpace(payment.CustomerName)
-                                                                        ? "N/A"
-                                                                        : payment.CustomerName)
-                            </td>
-
-                                    <td>
-                                        @payment.PaymentMethod
-                                    </td>
-
-                                    <td>
-                                        R @payment.InvoiceTotal.ToString("N2")
-                                    </td>
-
-                                    <td>
-                                        R @payment.AmountPaid.ToString("N2")
-                                    </td>
-
-                                    <td>
-                                        R @payment.OutstandingBalance.ToString("N2")
-                                    </td>
-
-                                    <td>
-
-                                @if (payment.Status == FMCGEnterpriseManagementSystem.Enums.PaymentStatus.Paid)
-                                        {
-                                            <span class="badge bg-success">
-                                                Paid
-                                            </span>
-                                        }
-                                        else if (payment.Status == FMCGEnterpriseManagementSystem.Enums.PaymentStatus.PartiallyPaid)
-                                        {
-                                            <span class="badge bg-warning text-dark">
-                                                Partially Paid
-                                            </span>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge bg-secondary">
-                                                Unpaid
-                                            </span>
-                                        }
-
-                                    </td>
-
-                                </tr>
-                            }
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-            }
-            else
-            {
-                <div class="text-center py-5">
-
-                    <h3 class="fw-bold">
-                        No Payments Found
-                    </h3>
-
-                    <p class="text-muted">
-                        There are currently no recorded payments.
-                    </p>
-
-                    <a asp-action="SelectInvoice"
-                       class="btn-action-primary text-decoration-none">
-                        Create a Payment
-                    </a>
-
-                </div>
-            }
-
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"></button>
         </div>
+    }
+
+    <div class="payments-card">
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="payments-table-container">
+
+                <table class="payments-table">
+
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Invoice</th>
+                            <th>Customer</th>
+                            <th>Payment Method</th>
+                            <th class="text-end">Invoice Total</th>
+                            <th class="text-end">Amount Paid</th>
+                            <th class="text-end">Outstanding</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var payment in Model)
+                        {
+                            <tr>
+
+                                <td>
+                                    @payment.PaymentDate.ToString("dd/MM/yyyy")
+                                </td>
+
+                                <td>
+                                    <span class="payments-reference">
+                                        @payment.InvoiceNumber
+                                    </span>
+                                </td>
+
+                                <td>
+                                    @(string.IsNullOrWhiteSpace(payment.CustomerName)
+                                        ? "N/A"
+                                        : payment.CustomerName)
+                                </td>
+
+                                <td>
+                                    @payment.PaymentMethod
+                                </td>
+
+                                <td class="text-end">
+                                    R @payment.InvoiceTotal.ToString("N2")
+                                </td>
+
+                                <td class="text-end fw-semibold">
+                                    R @payment.AmountPaid.ToString("N2")
+                                </td>
+
+                                <td class="text-end">
+                                    R @payment.OutstandingBalance.ToString("N2")
+                                </td>
+
+                                <td>
+
+                                    @if (payment.Status ==
+                                        FMCGEnterpriseManagementSystem.Enums.PaymentStatus.Paid)
+                                    {
+                                        <span class="payments-status paid">
+                                            <i class="bi bi-check-circle me-1"></i>
+                                            Paid
+                                        </span>
+                                    }
+                                    else if (payment.Status ==
+                                        FMCGEnterpriseManagementSystem.Enums.PaymentStatus.PartiallyPaid)
+                                    {
+                                        <span class="payments-status partial">
+                                            <i class="bi bi-clock-history me-1"></i>
+                                            Partially Paid
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="payments-status unpaid">
+                                            Unpaid
+                                        </span>
+                                    }
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <div class="payments-empty">
+
+                <i class="bi bi-credit-card"></i>
+
+                <h3>No Payments Found</h3>
+
+                <p>
+                    There are currently no recorded payments.
+                </p>
+
+                <a asp-controller="Payments"
+                   asp-action="SelectInvoice"
+                   class="payments-btn-primary">
+
+                    <i class="bi bi-plus-lg"></i>
+                    Create a Payment
+                </a>
+
+            </div>
+        }
+
     </div>
 
 </div>

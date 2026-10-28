@@ -1,19 +1,397 @@
 @*
-    Purpose: Details of a single invoice.
-    Authors: Sayali-St10458649, iqran0906 (from git history)
+    File: Views/Invoices/Details.cshtml
+
+    Purpose:
+    Display invoice details, invoice approval status,
+    payment status, payment summary, banking details,
+    and invoice email functionality.
+
+    Original Authors:
+    Sayali-St10458649, iqran0906 (Git history).
+
+    UI Improvements and Integration:
+    Iqra Nazir (2026).
+
+    
+
+    References:
+    Bootstrap (n.d.) Components and utilities.
+    https://getbootstrap.com/docs/5.3/
+
+    Microsoft (n.d.) ASP.NET Core MVC Razor views.
+    https://learn.microsoft.com/en-us/aspnet/core/mvc/views/razor
+
+    MDN Web Docs (n.d.) HTML forms.
+    https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms
 *@
+
 @model FMCGEnterpriseManagementSystem.ViewModels.InvoiceViewModel
 
 @{
     ViewData["Title"] = "Invoice Preview";
-   Layout = Context.Request.Query.ContainsKey("pdfmode") ? "_PdfLayout" : "_Layout";
 
+    // Preserve the existing PDF layout selection
+    Layout = Context.Request.Query.ContainsKey("pdfmode")
+        ? "_PdfLayout"
+        : "_Layout";
+
+    // The invoice's payment balance is supplied by the existing ViewModel.
+   
+    var isApproved = Model.Status == "Approved";
+    var isPending = Model.Status == "Pending";
+
+    var amountPaid = Model.Total - Model.AmountDue;
+
+   
+    if (amountPaid < 0)
+    {
+        amountPaid = 0;
+    }
+
+    var isFullyPaid = isApproved && Model.AmountDue <= 0;
+    var isPartiallyPaid = isApproved
+        && Model.AmountDue > 0
+        && Model.AmountDue < Model.Total;
+
+    var isUnpaid = isApproved
+        && Model.AmountDue >= Model.Total;
+
+    var isPdfMode = Context.Request.Query.ContainsKey("pdfmode");
 }
 
-@if (TempData["SuccessMessage"] != null)
+<style>
+    /*
+        Invoice Details presentation styling.
+
+        References:
+        Bootstrap (n.d.) Layout and components.
+        MDN Web Docs (n.d.) CSS styling.
+
+       
+    */
+
+    .invoice-details-page {
+        background: #e6edf1;
+        border: 1px solid rgba(53, 127, 145, 0.18);
+        border-radius: 15px;
+        padding: 30px;
+        color: #183244;
+        font-size: 15px;
+    }
+
+    .invoice-details-page h2 {
+        color: #183244;
+        font-size: 30px;
+        font-weight: 800;
+    }
+
+    .invoice-details-page h5 {
+        font-size: 20px;
+        font-weight: 800;
+        color: #183244;
+    }
+
+    .invoice-details-page h6 {
+        font-size: 17px;
+        font-weight: 800;
+        color: #183244;
+    }
+
+    .invoice-details-page p,
+    .invoice-details-page span,
+    .invoice-details-page label {
+        font-size: 15px;
+    }
+
+    .invoice-details-page .invoice-company-name {
+        font-size: 20px;
+        font-weight: 800;
+        color: #183244;
+    }
+
+    .invoice-details-page .invoice-muted {
+        color: #667988;
+        font-size: 15px;
+    }
+
+    .invoice-details-page .invoice-section-card {
+        background: #f8fafb;
+        border: 1px solid #c9d9df;
+        border-top: 3px solid #357f91;
+        border-radius: 12px;
+        padding: 22px;
+        margin-bottom: 22px;
+    }
+
+    .invoice-details-page .invoice-section-heading {
+        color: #183244;
+        font-size: 19px;
+        font-weight: 800;
+        margin-bottom: 17px;
+    }
+
+    .invoice-details-page .invoice-detail-label {
+        color: #667988;
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .invoice-details-page .invoice-detail-value {
+        color: #183244;
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .invoice-details-page .invoice-table-wrapper {
+        overflow-x: auto;
+        margin-bottom: 24px;
+    }
+
+    .invoice-details-page .invoice-items-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 8px;
+        font-size: 15px;
+    }
+
+    .invoice-details-page .invoice-items-table thead th {
+        background: #dce9ee;
+        color: #344f5e;
+        font-size: 15px;
+        font-weight: 800;
+        padding: 14px 12px;
+        border: none;
+        white-space: nowrap;
+    }
+
+    .invoice-details-page .invoice-items-table tbody td {
+        background: #fff;
+        padding: 15px 12px;
+        border-top: 1px solid #d9e4e9;
+        border-bottom: 1px solid #d9e4e9;
+        vertical-align: middle;
+        font-size: 15px;
+    }
+
+    .invoice-details-page .invoice-items-table tbody td:first-child {
+        border-left: 1px solid #d9e4e9;
+    }
+
+    .invoice-details-page .invoice-items-table tbody td:last-child {
+        border-right: 1px solid #d9e4e9;
+    }
+
+    .invoice-details-page .invoice-status-badge {
+        display: inline-block;
+        border-radius: 20px;
+        padding: 8px 14px;
+        font-size: 14px;
+        font-weight: 800;
+    }
+
+    .invoice-details-page .invoice-status-approved {
+        background: #dff2e8;
+        color: #26714e;
+    }
+
+    .invoice-details-page .invoice-status-pending {
+        background: #fff3d7;
+        color: #966c1d;
+    }
+
+    .invoice-details-page .invoice-status-partial {
+        background: #fff3d7;
+        color: #966c1d;
+    }
+
+    .invoice-details-page .invoice-status-unpaid {
+        background: #e6ebef;
+        color: #536b78;
+    }
+
+    .invoice-details-page .invoice-status-other {
+        background: #e6ebef;
+        color: #536b78;
+    }
+
+    .invoice-details-page .invoice-payment-summary {
+        background: #edf3f5;
+        border: 1px solid #c9d9df;
+        border-radius: 12px;
+        padding: 23px;
+    }
+
+    .invoice-details-page .invoice-summary-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        padding: 10px 0;
+        color: #344f5e;
+        font-size: 15px;
+    }
+
+    .invoice-details-page .invoice-summary-row strong {
+        font-size: 16px;
+        color: #183244;
+    }
+
+    .invoice-details-page .invoice-summary-total {
+        border-top: 1px solid #c9d9df;
+        margin-top: 10px;
+        padding-top: 15px;
+        font-weight: 800;
+    }
+
+    .invoice-details-page .invoice-summary-total strong {
+        font-size: 21px;
+    }
+
+    .invoice-details-page .invoice-outstanding {
+        background: #dce9ee;
+        border-radius: 8px;
+        padding: 14px;
+        margin-top: 12px;
+        font-weight: 800;
+    }
+
+    .invoice-details-page .invoice-outstanding strong {
+        font-size: 21px;
+    }
+
+    .invoice-details-page .invoice-paid-full {
+        background: #dff2e8;
+        border: 1px solid #b8dfcb;
+        border-radius: 9px;
+        padding: 16px;
+        margin-top: 15px;
+        text-align: center;
+        color: #26714e;
+        font-size: 18px;
+        font-weight: 800;
+    }
+
+    .invoice-details-page .invoice-bank-details {
+        font-size: 15px;
+        line-height: 1.9;
+        color: #344f5e;
+    }
+
+    .invoice-details-page .invoice-bank-details strong {
+        color: #183244;
+    }
+
+    .invoice-details-page .invoice-btn-primary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 11px 20px;
+        border-radius: 8px;
+        border: 1px solid #357f91;
+        background: #357f91;
+        color: #fff;
+        font-size: 15px;
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .invoice-details-page .invoice-btn-primary:hover {
+        background: #286675;
+        border-color: #286675;
+        color: #fff;
+    }
+
+    .invoice-details-page .invoice-btn-outline {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 11px 20px;
+        border-radius: 8px;
+        border: 1px solid #a9c4cc;
+        background: #f8fafb;
+        color: #357f91;
+        font-size: 15px;
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .invoice-details-page .invoice-btn-outline:hover {
+        background: #dce9ee;
+        color: #286675;
+    }
+
+    .invoice-details-page .invoice-actions {
+        display: flex;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 25px;
+    }
+
+    .invoice-details-page .modal-title {
+        font-size: 19px;
+        font-weight: 800;
+    }
+
+    .invoice-details-page .modal-body,
+    .invoice-details-page .modal-footer {
+        font-size: 15px;
+    }
+
+    @@media (max-width: 768px) {
+        .invoice-details-page {
+            padding: 18px;
+        }
+
+        .invoice-details-page h2 {
+            font-size: 26px;
+        }
+
+        .invoice-details-page .invoice-section-card {
+            padding: 16px;
+        }
+
+        .invoice-details-page .invoice-actions {
+            justify-content: stretch;
+        }
+    }
+
+    @@media print {
+        .invoice-details-page {
+            background: #fff !important;
+            border: none !important;
+            padding: 0 !important;
+        }
+
+        .invoice-no-print {
+            display: none !important;
+        }
+
+        .invoice-details-page .invoice-section-card,
+        .invoice-details-page .invoice-payment-summary {
+            background: #fff !important;
+            break-inside: avoid;
+        }
+    }
+</style>
+
+
+@* =====================================================
+   SUCCESS AND ERROR MESSAGES
+   ===================================================== *@
+
+@if (!isPdfMode && TempData["SuccessMessage"] != null)
 {
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="bi bi-check-circle me-1"></i>
+    <div class="alert alert-success alert-dismissible fade show"
+         role="alert">
+
+        <i class="bi bi-check-circle me-2"></i>
+
         @TempData["SuccessMessage"]
 
         <button type="button"
@@ -21,13 +399,17 @@
                 data-bs-dismiss="alert"
                 aria-label="Close">
         </button>
+
     </div>
 }
 
-@if (TempData["ErrorMessage"] != null)
+@if (!isPdfMode && TempData["ErrorMessage"] != null)
 {
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <i class="bi bi-exclamation-triangle me-1"></i>
+    <div class="alert alert-danger alert-dismissible fade show"
+         role="alert">
+
+        <i class="bi bi-exclamation-triangle me-2"></i>
+
         @TempData["ErrorMessage"]
 
         <button type="button"
@@ -35,113 +417,83 @@
                 data-bs-dismiss="alert"
                 aria-label="Close">
         </button>
+
     </div>
 }
 
-<div class="d-flex justify-content-between align-items-center mb-4">
 
-    <div>
-        <span class="fw-bold text-secondary me-2">
-            Invoice Status:
-        </span>
+@* =====================================================
+   INVOICE APPROVAL AND PAYMENT STATUS
+   ===================================================== *@
 
-        @if (Model.Status == "Pending")
-        {
-            <span class="badge bg-warning text-dark fs-6">
-                <i class="bi bi-clock me-1"></i>
-                Pending Approval
-            </span>
-        }
-        else if (Model.Status == "Approved" && Model.AmountDue <= 0)
-        {
-            <span class="badge bg-success fs-6">
-                <i class="bi bi-check-circle me-1"></i>
-                Paid
-            </span>
-        }
-        else if (Model.Status == "Approved" &&
-                 Model.AmountDue < Model.Total)
-        {
-            <span class="badge bg-info text-dark fs-6">
-                <i class="bi bi-hourglass-split me-1"></i>
-                Partially Paid
-            </span>
-        }
-        else if (Model.Status == "Approved")
-        {
-            <span class="badge bg-success fs-6">
-                <i class="bi bi-check-circle me-1"></i>
-                Approved
-            </span>
-        }
-        else
-        {
-            <span class="badge bg-secondary fs-6">
-                @Model.Status
-            </span>
-        }
-    </div>
+<div class="invoice-details-page">
 
-    @if (User.IsInRole("Administrator") && Model.Status == "Pending")
-    {
-        <button type="button"
-                class="btn btn-success"
-                data-bs-toggle="modal"
-                data-bs-target="#approveInvoiceModal">
+    <div class="invoice-section-card">
 
-            <i class="bi bi-check-circle me-1"></i>
-            Approve Invoice
+        <div class="row g-3 align-items-center">
 
-        </button>
-    }
+            <div class="col-md-6">
 
-</div>
-
-
-<div class="content-card">
-
-    <div class="row align-items-center mb-4">
-
-        <div class="col-sm-6">
-
-            <h5 class="fw-bold m-0"
-                style="color: #1c323d;">
-                Exclusive Distributors (pty) LTD
-            </h5>
-
-            <small class="text-muted d-block">
-                Durban
-            </small>
-
-        </div>
-
-        <div class="col-sm-6 text-sm-end">
-
-            <div class="d-inline-block text-start">
-
-                <div class="d-flex align-items-center gap-2 mb-2">
-
-                    <label class="small text-secondary fw-bold text-nowrap m-0">
-                        Date:
-                    </label>
-
-                    <span>
-                        @Model.InvoiceDate.ToString("yyyy-MM-dd")
-                    </span>
-
+                <div class="invoice-detail-label mb-2">
+                    Invoice Status
                 </div>
 
-                <div class="d-flex align-items-center gap-2">
-
-                    <label class="small text-secondary fw-bold text-nowrap m-0">
-                        Invoice Number:
-                    </label>
-
-                    <span class="fw-bold">
-                        @Model.InvoiceNumber
+                @if (isPending)
+                {
+                    <span class="invoice-status-badge invoice-status-pending">
+                        <i class="bi bi-clock me-1"></i>
+                        Pending Approval
                     </span>
+                }
+                else if (isApproved)
+                {
+                    <span class="invoice-status-badge invoice-status-approved">
+                        <i class="bi bi-check-circle me-1"></i>
+                        Approved
+                    </span>
+                }
+                else
+                {
+                    <span class="invoice-status-badge invoice-status-other">
+                        @Model.Status
+                    </span>
+                }
 
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="invoice-detail-label mb-2">
+                    Payment Status
                 </div>
+
+                @if (isFullyPaid)
+                {
+                    <span class="invoice-status-badge invoice-status-approved">
+                        <i class="bi bi-check-circle me-1"></i>
+                        Paid in Full
+                    </span>
+                }
+                else if (isPartiallyPaid)
+                {
+                    <span class="invoice-status-badge invoice-status-partial">
+                        <i class="bi bi-hourglass-split me-1"></i>
+                        Partially Paid
+                    </span>
+                }
+                else if (isUnpaid)
+                {
+                    <span class="invoice-status-badge invoice-status-unpaid">
+                        <i class="bi bi-clock-history me-1"></i>
+                        Unpaid
+                    </span>
+                }
+                else
+                {
+                    <span class="invoice-status-badge invoice-status-other">
+                        Not Yet Approved
+                    </span>
+                }
 
             </div>
 
@@ -150,226 +502,344 @@
     </div>
 
 
-    <h2 class="fw-bold mb-4"
-        style="color: #1c323d;">
-        Invoice Preview
-    </h2>
+    @* =====================================================
+       COMPANY AND INVOICE HEADER
+       ===================================================== *@
 
-
-    <div class="row g-3 mb-4">
+    <div class="row align-items-center mb-4 g-3">
 
         <div class="col-md-6">
 
-            <label class="fw-bold text-secondary">
-                Customer
-            </label>
+            <div class="invoice-company-name">
+                Exclusive Distributors (Pty) Ltd
+            </div>
 
-            <p>
-                @Model.CustomerName
-            </p>
+            <div class="invoice-muted">
+                Durban
+            </div>
 
         </div>
 
         <div class="col-md-6 text-md-end">
 
-            <label class="fw-bold text-secondary">
-                Payment Terms
-            </label>
+            <div class="invoice-detail-label">
+                Invoice Date
+            </div>
 
-            <p>
-                @Model.PaymentTerms
-            </p>
+            <div class="invoice-detail-value mb-2">
+                @Model.InvoiceDate.ToString("dd MMMM yyyy")
+            </div>
+
+            <div class="invoice-detail-label">
+                Invoice Number
+            </div>
+
+            <div class="invoice-detail-value">
+                @Model.InvoiceNumber
+            </div>
 
         </div>
 
     </div>
 
 
-    <div class="table-responsive border rounded bg-light p-2 mb-3">
+    <h2 class="mb-4">
+        Invoice Preview
+    </h2>
 
-        <table class="table align-middle m-0 bg-white shadow-sm rounded">
 
-            <thead class="table-secondary text-secondary small">
+    @* =====================================================
+       CUSTOMER AND PAYMENT TERMS
+       ===================================================== *@
 
-                <tr>
-                    <th>Quantity</th>
-                    <th>Product Code</th>
-                    <th>Description</th>
-                    <th>Unit Price</th>
-                    <th>Disc %</th>
-                    <th>Total (excl. VAT)</th>
-                    <th>VAT</th>
-                </tr>
+    <div class="invoice-section-card">
 
-            </thead>
+        <h5 class="invoice-section-heading">
+            <i class="bi bi-person me-2"></i>
+            Customer Information
+        </h5>
 
-            <tbody>
+        <div class="row g-3">
 
-                @foreach (var item in Model.Items)
-                {
-                    var lineExVat =
-                        item.VatCategory == "[NONE]"
-                            ? item.LineTotal
-                            : item.LineTotal / 1.15m;
+            <div class="col-md-6">
 
-                    var lineVatAmount =
-                        item.LineTotal - lineExVat;
+                <div class="invoice-detail-label">
+                    Customer
+                </div>
 
-                    <tr>
+                <div class="invoice-detail-value">
+                    @Model.CustomerName
+                </div>
 
-                        <td>
-                            @item.Quantity
-                        </td>
+            </div>
 
-                        <td>
-                            @item.ItemCode
-                        </td>
+            <div class="col-md-6">
 
-                        <td>
-                            @item.Description
-                        </td>
+                <div class="invoice-detail-label">
+                    Payment Terms
+                </div>
 
-                        <td>
-                            @($"R{item.UnitPrice:0.00}")
-                        </td>
+                <div class="invoice-detail-value">
+                    @Model.PaymentTerms
+                </div>
 
-                        <td>
-                            @($"{item.DiscountPercent:0.00}%")
-                        </td>
+            </div>
 
-                        <td>
-                            @($"R{lineExVat:0.00}")
-                        </td>
-
-                        <td>
-                            @($"R{lineVatAmount:0.00}")
-                        </td>
-
-                    </tr>
-                }
-
-            </tbody>
-
-        </table>
+        </div>
 
     </div>
 
 
-    <div class="row mb-4">
+    @* =====================================================
+       INVOICE ITEMS
+       ===================================================== *@
 
-        <div class="col-md-6">
+    <div class="invoice-section-card">
 
-            <div class="border rounded p-3 bg-light">
+        <h5 class="invoice-section-heading">
+            <i class="bi bi-box-seam me-2"></i>
+            Invoice Items
+        </h5>
 
-                <h6 class="fw-bold text-secondary mb-2">
+        <div class="invoice-table-wrapper">
+
+            <table class="invoice-items-table">
+
+                <thead>
+
+                    <tr>
+                        <th>Quantity</th>
+                        <th>Product Code</th>
+                        <th>Description</th>
+                        <th class="text-end">Unit Price</th>
+                        <th class="text-end">Disc %</th>
+                        <th class="text-end">Total (excl. VAT)</th>
+                        <th class="text-end">VAT</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model.Items)
+                    {
+                        // Preserve the existing invoice line calculation.
+                        var lineExVat =
+                            item.VatCategory == "[NONE]"
+                                ? item.LineTotal
+                                : item.LineTotal / 1.15m;
+
+                        var lineVatAmount =
+                            item.LineTotal - lineExVat;
+
+                        <tr>
+
+                            <td>
+                                @item.Quantity
+                            </td>
+
+                            <td>
+                                @item.ItemCode
+                            </td>
+
+                            <td>
+                                @item.Description
+                            </td>
+
+                            <td class="text-end">
+                                @($"R{item.UnitPrice:0.00}")
+                            </td>
+
+                            <td class="text-end">
+                                @($"{item.DiscountPercent:0.00}%")
+                            </td>
+
+                            <td class="text-end">
+                                @($"R{lineExVat:0.00}")
+                            </td>
+
+                            <td class="text-end">
+                                @($"R{lineVatAmount:0.00}")
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    @* =====================================================
+       BANKING DETAILS AND PAYMENT SUMMARY
+       ===================================================== *@
+
+    <div class="row g-4">
+
+        <div class="col-lg-6">
+
+            <div class="invoice-section-card h-100">
+
+                <h5 class="invoice-section-heading">
+                    <i class="bi bi-bank me-2"></i>
                     Banking Details
-                </h6>
+                </h5>
 
-                <p class="small mb-1">
-                    <strong>Bank:</strong> FNB
-                </p>
+                <div class="invoice-bank-details">
 
-                <p class="small mb-1">
-                    <strong>Branch Code:</strong> 250655
-                </p>
+                    <div>
+                        <strong>Bank:</strong>
+                        FNB
+                    </div>
 
-                <p class="small mb-1">
-                    <strong>Account Name:</strong>
-                    Exclusive Distributors (Pty) Ltd
-                </p>
+                    <div>
+                        <strong>Branch Code:</strong>
+                        250655
+                    </div>
 
-                <p class="small mb-1">
-                    <strong>Account Number:</strong>
-                    63191446202
-                </p>
+                    <div>
+                        <strong>Account Name:</strong>
+                        Exclusive Distributors (Pty) Ltd
+                    </div>
 
-                <p class="small mb-1">
-                    <strong>Reference:</strong>
-                    Invoice @Model.InvoiceNumber
-                </p>
+                    <div>
+                        <strong>Account Number:</strong>
+                        63191446202
+                    </div>
 
-                <p class="small mb-1">
-                    <strong>Proof of Payment:</strong>
-                    exclusivedistributors2@gmail.com
-                </p>
+                    <div>
+                        <strong>Reference:</strong>
+                        Invoice @Model.InvoiceNumber
+                    </div>
 
-                <p class="small fst-italic mt-2 mb-0">
-                    Thanking you for your business!
-                </p>
+                    <div>
+                        <strong>Proof of Payment:</strong>
+                        exclusivedistributors2@gmail.com
+                    </div>
+
+                    <div class="mt-3 fst-italic">
+                        Thanking you for your business!
+                    </div>
+
+                </div>
 
             </div>
 
         </div>
 
 
-        <div class="col-md-6 text-end fw-bold text-secondary">
+        <div class="col-lg-6">
 
-            <div class="d-inline-block text-start"
-                 style="min-width: 280px;">
+            <div class="invoice-payment-summary">
 
-                <div class="d-flex justify-content-between py-1">
+                <h5 class="invoice-section-heading">
+                    <i class="bi bi-calculator me-2"></i>
+                    Payment Summary
+                </h5>
+
+
+                <div class="invoice-summary-row">
 
                     <span>
                         Subtotal (excl. VAT)
                     </span>
 
-                    <span>
+                    <strong>
                         @($"R{Model.Subtotal:0.00}")
-                    </span>
+                    </strong>
 
                 </div>
 
-                <div class="d-flex justify-content-between py-1">
+
+                <div class="invoice-summary-row">
 
                     <span>
                         VAT
                     </span>
 
-                    <span>
+                    <strong>
                         @($"R{Model.VatTotal:0.00}")
-                    </span>
+                    </strong>
 
                 </div>
 
-                <div class="d-flex justify-content-between py-1 border-top border-dark mt-2 text-dark fs-5">
+
+                <div class="invoice-summary-row invoice-summary-total">
 
                     <span>
-                        Grand Total
+                        Invoice Total
                     </span>
 
-                    <span>
+                    <strong>
                         @($"R{Model.Total:0.00}")
-                    </span>
+                    </strong>
 
                 </div>
 
 
-                @if (Model.Status == "Approved" &&
-                     Model.AmountDue < Model.Total)
+                @if (isApproved)
                 {
-                    <div class="d-flex justify-content-between py-1 mt-2">
+                    <div class="invoice-summary-row">
 
                         <span>
                             Amount Paid
                         </span>
 
-                        <span>
-                            @($"R{(Model.Total - Model.AmountDue):0.00}")
-                        </span>
+                        <strong>
+                            @($"R{amountPaid:0.00}")
+                        </strong>
 
                     </div>
 
-                    <div class="d-flex justify-content-between py-1 fw-bold">
+
+                    <div class="invoice-summary-row invoice-outstanding">
 
                         <span>
-                            Amount Due
+                            Outstanding Balance
                         </span>
 
-                        <span>
+                        <strong>
                             @($"R{Model.AmountDue:0.00}")
-                        </span>
+                        </strong>
 
                     </div>
+
+
+                    @if (isFullyPaid)
+                    {
+                        <div class="invoice-paid-full">
+
+                            <i class="bi bi-check-circle me-2"></i>
+
+                            PAID IN FULL
+
+                        </div>
+                    }
+                    else if (isPartiallyPaid)
+                    {
+                        <div class="mt-3">
+
+                            <span class="invoice-status-badge invoice-status-partial">
+                                <i class="bi bi-hourglass-split me-1"></i>
+                                PARTIALLY PAID
+                            </span>
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="mt-3">
+
+                            <span class="invoice-status-badge invoice-status-unpaid">
+                                PAYMENT OUTSTANDING
+                            </span>
+
+                        </div>
+                    }
                 }
 
             </div>
@@ -379,61 +849,149 @@
     </div>
 
 
-    <div class="d-flex justify-content-end gap-3">
-        <button type="button" class="btn btn-primary px-4" data-bs-toggle="modal" data-bs-target="#emailInvoiceModal">
-            Email Invoice
-        </button>
-        <a asp-action="Index" class="btn btn-outline-secondary px-4">Back to Invoices</a>
-    </div>
+    @* =====================================================
+       EMAIL AND NAVIGATION BUTTONS
+       ===================================================== *@
 
-   
+    @if (!isPdfMode)
+    {
+        <div class="invoice-actions invoice-no-print">
 
-    <div class="modal fade" id="emailInvoiceModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
+            @if (User.IsInRole("Administrator") && isPending)
+{
+    <button type="button"
+            class="invoice-btn-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#approveInvoiceModal">
+
+        <i class="bi bi-check-circle"></i>
+        Approve Invoice
+
+    </button>
+}
+            <button type="button"
+                    class="invoice-btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#emailInvoiceModal">
+
+                <i class="bi bi-envelope"></i>
+                Email Invoice
+            </button>
+
+            <a asp-controller="Invoices"
+               asp-action="Index"
+               class="invoice-btn-outline">
+
+                <i class="bi bi-arrow-left"></i>
+                Back to Invoices
+            </a>
+
+        </div>
+    }
+
+</div>
+
+
+@* =====================================================
+   EMAIL INVOICE MODAL
+   ===================================================== *@
+
+@if (!isPdfMode)
+{
+    <div class="modal fade"
+         id="emailInvoiceModal"
+         tabindex="-1"
+         aria-labelledby="emailInvoiceModalLabel"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+
             <div class="modal-content">
-                <form asp-controller="Invoices" asp-action="EmailInvoice" method="post">
+
+                <form asp-controller="Invoices"
+                      asp-action="EmailInvoice"
+                      method="post"
+                      id="emailInvoiceForm">
+
                     @Html.AntiForgeryToken()
-                    <input type="hidden" name="id" value="@Model.InvoiceId" />
+
+                    <input type="hidden"
+                           name="id"
+                           value="@Model.InvoiceId" />
+
                     <div class="modal-header">
-                        <h5 class="modal-title">Email Invoice @Model.InvoiceNumber</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                        <h5 class="modal-title"
+                            id="emailInvoiceModalLabel">
+
+                            Email Invoice @Model.InvoiceNumber
+
+                        </h5>
+
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close">
+                        </button>
+
                     </div>
+
                     <div class="modal-body">
-                        <label class="fw-bold text-secondary mb-1">Recipient Email</label>
+
+                        <label for="recipientEmail"
+                               class="form-label fw-semibold">
+
+                            Recipient Email
+
+                        </label>
+
                         <input type="email"
+                               id="recipientEmail"
                                name="recipientEmail"
                                class="form-control"
                                value="@ViewBag.CustomerEmail"
                                required
                                placeholder="customer@example.com" />
+
                     </div>
+
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary" onclick="this.disabled=true; this.form.submit();">Send</button>
+
+                        <button type="button"
+                                class="btn btn-outline-secondary"
+                                data-bs-dismiss="modal">
+
+                            Cancel
+
+                        </button>
+
+                        <button type="submit"
+                                id="sendInvoiceButton"
+                                class="btn btn-primary">
+
+                            <i class="bi bi-send me-1"></i>
+                            Send Invoice
+
+                        </button>
+
                     </div>
+
                 </form>
+
             </div>
+
         </div>
-    </div>
-
-        <a asp-action="Index"
-           class="btn btn-outline-secondary px-4">
-
-            Back to Invoices
-
-        </a>
 
     </div>
+}
 
-</div>
 
-
-@* ============================================
+@* =====================================================
    APPROVE INVOICE CONFIRMATION MODAL
-   Only administrators can see this modal.
-   ============================================ *@
+   Only administrators can approve pending invoices.
+   ===================================================== *@
 
-@if (User.IsInRole("Administrator") && Model.Status == "Pending")
+@if (!isPdfMode && User.IsInRole("Administrator") && isPending)
 {
     <div class="modal fade"
          id="approveInvoiceModal"
@@ -488,8 +1046,7 @@
                                 <div class="small mt-1">
 
                                     Once approved, the invoice will be locked
-                                    and the related inventory stock will be
-                                    deducted.
+                                    and the related inventory stock will be deducted.
 
                                 </div>
 
@@ -516,8 +1073,7 @@
                     <form asp-controller="Invoices"
                           asp-action="UpdateStatus"
                           asp-route-id="@Model.InvoiceId"
-                          method="post"
-                          class="d-inline">
+                          method="post">
 
                         @Html.AntiForgeryToken()
 
@@ -542,4 +1098,37 @@
         </div>
 
     </div>
+}
+
+
+@* =====================================================
+   PAGE SCRIPTS
+   ===================================================== *@
+
+@if (!isPdfMode)
+{
+    <script>
+        /*
+         * Prevent duplicate email submissions.
+         *
+         * Reference:
+         * MDN Web Docs (n.d.) HTMLFormElement submit event.
+         */
+
+        const emailInvoiceForm =
+            document.getElementById('emailInvoiceForm');
+
+        if (emailInvoiceForm) {
+            emailInvoiceForm.addEventListener('submit', function () {
+
+                const sendButton =
+                    document.getElementById('sendInvoiceButton');
+
+                if (sendButton) {
+                    sendButton.disabled = true;
+                    sendButton.innerHTML = 'Sending...';
+                }
+            });
+        }
+    </script>
 }
