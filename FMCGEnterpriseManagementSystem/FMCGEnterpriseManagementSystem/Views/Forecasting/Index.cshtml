@@ -1,82 +1,355 @@
 ﻿@*
-    Purpose: Forecasting list page (table with search / filters and actions).
-    Authors: Maseeha17 (from git history)
+    File: Views/Forecasting/Index.cshtml
+
+    Purpose:
+    Display automated demand and stock forecasts,inventory thresholds, reorder recommendations,
+    category/status filters and CSV export.
+
+    Original Author:
+    Maseeha17 (2026), according to Git history.
+
+    UI Improvements:
+    Iqra Nazir (2026).
+
+   
+
+    References:
+    Microsoft (n.d.) ASP.NET Core MVC Razor views.
+    https://learn.microsoft.com/en-us/aspnet/core/mvc/views/razor
+
+    Bootstrap (n.d.) Tables, badges and layout.
+    https://getbootstrap.com/docs/5.3/
 *@
+
 @model FMCGEnterpriseManagementSystem.ViewModels.ForecastFilterViewModel
 
 @{
     ViewData["Title"] = "Demand & Stock Forecasting";
+
+    // Summary figures are calculated from the existing forecast results.
+    var totalProducts = Model.Forecasts.Count();
+
+    var criticalCount = Model.Forecasts.Count(
+        item => item.ForecastStatus == "Critical"
+    );
+
+    var warningCount = Model.Forecasts.Count(
+        item => item.ForecastStatus == "Warning"
+    );
+
+    var optimalCount = Model.Forecasts.Count(
+        item => item.ForecastStatus == "Optimal"
+    );
 }
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-        <h3 class="fw-bold mb-1 text-white">Demand & Stock Forecasting</h3>
-        <p class="text-light opacity-75 mb-0">Automated stock requirement projections based on minimum inventory thresholds.</p>
-    </div>
-    <div class="d-flex gap-2">
-        <a asp-action="ExportCsv"
+<div class="forecasting-page">
+
+    @* ==========================================
+       PAGE HEADER
+       ========================================== *@
+
+    <div class="forecasting-page-header">
+
+        <div>
+
+            <h2 class="forecasting-page-title">
+                Demand & Stock Forecasting
+            </h2>
+
+            <p class="forecasting-page-subtitle">
+                Automated stock requirement projections based on
+                minimum inventory thresholds.
+            </p>
+
+        </div>
+
+        <a asp-controller="Forecasting"
+           asp-action="ExportCsv"
            asp-route-category="@Model.SelectedCategory"
            asp-route-statusFilter="@Model.StatusFilter"
-           class="btn btn-outline-light">
-            <i class="bi bi-download me-1"></i> Export CSV
+           class="forecasting-btn-outline">
+
+            <i class="bi bi-download"></i>
+            Export CSV
+
         </a>
-    </div>
-</div>
 
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
-        @TempData["SuccessMessage"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-}
 
-<form method="get" asp-action="Index" class="row g-3 mb-4 align-items-end">
-    <div class="col-md-4">
-        <label class="form-label text-light fw-semibold">Filter by Category</label>
-        <select name="category" class="form-select" onchange="this.form.submit()">
-            <option value="">All Categories</option>
-            @foreach (var cat in Model.Categories)
-            {
-                <option value="@cat" selected="@(Model.SelectedCategory == cat)">@cat</option>
-            }
-        </select>
-    </div>
-    <div class="col-md-4">
-        <label class="form-label text-light fw-semibold">Filter by Status</label>
-        <select name="statusFilter" class="form-select" onchange="this.form.submit()">
-            <option value="">All Statuses</option>
-            <option value="Critical" selected="@(Model.StatusFilter == "Critical")">Critical</option>
-            <option value="Warning" selected="@(Model.StatusFilter == "Warning")">Warning</option>
-            <option value="Optimal" selected="@(Model.StatusFilter == "Optimal")">Optimal</option>
-        </select>
-    </div>
-    <div class="col-md-4 text-end">
-        <span class="text-light opacity-75 d-block small">Total Projected Reorder Budget</span>
-       <span class="fw-bold fs-5 text-white">@Model.TotalProjectedReorderCost.ToString("N2")</span>
-    </div>
-</form>
 
-<div class="table-responsive">
-    <table class="table custom-data-table align-middle">
+    @* ==========================================
+       SUCCESS MESSAGE
+       ========================================== *@
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show mb-4"
+             role="alert">
+
+            <i class="bi bi-check-circle me-2"></i>
+            @TempData["SuccessMessage"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+            </button>
+
+        </div>
+    }
+
+
+    @* ==========================================
+       SUMMARY CARDS
+       ========================================== *@
+
+    <div class="row g-3 mb-4">
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="forecasting-stat-card">
+
+                <div class="forecasting-stat-label">
+                    Products in Forecast
+                </div>
+
+                <div class="forecasting-stat-value">
+                    @totalProducts
+                </div>
+
+                <div class="forecasting-stat-description">
+                    Products matching current filters
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="forecasting-stat-card critical">
+
+                <div class="forecasting-stat-label">
+                    Critical Stock
+                </div>
+
+                <div class="forecasting-stat-value">
+                    @criticalCount
+                </div>
+
+                <div class="forecasting-stat-description">
+                    Require immediate attention
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="forecasting-stat-card warning">
+
+                <div class="forecasting-stat-label">
+                    Stock Warnings
+                </div>
+
+                <div class="forecasting-stat-value">
+                    @warningCount
+                </div>
+
+                <div class="forecasting-stat-description">
+                    Reordering recommended
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="forecasting-stat-card optimal">
+
+                <div class="forecasting-stat-label">
+                    Optimal Stock
+                </div>
+
+                <div class="forecasting-stat-value">
+                    @optimalCount
+                </div>
+
+                <div class="forecasting-stat-description">
+                    Stock levels are sufficient
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    @* ==========================================
+       FORECAST FILTERS
+       ========================================== *@
+
+    <div class="forecasting-filter-panel">
+
+        <form asp-controller="Forecasting"
+              asp-action="Index"
+              method="get">
+
+            <div class="row g-3 align-items-end">
+
+                <div class="col-lg-5">
+
+                    <label for="forecastCategory"
+                           class="forecasting-filter-label">
+
+                        Filter by Category
+
+                    </label>
+
+                    <select id="forecastCategory"
+                            name="category"
+                            class="form-select"
+                            onchange="this.form.submit()">
+
+                        <option value="">
+                            All Categories
+                        </option>
+
+                        @foreach (var cat in Model.Categories)
+                        {
+                            <option value="@cat"
+                                    selected="@(Model.SelectedCategory == cat)">
+                                @cat
+                            </option>
+                        }
+
+                    </select>
+
+                </div>
+
+
+                <div class="col-lg-5">
+
+                    <label for="forecastStatus"
+                           class="forecasting-filter-label">
+
+                        Filter by Status
+
+                    </label>
+
+                    <select id="forecastStatus"
+                            name="statusFilter"
+                            class="form-select"
+                            onchange="this.form.submit()">
+
+                        <option value="">
+                            All Statuses
+                        </option>
+
+                        <option value="Critical"
+                                selected="@(Model.StatusFilter == "Critical")">
+                            Critical
+                        </option>
+
+                        <option value="Warning"
+                                selected="@(Model.StatusFilter == "Warning")">
+                            Warning
+                        </option>
+
+                        <option value="Optimal"
+                                selected="@(Model.StatusFilter == "Optimal")">
+                            Optimal
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="col-lg-2">
+
+                    <a asp-controller="Forecasting"
+                       asp-action="Index"
+                       class="forecasting-btn-outline w-100">
+
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                        Clear
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    @* ==========================================
+       PROJECTED REORDER BUDGET
+       ========================================== *@
+
+    <div class="forecasting-stat-card mb-4">
+
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+            <div>
+
+                <div class="forecasting-stat-label">
+                    Total Projected Reorder Budget
+                </div>
+
+                <div class="forecasting-stat-value">
+                    R @Model.TotalProjectedReorderCost.ToString("N2")
+                </div>
+
+            </div>
+
+            <i class="bi bi-graph-up-arrow"
+               style="font-size:32px;color:#357f91;">
+            </i>
+
+        </div>
+
+    </div>
+
+
+    @* ==========================================
+       FORECAST TABLE
+       ========================================== *@
+
+    <div class="forecasting-table-container">
+
+    <table class="forecasting-table forecasting-compact-table">
+
         <thead>
             <tr>
-                <th>Code</th>
-                <th>Product Name</th>
-                <th>Category</th>
+                <th>Product</th>
                 <th class="text-center">Current Stock</th>
-                <th class="text-center">Reorder Threshold</th>
+                <th class="text-center">Reorder Level</th>
                 <th class="text-center">Est. Demand</th>
                 <th class="text-center">Recommended Order</th>
                 <th class="text-center">Status</th>
-                <th class="text-center">Actions</th>
+                <th class="text-center">Action</th>
             </tr>
         </thead>
+
         <tbody>
+
             @if (!Model.Forecasts.Any())
             {
                 <tr>
-                    <td colspan="9" class="text-center py-4 text-muted">No forecasting records matched your filters.</td>
+                    <td colspan="7" class="forecasting-empty-state">
+                        <i class="bi bi-bar-chart-line"></i>
+                        No forecasting records matched your filters.
+                    </td>
                 </tr>
             }
             else
@@ -84,51 +357,96 @@
                 @foreach (var item in Model.Forecasts)
                 {
                     <tr>
-                        <td class="fw-bold">@item.ProductCode</td>
-                        <td>@item.ProductName</td>
-                        <td><span class="badge bg-light text-dark border">@item.Category</span></td>
-                        <td class="text-center fw-bold">@item.CurrentStock</td>
-                        <td class="text-center text-muted">@item.ReorderLevel</td>
-                        <td class="text-center fw-semibold">@item.EstimatedMonthlyDemand</td>
+
+                        <td>
+                            <div class="forecasting-product-code">
+                                @item.ProductCode
+                            </div>
+
+                            <div class="forecasting-product-name mt-1">
+                                @item.ProductName
+                            </div>
+
+                            <span class="forecasting-category-badge mt-2">
+                                @item.Category
+                            </span>
+                        </td>
+
+                        <td class="text-center fw-bold">
+                            @item.CurrentStock
+                        </td>
+
+                        <td class="text-center">
+                            @item.ReorderLevel
+                        </td>
+
+                        <td class="text-center">
+                            @item.EstimatedMonthlyDemand
+                        </td>
+
                         <td class="text-center">
                             @if (item.RecommendedReorderQuantity > 0)
                             {
-                                <span class="badge bg-danger fs-6 px-3 py-2">+@item.RecommendedReorderQuantity Units</span>
+                                <span class="forecasting-reorder-quantity needed">
+                                    +@item.RecommendedReorderQuantity Units
+                                </span>
                             }
                             else
                             {
-                                <span class="badge bg-light text-dark border fs-6 px-3 py-2">0 Units</span>
+                                <span class="forecasting-reorder-quantity">
+                                    0 Units
+                                </span>
                             }
                         </td>
+
                         <td class="text-center">
                             @if (item.ForecastStatus == "Critical")
                             {
-                                <span class="badge bg-danger">Critical - Restock Immediately</span>
+                                <span class="forecasting-status critical">
+                                    Critical
+                                </span>
                             }
                             else if (item.ForecastStatus == "Warning")
                             {
-                                <span class="badge bg-warning text-dark">Warning - Restock Recommended</span>
+                                <span class="forecasting-status warning">
+                                    Warning
+                                </span>
                             }
                             else
                             {
-                                <span class="badge bg-success">Optimal Stock Level</span>
+                                <span class="forecasting-status optimal">
+                                    Optimal
+                                </span>
                             }
                         </td>
+
                         <td class="text-center">
                             @if (item.RecommendedReorderQuantity > 0)
                             {
-                                <a asp-action="Reorder" asp-route-productId="@item.ProductId" class="btn btn-sm btn-action-primary">
+                                <a asp-controller="Forecasting"
+                                   asp-action="Reorder"
+                                   asp-route-productId="@item.ProductId"
+                                   class="forecasting-btn-primary">
+                                    <i class="bi bi-cart-plus"></i>
                                     Reorder
                                 </a>
                             }
                             else
                             {
-                                <button class="btn btn-sm btn-outline-secondary" disabled>Stock Sufficient</button>
+                                <span class="forecasting-btn-disabled">
+                                    Sufficient
+                                </span>
                             }
                         </td>
+
                     </tr>
                 }
             }
+
         </tbody>
+
     </table>
+
+</div>
+
 </div>

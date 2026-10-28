@@ -1,0 +1,632 @@
+﻿/*
+    File: wwwroot/css/forecasting.css
+
+    Purpose:
+    Styling for the Demand & Stock Forecasting module.
+
+    Original Forecasting Module:
+    Maseeha17 (2026), according to Git history.
+
+    UI Improvements:
+    Iqra Nazir (2026).
+
+    UI Development Assistance:
+    OpenAI ChatGPT (2026).
+
+    References (Harvard Anglia):
+    Bootstrap (n.d.) Documentation. Available at:
+    https://getbootstrap.com/docs/5.3/
+
+    MDN Web Docs (n.d.) CSS: Cascading Style Sheets.
+    Available at:
+    https://developer.mozilla.org/en-US/docs/Web/CSS
+
+    Microsoft (n.d.) ASP.NET Core MVC views.
+    Available at:
+    https://learn.microsoft.com/en-us/aspnet/core/mvc/views/overview
+*/
+
+
+/* ==========================================
+   MAIN PAGE
+   ========================================== */
+
+.forecasting-page {
+    background: #e6edf1;
+    border: 1px solid rgba(53, 127, 145, 0.18);
+    border-radius: 15px;
+    padding: 30px;
+    min-height: 75vh;
+    color: #183244;
+    font-size: 16px;
+}
+
+    .forecasting-page h1,
+    .forecasting-page h2,
+    .forecasting-page h3,
+    .forecasting-page h4,
+    .forecasting-page h5 {
+        color: #183244;
+    }
+
+.forecasting-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+}
+
+.forecasting-page-title {
+    font-size: 30px;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.forecasting-page-subtitle {
+    color: #667988;
+    font-size: 16px;
+    margin-bottom: 0;
+    line-height: 1.6;
+}
+
+
+/* ==========================================
+   BUTTONS
+   ========================================== */
+
+.forecasting-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    background: #357f91;
+    border: 1px solid #357f91;
+    color: white;
+    padding: 11px 18px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.2s ease;
+    cursor: pointer;
+}
+
+    .forecasting-btn-primary:hover {
+        background: #286675;
+        border-color: #286675;
+        color: white;
+    }
+
+.forecasting-btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    background: #f8fafb;
+    border: 1px solid #a9c4cc;
+    color: #357f91;
+    padding: 11px 18px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.2s ease;
+    cursor: pointer;
+}
+
+    .forecasting-btn-outline:hover {
+        background: #dce9ee;
+        color: #286675;
+    }
+
+    .forecasting-btn-primary:focus-visible,
+    .forecasting-btn-outline:focus-visible {
+        outline: 3px solid rgba(53, 127, 145, 0.35);
+        outline-offset: 2px;
+    }
+
+.forecasting-btn-disabled {
+    display: inline-block;
+    background: #e8eef1;
+    border: 1px solid #d2dfe4;
+    color: #6b7c85;
+    padding: 9px 12px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: not-allowed;
+}
+
+
+/* ==========================================
+   SUMMARY CARDS
+   ========================================== */
+
+.forecasting-stat-card {
+    background: #f8fafb;
+    border: 1px solid #c9d9df;
+    border-top: 3px solid #357f91;
+    border-radius: 12px;
+    padding: 22px;
+    height: 100%;
+}
+
+    .forecasting-stat-card.critical {
+        border-top-color: #c35b5b;
+    }
+
+    .forecasting-stat-card.warning {
+        border-top-color: #d4a449;
+    }
+
+    .forecasting-stat-card.optimal {
+        border-top-color: #4e9a78;
+    }
+
+.forecasting-stat-label {
+    color: #667988;
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.forecasting-stat-value {
+    color: #183244;
+    font-size: 27px;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.forecasting-stat-description {
+    color: #667988;
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+
+/* ==========================================
+   FILTERS
+   ========================================== */
+
+.forecasting-filter-panel {
+    background: #edf3f5;
+    border: 1px solid #c9d9df;
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 26px;
+}
+
+.forecasting-filter-label {
+    display: block;
+    color: #344f5e;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.forecasting-page .form-control,
+.forecasting-page .form-select {
+    border: 1px solid #c5d5dc;
+    border-radius: 8px;
+    padding: 11px 12px;
+    font-size: 16px;
+    color: #183244;
+    background-color: #fff;
+    min-height: 45px;
+}
+
+    .forecasting-page .form-control:focus,
+    .forecasting-page .form-select:focus {
+        border-color: #357f91;
+        box-shadow: 0 0 0 0.2rem rgba(53, 127, 145, 0.13);
+    }
+
+
+/* ==========================================
+   TABLE
+   ========================================== */
+
+.forecasting-table-container {
+    overflow-x: auto;
+}
+
+.forecasting-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+    min-width: 1160px;
+    font-size: 15px;
+}
+
+    .forecasting-table thead th {
+        background: #dce9ee;
+        color: #344f5e;
+        font-size: 15px;
+        font-weight: 800;
+        padding: 15px 13px;
+        border: none;
+        white-space: nowrap;
+    }
+
+    .forecasting-table tbody td {
+        background: #f8fafb;
+        color: #344f5e;
+        font-size: 15px;
+        padding: 16px 13px;
+        vertical-align: middle;
+        border-top: 1px solid #d9e4e9;
+        border-bottom: 1px solid #d9e4e9;
+    }
+
+        .forecasting-table tbody td:first-child {
+            border-left: 1px solid #d9e4e9;
+            border-radius: 8px 0 0 8px;
+        }
+
+        .forecasting-table tbody td:last-child {
+            border-right: 1px solid #d9e4e9;
+            border-radius: 0 8px 8px 0;
+        }
+
+    .forecasting-table tbody tr:hover td {
+        background: #edf5f7;
+    }
+
+.forecasting-product-code {
+    color: #183244;
+    font-weight: 800;
+}
+
+.forecasting-product-name {
+    color: #183244;
+    font-weight: 700;
+}
+
+.forecasting-category-badge {
+    display: inline-block;
+    background: #e7eff2;
+    border: 1px solid #c9d9df;
+    color: #476371;
+    border-radius: 7px;
+    padding: 6px 10px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+/* ==========================================
+   STATUS BADGES
+   ========================================== */
+
+.forecasting-status {
+    display: inline-block;
+    border-radius: 7px;
+    padding: 8px 11px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+    .forecasting-status.critical {
+        background: #f8e5e5;
+        color: #a64040;
+    }
+
+    .forecasting-status.warning {
+        background: #fff1d8;
+        color: #946a20;
+    }
+
+    .forecasting-status.optimal {
+        background: #e0f2e8;
+        color: #2b7752;
+    }
+
+.forecasting-reorder-quantity {
+    display: inline-block;
+    background: #e7eff2;
+    color: #286675;
+    border-radius: 7px;
+    padding: 8px 11px;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+    .forecasting-reorder-quantity.needed {
+        background: #f8e5e5;
+        color: #a64040;
+    }
+
+
+/* ==========================================
+   REORDER FORM
+   ========================================== */
+
+.forecasting-form-card {
+    max-width: 780px;
+    margin: 0 auto;
+    background: #f8fafb;
+    border: 1px solid #c9d9df;
+    border-top: 3px solid #357f91;
+    border-radius: 12px;
+    padding: 28px;
+}
+
+.forecasting-form-heading {
+    color: #183244;
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 7px;
+}
+
+.forecasting-form-description {
+    color: #667988;
+    font-size: 16px;
+    margin-bottom: 24px;
+}
+
+.forecasting-form-label {
+    color: #344f5e;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.forecasting-readonly-field {
+    background: #edf3f5 !important;
+    font-weight: 600;
+}
+
+.forecasting-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    flex-wrap: wrap;
+    border-top: 1px solid #d8e4e9;
+    padding-top: 22px;
+    margin-top: 28px;
+}
+
+
+/* ==========================================
+   EMPTY STATE
+   ========================================== */
+
+.forecasting-empty-state {
+    padding: 55px 20px !important;
+    text-align: center;
+    color: #667988;
+    font-size: 16px;
+}
+
+    .forecasting-empty-state i {
+        display: block;
+        font-size: 34px;
+        margin-bottom: 12px;
+        color: #7f9ca7;
+    }
+
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+
+@media (max-width: 768px) {
+    .forecasting-page {
+        padding: 18px;
+    }
+
+    .forecasting-page-title {
+        font-size: 26px;
+    }
+
+    .forecasting-stat-value {
+        font-size: 24px;
+    }
+
+    .forecasting-form-card {
+        padding: 18px;
+    }
+
+    .forecasting-form-actions {
+        flex-direction: column-reverse;
+    }
+
+        .forecasting-form-actions a,
+        .forecasting-form-actions button {
+            width: 100%;
+        }
+
+    /* ==========================================
+   FORECASTING TABLE WIDTH IMPROVEMENTS
+
+   Purpose:
+   Fit forecasting information within the
+   available dashboard content area.
+
+   UI Improvements: Iqra Nazir (2026)
+   Assistance: OpenAI ChatGPT (2026)
+   ========================================== */
+
+    .forecasting-table-container {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .forecasting-table {
+        width: 100%;
+        min-width: 0;
+        table-layout: fixed;
+        border-spacing: 0 6px;
+    }
+
+        .forecasting-table thead th {
+            padding: 12px 7px;
+            font-size: 13px;
+            white-space: normal;
+            overflow-wrap: anywhere;
+            line-height: 1.4;
+        }
+
+        .forecasting-table tbody td {
+            padding: 13px 7px;
+            font-size: 14px;
+            overflow-wrap: anywhere;
+            line-height: 1.5;
+        }
+
+        .forecasting-table th:nth-child(1),
+        .forecasting-table td:nth-child(1) {
+            width: 8%;
+        }
+
+        .forecasting-table th:nth-child(2),
+        .forecasting-table td:nth-child(2) {
+            width: 15%;
+        }
+
+        .forecasting-table th:nth-child(3),
+        .forecasting-table td:nth-child(3) {
+            width: 10%;
+        }
+
+        .forecasting-table th:nth-child(4),
+        .forecasting-table td:nth-child(4) {
+            width: 9%;
+        }
+
+        .forecasting-table th:nth-child(5),
+        .forecasting-table td:nth-child(5) {
+            width: 10%;
+        }
+
+        .forecasting-table th:nth-child(6),
+        .forecasting-table td:nth-child(6) {
+            width: 9%;
+        }
+
+        .forecasting-table th:nth-child(7),
+        .forecasting-table td:nth-child(7) {
+            width: 12%;
+        }
+
+        .forecasting-table th:nth-child(8),
+        .forecasting-table td:nth-child(8) {
+            width: 15%;
+        }
+
+        .forecasting-table th:nth-child(9),
+        .forecasting-table td:nth-child(9) {
+            width: 12%;
+        }
+
+    .forecasting-status {
+        white-space: normal;
+        font-size: 13px;
+        padding: 7px 8px;
+    }
+
+    .forecasting-reorder-quantity {
+        font-size: 13px;
+        padding: 7px 8px;
+        white-space: normal;
+    }
+
+    .forecasting-table .forecasting-btn-primary,
+    .forecasting-table .forecasting-btn-disabled {
+        width: 100%;
+        padding: 9px 6px;
+        font-size: 14px;
+        white-space: normal;
+        text-align: center;
+    }
+
+    .forecasting-category-badge {
+        font-size: 13px;
+        padding: 5px 7px;
+        white-space: normal;
+    }
+
+    /* Keep the table usable on genuinely small screens. */
+    @media (max-width: 900px) {
+        .forecasting-table {
+            min-width: 850px;
+        }
+    }
+
+    /* Compact forecasting table —  UI improvement */
+
+    .forecasting-table-container {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;
+    }
+
+    .forecasting-compact-table {
+        width: 100%;
+        min-width: 0;
+        table-layout: fixed;
+    }
+
+        .forecasting-compact-table th,
+        .forecasting-compact-table td {
+            font-size: 15px;
+            padding: 13px 10px;
+            overflow-wrap: break-word;
+        }
+
+            .forecasting-compact-table th:nth-child(1),
+            .forecasting-compact-table td:nth-child(1) {
+                width: 25%;
+            }
+
+            .forecasting-compact-table th:nth-child(2),
+            .forecasting-compact-table td:nth-child(2) {
+                width: 11%;
+            }
+
+            .forecasting-compact-table th:nth-child(3),
+            .forecasting-compact-table td:nth-child(3) {
+                width: 12%;
+            }
+
+            .forecasting-compact-table th:nth-child(4),
+            .forecasting-compact-table td:nth-child(4) {
+                width: 11%;
+            }
+
+            .forecasting-compact-table th:nth-child(5),
+            .forecasting-compact-table td:nth-child(5) {
+                width: 16%;
+            }
+
+            .forecasting-compact-table th:nth-child(6),
+            .forecasting-compact-table td:nth-child(6) {
+                width: 11%;
+            }
+
+            .forecasting-compact-table th:nth-child(7),
+            .forecasting-compact-table td:nth-child(7) {
+                width: 14%;
+            }
+
+        .forecasting-compact-table .forecasting-status {
+            white-space: normal;
+            font-size: 14px;
+        }
+
+        .forecasting-compact-table .forecasting-btn-primary {
+            width: auto;
+            min-width: 90px;
+            font-size: 15px;
+        }
+
+    @media (max-width: 900px) {
+        .forecasting-compact-table {
+            min-width: 760px;
+        }
+    }
+}

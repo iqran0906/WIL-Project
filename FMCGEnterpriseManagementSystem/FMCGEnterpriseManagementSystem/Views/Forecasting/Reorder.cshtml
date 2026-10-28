@@ -1,51 +1,226 @@
 ﻿@*
-    Purpose: Reorder stock form for one product.
-    Authors: Maseeha17 (from git history)
+    File: Views/Forecasting/Reorder.cshtml
+
+    Purpose:
+    Allow authorised users to trigger a stock reorder
+    for a selected product using the forecasting module.
+
+    Original Author:
+    Maseeha17 (2026), according to Git history.
+
+    UI Improvements:
+    Iqra Nazir (2026).
+
+    
+
+    References:
+    Microsoft (n.d.) ASP.NET Core MVC model binding and validation.
+    https://learn.microsoft.com/en-us/aspnet/core/mvc/models/model-binding
+
+    Bootstrap (n.d.) Forms and layout.
+    https://getbootstrap.com/docs/5.3/forms/overview/
 *@
+
 @model FMCGEnterpriseManagementSystem.ViewModels.TriggerReorderViewModel
 
 @{
-    ViewData["Title"] = "Trigger Automated Reorder";
+    ViewData["Title"] = "Reorder Stock";
 }
 
-<div class="row justify-content-center">
-    <div class="col-md-8 col-lg-6">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3 class="fw-bold mb-0">Reorder Stock</h3>
-            <a asp-action="Index" class="btn btn-outline-secondary btn-sm">Back to Forecasting</a>
+<div class="forecasting-page">
+
+    @* ==========================================
+       PAGE HEADER
+       ========================================== *@
+
+    <div class="forecasting-page-header">
+
+        <div>
+
+            <h2 class="forecasting-page-title">
+                Reorder Stock
+            </h2>
+
+            <p class="forecasting-page-subtitle">
+                Review the selected product, choose a supplier
+                and confirm the required reorder quantity.
+            </p>
+
         </div>
 
-        <form asp-action="Reorder" method="post">
+        <a asp-controller="Forecasting"
+           asp-action="Index"
+           class="forecasting-btn-outline">
+
+            <i class="bi bi-arrow-left"></i>
+            Back to Forecasting
+
+        </a>
+
+    </div>
+
+
+    @* ==========================================
+       REORDER FORM
+       ========================================== *@
+
+    <div class="forecasting-form-card">
+
+        <h5 class="forecasting-form-heading">
+            <i class="bi bi-box-seam me-2"></i>
+            Stock Reorder Details
+        </h5>
+
+        <p class="forecasting-form-description">
+            Confirm the information below before submitting
+            the stock reorder.
+        </p>
+
+
+        <form asp-controller="Forecasting"
+              asp-action="Reorder"
+              method="post">
+
             @Html.AntiForgeryToken()
+
+            @* Preserve all hidden fields required by the controller. *@
+
             <input type="hidden" asp-for="ProductId" />
             <input type="hidden" asp-for="ProductCode" />
             <input type="hidden" asp-for="ProductName" />
 
-            <div class="mb-3">
-                <label class="form-label">Product</label>
-                <input class="form-control" value="[@Model.ProductCode] @Model.ProductName" readonly />
+
+            @* ==========================================
+               VALIDATION SUMMARY
+               ========================================== *@
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger mb-3"
+                 role="alert">
             </div>
 
-            <div class="mb-3">
-                <label asp-for="SupplierId" class="form-label"></label>
-                <select asp-for="SupplierId" asp-items="ViewBag.Suppliers" class="form-select">
-                    <option value="">-- Select Supplier --</option>
-                </select>
-                <span asp-validation-for="SupplierId" class="text-danger small"></span>
-            </div>
+
+            @* ==========================================
+               SELECTED PRODUCT
+               ========================================== *@
 
             <div class="mb-4">
-                <label asp-for="ReorderQuantity" class="form-label"></label>
-                <input asp-for="ReorderQuantity" class="form-control" type="number" />
-                <span asp-validation-for="ReorderQuantity" class="text-danger small"></span>
+
+                <label class="forecasting-form-label"
+                       for="selectedForecastProduct">
+
+                    Selected Product
+
+                </label>
+
+                <input id="selectedForecastProduct"
+                       type="text"
+                       class="form-control forecasting-readonly-field"
+                       value="[@Model.ProductCode] @Model.ProductName"
+                       readonly />
+
+                <div class="form-text mt-2">
+                    This product was selected from the forecasting recommendations.
+                </div>
+
             </div>
 
-            <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-custom-save">Confirm & Order Stock</button>
+
+            @* ==========================================
+               SUPPLIER
+               ========================================== *@
+
+            <div class="mb-4">
+
+                <label asp-for="SupplierId"
+                       class="forecasting-form-label">
+
+                    Supplier
+
+                </label>
+
+                <select asp-for="SupplierId"
+                        asp-items="ViewBag.Suppliers"
+                        class="form-select">
+
+                    <option value="">
+                        Select Supplier
+                    </option>
+
+                </select>
+
+                <span asp-validation-for="SupplierId"
+                      class="text-danger small d-block mt-2">
+                </span>
+
             </div>
+
+
+            @* ==========================================
+               REORDER QUANTITY
+               ========================================== *@
+
+            <div class="mb-4">
+
+                <label asp-for="ReorderQuantity"
+                       class="forecasting-form-label">
+
+                    Reorder Quantity
+
+                </label>
+
+                <input asp-for="ReorderQuantity"
+                       type="number"
+                       min="1"
+                       step="1"
+                       class="form-control" />
+
+                <span asp-validation-for="ReorderQuantity"
+                      class="text-danger small d-block mt-2">
+                </span>
+
+                <div class="form-text mt-2">
+                    Enter the number of units to reorder.
+                </div>
+
+            </div>
+
+
+            @* ==========================================
+               FORM ACTIONS
+               ========================================== *@
+
+            <div class="forecasting-form-actions">
+
+                <a asp-controller="Forecasting"
+                   asp-action="Index"
+                   class="forecasting-btn-outline">
+
+                    Cancel
+
+                </a>
+
+                <button type="submit"
+                        class="forecasting-btn-primary">
+
+                    <i class="bi bi-check-circle"></i>
+                    Confirm &amp; Order Stock
+
+                </button>
+
+            </div>
+
         </form>
+
     </div>
+
 </div>
+
+
 @section Scripts {
+
+    @* Preserve ASP.NET Core client-side validation. *@
+
     <partial name="_ValidationScriptsPartial" />
+
 }
