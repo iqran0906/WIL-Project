@@ -428,8 +428,26 @@
 
 <div class="invoice-details-page">
 
-    <div class="invoice-section-card">
+    
 
+    @if (!isPdfMode && User.IsInRole("Administrator") && isPending)
+    {
+        <div class="d-flex justify-content-end mb-3 invoice-no-print">
+
+            <button type="button"
+                    class="btn btn-success fw-semibold px-4 py-2"
+                    data-bs-toggle="modal"
+                    data-bs-target="#approveInvoiceModal">
+
+                <i class="bi bi-check-circle me-2"></i>
+                Approve Invoice
+
+            </button>
+
+        </div>
+    }
+
+    <div class="invoice-section-card">
         <div class="row g-3 align-items-center">
 
             <div class="col-md-6">
@@ -849,26 +867,20 @@
     </div>
 
 
-    @* =====================================================
+       @* =====================================================
        EMAIL AND NAVIGATION BUTTONS
+
+       Purpose:
+       Preserve invoice email and navigation functionality.
+       Invoice approval is handled by the button at the top.
+
+       UI Integration: Iqra Nazir (2026)
        ===================================================== *@
 
     @if (!isPdfMode)
     {
         <div class="invoice-actions invoice-no-print">
 
-            @if (User.IsInRole("Administrator") && isPending)
-{
-    <button type="button"
-            class="invoice-btn-primary"
-            data-bs-toggle="modal"
-            data-bs-target="#approveInvoiceModal">
-
-        <i class="bi bi-check-circle"></i>
-        Approve Invoice
-
-    </button>
-}
             <button type="button"
                     class="invoice-btn-primary"
                     data-bs-toggle="modal"
@@ -876,6 +888,7 @@
 
                 <i class="bi bi-envelope"></i>
                 Email Invoice
+
             </button>
 
             <a asp-controller="Invoices"
@@ -884,6 +897,7 @@
 
                 <i class="bi bi-arrow-left"></i>
                 Back to Invoices
+
             </a>
 
         </div>
