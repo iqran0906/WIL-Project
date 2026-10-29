@@ -281,9 +281,30 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 "Inventory");
         }
 
-        public IActionResult CreateInvoice() => View();
+        // ==========================================================
+        // LEGACY INVOICE AND QUOTATION ROUTES
+        // ==========================================================
 
-        public IActionResult CreateQuote() => View();
+    
+        //
+        // Reference:
+        // Microsoft (n.d.) Controller actions in ASP.NET Core MVC.
+        // https://learn.microsoft.com/en-us/aspnet/core/mvc/controllers/actions
+
+        [HttpGet]
+        [Authorize(Roles = "Administrator,Employee,SalesRepresentative")]
+        public IActionResult CreateInvoice()
+        {
+            return RedirectToAction("Create", "Invoices");
+        }
+
+       
+        [HttpGet]
+        [Authorize(Roles = "Administrator,Employee,SalesRepresentative")]
+        public IActionResult CreateQuote()
+        {
+            return RedirectToAction("Create", "Quotes");
+        }
 
         // Allows the error page to be displayed without authentication.
         [AllowAnonymous]

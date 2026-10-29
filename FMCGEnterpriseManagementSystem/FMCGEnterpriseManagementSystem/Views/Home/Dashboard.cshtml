@@ -623,124 +623,140 @@
     </form>
 
 
-    <!-- QUICK ACTIONS -->
+    <!-- ==========================================================
+     QUICK ACTIONS
+     Purpose:
+     Connect Dashboard shortcuts to the functional business
+     modules instead of older Home prototype pages.
 
-    <section aria-labelledby="quickActionsHeading">
+     Updated by: Iqra Nazir (2026)
 
-        <div class="dashboard-section-heading">
-            <h2 id="quickActionsHeading">Quick Actions</h2>
-        </div>
+     Reference:
+     Microsoft (n.d.) Anchor Tag Helper in ASP.NET Core.
+     https://learn.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/built-in/anchor-tag-helper
+     ========================================================== -->
 
-        <div class="row g-3 mb-5">
+<section aria-labelledby="quickActionsHeading">
 
-            <!-- CUSTOMER -->
+    <div class="dashboard-section-heading">
+        <h2 id="quickActionsHeading">Quick Actions</h2>
+    </div>
 
-            <div class="col-6 col-md-4 col-xl-2">
+    <div class="row g-3 mb-5">
 
-                <a asp-action="AddCustomer"
-                   class="dashboard-action">
+        <!-- CUSTOMER -->
 
-                    <i class="bi bi-person-plus" aria-hidden="true"></i>
+        <div class="col-6 col-md-4 col-xl-2">
 
-                    <span>New Customer</span>
+            <a asp-controller="Customers"
+               asp-action="AddCustomer"
+               class="dashboard-action">
 
-                </a>
+                <i class="bi bi-person-plus" aria-hidden="true"></i>
 
-            </div>
+                <span>New Customer</span>
 
-
-            <!-- SUPPLIER: ADMINISTRATOR AND EMPLOYEE -->
-
-            @if (canManageCatalog)
-            {
-                <div class="col-6 col-md-4 col-xl-2">
-
-                    <a asp-controller="Supplier"
-                       asp-action="AddSupplier"
-                       class="dashboard-action">
-
-                        <i class="bi bi-truck" aria-hidden="true"></i>
-
-                        <span>New Supplier</span>
-
-                    </a>
-
-                </div>
-            }
-
-
-            <!-- PRODUCT: ADMINISTRATOR AND EMPLOYEE -->
-
-            @if (canManageCatalog)
-            {
-                <div class="col-6 col-md-4 col-xl-2">
-
-                    <a asp-action="AddItem"
-                       class="dashboard-action">
-
-                        <i class="bi bi-box-seam" aria-hidden="true"></i>
-
-                        <span>New Product</span>
-
-                    </a>
-
-                </div>
-            }
-
-
-            <!-- INVOICE -->
-
-            <div class="col-6 col-md-4 col-xl-2">
-
-                <a asp-action="CreateInvoice"
-                   class="dashboard-action">
-
-                    <i class="bi bi-receipt" aria-hidden="true"></i>
-
-                    <span>New Invoice</span>
-
-                </a>
-
-            </div>
-
-
-            <!-- QUOTE -->
-
-            <div class="col-6 col-md-4 col-xl-2">
-
-                <a asp-action="CreateQuote"
-                   class="dashboard-action">
-
-                    <i class="bi bi-file-earmark-text" aria-hidden="true"></i>
-
-                    <span>New Quote</span>
-
-                </a>
-
-            </div>
-
-
-            <!-- REPORTS: ADMINISTRATOR ONLY -->
-
-            @if (canViewReports)
-            {
-                <div class="col-6 col-md-4 col-xl-2">
-
-                    <a asp-action="Reports"
-                       class="dashboard-action">
-
-                        <i class="bi bi-bar-chart" aria-hidden="true"></i>
-
-                        <span>View Reports</span>
-
-                    </a>
-
-                </div>
-            }
+            </a>
 
         </div>
 
-    </section>
+
+        <!-- SUPPLIER: ADMINISTRATOR AND EMPLOYEE -->
+
+        @if (canManageCatalog)
+        {
+            <div class="col-6 col-md-4 col-xl-2">
+
+                <a asp-controller="Supplier"
+                   asp-action="AddSupplier"
+                   class="dashboard-action">
+
+                    <i class="bi bi-truck" aria-hidden="true"></i>
+
+                    <span>New Supplier</span>
+
+                </a>
+
+            </div>
+        }
+
+
+        <!-- PRODUCT: ADMINISTRATOR AND EMPLOYEE -->
+
+        @if (canManageCatalog)
+        {
+            <div class="col-6 col-md-4 col-xl-2">
+
+                <a asp-controller="Inventory"
+                   asp-action="AddItem"
+                   class="dashboard-action">
+
+                    <i class="bi bi-box-seam" aria-hidden="true"></i>
+
+                    <span>New Product</span>
+
+                </a>
+
+            </div>
+        }
+
+
+        <!-- INVOICE: FUNCTIONAL INVOICE MODULE -->
+
+        <div class="col-6 col-md-4 col-xl-2">
+
+            <a asp-controller="Invoices"
+               asp-action="Create"
+               class="dashboard-action">
+
+                <i class="bi bi-receipt" aria-hidden="true"></i>
+
+                <span>New Invoice</span>
+
+            </a>
+
+        </div>
+
+
+        <!-- QUOTE: FUNCTIONAL QUOTATION MODULE -->
+
+        <div class="col-6 col-md-4 col-xl-2">
+
+            <a asp-controller="Quotes"
+               asp-action="Create"
+               class="dashboard-action">
+
+                <i class="bi bi-file-earmark-text" aria-hidden="true"></i>
+
+                <span>New Quote</span>
+
+            </a>
+
+        </div>
+
+
+        <!-- REPORTS: ADMINISTRATOR ONLY -->
+
+        @if (canViewReports)
+        {
+            <div class="col-6 col-md-4 col-xl-2">
+
+                <a asp-controller="Reports"
+                   asp-action="Index"
+                   class="dashboard-action">
+
+                    <i class="bi bi-bar-chart" aria-hidden="true"></i>
+
+                    <span>View Reports</span>
+
+                </a>
+
+            </div>
+        }
+
+    </div>
+
+</section>
 
 
     <!-- BUSINESS ANALYTICS -->
