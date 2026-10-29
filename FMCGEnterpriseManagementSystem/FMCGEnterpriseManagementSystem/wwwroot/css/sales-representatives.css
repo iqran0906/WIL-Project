@@ -204,59 +204,87 @@
     color: #566675;
 }
 
-/* ACTION BUTTONS */
+/* ==========================================================
+   ACTION BUTTONS
+   Consistent styling across business management modules.
+   UI enhancement: WIL Exclusive Distributors project.
+   ========================================================== */
 
 .sales-actions {
     display: flex;
     justify-content: center;
+    align-items: center;
     flex-wrap: wrap;
-    gap: 7px;
+    gap: 8px;
 }
 
-.sales-edit-btn {
-    background: #ffc107;
-    border: 1px solid #ffc107;
-    color: #212529;
-    border-radius: 5px;
-    padding: 8px 12px;
-    font-size: 13px;
-    font-weight: 600;
+.sales-edit-btn,
+.sales-deactivate-btn,
+.sales-reactivate-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    min-height: 36px;
+    padding: 8px 13px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.2;
     text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* EDIT */
+
+.sales-edit-btn {
+    background: #e0f0f2;
+    border: 1px solid #a6cdd3;
+    color: #216b7b;
 }
 
     .sales-edit-btn:hover {
-        background: #e6ad00;
-        color: #212529;
+        background: #cce5e9;
+        border-color: #78b4be;
+        color: #174e5a;
     }
 
+/* DEACTIVATE */
+
 .sales-deactivate-btn {
-    background: #dc3545;
-    border: 1px solid #dc3545;
-    color: white;
-    border-radius: 5px;
-    padding: 8px 12px;
-    font-size: 13px;
-    font-weight: 600;
+    background: #f9e5e5;
+    border: 1px solid #e9b7b7;
+    color: #a33a3a;
 }
 
     .sales-deactivate-btn:hover {
-        background: #bd2635;
-        color: white;
+        background: #f3d2d2;
+        border-color: #d99a9a;
+        color: #862b2b;
     }
 
+/* REACTIVATE */
+
 .sales-reactivate-btn {
-    background: #27815b;
-    border: 1px solid #27815b;
-    color: white;
-    border-radius: 5px;
-    padding: 8px 12px;
-    font-size: 13px;
-    font-weight: 600;
+    background: #e0f3e9;
+    border: 1px solid #abd9bf;
+    color: #24764d;
 }
 
     .sales-reactivate-btn:hover {
-        background: #1d6748;
-        color: white;
+        background: #ccebdc;
+        border-color: #86c5a3;
+        color: #185b39;
+    }
+
+    /* KEYBOARD ACCESSIBILITY */
+
+    .sales-edit-btn:focus-visible,
+    .sales-deactivate-btn:focus-visible,
+    .sales-reactivate-btn:focus-visible {
+        outline: 2px solid #357f91;
+        outline-offset: 3px;
     }
 
 /* FORMS */

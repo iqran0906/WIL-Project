@@ -211,45 +211,72 @@
         font-weight: 700;
     }
 
-    /* ACTIONS */
+   /* ==========================================================
+   EMPLOYEE ACTION BUTTONS
+   Consistent teal and muted-red styling.
+   ========================================================== */
 
-    .employees-actions {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 7px;
-    }
+.employees-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
 
-    .employees-edit-btn {
-        background: #ffc107;
-        color: #212529;
-        border: 1px solid #ffc107;
-        border-radius: 5px;
-        padding: 7px 12px;
-        font-size: 13px;
-        font-weight: 600;
-        text-decoration: none;
-    }
+.employees-edit-btn,
+.employees-deactivate-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    min-height: 36px;
+    padding: 8px 13px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease,
+                border-color 0.2s ease;
+}
 
-        .employees-edit-btn:hover {
-            background: #e6ad00;
-            color: #212529;
-        }
+/* EDIT */
 
-    .employees-deactivate-btn {
-        background: #dc3545;
-        color: white;
-        border: 1px solid #dc3545;
-        border-radius: 5px;
-        padding: 7px 12px;
-        font-size: 13px;
-        font-weight: 600;
-    }
+.employees-edit-btn {
+    background: #e0f0f2;
+    border: 1px solid #a6cdd3;
+    color: #216b7b;
+}
 
-        .employees-deactivate-btn:hover {
-            background: #bd2635;
-            color: white;
-        }
+.employees-edit-btn:hover {
+    background: #cce5e9;
+    border-color: #78b4be;
+    color: #174e5a;
+}
+
+/* DEACTIVATE */
+
+.employees-deactivate-btn {
+    background: #f9e5e5;
+    border: 1px solid #e9b7b7;
+    color: #a33a3a;
+}
+
+.employees-deactivate-btn:hover {
+    background: #f3d2d2;
+    border-color: #d99a9a;
+    color: #862b2b;
+}
+
+/* KEYBOARD ACCESSIBILITY */
+
+.employees-edit-btn:focus-visible,
+.employees-deactivate-btn:focus-visible {
+    outline: 2px solid #357f91;
+    outline-offset: 3px;
+}
 
     .employees-empty-state {
         background: #f8fafb;
