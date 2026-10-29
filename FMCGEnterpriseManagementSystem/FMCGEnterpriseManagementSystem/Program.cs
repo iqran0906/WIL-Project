@@ -191,14 +191,17 @@ app.UseAuthorization();
 // ROUTING
 // ==========================================================
 
+// Public landing page is the first page when opening the application.
+// Users can choose to sign in from the Welcome page.
 app.MapControllerRoute(
-    name: "login",
+    name: "welcome",
     pattern: "",
     defaults: new
     {
-        controller = "Account",
-        action = "Login"
+        controller = "Home",
+        action = "Welcome"
     });
+
 
 app.MapControllerRoute(
     name: "default",

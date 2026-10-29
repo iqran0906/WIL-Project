@@ -176,7 +176,9 @@ namespace FMCGEnterpriseManagementSystem.Controllers
             return View(model);
         }
 
-        // Displays the privacy page.
+        // Displays public information about privacy and data handling.
+        // Visitors can read this page without signing in.
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Privacy()
         {
@@ -360,32 +362,17 @@ namespace FMCGEnterpriseManagementSystem.Controllers
                 });
         }
 
-        /*
- * Code Attribution
- *
- * Purpose:
- * Displays the public welcome page for unauthenticated visitors.
- * Redirects authenticated users to their dashboard.
- *
- * Reference:
- * Microsoft (n.d.) ASP.NET Core MVC overview.
- * Available at:
- * https://learn.microsoft.com/en-us/aspnet/core/mvc/overview
- *
- * Implementation:
- * Original implementation developed for the Exclusive Distributors FMCG Enterprise Management System.
- 
- */
+        // Displays the public Welcome page.
+        // Accessible to authenticated and unauthenticated visitors.
+        //
+        // Reference:
+        // Microsoft (n.d.) Simple authorization in ASP.NET Core.
+        // https://learn.microsoft.com/en-us/aspnet/core/security/authorization/simple
 
         [AllowAnonymous]
         [HttpGet]
         public IActionResult Welcome()
         {
-            if (User.Identity?.IsAuthenticated == true)
-            {
-                return RedirectToAction("Dashboard", "Home");
-            }
-
             return View();
         }
     }

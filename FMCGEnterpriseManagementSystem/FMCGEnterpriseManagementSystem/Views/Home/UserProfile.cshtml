@@ -1,20 +1,39 @@
 @*
-    Purpose: User Profile: shows details for the currently logged-in user.
-    Administrators display account information, while employees and
-    sales representatives display their linked employee information.
-    Authors: ST10068525, iqran0906
+    File: Views/Home/UserProfile.cshtml
+
+    Purpose:
+    Displays profile information for the currently authenticated user.
+    Administrators see account information, while employees and sales
+    representatives see their linked employee information.
+
+    Original Authors:
+    ST10068525, iqran0906
+
+    UI Improvements:
+    Iqra Nazir (2026).
+
+    References (Harvard Anglia):
+    Microsoft (n.d.) Razor syntax reference for ASP.NET Core.
+    Available at: https://learn.microsoft.com/en-us/aspnet/core/mvc/views/razor
+
+
+    MDN Web Docs (n.d.) CSS.
+    Available at: https://developer.mozilla.org/en-US/docs/Web/CSS
 *@
+
 @model FMCGEnterpriseManagementSystem.ViewModels.UserProfileViewModel
 
 @{
     ViewData["Title"] = "User Profile";
 
+    // Format role names for display.
     string FormatRole(string role) =>
         System.Text.RegularExpressions.Regex.Replace(
             role,
             "(?<=[a-z])(?=[A-Z])",
             " ");
 
+    // Display a dash when optional information is unavailable.
     string ValueOrDash(string? value) =>
         string.IsNullOrWhiteSpace(value) ? "—" : value;
 
@@ -22,41 +41,345 @@
 }
 
 <style>
-    .profile-avatar {
-        width: 72px;
-        height: 72px;
+    /* ==========================================
+       USER PROFILE PAGE
+       ========================================== */
+
+    .user-profile-page {
+        background: #e6edf1;
+        border: 1px solid rgba(53, 127, 145, 0.18);
+        border-radius: 15px;
+        padding: 30px;
+        color: #183244;
+        font-size: 16px;
+    }
+
+    /* PAGE HEADING */
+
+    .user-profile-page-heading {
+        display: flex;
+        align-items: center;
+        gap: 17px;
+        margin-bottom: 28px;
+    }
+
+    .user-profile-page-icon {
+        width: 58px;
+        height: 58px;
         flex-shrink: 0;
-        border-radius: 50%;
-        background-color: #357383;
-        color: #ffffff;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.6rem;
+        background: #dce9ee;
+        border: 1px solid #c9d9df;
+        border-radius: 12px;
+        color: #357f91;
+        font-size: 26px;
+    }
+
+    .user-profile-page-title {
+        color: #183244;
+        font-size: 30px;
+        font-weight: 800;
+        margin: 0 0 6px;
+    }
+
+    .user-profile-page-description {
+        color: #667988;
+        font-size: 16px;
+        margin: 0;
+    }
+
+    /* PROFILE SUMMARY */
+
+    .user-profile-summary {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        padding: 26px;
+        margin-bottom: 25px;
+        background: #f8fafb;
+        border: 1px solid #c9d9df;
+        border-top: 3px solid #357f91;
+        border-radius: 12px;
+    }
+
+    .user-profile-avatar {
+        width: 76px;
+        height: 76px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        background: #357f91;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 27px;
+        font-weight: 800;
+    }
+
+    .user-profile-summary-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .user-profile-name {
+        color: #183244;
+        font-size: 26px;
+        font-weight: 800;
+        margin: 0 0 7px;
+        overflow-wrap: anywhere;
+    }
+
+    .user-profile-email {
+        color: #667988;
+        font-size: 16px;
+        overflow-wrap: anywhere;
+    }
+
+    .user-profile-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 13px;
+    }
+
+    .user-profile-role-badge {
+        display: inline-flex;
+        align-items: center;
+        background: #dce9ee;
+        color: #286675;
+        padding: 7px 12px;
+        border-radius: 7px;
+        font-size: 14px;
         font-weight: 700;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .user-profile-status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 7px 12px;
+        border-radius: 7px;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .user-profile-status-badge.active {
+        background: #dff3e7;
+        color: #207447;
+    }
+
+    .user-profile-status-badge.inactive {
+        background: #e7e9ec;
+        color: #606a73;
+    }
+
+    .user-profile-login-status {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #536b78;
+        font-size: 15px;
+        font-weight: 600;
+    }
+
+    .user-profile-login-status i {
+        color: #27995c;
+        font-size: 12px;
+    }
+
+    /* INFORMATION CARDS */
+
+    .user-profile-card {
+        background: #f8fafb;
+        border: 1px solid #c9d9df;
+        border-top: 3px solid #357f91;
+        border-radius: 12px;
+        padding: 25px;
+        margin-bottom: 24px;
+    }
+
+    .user-profile-card-heading {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        color: #183244;
+        font-size: 20px;
+        font-weight: 800;
+        margin: 0 0 23px;
+    }
+
+    .user-profile-card-heading i {
+        color: #357f91;
+        font-size: 23px;
+    }
+
+    /* INFORMATION FIELDS */
+
+    .user-profile-field-label {
+        display: block;
+        color: #536b78;
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 9px;
+    }
+
+    .user-profile-field-value {
+        min-height: 47px;
+        display: flex;
+        align-items: center;
+        background: #edf3f5;
+        border: 1px solid #c9d9df;
+        border-radius: 8px;
+        padding: 11px 14px;
+        color: #183244;
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+    }
+
+    /* ACTION BUTTONS */
+
+    .user-profile-actions {
+        display: flex;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding-top: 24px;
+        border-top: 1px solid #c9d9df;
+    }
+
+    .user-profile-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        padding: 12px 20px;
+        border-radius: 9px;
+        font-size: 15px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: 0.2s ease;
+    }
+
+    .user-profile-button-secondary {
+        background: #f8fafb;
+        border: 1px solid #c9d9df;
+        color: #536b78;
+    }
+
+    .user-profile-button-secondary:hover {
+        background: #dce9ee;
+        color: #183244;
+    }
+
+    .user-profile-button-primary {
+        background: #357f91;
+        border: 1px solid #357f91;
+        color: #fff;
+    }
+
+    .user-profile-button-primary:hover {
+        background: #286675;
+        border-color: #286675;
+        color: #fff;
+    }
+
+    /* RESPONSIVE */
+
+    @@media (max-width: 768px) {
+        .user-profile-page {
+            padding: 18px;
+        }
+
+        .user-profile-page-title {
+            font-size: 26px;
+        }
+
+        .user-profile-summary {
+            padding: 20px;
+        }
+
+        .user-profile-name {
+            font-size: 23px;
+        }
+
+        .user-profile-card {
+            padding: 20px;
+        }
+
+        .user-profile-login-status {
+            width: 100%;
+        }
+
+        .user-profile-actions {
+            flex-direction: column;
+        }
+
+        .user-profile-button {
+            width: 100%;
+        }
     }
 </style>
 
-<div class="content-card">
+<div class="user-profile-page">
+
+    @* ==========================================
+       PAGE HEADING
+       ========================================== *@
+
+    <div class="user-profile-page-heading">
+
+        <div class="user-profile-page-icon">
+            <i class="bi bi-person-circle"></i>
+        </div>
+
+        <div>
+            <h1 class="user-profile-page-title">
+                My Profile
+            </h1>
+
+            <p class="user-profile-page-description">
+                View your personal information, account details
+                and system access.
+            </p>
+        </div>
+
+    </div>
+
+    @* ==========================================
+       SUCCESS MESSAGE
+       ========================================== *@
 
     @if (TempData["SuccessMessage"] != null)
     {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="bi bi-check-circle me-1"></i>
+        <div class="alert alert-success alert-dismissible fade show"
+             role="alert">
+
+            <i class="bi bi-check-circle me-2"></i>
+
             @TempData["SuccessMessage"]
+
             <button type="button"
                     class="btn-close"
                     data-bs-dismiss="alert"
                     aria-label="Close">
             </button>
+
         </div>
     }
 
-    <!-- PROFILE HEADER -->
-    <div class="d-flex flex-column flex-sm-row align-items-sm-center gap-3 mb-4 border-bottom pb-3">
+    @* ==========================================
+       PROFILE SUMMARY
+       ========================================== *@
 
-        <div class="profile-avatar">
+    <div class="user-profile-summary">
+
+        <div class="user-profile-avatar">
+
             @if (string.IsNullOrEmpty(Model.Initials))
             {
                 <i class="bi bi-person"></i>
@@ -65,309 +388,343 @@
             {
                 @Model.Initials
             }
+
         </div>
 
-        <div class="flex-grow-1">
-            <h2 class="fw-bold m-0" style="color: #1c323d;">
+        <div class="user-profile-summary-info">
+
+            <h2 class="user-profile-name">
                 @Model.DisplayName
             </h2>
 
-            <div class="text-muted">
+            <div class="user-profile-email">
                 @Model.Email
             </div>
 
-            <div class="d-flex flex-wrap gap-2 mt-2">
+            <div class="user-profile-badges">
 
                 @foreach (var role in Model.Roles)
                 {
-                    <span class="badge" style="background-color: #357383;">
+                    <span class="user-profile-role-badge">
                         @FormatRole(role)
                     </span>
                 }
 
                 @if (Model.IsActive)
                 {
-                    <span class="badge bg-success">Active</span>
+                    <span class="user-profile-status-badge active">
+                        <i class="bi bi-check-circle-fill"></i>
+                        Active
+                    </span>
                 }
                 else
                 {
-                    <span class="badge bg-secondary">Inactive</span>
+                    <span class="user-profile-status-badge inactive">
+                        <i class="bi bi-dash-circle"></i>
+                        Inactive
+                    </span>
                 }
 
             </div>
+
         </div>
 
-        <span class="text-muted small">
-            <i class="bi bi-circle-fill text-success me-1"
-               style="font-size: 0.6rem;"></i>
+        <div class="user-profile-login-status">
+            <i class="bi bi-circle-fill"></i>
             Currently logged in
-        </span>
+        </div>
 
     </div>
 
-    @*
-        A missing employee record is normal for the Administrator.
-        Only show the warning for non-administrator accounts.
-    *@
+    @* ==========================================
+       EMPLOYEE LINK WARNING
+       ========================================== *@
+
     @if (!Model.HasEmployeeRecord && !isAdministrator)
     {
         <div class="alert alert-warning">
-            <i class="bi bi-exclamation-triangle me-1"></i>
+
+            <i class="bi bi-exclamation-triangle me-2"></i>
+
             This account is not linked to an employee record.
             Please contact an administrator.
+
         </div>
     }
+
+    @* ==========================================
+       ADMINISTRATOR INFORMATION
+       ========================================== *@
 
     @if (isAdministrator && !Model.HasEmployeeRecord)
     {
-        <!-- ADMINISTRATOR ACCOUNT -->
+        <section class="user-profile-card">
 
-        <div class="row g-4">
+            <h3 class="user-profile-card-heading">
+                <i class="bi bi-shield-check"></i>
+                Administrator Account
+            </h3>
 
-            <div class="col-12">
-                <h5 class="fw-bold text-secondary mb-3">
-                    Administrator Account
-                </h5>
+            <div class="row g-4">
 
-                <div class="row g-3">
+                <div class="col-12 col-md-6">
+                    <label class="user-profile-field-label">
+                        Email Address
+                    </label>
 
-                    <div class="col-12 col-md-6">
-                        <label class="form-label fw-bold">
-                            Email Address
-                        </label>
-
-                        <div class="form-control bg-light border shadow-sm py-2">
-                            @ValueOrDash(Model.Email)
-                        </div>
+                    <div class="user-profile-field-value">
+                        @ValueOrDash(Model.Email)
                     </div>
-
-                    <div class="col-12 col-md-6">
-                        <label class="form-label fw-bold">
-                            Username
-                        </label>
-
-                        <div class="form-control bg-light border shadow-sm py-2">
-                            @ValueOrDash(Model.UserName)
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-md-6">
-                        <label class="form-label fw-bold">
-                            System Role
-                        </label>
-
-                        <div class="form-control bg-light border shadow-sm py-2">
-                            @ValueOrDash(
-                                string.Join(
-                                    ", ",
-                                    Model.Roles.Select(FormatRole)))
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-md-6">
-                        <label class="form-label fw-bold">
-                            Account Status
-                        </label>
-
-                        <div class="form-control bg-light border shadow-sm py-2">
-                            @(Model.IsActive ? "Active" : "Inactive")
-                        </div>
-                    </div>
-
                 </div>
+
+                <div class="col-12 col-md-6">
+                    <label class="user-profile-field-label">
+                        Username
+                    </label>
+
+                    <div class="user-profile-field-value">
+                        @ValueOrDash(Model.UserName)
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <label class="user-profile-field-label">
+                        System Role
+                    </label>
+
+                    <div class="user-profile-field-value">
+                        @ValueOrDash(
+                            string.Join(
+                                ", ",
+                                Model.Roles.Select(FormatRole)))
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <label class="user-profile-field-label">
+                        Account Status
+                    </label>
+
+                    <div class="user-profile-field-value">
+                        @(Model.IsActive ? "Active" : "Inactive")
+                    </div>
+                </div>
+
             </div>
 
-        </div>
+        </section>
     }
     else
     {
-        <!-- EMPLOYEE / SALES REPRESENTATIVE PROFILE -->
+        @* ==========================================
+           PERSONAL INFORMATION
+           ========================================== *@
 
-        <div class="row g-4">
+        <section class="user-profile-card">
 
-            <div class="col-12">
-                <h5 class="fw-bold text-secondary mb-3">
-                    Personal Information
-                </h5>
+            <h3 class="user-profile-card-heading">
+                <i class="bi bi-person"></i>
+                Personal Information
+            </h3>
 
-                <div class="row g-3">
+            <div class="row g-4">
 
-                    <div class="col-12 col-md-6">
-                        <label class="form-label fw-bold">
-                            Name
-                        </label>
+                <div class="col-12 col-md-6">
+                    <label class="user-profile-field-label">
+                        Name
+                    </label>
 
-                        <div class="form-control bg-light border shadow-sm py-2">
-                            @ValueOrDash(Model.FirstName)
-                        </div>
+                    <div class="user-profile-field-value">
+                        @ValueOrDash(Model.FirstName)
                     </div>
-
-                    <div class="col-12 col-md-6">
-                        <label class="form-label fw-bold">
-                            Surname
-                        </label>
-
-                        <div class="form-control bg-light border shadow-sm py-2">
-                            @ValueOrDash(Model.LastName)
-                        </div>
-                    </div>
-
                 </div>
+
+                <div class="col-12 col-md-6">
+                    <label class="user-profile-field-label">
+                        Surname
+                    </label>
+
+                    <div class="user-profile-field-value">
+                        @ValueOrDash(Model.LastName)
+                    </div>
+                </div>
+
             </div>
 
-            <hr class="my-4 text-muted" />
+        </section>
 
-            <div class="col-12">
-                <h5 class="fw-bold text-secondary mb-3">
-                    Contact Details
-                </h5>
+        @* ==========================================
+           CONTACT DETAILS
+           ========================================== *@
 
-                <div class="row g-3">
+        <section class="user-profile-card">
 
-                    <div class="col-12 col-md-6">
-                        <label class="form-label fw-bold">
-                            Email Address
-                        </label>
+            <h3 class="user-profile-card-heading">
+                <i class="bi bi-telephone"></i>
+                Contact Details
+            </h3>
 
-                        <div class="form-control bg-light border shadow-sm py-2">
-                            @ValueOrDash(Model.Email)
-                        </div>
+            <div class="row g-4">
+
+                <div class="col-12 col-md-6">
+                    <label class="user-profile-field-label">
+                        Email Address
+                    </label>
+
+                    <div class="user-profile-field-value">
+                        @ValueOrDash(Model.Email)
                     </div>
-
-                    <div class="col-12 col-md-6">
-                        <label class="form-label fw-bold">
-                            Contact Number
-                        </label>
-
-                        <div class="form-control bg-light border shadow-sm py-2">
-                            @ValueOrDash(Model.ContactNumber)
-                        </div>
-                    </div>
-
                 </div>
+
+                <div class="col-12 col-md-6">
+                    <label class="user-profile-field-label">
+                        Contact Number
+                    </label>
+
+                    <div class="user-profile-field-value">
+                        @ValueOrDash(Model.ContactNumber)
+                    </div>
+                </div>
+
             </div>
 
-            <hr class="my-4 text-muted" />
+        </section>
 
-            <div class="col-12 mb-4">
-                <h5 class="fw-bold text-secondary mb-3">
-                    Business Profile
-                </h5>
+        @* ==========================================
+           BUSINESS PROFILE
+           ========================================== *@
 
-                <div class="row g-3">
+        <section class="user-profile-card">
 
-                    <div class="col-12 col-md-6">
-                        <label class="form-label fw-bold">
-                            Business Position
-                        </label>
+            <h3 class="user-profile-card-heading">
+                <i class="bi bi-briefcase"></i>
+                Business Profile
+            </h3>
 
-                        <div class="form-control bg-light border shadow-sm py-2">
-                            @ValueOrDash(Model.JobTitle)
-                        </div>
+            <div class="row g-4">
+
+                <div class="col-12 col-md-6">
+                    <label class="user-profile-field-label">
+                        Business Position
+                    </label>
+
+                    <div class="user-profile-field-value">
+                        @ValueOrDash(Model.JobTitle)
                     </div>
-
-                    <div class="col-12 col-md-6">
-                        <label class="form-label fw-bold">
-                            System Role
-                        </label>
-
-                        <div class="form-control bg-light border shadow-sm py-2">
-                            @ValueOrDash(
-                                string.Join(
-                                    ", ",
-                                    Model.Roles.Select(FormatRole)))
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-md-6">
-                        <label class="form-label fw-bold">
-                            Employee Number
-                        </label>
-
-                        <div class="form-control bg-light border shadow-sm py-2">
-                            @ValueOrDash(Model.EmployeeNumber)
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-md-6">
-                        <label class="form-label fw-bold">
-                            Date of Employment
-                        </label>
-
-                        <div class="form-control bg-light border shadow-sm py-2">
-                            @ValueOrDash(
-                                Model.DateOfEmployment?.ToString("dd MMM yyyy"))
-                        </div>
-                    </div>
-
-                    @if (Model.SalesRepCode != null)
-                    {
-                        <div class="col-12 col-md-6">
-                            <label class="form-label fw-bold">
-                                Sales Rep Code
-                            </label>
-
-                            <div class="form-control bg-light border shadow-sm py-2">
-                                @Model.SalesRepCode
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-md-6">
-                            <label class="form-label fw-bold">
-                                Sales Area
-                            </label>
-
-                            <div class="form-control bg-light border shadow-sm py-2">
-                                @ValueOrDash(Model.SalesArea)
-                            </div>
-                        </div>
-                    }
-
-                    <div class="col-12 col-md-6">
-                        <label class="form-label fw-bold">
-                            Username
-                        </label>
-
-                        <div class="form-control bg-light border shadow-sm py-2">
-                            @ValueOrDash(Model.UserName)
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-md-6">
-                        <label class="form-label fw-bold">
-                            Account Status
-                        </label>
-
-                        <div class="form-control bg-light border shadow-sm py-2">
-                            @(Model.IsActive ? "Active" : "Inactive")
-                        </div>
-                    </div>
-
                 </div>
+
+                <div class="col-12 col-md-6">
+                    <label class="user-profile-field-label">
+                        System Role
+                    </label>
+
+                    <div class="user-profile-field-value">
+                        @ValueOrDash(
+                            string.Join(
+                                ", ",
+                                Model.Roles.Select(FormatRole)))
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <label class="user-profile-field-label">
+                        Employee Number
+                    </label>
+
+                    <div class="user-profile-field-value">
+                        @ValueOrDash(Model.EmployeeNumber)
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <label class="user-profile-field-label">
+                        Date of Employment
+                    </label>
+
+                    <div class="user-profile-field-value">
+                        @ValueOrDash(
+                            Model.DateOfEmployment?.ToString("dd MMM yyyy"))
+                    </div>
+                </div>
+
+                @if (Model.SalesRepCode != null)
+                {
+                    <div class="col-12 col-md-6">
+                        <label class="user-profile-field-label">
+                            Sales Rep Code
+                        </label>
+
+                        <div class="user-profile-field-value">
+                            @Model.SalesRepCode
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <label class="user-profile-field-label">
+                            Sales Area
+                        </label>
+
+                        <div class="user-profile-field-value">
+                            @ValueOrDash(Model.SalesArea)
+                        </div>
+                    </div>
+                }
+
+                <div class="col-12 col-md-6">
+                    <label class="user-profile-field-label">
+                        Username
+                    </label>
+
+                    <div class="user-profile-field-value">
+                        @ValueOrDash(Model.UserName)
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <label class="user-profile-field-label">
+                        Account Status
+                    </label>
+
+                    <div class="user-profile-field-value">
+                        @(Model.IsActive ? "Active" : "Inactive")
+                    </div>
+                </div>
+
             </div>
 
-        </div>
+        </section>
     }
 
-    <div class="d-flex flex-column flex-sm-row justify-content-end gap-2 border-top pt-3 mt-4">
+    @* ==========================================
+       PROFILE ACTIONS
+       ========================================== *@
+
+    <div class="user-profile-actions">
 
         <a asp-action="Dashboard"
-           class="btn btn-outline-secondary px-4 text-center">
+           class="user-profile-button user-profile-button-secondary">
+
+            <i class="bi bi-arrow-left"></i>
             Back to Dashboard
+
         </a>
 
         <a asp-controller="Profile"
            asp-action="ChangePassword"
-           class="btn btn-outline-secondary px-4 text-center">
-            <i class="bi bi-shield-lock me-1"></i>
+           class="user-profile-button user-profile-button-secondary">
+
+            <i class="bi bi-shield-lock"></i>
             Change Password
+
         </a>
 
         <a asp-controller="Profile"
            asp-action="Edit"
-           class="btn btn-custom-save px-4 text-center">
-            <i class="bi bi-pencil-square me-1"></i>
+           class="user-profile-button user-profile-button-primary">
+
+            <i class="bi bi-pencil-square"></i>
             Edit My Details
+
         </a>
 
     </div>

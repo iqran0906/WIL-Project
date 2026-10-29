@@ -1,10 +1,361 @@
 ﻿@*
-    Purpose: Privacy policy page.
-    Authors: Naseeha27 (from git history)
-*@
-@{
-    ViewData["Title"] = "Privacy Policy";
-}
-<h1>@ViewData["Title"]</h1>
+    File: Views/Home/Privacy.cshtml
 
-<p>Use this page to detail your site's privacy policy.</p>
+    Purpose:
+    Provides an overview of privacy and responsible
+    information handling within the Exclusive Distributors
+    FMCG Enterprise Management System.
+
+    Original Author:
+    Naseeha27 (original placeholder, Git history).
+
+    UI Improvements:
+    Iqra Nazir (2026).
+
+    References :
+    Microsoft (n.d.) Razor syntax reference for ASP.NET Core.
+    Available at: https://learn.microsoft.com/en-us/aspnet/core/mvc/views/razor
+
+    
+*@
+
+@{
+    ViewData["Title"] = "Privacy & Information Handling";
+}
+
+<style>
+    .privacy-page {
+        background: #e6edf1;
+        border: 1px solid rgba(53, 127, 145, 0.18);
+        border-radius: 15px;
+        padding: 30px;
+        color: #183244;
+        font-size: 16px;
+    }
+
+    .privacy-header {
+        display: flex;
+        align-items: center;
+        gap: 17px;
+        margin-bottom: 28px;
+    }
+
+    .privacy-header-icon {
+        width: 58px;
+        height: 58px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #dce9ee;
+        border: 1px solid #c9d9df;
+        border-radius: 12px;
+        color: #357f91;
+        font-size: 26px;
+    }
+
+    .privacy-title {
+        color: #183244;
+        font-size: 30px;
+        font-weight: 800;
+        margin: 0 0 6px;
+    }
+
+    .privacy-description {
+        color: #667988;
+        font-size: 16px;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    .privacy-card {
+        background: #f8fafb;
+        border: 1px solid #c9d9df;
+        border-top: 3px solid #357f91;
+        border-radius: 12px;
+        padding: 26px;
+        margin-bottom: 22px;
+    }
+
+    .privacy-card-heading {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: #183244;
+        font-size: 20px;
+        font-weight: 800;
+        margin-bottom: 16px;
+    }
+
+    .privacy-card-heading i {
+        color: #357f91;
+        font-size: 23px;
+    }
+
+    .privacy-card p,
+    .privacy-card li {
+        color: #536b78;
+        font-size: 16px;
+        line-height: 1.8;
+    }
+
+    .privacy-card p:last-child {
+        margin-bottom: 0;
+    }
+
+    .privacy-card ul {
+        margin-bottom: 0;
+        padding-left: 22px;
+    }
+
+    .privacy-card li {
+        margin-bottom: 8px;
+    }
+
+    .privacy-card li:last-child {
+        margin-bottom: 0;
+    }
+
+    .privacy-notice {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        background: #edf3f5;
+        border: 1px solid #c9d9df;
+        border-left: 4px solid #357f91;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 25px;
+    }
+
+    .privacy-notice i {
+        color: #357f91;
+        font-size: 23px;
+    }
+
+    .privacy-notice p {
+        color: #536b78;
+        font-size: 15px;
+        line-height: 1.7;
+        margin: 0;
+    }
+
+    .privacy-actions {
+        display: flex;
+        justify-content: flex-end;
+        padding-top: 22px;
+        border-top: 1px solid #c9d9df;
+    }
+
+    .privacy-back-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        background: #357f91;
+        border: 1px solid #357f91;
+        border-radius: 9px;
+        padding: 12px 22px;
+        color: #fff;
+        font-size: 15px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: 0.2s ease;
+    }
+
+    .privacy-back-button:hover {
+        background: #286675;
+        border-color: #286675;
+        color: #fff;
+    }
+
+    @@media (max-width: 768px) {
+        .privacy-page {
+            padding: 18px;
+        }
+
+        .privacy-title {
+            font-size: 26px;
+        }
+
+        .privacy-card {
+            padding: 20px;
+        }
+
+        .privacy-actions,
+        .privacy-back-button {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="privacy-page">
+
+    <!-- PAGE HEADER -->
+
+    <div class="privacy-header">
+
+        <div class="privacy-header-icon">
+            <i class="bi bi-shield-lock"></i>
+        </div>
+
+        <div>
+            <h1 class="privacy-title">
+                Privacy & Information Handling
+            </h1>
+
+            <p class="privacy-description">
+                Understanding how business and account information
+                is used within the management system.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- INTRODUCTION -->
+
+    <div class="privacy-notice">
+
+        <i class="bi bi-info-circle"></i>
+
+        <p>
+            This page provides a general overview of information
+            handling within the Exclusive Distributors FMCG
+            Enterprise Management System. It is intended as
+            system guidance and does not replace a formally
+            approved organisational privacy policy.
+        </p>
+
+    </div>
+
+    <!-- BUSINESS INFORMATION -->
+
+    <section class="privacy-card">
+
+        <h2 class="privacy-card-heading">
+            <i class="bi bi-database"></i>
+            Business Information
+        </h2>
+
+        <p>
+            The management system supports the recording and
+            management of information relating to daily
+            distribution and business operations.
+        </p>
+
+        <ul>
+            <li>Customer and supplier records.</li>
+            <li>Product and inventory information.</li>
+            <li>Quotations, invoices and payment records.</li>
+            <li>Employee and sales representative information.</li>
+            <li>Business reports and operational activity.</li>
+        </ul>
+
+    </section>
+
+    <!-- USER ACCOUNTS -->
+
+    <section class="privacy-card">
+
+        <h2 class="privacy-card-heading">
+            <i class="bi bi-person-lock"></i>
+            User Accounts & Access
+        </h2>
+
+        <p>
+            The system includes user accounts and role-based
+            access functionality to distinguish between
+            different types of authorised users.
+        </p>
+
+        <p>
+            Access to individual features depends on the
+            permissions configured for the user's role.
+            Users should access only the business information
+            required for their responsibilities.
+        </p>
+
+    </section>
+
+    <!-- RESPONSIBLE USE -->
+
+    <section class="privacy-card">
+
+        <h2 class="privacy-card-heading">
+            <i class="bi bi-shield-check"></i>
+            Responsible Information Handling
+        </h2>
+
+        <p>
+            Users should handle information entered into
+            the system responsibly and follow applicable
+            organisational procedures.
+        </p>
+
+        <ul>
+            <li>Keep account credentials confidential.</li>
+            <li>Use the system only for authorised business activities.</li>
+            <li>Verify information before creating or updating records.</li>
+            <li>Avoid sharing personal or confidential business information unnecessarily.</li>
+            <li>Report suspected unauthorised access to the system administrator.</li>
+        </ul>
+
+    </section>
+
+    <!-- RECORD ACCURACY -->
+
+    <section class="privacy-card">
+
+        <h2 class="privacy-card-heading">
+            <i class="bi bi-pencil-square"></i>
+            Information Accuracy
+        </h2>
+
+        <p>
+            Accurate business records are important for
+            inventory management, financial processes,
+            reporting and operational decision-making.
+        </p>
+
+        <p>
+            Authorised users should review information
+            carefully and correct inaccurate records
+            through the appropriate system functions.
+        </p>
+
+    </section>
+
+    <!-- PRIVACY ENQUIRIES -->
+
+    <section class="privacy-card">
+
+        <h2 class="privacy-card-heading">
+            <i class="bi bi-question-circle"></i>
+            Privacy Enquiries
+        </h2>
+
+        <p>
+            Questions regarding access to business records,
+            account permissions or information handling
+            should be directed to the designated system
+            administrator or authorised organisational representative.
+        </p>
+
+    </section>
+
+    <!-- NAVIGATION -->
+
+    <div class="privacy-actions">
+
+       <a asp-controller="Home"
+   asp-action="Welcome"
+   class="privacy-back-button">
+
+    <i class="bi bi-arrow-left"></i>
+    Back to Welcome
+
+</a>
+
+    </div>
+
+</div>
